@@ -555,7 +555,8 @@ def validate(args):
     return report
 
 
-if __name__ == "__main__":
+def main(argv=None):
+    """Parse the public validation CLI; importing this tool never runs an engine."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--engine", type=Path, required=True)
     parser.add_argument("--version", choices=("8.5.0", "26.2.0"), required=True)
@@ -573,4 +574,8 @@ if __name__ == "__main__":
     parser.add_argument("--timeout", type=float, default=300)
     parser.add_argument("--rtol", type=float, default=1e-6)
     parser.add_argument("--atol", type=float, default=1e-7)
-    validate(parser.parse_args())
+    return validate(parser.parse_args(argv))
+
+
+if __name__ == "__main__":
+    main()

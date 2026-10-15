@@ -380,3 +380,182 @@ def test_summary_reports_signed_reference_deltas_and_escapes_case_metadata():
     assert "case\\|with newline" in summary
     assert "| 9 | -1 (-10%) | -1 (-10%) |" in summary
     assert "Report JSON: reports/audit.json" in summary
+
+
+@pytest.mark.parametrize("family,expected", [
+    ("simple", {"E_L": 1, "Q_h": 2, "Q_c": 3}),
+    ("school", {"Q": 4, "P": 5.75}),
+    ("detailed", {"H_1": 11, "H_2": 12, "H_3": 13, "H_4": 14, "H_5": 15, "H_6": 16,
+                  "C": 17, "V_legacy": 18, "L_N": 21, "L_W": 22, "L_E": 23, "L_S": 24, "L_I": 25}),
+    ("office", {"Y": 843.38}),
+])
+def test_independent_csharp_row_contract_and_units(tmp_path, family, expected):
+    # Distinct values, including a decoy second fan, detect index/unit mistakes.
+    rows = ["0,0"] * 57
+    energies = {12: 1, 13: 2, 14: 3, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25,
+                28: 11, 29: 12, 30: 13, 31: 14, 32: 15, 33: 16, 34: 18, 35: 99, 36: 17, 55: 4}
+    for row, kwh in energies.items():
+        rows[row] = f"0,{kwh * 3.6e6}"
+    rows[56] = "0,5750"
+    (tmp_path / "eplusout.eso").write_text("\n".join(rows))
+    table = ["0,0,0,0,0"] * 17
+    table[16] = "0,0,0,0,843.38,999"
+    (tmp_path / "eplustbl.csv").write_text("\n".join(table))
+    assert validation.fixed_row_outputs(SimpleNamespace(family=family), tmp_path) == expected
+
+
+@pytest.mark.parametrize("compare", [validation.require_close, validation.numerical_difference])
+@pytest.mark.parametrize("actual,expected", [(float("inf"), 1), (1, float("nan"))])
+def test_nonfinite_reference_values_are_never_accepted(compare, actual, expected):
+    with pytest.raises(AssertionError, match="Nonfinite"):
+        compare(actual, expected, "output", rtol=1e-6, atol=1e-7)
+
+
+@pytest.mark.parametrize("change,match", [
+    ({"x": [-1]}, "design does not match"),
+    ({"passed": "false"}, "outcome is not Boolean"),
+    ({"passed": False}, "must not contain accepted"),
+    ({"components": {"renamed_output": 10}}, "output schema changed"),
+])
+def test_invalid_baseline_identity_or_schema_cannot_pass_the_audit(audit, change, match):
+    rows = audit.write(failed=())
+    rows[0].update(change)
+    baseline = json.loads(audit.args.baseline.read_text())
+    baseline["cases"] = rows
+    audit.args.baseline.write_text(json.dumps(baseline))
+    with pytest.raises(AssertionError, match=match):
+        validation.validate(audit.args)
+    report = json.loads(audit.args.output.read_text())
+    assert not report["cases"][0]["validation_passed"]
+    assert report["cases"][1]["validation_passed"]
+
+
+@pytest.mark.parametrize("change,match", [
+    ("process", "process/engine provenance"),
+    ("engine", "process/engine provenance"),
+    ("staged-input", "input bytes changed"),
+    ("weather", "weather bytes changed"),
+])
+def test_reviewed_failure_requires_intact_retained_provenance(audit, change, match):
+    audit.write(selected=[audit.cases[0]])
+    audit.modes["first"] = "warmup"
+    report = validation.validate(audit.args)
+    directory = Path(report["cases"][0]["failure"]["directory"])
+    runner = validation.EnergyPlusRunner(audit.args.engine, expected_version=audit.args.version,
+                                        timeout=30, output_root=audit.args.work_dir, cache=False)
+    metadata_file = directory / "run.json"
+    metadata = json.loads(metadata_file.read_text())
+    if change == "process":
+        metadata["returncode"] = 1
+    elif change == "engine":
+        audit.args.engine.write_bytes(b"replaced executable")
+    elif change == "staged-input":
+        Path(metadata["input_file"]).write_bytes(b"replaced input")
+    else:
+        metadata["weather_sha256"] = "0" * 64
+    metadata_file.write_text(json.dumps(metadata))
+    with pytest.raises(AssertionError, match=match):
+        validation.require_native_failure(
+            EnergyPlusError("rejected", directory=directory, reason="simulation"), runner,
+            audit.args.work_dir / "first" / "model.epJSON", audit.args.weather_dir / "Seattle.epw",
+            _expected_failure())
+
+
+def test_incomplete_timeout_is_not_a_reviewed_warmup_failure_and_audit_continues(audit, monkeypatch):
+    audit.write()
+    run = validation.EnergyPlusRunner.run
+    partial = audit.tmp / "partial-timeout"
+    partial.mkdir()
+
+    def timeout_first(runner, model, weather=None, **kwargs):
+        if model.parent.name == "first":
+            raise EnergyPlusError("process timed out", directory=partial, reason="timeout")
+        return run(runner, model, weather, **kwargs)
+
+    monkeypatch.setattr(validation.EnergyPlusRunner, "run", timeout_first)
+    with pytest.raises(AssertionError, match="changed stage/reason"):
+        validation.validate(audit.args)
+    report = json.loads(audit.args.output.read_text())
+    assert report["cases"][0]["failure"]["reason"] == "timeout"
+    assert report["reference_checked_rejections"] == 0
+    assert report["cases"][1]["validation_passed"]
+
+
+@pytest.mark.parametrize("mutation,match", [("missing-environment", "missing its zone/environment"),
+                                            ("wrong-stage", "simulation-stage"),
+                                            ("inconsistent-completion", "completion/severe")])
+def test_reviewed_rejection_needs_complete_context_and_completion(tmp_path, mutation, match):
+    _diagnostic_files(tmp_path)
+    expected = _expected_failure()
+    if mutation == "missing-environment":
+        err = tmp_path / "eplusout.err"
+        err.write_text(err.read_text().splitlines()[0])
+    elif mutation == "wrong-stage":
+        expected["stage"] = "outputs"
+    else:
+        end = tmp_path / "eplusout.end"
+        end.write_text(end.read_text().replace("1 Severe", "2 Severe"))
+    with pytest.raises(AssertionError, match=match):
+        validation.require_expected_failure_archive(tmp_path, expected)
+
+
+@pytest.mark.parametrize("mutation,match", [("duplicate-cases", "duplicate case IDs"),
+                                            ("duplicate-baseline", "Baseline contains duplicate"),
+                                            ("unknown-case", "Unknown validation case")])
+def test_ambiguous_case_selection_is_rejected_before_simulation(audit, mutation, match):
+    audit.write(failed=())
+    if mutation == "duplicate-cases":
+        audit.args.cases.write_text(json.dumps({"cases": [audit.cases[0], audit.cases[0]]}))
+    elif mutation == "duplicate-baseline":
+        baseline = json.loads(audit.args.baseline.read_text())
+        baseline["cases"].append(baseline["cases"][0])
+        audit.args.baseline.write_text(json.dumps(baseline))
+    else:
+        audit.args.case_id = ["not-a-case"]
+    with pytest.raises(ValueError, match=match):
+        validation.validate(audit.args)
+    assert not audit.calls
+
+
+def test_unexercised_baseline_case_cannot_be_reported_as_complete(audit):
+    audit.write(failed=())
+    baseline = json.loads(audit.args.baseline.read_text())
+    baseline["cases"].append({**baseline["cases"][0], "case_id": "unexercised"})
+    audit.args.baseline.write_text(json.dumps(baseline))
+    with pytest.raises(AssertionError, match="not exercised: unexercised"):
+        validation.validate(audit.args)
+    report = json.loads(audit.args.output.read_text())
+    assert len(report["cases"]) == 2 and report["accepted_simulations"] == 2
+    assert not report["passed"]
+
+
+def test_measurement_without_baseline_does_not_claim_reference_agreement(audit):
+    audit.write(failed=())
+    audit.args.baseline = None
+    report = validation.validate(audit.args)
+    assert report["comparison"] == "measurement-only"
+    assert "Not compared" in validation.github_summary(report, audit.args.output)
+    assert all("regression_comparison" not in case for case in report["cases"])
+
+
+def test_cli_parses_selection_and_reference_options_without_running_an_engine(monkeypatch):
+    calls = []
+    monkeypatch.setattr(validation, "validate", lambda args: calls.append(args) or "report")
+    assert validation.main([
+        "--engine", "energyplus", "--version", "8.5.0", "--weather-dir", "weather",
+        "--weather-kind", "canonical", "--work-dir", "runs", "--output", "report.json",
+        "--baseline", "baseline.json", "--oracle", "oracle.exe", "--proxy", "proxy.exe",
+        "--case-id", "p01-midpoint", "--case-id", "p01-orientation90", "--include-orientation90",
+    ]) == "report"
+    args = calls[0]
+    assert args.version == "8.5.0" and args.weather_kind == "canonical"
+    assert args.case_id == ["p01-midpoint", "p01-orientation90"] and args.include_orientation90
+    assert args.baseline == Path("baseline.json") and args.oracle == Path("oracle.exe")
+    assert (args.rtol, args.atol, args.timeout) == (1e-6, 1e-7, 300)
+
+
+def test_cli_help_is_available_without_an_installation_or_weather(capsys):
+    with pytest.raises(SystemExit) as error:
+        validation.main(["--help"])
+    assert error.value.code == 0
+    assert "--include-orientation90" in capsys.readouterr().out

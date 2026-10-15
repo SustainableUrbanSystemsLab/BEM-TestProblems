@@ -104,3 +104,43 @@ def test_missing_benchmark_setup_fails_before_entering_solver(monkeypatch):
     with pytest.raises(FileNotFoundError) as error:
         solve(get_problem(1), max_evaluations=20)
     assert error.value is expected
+
+
+@pytest.mark.parametrize("failure", [RuntimeError("simulation failed"), KeyboardInterrupt("stop")])
+def test_callback_failure_stops_future_simulations_and_reraises_original(monkeypatch, failure):
+    calls = []
+
+    class Broken(Quadratic):
+        def evaluate(self, x, **kwargs):
+            calls.append(tuple(x))
+            raise failure
+
+    def fake_pdfo(objective, start, **kwargs):
+        # Fortran must receive a numeric sentinel, never a Python exception.
+        assert all(value != value for value in [objective(start), objective(start), objective(start)])
+        return object()
+
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(pdfo=fake_pdfo))
+    with pytest.raises(type(failure)) as error:
+        solve(Broken(), max_evaluations=10)
+    assert error.value is failure
+    assert calls == [(0.0, 0.0)]
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
+def test_nonfinite_scalar_objectives_are_rejected_after_solver_unwinds(monkeypatch, value):
+    class Nonfinite(Quadratic):
+        def evaluate(self, x, **kwargs):
+            return value
+
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(
+        pdfo=lambda objective, start, **kwargs: objective(start),
+    ))
+    with pytest.raises(ValueError, match="nonfinite objective"):
+        solve(Nonfinite(), max_evaluations=10)
+
+
+def test_optional_solver_import_error_has_actionable_installation_hint(monkeypatch):
+    monkeypatch.setitem(sys.modules, "pdfo", None)
+    with pytest.raises(ImportError, match=r"bem-testproblems\[optimize\]"):
+        solve(Quadratic())

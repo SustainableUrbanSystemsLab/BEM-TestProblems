@@ -11,7 +11,10 @@ import shutil
 import zipfile
 from pathlib import Path
 
-from install_energyplus import ROOT, download
+if __package__:
+    from .install_energyplus import ROOT, download
+else:
+    from install_energyplus import ROOT, download
 
 FILES = {
     "energyplus.exe": "50115bd8bacc102bf793caa7bbb33f19508b8cbf28b7c20169e301c9b32d3d98",
@@ -43,7 +46,11 @@ def install(destination=None):
     return destination / "energyplus.exe"
 
 
-if __name__ == "__main__":
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--destination", type=Path)
-    install(parser.parse_args().destination)
+    install(parser.parse_args(argv).destination)
+
+
+if __name__ == "__main__":
+    main()

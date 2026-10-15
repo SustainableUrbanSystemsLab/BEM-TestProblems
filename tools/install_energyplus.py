@@ -95,9 +95,13 @@ def install(key=None, destination=None):
     return executable
 
 
-if __name__ == "__main__":
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--platform")
     parser.add_argument("--destination", type=Path)
-    options = parser.parse_args()
+    options = parser.parse_args(argv)
     install(options.platform, options.destination)
+
+
+if __name__ == "__main__":
+    main()

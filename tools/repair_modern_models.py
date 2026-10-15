@@ -17,6 +17,11 @@ OLD_SOURCE = "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/Energy
 NEW_SOURCE = "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/"
 
 
+def _positive_number(value):
+    return (isinstance(value, (int, float)) and not isinstance(value, bool)
+            and math.isfinite(value) and value > 0)
+
+
 def area(surface):
     vertices = [
         tuple(vertex[f"vertex_{axis}_coordinate"] for axis in "xyz")
@@ -93,10 +98,8 @@ def apply_compatibility(model, number):
             if (
                 original != "Autosize"
                 or radiator["heating_design_capacity_method"] != "HeatingDesignCapacity"
-                or not isinstance(radiator["u_factor_times_area_value"], (int, float))
-                or not radiator["u_factor_times_area_value"] > 0
-                or not isinstance(radiator["maximum_water_flow_rate"], (int, float))
-                or not radiator["maximum_water_flow_rate"] > 0
+                or not _positive_number(radiator["u_factor_times_area_value"])
+                or not _positive_number(radiator["maximum_water_flow_rate"])
             ):
                 raise ValueError(f"School radiator {name}: UA and flow must remain hard-sized")
             radiator["heating_design_capacity"] = 0.0
@@ -130,6 +133,8 @@ def repair_file(path, number):
         return 0
     sidecar = path.with_suffix(".provenance.json")
     provenance = json.loads(sidecar.read_bytes())
+    if provenance.get("output_sha256") != hashlib.sha256(raw).hexdigest():
+        raise ValueError("Model bytes do not match their transition provenance; manual review required")
     provenance.setdefault("transitioned_epjson_sha256", hashlib.sha256(raw).hexdigest())
     updated = (json.dumps(model, indent=2, sort_keys=True) + "\n").encode("utf-8")
     path.write_bytes(updated)

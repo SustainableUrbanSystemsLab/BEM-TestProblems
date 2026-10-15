@@ -4,7 +4,7 @@
 import pytest
 
 from bem_testproblems.energyplus import RunResult
-from bem_testproblems.outputs import OutputError, extract_outputs
+from bem_testproblems.outputs import OutputError, extract_outputs, read_eso
 
 
 def eso_run(tmp_path, variables, *, version="8.5.0", reverse=False):
@@ -95,3 +95,69 @@ def test_office_preserves_displayed_conditioned_area_value(tmp_path):
 def test_missing_report_fails(tmp_path):
     with pytest.raises(OutputError, match="Missing"):
         extract_outputs("simple", RunResult(tmp_path, "8.5.0"))
+
+
+@pytest.mark.parametrize("body,message", [
+    ("End of Data\n", "Incomplete ESO"),
+    ("End of Data Dictionary\n", "Incomplete ESO"),
+    ("10,1,ZONE,Energy [J] !RunPeriod\n10,1,ZONE,Energy [J] !RunPeriod\n"
+     "End of Data Dictionary\nEnd of Data\n", "Duplicate ESO dictionary"),
+    ("10,1,ZONE,Energy [J] !RunPeriod\nEnd of Data Dictionary\n10\nEnd of Data\n",
+     "Truncated ESO data"),
+    ("10,1,ZONE,Energy [J] !RunPeriod\nEnd of Data Dictionary\n10,invalid\nEnd of Data\n",
+     "Non-numeric report value"),
+])
+def test_malformed_eso_is_rejected_with_specific_diagnostic(tmp_path, body, message):
+    path = tmp_path / "malformed.eso"
+    path.write_text(body)
+    with pytest.raises(OutputError, match=message):
+        read_eso(path)
+
+
+@pytest.mark.parametrize("variables,message", [
+    ([], "found 0"),
+    ([("HOTWATER", "District Heating Water Energy", "J", "Daily", 1)] * 2, "found 2"),
+    ([("HOTWATER", "District Heating Water Energy", "J", "RunPeriod", 1)], "found 0"),
+])
+def test_required_report_must_be_unique_and_have_correct_frequency(tmp_path, variables, message):
+    with pytest.raises(OutputError, match=message):
+        extract_outputs("school", eso_run(tmp_path, variables))
+
+
+def test_report_keys_names_and_frequency_ignore_case_and_extra_spaces(tmp_path):
+    run = eso_run(tmp_path, [
+        (" hotwater ", "district  heating WATER energy", "J", "daily", 3.6e6),
+        (" HOTWATER ", "District Heating  Water Rate", "W", "DAILY", 2000),
+    ])
+    assert extract_outputs("school", run) == {"Q": 1, "P": 2}
+
+
+@pytest.mark.parametrize("unit", ["MJ/m2", "MJ/m^2", "MJ/m²"])
+def test_office_accepts_documented_square_metre_spellings(tmp_path, unit):
+    (tmp_path / "eplustbl.csv").write_text(
+        f"Site and Source Energy\n,Energy Per Conditioned Building Area [{unit}]\n"
+        "Total Source Energy,123.45\n",
+        encoding="utf-8-sig",
+    )
+    assert extract_outputs("office", RunResult(tmp_path, "26.2.0")) == {"Y": 123.45}
+
+
+@pytest.mark.parametrize("table,message", [
+    ("Site and Source Energy\nTotal Source Energy,1\n", "Missing Total Source Energy"),
+    ("Site and Source Energy\n,Energy Per Conditioned Building Area [MJ/m2]\n"
+     "Total Source Energy,nan\n", "Non-finite report value"),
+    ("Site and Source Energy\n,Energy Per Conditioned Building Area [MJ/m2]\n"
+     "Total Source Energy,1\n" * 2, "Expected one Site and Source Energy"),
+])
+def test_office_rejects_missing_ambiguous_or_nonfinite_values(tmp_path, table, message):
+    (tmp_path / "eplustbl.csv").write_text(table)
+    with pytest.raises(OutputError, match=message):
+        extract_outputs("office", RunResult(tmp_path, "26.2.0"))
+
+
+def test_missing_tabular_report_and_unknown_family_have_clear_errors(tmp_path):
+    run = RunResult(tmp_path, "26.2.0")
+    with pytest.raises(OutputError, match="Missing EnergyPlus tabular output"):
+        extract_outputs("office", run)
+    with pytest.raises(ValueError, match="Unknown benchmark output family"):
+        extract_outputs("unavailable", run)

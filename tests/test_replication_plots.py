@@ -70,3 +70,58 @@ def test_partial_plot_is_labeled_and_numerical_summary_is_preserved(tmp_path):
     assert report["skipped_original_methods"][0]["name"] == "galapagos_ga"
     assert len(result["plots"]) == 2
     assert (tmp_path / "plots/figure8-energyplus-8.5.0.png").stat().st_size > 0
+
+
+@pytest.mark.parametrize("value", [None, float("nan"), float("inf")])
+def test_completed_records_need_a_finite_best_objective(tmp_path, value):
+    root = experiment(tmp_path)
+    path = root / "runs/0.json"
+    record = json.loads(path.read_text())
+    record["best_f"] = value
+    path.write_text(json.dumps(record))
+    with pytest.raises(ValueError, match="finite best objective"):
+        collect_boxplot_data(root)
+
+
+def test_duplicate_manifest_specs_are_rejected_before_plotting(tmp_path):
+    root = experiment(tmp_path)
+    path = root / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["runs"].append(manifest["runs"][0])
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="Duplicate run IDs"):
+        collect_boxplot_data(root)
+
+
+@pytest.mark.parametrize("number", (1, 13))
+def test_paired_engine_summary_uses_completed_medians_and_the_old_engine_denominator(tmp_path, number):
+    pytest.importorskip("matplotlib")
+    root = experiment(tmp_path)
+    manifest_path = root / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["problem_definitions"] = {str(number): manifest["problem_definitions"]["1"]}
+    for spec in manifest["runs"]:
+        spec["problem"] = number
+    manifest["protocol"] = "paper-start-and-budget-protocol"
+    manifest["engines"]["26.2.0"] = {}
+    for version, values in (("8.5.0", (10, 20, 30, 40)), ("26.2.0", (12, 24, 36, 48))):
+        for i, value in enumerate(values):
+            spec = {"id": str(i) if version == "8.5.0" else f"modern-{i}",
+                    "problem": number, "version": version, "solver": "bobyqa"}
+            if version != "8.5.0":
+                manifest["runs"].append(spec)
+            record = {**spec, "manifest_id": "example", "status": "completed",
+                      "best_f": value, "best_x": [i], "warmup_severe_evaluations_used": 2 if i == 0 else 0}
+            (root / "runs" / f"{spec['id']}.json").write_text(json.dumps(record))
+    manifest_path.write_text(json.dumps(manifest))
+    result = plot_replication(root)
+    report = json.loads((root / "plots/boxplot-summary.json").read_text())
+    assert result["scope"] == "PAPER BUDGET" and not report["partial"]
+    assert report["groups"][0]["statistics"] == {
+        "minimum": 10, "q1": 17.5, "median": 25, "q3": 32.5, "maximum": 40}
+    comparison = report["engine_median_comparisons"][0]
+    assert comparison["median_8.5"] == 25 and comparison["median_26.2"] == 30
+    assert comparison["signed_difference"] == 5 and comparison["percentage_change"] == 20
+    assert comparison["accepted_8.5"] == comparison["accepted_26.2"] == 4
+    assert report["groups"][0]["runs_using_warmup_severe_outputs"] == 1
+    assert report["groups"][0]["warmup_severe_evaluations_used"] == 2

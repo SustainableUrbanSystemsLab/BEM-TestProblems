@@ -1,7 +1,12 @@
 """Checksum and path-boundary checks for the local tool installers."""
 
 import hashlib
+import io
+import json
+import tarfile
 import zipfile
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -94,3 +99,166 @@ def test_function_value_tolerance_uses_the_reference_and_absolute_zero_fallback(
     assert not numerical_difference(1000.002, 1000, "EUR", rtol=1e-6, atol=1e-7)["passed"]
     small = numerical_difference(1e-8, 0, "kWh", rtol=1e-6, atol=1e-7)
     assert small["passed"] and small["relative_difference"] is None
+
+
+def test_download_replaces_corrupt_cache_only_after_verifying_replacement(tmp_path):
+    target = tmp_path / "cached"
+    target.write_bytes(b"old corrupt cache")
+    source = tmp_path / "replacement"
+    source.write_bytes(b"verified replacement")
+    checksum = hashlib.sha256(source.read_bytes()).hexdigest()
+    assert download(source.as_uri(), target, checksum) == target
+    assert target.read_bytes() == b"verified replacement"
+    assert not target.with_suffix(".part").exists()
+
+
+def test_interrupted_download_preserves_existing_file_and_removes_partial(tmp_path, monkeypatch):
+    from tools import install_energyplus as tool
+
+    class Interrupted(io.BytesIO):
+        def read(self, size=-1):
+            if self.tell():
+                raise OSError("interrupted transfer")
+            return super().read(3)
+
+    monkeypatch.setattr(tool.urllib.request, "urlopen", lambda *a, **k: Interrupted(b"payload"))
+    target = tmp_path / "download"
+    target.write_bytes(b"previous")
+    with pytest.raises(OSError, match="interrupted"):
+        download("https://example.invalid", target, "0" * 64)
+    assert target.read_bytes() == b"previous"
+    assert not target.with_name("download.part").exists()
+
+
+def test_tar_extraction_rejects_symlink_escape(tmp_path):
+    archive = tmp_path / "unsafe.tar"
+    with tarfile.open(archive, "w") as bundle:
+        link = tarfile.TarInfo("escaping-link")
+        link.type, link.linkname = tarfile.SYMTYPE, "../outside"
+        bundle.addfile(link)
+    with pytest.raises(tarfile.FilterError):
+        extract(archive, tmp_path / "installation")
+    assert not (tmp_path / "outside").exists()
+
+
+@pytest.mark.parametrize("system,machine,expected", [
+    ("Darwin", "arm64", "macos-arm64"), ("Linux", "aarch64", "linux-arm64"),
+    ("Windows", "AMD64", "windows-x86_64"), ("Linux", "x86_64", "linux-x86_64"),
+])
+def test_installer_maps_supported_host_platforms(system, machine, expected, monkeypatch):
+    from tools import install_energyplus as tool
+
+    monkeypatch.setattr(tool.platform, "system", lambda: system)
+    monkeypatch.setattr(tool.platform, "machine", lambda: machine)
+    assert tool.platform_key() == expected
+
+
+def test_unknown_platform_requires_an_explicit_choice(monkeypatch):
+    from tools import install_energyplus as tool
+
+    monkeypatch.setattr(tool.platform, "system", lambda: "unsupported")
+    with pytest.raises(ValueError, match="Unsupported platform"):
+        tool.platform_key()
+
+
+def test_modern_install_uses_verified_archive_and_refuses_unstamped_directory(tmp_path, monkeypatch):
+    from tools import install_energyplus as tool
+
+    metadata = {"version": "26.2.0", "build": "test", "archives": {
+        "windows-x86_64": ["Windows.zip", "1" * 64]}}
+    assets = tmp_path / "assets"
+    assets.mkdir()
+    (assets / "energyplus-downloads.json").write_text(json.dumps(metadata))
+    bundle_path = tmp_path / "official.zip"
+    with zipfile.ZipFile(bundle_path, "w") as bundle:
+        bundle.writestr("installation/energyplus.exe", b"mock executable, never launched")
+        bundle.writestr("installation/Energy+.idd", "mock dictionary")
+    calls = []
+
+    def fake_download(url, target, expected):
+        calls.append((url, target, expected))
+        return bundle_path
+
+    monkeypatch.setattr(tool, "ROOT", tmp_path)
+    monkeypatch.setattr(tool, "download", fake_download)
+    destination = tmp_path / "installed"
+    executable = tool.install("windows-x86_64", destination)
+    assert executable == destination / "energyplus.exe"
+    assert executable.read_bytes() == b"mock executable, never launched"
+    assert calls[0][2] == "1" * 64
+    stamp = json.loads((destination / "bem-install.json").read_text())
+    assert stamp["archive_sha256"] == "1" * 64 and stamp["platform"] == "windows-x86_64"
+    assert tool.install("windows-x86_64", destination) == executable
+    assert len(calls) == 1
+    unverified = tmp_path / "unverified"
+    unverified.mkdir()
+    with pytest.raises(FileExistsError, match="not a verified installation"):
+        tool.install("windows-x86_64", unverified)
+
+
+@pytest.mark.parametrize("count", [0, 2])
+def test_modern_install_rejects_ambiguous_executable_layout(tmp_path, monkeypatch, count):
+    from tools import install_energyplus as tool
+
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets/energyplus-downloads.json").write_text(json.dumps({
+        "version": "26.2.0", "build": "test", "archives": {"windows-x86_64": ["Windows.zip", "0" * 64]}}))
+    archive = tmp_path / "bundle.zip"
+    with zipfile.ZipFile(archive, "w") as bundle:
+        for index in range(count):
+            bundle.writestr(f"copy{index}/energyplus.exe", "mock")
+    monkeypatch.setattr(tool, "ROOT", tmp_path)
+    monkeypatch.setattr(tool, "download", lambda *args: archive)
+    with pytest.raises(ValueError, match="Expected one"):
+        tool.install("windows-x86_64", tmp_path / "installed")
+    assert not (tmp_path / "installed").exists()
+
+
+def test_legacy_installer_checks_platform_and_runtime_before_downloads(tmp_path, monkeypatch):
+    from tools import install_reference_engine as tool
+
+    monkeypatch.setattr(tool, "download", lambda *a: pytest.fail("No download before preflight"))
+    monkeypatch.setattr(tool, "os", SimpleNamespace(name="posix"))
+    with pytest.raises(RuntimeError, match="requires Windows"):
+        tool.install(tmp_path / "engine")
+    monkeypatch.setattr(tool, "os", SimpleNamespace(name="nt"))
+
+    def missing_runtime(_):
+        raise OSError("missing runtime")
+
+    monkeypatch.setattr(tool, "ctypes", SimpleNamespace(WinDLL=missing_runtime))
+    with pytest.raises(RuntimeError, match="Visual C"):
+        tool.install(tmp_path / "engine")
+    assert not (tmp_path / "engine").exists()
+
+
+@pytest.mark.parametrize("member", ["energyplusapi.dll", "../energyplusapi.dll"])
+def test_legacy_install_extracts_only_pinned_core_and_retains_notice(tmp_path, monkeypatch, member):
+    from tools import install_reference_engine as tool
+
+    (tmp_path / "reference/licenses").mkdir(parents=True)
+    (tmp_path / "reference/licenses/EnergyPlus-8.5-LICENSE.txt").write_text("full notice")
+    monkeypatch.setattr(tool, "ROOT", tmp_path)
+    monkeypatch.setattr(tool, "os", SimpleNamespace(name="nt"))
+    monkeypatch.setattr(tool, "ctypes", SimpleNamespace(WinDLL=lambda _: None))
+    calls = []
+
+    def fake_download(url, path, checksum):
+        calls.append((url, Path(path).name, checksum))
+        if path.suffix == ".zip":
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr(member, "mock API, never loaded")
+        else:
+            path.write_bytes(b"mock core, never launched")
+
+    monkeypatch.setattr(tool, "download", fake_download)
+    destination = tmp_path / "engine"
+    if member.startswith("../"):
+        with pytest.raises(ValueError, match="Unexpected legacy API"):
+            tool.install(destination)
+        assert not (tmp_path / "energyplusapi.dll").exists()
+    else:
+        assert tool.install(destination) == destination / "energyplus.exe"
+        assert (destination / "License.txt").read_text() == "full notice"
+        assert (destination / "energyplusapi.dll").read_text() == "mock API, never loaded"
+    assert {name: checksum for _, name, checksum in calls} == tool.FILES

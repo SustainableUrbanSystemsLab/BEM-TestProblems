@@ -1,10 +1,6 @@
 """Process-boundary tests use a tiny executable, never an EnergyPlus installation."""
 
 import json
-import os
-import shlex
-import sys
-import textwrap
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -12,41 +8,6 @@ from pathlib import Path
 import pytest
 
 from bem_testproblems.energyplus import EnergyPlusError, EnergyPlusRunner, sha256_file
-
-
-@pytest.fixture
-def fake_engine(tmp_path):
-    script = tmp_path / "fake_engine.py"
-    script.write_text(textwrap.dedent('''\
-        import json, os, pathlib, subprocess, sys, time
-        if "--version" in sys.argv:
-            print("EnergyPlus, Version 26.2.0-test")
-            raise SystemExit(0)
-        out = pathlib.Path(sys.argv[sys.argv.index("-d") + 1])
-        inp = pathlib.Path(sys.argv[-1])
-        settings = json.loads(inp.read_text()).get("test", {})
-        print("stdout retained", flush=True)
-        print("stderr retained", file=sys.stderr, flush=True)
-        (out / "observed.json").write_text(json.dumps({"cwd": os.getcwd(), "argv": sys.argv}))
-        if settings.get("child"):
-            target = str(out / "orphan-marker")
-            subprocess.Popen([sys.executable, "-c", "import time,pathlib;time.sleep(1.5);pathlib.Path(" + repr(target) + ").write_text('orphan')"])
-            time.sleep(30)
-        if settings.get("exit"):
-            raise SystemExit(settings["exit"])
-        (out / "eplusout.err").write_text("** Severe  ** bad model" if settings.get("severe") else "0 Warning; 0 Severe Errors")
-        if not settings.get("incomplete"):
-            (out / "eplusout.end").write_text("EnergyPlus Completed Successfully")
-        (out / "eplusout.eso").write_text("End of Data Dictionary\\nEnd of Data\\n")
-    '''))
-    if os.name == "nt":
-        executable = tmp_path / "fake_energyplus.cmd"
-        executable.write_text(f'@"{sys.executable}" "{script}" %*\n')
-    else:
-        executable = tmp_path / "fake_energyplus"
-        executable.write_text(f'#!/bin/sh\nexec {shlex.quote(sys.executable)} {shlex.quote(str(script))} "$@"\n')
-        executable.chmod(0o755)
-    return executable
 
 
 def model(tmp_path, **settings):
@@ -141,3 +102,138 @@ def test_cache_includes_weather_and_mode(tmp_path, fake_engine):
     two = runner.run(source, weather)
     three = runner.run(source, weather, design_day=True)
     assert len({one.directory, two.directory, three.directory}) == 3
+
+
+@pytest.mark.parametrize("timeout", [0, -1, float("nan"), float("inf"), -float("inf")])
+def test_timeout_must_be_finite_and_positive(fake_engine, timeout):
+    with pytest.raises(ValueError, match="timeout must be finite and positive"):
+        EnergyPlusRunner(fake_engine, timeout=timeout)
+
+
+@pytest.mark.parametrize("replacement", ["Not an EnergyPlus version", "EnergyPlus, Version 8.5.0-test"])
+def test_unidentifiable_or_wrong_probe_version_never_starts_simulation(fake_engine, replacement):
+    script = fake_engine.parent / "fake_engine.py"
+    script.write_text(script.read_text().replace("EnergyPlus, Version 26.2.0-test", replacement))
+    with pytest.raises(EnergyPlusError) as error:
+        EnergyPlusRunner(fake_engine)
+    assert error.value.reason == "version"
+    assert error.value.directory is None
+
+
+def test_failed_version_probe_reports_its_exit_status(fake_engine):
+    script = fake_engine.parent / "fake_engine.py"
+    script.write_text(script.read_text().replace("raise SystemExit(0)", "raise SystemExit(9)", 1))
+    with pytest.raises(EnergyPlusError, match="version probe failed") as error:
+        EnergyPlusRunner(fake_engine)
+    assert error.value.reason == "version"
+    assert error.value.returncode == 9
+
+
+def test_version_probe_timeout_is_a_configuration_error(fake_engine):
+    script = fake_engine.parent / "fake_engine.py"
+    script.write_text(script.read_text().replace(
+        'print("EnergyPlus, Version 26.2.0-test")',
+        'time.sleep(5); print("EnergyPlus, Version 26.2.0-test")',
+    ))
+    with pytest.raises(EnergyPlusError, match="version probe timed out") as error:
+        EnergyPlusRunner(fake_engine, timeout=0.5)
+    assert error.value.reason == "version"
+
+
+def test_executable_replacement_is_rejected_before_running(tmp_path, fake_engine):
+    runner = EnergyPlusRunner(fake_engine, output_root=tmp_path / "runs")
+    fake_engine.write_bytes(fake_engine.read_bytes() + b"\n")
+    with pytest.raises(EnergyPlusError, match="executable changed") as error:
+        runner.run(model(tmp_path))
+    assert error.value.reason == "version"
+    assert list(runner.output_root.iterdir()) == []
+
+
+@pytest.mark.parametrize("changed_file,new_content", [
+    ("eplusout.err", "** Fatal ** modified diagnostics"),
+    ("eplusout.end", "EnergyPlus Terminated"),
+    ("input.epJSON", "Replaced staged input"),
+])
+def test_cache_does_not_reuse_corrupted_inputs_or_completion_diagnostics(
+    tmp_path, fake_engine, changed_file, new_content
+):
+    runner = EnergyPlusRunner(fake_engine, output_root=tmp_path / "runs")
+    source = model(tmp_path)
+    first = runner.run(source)
+    (first.directory / changed_file).write_text(new_content)
+    fresh = runner.run(source)
+    assert not fresh.cache_hit
+    assert fresh.directory != first.directory
+    assert runner.run(source).cache_hit
+
+
+@pytest.mark.parametrize("changed", ["input", "weather"])
+def test_identity_change_between_cache_key_and_staging_is_not_cached(
+    tmp_path, fake_engine, monkeypatch, changed
+):
+    runner = EnergyPlusRunner(fake_engine, output_root=tmp_path / "runs")
+    source = model(tmp_path)
+    weather = tmp_path / "weather.epw"
+    weather.write_text("Initial weather")
+    actual_run = runner._run_uncached
+
+    def mutate_before_staging(*args, **kwargs):
+        path = source if changed == "input" else weather
+        path.write_text(path.read_text() + "\n")
+        return actual_run(*args, **kwargs)
+
+    monkeypatch.setattr(runner, "_run_uncached", mutate_before_staging)
+    with pytest.raises(EnergyPlusError, match="changed during evaluation") as error:
+        runner.run(source, weather)
+    assert error.value.reason == "input_changed"
+    assert error.value.directory.is_dir()
+    monkeypatch.setattr(runner, "_run_uncached", actual_run)
+    assert not runner.run(source, weather).cache_hit
+
+
+@pytest.mark.parametrize("versions", [{}, {"a": {}, "b": {"version_identifier": "26.2"}}])
+def test_missing_or_ambiguous_input_version_fails_before_process_launch(tmp_path, fake_engine, versions):
+    source = model(tmp_path)
+    source.write_text(json.dumps({"Version": versions}))
+    runner = EnergyPlusRunner(fake_engine, output_root=tmp_path / "runs")
+    with pytest.raises(EnergyPlusError) as error:
+        runner.run(source)
+    assert error.value.reason == "input_version"
+    assert list(runner.output_root.iterdir()) == []
+
+
+@pytest.mark.parametrize("cache", [True, False])
+def test_invalid_input_suffix_and_weather_directory_are_rejected(tmp_path, fake_engine, cache):
+    runner = EnergyPlusRunner(fake_engine, cache=cache, output_root=tmp_path / "runs")
+    source = model(tmp_path)
+    wrong_extension = source.with_suffix(".txt")
+    wrong_extension.write_bytes(source.read_bytes())
+    input_directory = tmp_path / "directory.idf"
+    input_directory.mkdir()
+    with pytest.raises(ValueError, match="input must be an .idf or .epJSON"):
+        runner.run(wrong_extension)
+    with pytest.raises(ValueError, match="input must be an .idf or .epJSON"):
+        runner.run(input_directory)
+    with pytest.raises(ValueError, match="weather_file must be an EPW file"):
+        runner.run(source, tmp_path)
+    assert list(runner.output_root.iterdir()) == []
+
+
+@pytest.mark.parametrize("text,accepted", [
+    ("! Version,8.5;\nBuilding,Example;\nvErSiOn,26.2; ! Current target", True),
+    ("! Version,26.2;\nBuilding,Example;", False),
+    ("Version,unknown;", False),
+    ("Version,8.5;", False),
+])
+def test_idf_version_parser_distinguishes_comments_case_and_actual_version(
+    tmp_path, fake_engine, text, accepted
+):
+    source = tmp_path / "input.idf"
+    source.write_text(text)
+    runner = EnergyPlusRunner(fake_engine)
+    if accepted:
+        runner._check_input_version(source)
+    else:
+        with pytest.raises(EnergyPlusError) as error:
+            runner.run(source)
+        assert error.value.reason == "input_version"

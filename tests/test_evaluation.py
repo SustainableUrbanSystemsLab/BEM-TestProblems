@@ -229,3 +229,65 @@ def test_legacy_runner_is_inferred_and_missing_original_template_fails_at_bind(m
 def test_conflicting_configuration_fails_before_launch(options):
     with pytest.raises(ValueError):
         make_objective(13, **options)
+
+
+def test_installed_package_defaults_and_explicit_paths_follow_callers_directory(tmp_path, monkeypatch):
+    module = tmp_path / "installation" / "bem_testproblems" / "evaluation.py"
+    monkeypatch.setattr(evaluation, "__file__", str(module))
+    monkeypatch.chdir(tmp_path)
+    executable = tmp_path / "chosen-engine"
+    weather = tmp_path / "variant.epw"
+    executable.write_text("An executable checked only by the fake constructor")
+    weather.write_text("Independent weather variant")
+    created = []
+
+    def construct(path, **kwargs):
+        created.append((path, kwargs))
+        return FakeRunner(kwargs["expected_version"])
+
+    monkeypatch.setattr(evaluation, "EnergyPlusRunner", construct)
+    objective = make_objective(13, executable="chosen-engine", weather="variant.epw", output_root="runs")
+    assert created == [(executable, {"expected_version": "26.2.0", "output_root": tmp_path / "runs"})]
+    assert objective.keywords["weather"] == weather
+    assert evaluation._default_project_root() == tmp_path
+
+
+@pytest.mark.parametrize("setting", ["executable", "weather"])
+def test_explicit_directory_cannot_replace_required_file(tmp_path, setting):
+    options = {setting: tmp_path}
+    if setting == "weather":
+        options["runner"] = FakeRunner()
+    with pytest.raises(ValueError, match="must be a file"):
+        make_objective(13, **options)
+
+
+def test_explicit_missing_weather_has_a_specific_setup_error(tmp_path):
+    with pytest.raises(FileNotFoundError, match="Explicit weather file is missing"):
+        make_objective(13, runner=FakeRunner(), weather=tmp_path / "missing.epw")
+
+
+@pytest.mark.parametrize("version", ["8.5.1", "26.2.1", "unknown"])
+def test_factory_rejects_unsupported_runner_version_before_setup(tmp_path, version):
+    with pytest.raises(ValueError, match="Supported EnergyPlus versions"):
+        make_objective(13, project_root=tmp_path, runner=FakeRunner(version))
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_explicit_legacy_version_is_normalized_and_binds_existing_reference(tmp_path, monkeypatch):
+    looked_up = []
+    monkeypatch.setattr(evaluation, "legacy_template_path", lambda filename: looked_up.append(filename))
+    runner = FakeRunner("8.5")
+    objective = make_objective(13, runner=runner, energyplus_version="8.5.0")
+    assert objective.keywords == {"runner": runner, "weather": None}
+    assert looked_up == [get_problem(13).template_filename]
+
+
+@pytest.mark.parametrize("record_count", [0, 2])
+def test_canonical_weather_needs_one_unambiguous_package_pin(tmp_path, monkeypatch, record_count):
+    package = tmp_path / "package"
+    (package / "data").mkdir(parents=True)
+    record = {"cache_path": get_problem(1).weather_filename, "sha256": "not-used"}
+    (package / "data" / "weather-assets.json").write_text(json.dumps({"files": [record] * record_count}))
+    monkeypatch.setattr(evaluation, "files", lambda package_name: package)
+    with pytest.raises(ValueError, match="No canonical weather checksum"):
+        make_objective(1, runner=FakeRunner(), weather_dir=tmp_path)

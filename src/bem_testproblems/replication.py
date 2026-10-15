@@ -345,7 +345,10 @@ def _compact_success(result, attempt_root, policy):
         retained = {"eplusout.err", "eplusout.end", "run.json", "stdout.log", "stderr.log"}
         for path in directory.iterdir():
             if path.name not in retained:
-                shutil.rmtree(path) if path.is_dir() else path.unlink()
+                if path.is_dir():
+                    shutil.rmtree(path)
+                else:
+                    path.unlink()
 
 
 def _run_one(spec, manifest, root, retain_success):
@@ -450,8 +453,12 @@ def _run_one(spec, manifest, root, retain_success):
             raise failure
         record["solver_result"] = _json_value(result)
         status = result.get("status", "completed")
-        record["status"] = "skipped" if status == "skipped" else "budget_exhausted" if status in {
-            "budget", "budget_exhausted"} else "completed"
+        if status == "skipped":
+            record["status"] = "skipped"
+        elif status in {"budget", "budget_exhausted"}:
+            record["status"] = "budget_exhausted"
+        else:
+            record["status"] = "completed"
         record["message"] = str(result.get("message", ""))
         record["solver_termination"] = status
         record["solver_success"] = result.get("success")

@@ -200,9 +200,10 @@ Reduced-budget smoke runs and incomplete campaigns are explicitly labeled.
 ## Tests and numerical comparisons
 
 ```sh
-.venv/bin/python -m pip install -e '.[dev,optimize]'
+.venv/bin/python -m pip install -e '.[dev,optimize,replication]'
 .venv/bin/python tools/fetch_reference.py
-.venv/bin/python -m pytest -q
+.venv/bin/python -m coverage run -m pytest -q
+.venv/bin/python -m coverage report
 .venv/bin/python -m ruff check src tests tools
 ```
 
@@ -210,6 +211,11 @@ GitHub Actions checks Python on Linux, Windows and macOS; compares unchanged
 original C# components with Python using the same EnergyPlus 8.5 engine; and
 checks modern results against separately reviewed EnergyPlus 26.2 references.
 The [reference harness](reference/README.md) documents the numerical comparisons.
+CI publishes coverage for every Python module and tool, including branches, and
+requires every nonempty file to be exercised and at least 85% combined coverage.
+Coverage identifies gaps; correctness
+comes from independent formula checks, failure tests and native reference
+comparisons. The [testing guide](docs/testing.md) maps the code to those checks.
 
 | Check | Comparison | Purpose |
 | --- | --- | --- |
