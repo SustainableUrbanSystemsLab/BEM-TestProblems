@@ -211,6 +211,9 @@ def validate(args):
         report["passed"] = True
     except BaseException as error:
         report["failure"] = str(error)
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            message = str(error).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+            print("::error::" + message, flush=True)
         raise
     finally:
         args.output.parent.mkdir(parents=True, exist_ok=True)
