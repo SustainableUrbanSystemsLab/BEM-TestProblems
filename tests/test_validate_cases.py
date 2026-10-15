@@ -338,13 +338,13 @@ def test_github_summary_is_written_after_aggregate_failure_and_known_rejections_
     monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
     with pytest.raises(AssertionError, match="Strict simulation rejected"):
         validation.validate(audit.args)
-    text = summary.read_text()
+    text = summary.read_text(encoding="utf-8")
     assert "Validation: **FAIL**" in text
     assert "Accepted simulations: **1**. Reference-checked rejections: **1**" in text
     assert "| first | Rejected warmup | PASS | unavailable | unavailable | unavailable |" in text
     assert "| second | Accepted | PASS | 10 | +0 (+0%) | unavailable |" in text
     assert "| unexpected | Rejected | FAIL (simulation) | unavailable" in text
-    assert str(audit.args.output) in text
+    assert str(audit.args.output).replace("\\", "\\\\") in text
     assert "::warning::first: rejected simulation; failure reference matched" in capsys.readouterr().out
 
 
@@ -366,7 +366,7 @@ def test_csharp_mismatch_does_not_count_a_native_only_failure_match(audit, monke
     assert report["cases"][0]["failure_reference_matched"] is True
     assert report["cases"][0]["validation_passed"] is False
     assert report["reference_checked_rejections"] == 0
-    assert "Reference-checked rejections: **0**" in summary.read_text()
+    assert "Reference-checked rejections: **0**" in summary.read_text(encoding="utf-8")
 
 
 def test_summary_reports_signed_reference_deltas_and_escapes_case_metadata():
