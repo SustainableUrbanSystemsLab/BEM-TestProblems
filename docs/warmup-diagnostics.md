@@ -19,37 +19,41 @@ These are new project measurements; no numerical paper result is substituted.
 An objective below means the engine run passed strict diagnostics. **Rejected**
 means no objective was accepted. Displayed numbers are rounded to six decimals;
 the JSON records retain full available precision. Values from different engine
-versions are not expected to coincide.
+versions are not expected to coincide. The baseline is EnergyPlus 8.5:
+`Δ objective = f26.2 - f8.5` and `Δ (%) = 100 × (f26.2 - f8.5) / |f8.5|`.
+Positive changes are increases; negative changes are decreases. A dash means a
+comparison is unavailable because an evaluation was rejected (or, for a percentage,
+the baseline is zero). Changes are computed from full-precision values.
 
-| Case | EnergyPlus 8.5 objective | EnergyPlus 26.2 objective | Units |
-| --- | ---: | ---: | --- |
-| p01-midpoint | 153.181082 | 147.566000 | kWh/(m2 year) |
-| p02-midpoint | 194.745959 | 186.875943 | kWh/(m2 year) |
-| p03-midpoint | 173.274743 | 170.143885 | kWh/(m2 year) |
-| p04-midpoint | 147.638635 | 172.688497 | kWh/(m2 year) |
-| p05-midpoint | 214.609328 | 241.746830 | kWh/(m2 year) |
-| p06-midpoint | 179.577025 | 201.960714 | kWh/(m2 year) |
-| p08-midpoint | 173.938191 | 190.621682 | kWh/(m2 year) |
-| p09-midpoint | 843.380000 | 840.870000 | MJ/m2 |
-| p10-midpoint | 1198.570000 | 1201.820000 | MJ/m2 |
-| p13-midpoint | 1932.967349 | 1928.196660 | EUR |
-| p01-lower | 237.042291 | 233.781187 | kWh/(m2 year) |
-| p01-upper | 148.337251 | 145.932647 | kWh/(m2 year) |
-| p04-lower | 202.643114 | **Rejected** | kWh/(m2 year) |
-| p04-upper | 147.725439 | 163.447883 | kWh/(m2 year) |
-| p09-lower | 830.190000 | 828.530000 | MJ/m2 |
-| p09-upper | 909.470000 | 907.110000 | MJ/m2 |
-| p10-lower | **Rejected** | 1095.630000 | MJ/m2 |
-| p10-upper | 1646.560000 | 2330.740000 | MJ/m2 |
-| p13-lower | 1983.035176 | 1978.814154 | EUR |
-| p13-upper | 2212.926716 | 2206.941898 | EUR |
-| p09-penalty-below | 1262.055000 | 1258.380000 | MJ/m2 |
-| p09-penalty-above | 841.370000 | 838.920000 | MJ/m2 |
-| p10-penalty-below | 1801.200000 | 1805.745000 | MJ/m2 |
-| p10-penalty-above | 1200.790000 | 1203.830000 | MJ/m2 |
-| p06-embedded-p08 | 173.938191 | 190.621682 | kWh/(m2 year) |
-| p08-embedded-check | 173.938191 | 190.621682 | kWh/(m2 year) |
-| p01-orientation90 | **Rejected** | 152.729368 | kWh/(m2 year) |
+| Case | EnergyPlus 8.5 objective | EnergyPlus 26.2 objective | Δ objective | Δ (%) | Units |
+| --- | ---: | ---: | ---: | ---: | --- |
+| p01-midpoint | 153.181082 | 147.566000 | -5.615082 | -3.6656% | kWh/(m2 year) |
+| p02-midpoint | 194.745959 | 186.875943 | -7.870016 | -4.0412% | kWh/(m2 year) |
+| p03-midpoint | 173.274743 | 170.143885 | -3.130858 | -1.8069% | kWh/(m2 year) |
+| p04-midpoint | 147.638635 | 172.688497 | +25.049861 | +16.9670% | kWh/(m2 year) |
+| p05-midpoint | 214.609328 | 241.746830 | +27.137502 | +12.6451% | kWh/(m2 year) |
+| p06-midpoint | 179.577025 | 201.960714 | +22.383688 | +12.4647% | kWh/(m2 year) |
+| p08-midpoint | 173.938191 | 190.621682 | +16.683491 | +9.5916% | kWh/(m2 year) |
+| p09-midpoint | 843.380000 | 840.870000 | -2.510000 | -0.2976% | MJ/m2 |
+| p10-midpoint | 1198.570000 | 1201.820000 | +3.250000 | +0.2712% | MJ/m2 |
+| p13-midpoint | 1932.967349 | 1928.196660 | -4.770689 | -0.2468% | EUR |
+| p01-lower | 237.042291 | 233.781187 | -3.261104 | -1.3757% | kWh/(m2 year) |
+| p01-upper | 148.337251 | 145.932647 | -2.404604 | -1.6210% | kWh/(m2 year) |
+| p04-lower | 202.643114 | **Rejected** | — | — | kWh/(m2 year) |
+| p04-upper | 147.725439 | 163.447883 | +15.722444 | +10.6430% | kWh/(m2 year) |
+| p09-lower | 830.190000 | 828.530000 | -1.660000 | -0.2000% | MJ/m2 |
+| p09-upper | 909.470000 | 907.110000 | -2.360000 | -0.2595% | MJ/m2 |
+| p10-lower | **Rejected** | 1095.630000 | — | — | MJ/m2 |
+| p10-upper | 1646.560000 | 2330.740000 | +684.180000 | +41.5521% | MJ/m2 |
+| p13-lower | 1983.035176 | 1978.814154 | -4.221022 | -0.2129% | EUR |
+| p13-upper | 2212.926716 | 2206.941898 | -5.984818 | -0.2704% | EUR |
+| p09-penalty-below | 1262.055000 | 1258.380000 | -3.675000 | -0.2912% | MJ/m2 |
+| p09-penalty-above | 841.370000 | 838.920000 | -2.450000 | -0.2912% | MJ/m2 |
+| p10-penalty-below | 1801.200000 | 1805.745000 | +4.545000 | +0.2523% | MJ/m2 |
+| p10-penalty-above | 1200.790000 | 1203.830000 | +3.040000 | +0.2532% | MJ/m2 |
+| p06-embedded-p08 | 173.938191 | 190.621682 | +16.683491 | +9.5916% | kWh/(m2 year) |
+| p08-embedded-check | 173.938191 | 190.621682 | +16.683491 | +9.5916% | kWh/(m2 year) |
+| p01-orientation90 | **Rejected** | 152.729368 | — | — | kWh/(m2 year) |
 
 `lower` and `upper` set every free variable to its corresponding box endpoint.
 The embedded P6/P8 rows test the reduced problem's fixed-coordinate mapping; they
@@ -127,9 +131,15 @@ it is a supported contributor rather than a proven sole cause.
 | Current 26.2, cap 100 | 34 | 0 / 0 | Accepted: 152.72936839 |
 
 The failed 8.5 run still writes a diagnostic-only value, 156.45937753. Changing
-the warmup cap changes that value by approximately `5.99e-6` relatively. Neither
-the failed-run value nor the scratch-cap variant is an unchanged historical
-benchmark observation.
+the warmup cap increases that diagnostic value by **0.00093710 kWh/(m² year)**,
+or **+0.000599%** against the failed run (relative change `5.99e-6`). This is only
+a diagnostic comparison; the canonical comparison remains unavailable because
+the original evaluation was rejected. Neither the failed-run value nor the
+scratch-cap variant is an unchanged historical benchmark observation.
+
+Against the successful scratch 8.5 cap-100 variant, the current 26.2 value is
+**3.73094625 kWh/(m² year) lower (−2.3846%)**. Both runs pass diagnostics, but the
+baseline is the scratch numerical variant rather than the original benchmark.
 
 ### P4: a persistent two-day numerical cycle
 

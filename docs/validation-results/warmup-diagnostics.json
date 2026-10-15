@@ -40,6 +40,12 @@
         "passed": true,
         "objective": 147.5659999247044,
         "input_sha256": "9e13cdbc8074136d048c2cf08ced8aad33927957d19a0a102e4c62e74b9bdd98"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -5.61508174371005,
+        "absolute_difference": 5.61508174371005,
+        "percentage_change_against_8.5": -3.665649623668812
       }
     },
     {
@@ -64,6 +70,12 @@
         "passed": true,
         "objective": 186.87594278036502,
         "input_sha256": "6221f96dc20af2da7d4322c1a5ecb04a5cc2bb814393bcd32ae1154bc442c5e2"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -7.870016171062531,
+        "absolute_difference": 7.870016171062531,
+        "percentage_change_against_8.5": -4.0411704630160905
       }
     },
     {
@@ -88,6 +100,12 @@
         "passed": true,
         "objective": 170.14388537158788,
         "input_sha256": "b19c28729d9049e2d4901c7a574118988ad6af0412f5a9b8d7bbad4203d6d044"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -3.130857530500947,
+        "absolute_difference": 3.130857530500947,
+        "percentage_change_against_8.5": -1.8068747228037032
       }
     },
     {
@@ -121,6 +139,12 @@
         "passed": true,
         "objective": 172.68849670335467,
         "input_sha256": "8075d1f91e7c7960a16ba1013b2053f971ccb0c2523906a988e4a05cc6a143b4"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 25.04986146756545,
+        "absolute_difference": 25.04986146756545,
+        "percentage_change_against_8.5": 16.9670096364404
       }
     },
     {
@@ -154,6 +178,12 @@
         "passed": true,
         "objective": 241.74683046205237,
         "input_sha256": "45b5eac6dde311e9271b5c71b888675619dfdab1673d46e8947161ffd876aced"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 27.137502142020082,
+        "absolute_difference": 27.137502142020082,
+        "percentage_change_against_8.5": 12.645071094743736
       }
     },
     {
@@ -187,6 +217,12 @@
         "passed": true,
         "objective": 201.96071376725243,
         "input_sha256": "f564b6451bdec8df3bb9821da856b1142a004d98fce5a58a90b7b2c64edc62dc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 22.38368842870878,
+        "absolute_difference": 22.38368842870878,
+        "percentage_change_against_8.5": 12.464672686559108
       }
     },
     {
@@ -218,6 +254,12 @@
         "passed": true,
         "objective": 190.62168177067485,
         "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 16.683490656185995,
+        "absolute_difference": 16.683490656185995,
+        "percentage_change_against_8.5": 9.591620189498613
       }
     },
     {
@@ -251,6 +293,12 @@
         "passed": true,
         "objective": 840.87,
         "input_sha256": "058b9df013c2e18e788a1c1d16c806d1c97f03b7439b24668c916ebb787c9717"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.509999999999991,
+        "absolute_difference": 2.509999999999991,
+        "percentage_change_against_8.5": -0.2976119898503629
       }
     },
     {
@@ -284,6 +332,12 @@
         "passed": true,
         "objective": 1201.82,
         "input_sha256": "fb0b0b21abee9bbc3025d5f475a8d8f06a0aab84ccc8f6168bcde96b278bb768"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 3.25,
+        "absolute_difference": 3.25,
+        "percentage_change_against_8.5": 0.27115646144989447
       }
     },
     {
@@ -314,6 +368,12 @@
         "passed": true,
         "objective": 1928.1966599775135,
         "input_sha256": "bc306e7700ddb3a9ba025afcacbb7b4b03b225bc20cd8121dd2c9248b85c804d"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -4.770689499805485,
+        "absolute_difference": 4.770689499805485,
+        "percentage_change_against_8.5": -0.24680652268107353
       }
     },
     {
@@ -338,6 +398,12 @@
         "passed": true,
         "objective": 233.78118687799343,
         "input_sha256": "79f7a987ff70e07589a216f352bd2c28a90b8153e22b831c48004f98647c317b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -3.2611039212559376,
+        "absolute_difference": 3.2611039212559376,
+        "percentage_change_against_8.5": -1.375747724281723
       }
     },
     {
@@ -362,6 +428,12 @@
         "passed": true,
         "objective": 145.93264712165546,
         "input_sha256": "8107c34f613e68de0685ba0509b0b610799bf9b88ee9d6b3c00e5349792f6419"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.404604311383423,
+        "absolute_difference": 2.404604311383423,
+        "percentage_change_against_8.5": -1.6210387398669637
       }
     },
     {
@@ -395,6 +467,12 @@
         "passed": false,
         "objective": null,
         "input_sha256": "67909545993480e08587b6cae8e57848b3000819e3f7c38482d20bdfd1814aa6"
+      },
+      "objective_change": {
+        "status": "unavailable_rejected_evaluation",
+        "signed_difference": null,
+        "absolute_difference": null,
+        "percentage_change_against_8.5": null
       }
     },
     {
@@ -428,6 +506,12 @@
         "passed": true,
         "objective": 163.44788293535206,
         "input_sha256": "74f45bdbefa04ee4154ce22feba2c215af4c1b17c173f85b81927efe023c0845"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 15.722443621958973,
+        "absolute_difference": 15.722443621958973,
+        "percentage_change_against_8.5": 10.643017001699006
       }
     },
     {
@@ -461,6 +545,12 @@
         "passed": true,
         "objective": 828.53,
         "input_sha256": "1450852e00f26ff54cf9d2fa350833b31243704fc1cc489bf94f845b9a9b4020"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -1.6600000000000819,
+        "absolute_difference": 1.6600000000000819,
+        "percentage_change_against_8.5": -0.19995422734555726
       }
     },
     {
@@ -494,6 +584,12 @@
         "passed": true,
         "objective": 907.11,
         "input_sha256": "2bd9a1f63626913ad40c47f288d7ae24f9de3e2ffe30528fceda667121a3e954"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.3600000000000136,
+        "absolute_difference": 2.3600000000000136,
+        "percentage_change_against_8.5": -0.2594917919227697
       }
     },
     {
@@ -527,6 +623,12 @@
         "passed": true,
         "objective": 1095.63,
         "input_sha256": "6bbef0c74b7c9e306a3b1315053d4ab8b8d09f23ec97f534d479f040b85c6a52"
+      },
+      "objective_change": {
+        "status": "unavailable_rejected_evaluation",
+        "signed_difference": null,
+        "absolute_difference": null,
+        "percentage_change_against_8.5": null
       }
     },
     {
@@ -560,6 +662,12 @@
         "passed": true,
         "objective": 2330.74,
         "input_sha256": "c76d4d5b9dc8cc6fa4136c236978b51dc2a07d8146ed4f7037adafa91ae9e6c0"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 684.1799999999998,
+        "absolute_difference": 684.1799999999998,
+        "percentage_change_against_8.5": 41.55208434554464
       }
     },
     {
@@ -590,6 +698,12 @@
         "passed": true,
         "objective": 1978.8141538891032,
         "input_sha256": "300a4d4d9660950070bb50ad8a8c6011831d22743b21a2ef14590d69f648a02b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -4.221022077823363,
+        "absolute_difference": 4.221022077823363,
+        "percentage_change_against_8.5": -0.21285664162589532
       }
     },
     {
@@ -620,6 +734,12 @@
         "passed": true,
         "objective": 2206.9418977143155,
         "input_sha256": "fa57e894fdb1ee6694c5568b26fd1ea0025891976f909020a6c5ae05b39525da"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -5.98481789904281,
+        "absolute_difference": 5.98481789904281,
+        "percentage_change_against_8.5": -0.2704480838347145
       }
     },
     {
@@ -653,6 +773,12 @@
         "passed": true,
         "objective": 1258.3799999999999,
         "input_sha256": "85652d5826a08eb3f75d9817f98e749c5e24833f19567f11b74cd0a275b76a2b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -3.675000000000182,
+        "absolute_difference": 3.675000000000182,
+        "percentage_change_against_8.5": -0.29119174679393384
       }
     },
     {
@@ -686,6 +812,12 @@
         "passed": true,
         "objective": 838.92,
         "input_sha256": "3d7188447b41fc551b2eb8e5f28b73387c4304a38aac3be05b881734ec05d32b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.4500000000000455,
+        "absolute_difference": 2.4500000000000455,
+        "percentage_change_against_8.5": -0.29119174679392484
       }
     },
     {
@@ -719,6 +851,12 @@
         "passed": true,
         "objective": 1805.745,
         "input_sha256": "e9f5a7c220ed87d7efd7354241f6c4669e9b3903402abc96510cb6ef4c8a5bf8"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 4.545000000000073,
+        "absolute_difference": 4.545000000000073,
+        "percentage_change_against_8.5": 0.252331778814128
       }
     },
     {
@@ -752,6 +890,12 @@
         "passed": true,
         "objective": 1203.83,
         "input_sha256": "63055fce459663dfc57b33dbee28e4956ca2e372994e2f530a7ca8163492524d"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 3.0399999999999636,
+        "absolute_difference": 3.0399999999999636,
+        "percentage_change_against_8.5": 0.25316666527868853
       }
     },
     {
@@ -785,6 +929,12 @@
         "passed": true,
         "objective": 190.62168177067485,
         "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 16.683490656185995,
+        "absolute_difference": 16.683490656185995,
+        "percentage_change_against_8.5": 9.591620189498613
       }
     },
     {
@@ -816,6 +966,12 @@
         "passed": true,
         "objective": 190.62168177067485,
         "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 16.683490656185995,
+        "absolute_difference": 16.683490656185995,
+        "percentage_change_against_8.5": 9.591620189498613
       }
     },
     {
@@ -840,6 +996,12 @@
         "passed": true,
         "objective": 152.72936839353014,
         "input_sha256": "195d2635fd1f9f91bc414e7004e24ff51ac475bae3237328c51eff4b27024384"
+      },
+      "objective_change": {
+        "status": "unavailable_rejected_evaluation",
+        "signed_difference": null,
+        "absolute_difference": null,
+        "percentage_change_against_8.5": null
       }
     }
   ],
@@ -943,7 +1105,13 @@
       "modern_minus_scratch_85_100_cap": {
         "objective_absolute_signed": -3.730946246131907,
         "objective_relative_signed_against_scratch_85": -0.02384595898790381,
-        "scope": "Same physical vector and canonical weather, both strict-success and 100-day caps, but different engine/model versions; scratch historical input is a diagnostic variant."
+        "scope": "Same physical vector and canonical weather, both strict-success and 100-day caps, but different engine/model versions; scratch historical input is a diagnostic variant.",
+        "objective_percentage_signed_against_scratch_85": -2.3845958987903813
+      },
+      "scratch_100_minus_failed_25_diagnostic": {
+        "baseline_role": "Rejected original 8.5 run diagnostic-only value; this comparison is not a canonical accepted-objective comparison.",
+        "signed_difference": 0.0009371049331150516,
+        "percentage_change_against_failed_diagnostic": 0.0005989445617646309
       }
     },
     "p4": {
@@ -1036,7 +1204,7 @@
           "benchmark_inputs_unchanged": false,
           "accepted_as_benchmark_value": false,
           "objective_diagnostic_variant_only": null,
-          "description": "Only warmup cap25\u2192100 and diagnostic reporting changed; same physical design and tolerances.",
+          "description": "Only warmup cap25→100 and diagnostic reporting changed; same physical design and tolerances.",
           "failing_zone": "ZONE SOUTH",
           "environment": "RUNPERIOD 1",
           "failed_criterion": "maximum daily zone temperature change",
@@ -1200,7 +1368,7 @@
         },
         {
           "id": "scratch-timestep12-averaging12-warmup100",
-          "description": "Final valid timestep refinement4\u219212/hour; sizing averaging duration preserved at60minutes. Diagnostic variant only.",
+          "description": "Final valid timestep refinement4→12/hour; sizing averaging duration preserved at60minutes. Diagnostic variant only.",
           "controlled_changes": {
             "number_of_timesteps_per_hour": 12,
             "timesteps_in_averaging_window": 12,
@@ -1590,13 +1758,13 @@
       "control_schedule_context": {
         "fan_availability": "On24hours",
         "night_cooling_setpoint_c": 20,
-        "night_cooling_setpoint_hours": "01\u201308and22\u201324",
+        "night_cooling_setpoint_hours": "01–08and22–24",
         "day_cooling_setpoint_c": 25,
         "heating_setpoint_c": {
           "night": 18,
           "day": 20
         },
-        "main_cooling_coil_availability": "On09\u201319;offatotherhours",
+        "main_cooling_coil_availability": "On09–19;offatotherhours",
         "late_cycle_maximum_timestep_difference": {
           "between_warmup_days": [
             99,
@@ -1619,7 +1787,7 @@
             54.49386394567773
           ]
         },
-        "interpretation": "At the largest morning pointwise discrepancy the night20\u00b0C cooling setpoint coincides with the20\u00b0C heating setpoint while the main cooling coil is unavailable. This is a model-control context, not an isolated proof of the two-day cycle cause."
+        "interpretation": "At the largest morning pointwise discrepancy the night20°C cooling setpoint coincides with the20°C heating setpoint while the main cooling coil is unavailable. This is a model-control context, not an isolated proof of the two-day cycle cause."
       }
     },
     "p10": {
@@ -4294,7 +4462,7 @@
         "supported": [
           "The seven original errors all concern peak-load convergence during the annual RunPeriod; every reported temperature comparison passes.",
           "Increasing the maximum warmup days from 25 to 100 retains all seven original failed zones and adds a cooling-load error in PERIMETER_TOP_ZN_1.",
-          "Days 81\u2013100 at the original 10-minute zone timestep show a persistent near-period-two load cycle; the final day99/day100 zone-boundary peak ratios reproduce the printed cap100 errors.",
+          "Days 81–100 at the original 10-minute zone timestep show a persistent near-period-two load cycle; the final day99/day100 zone-boundary peak ratios reproduce the printed cap100 errors.",
           "The additional top-zone-1 cooling error is amplified by the 8.5 floor asymmetry: a prior zero day remains zero, whereas the current 37.1888 W peak is promoted to 100 W. Other failed peaks exceed 100 W and are not explained by this small-load artifact.",
           "The first 5-minute zone-timestep refinement reaches 100 warmup days with three cooling-load severe errors. Its unchanged 6-timestep sizing averaging window lasts only 30 minutes, so it contains a sizing-duration confound.",
           "The corrected 5-minute zone-timestep refinement also uses 12 sizing averaging steps, preserving the original 60-minute duration. It passes strict diagnostics without severe errors. The warmup-day count and objective are recorded separately; this demonstrates a numerical variant that resolves this sampled failure, without altering the canonical benchmark model.",
@@ -4328,17 +4496,17 @@
         "official_source": [
           {
             "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/HeatBalanceManager.cc",
-            "lines": "4817\u20134826, 4897\u20134898, 4939\u20134959, 4992\u20134993, 5018\u20135027, 5102\u20135118",
+            "lines": "4817–4826, 4897–4898, 4939–4959, 4992–4993, 5018–5027, 5102–5118",
             "description": "Daily extrema, 100 W floor, residual checks, previous-day assignment, capped exit, and normalized EIO loads."
           },
           {
             "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc",
-            "lines": "3108\u20133109, 3123\u20133124",
+            "lines": "3108–3109, 3123–3124",
             "description": "Current and previous heating/cooling peaks are both floored at 100 W before the modern residual check."
           },
           {
             "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/ZoneTempPredictorCorrector.cc",
-            "lines": "2142\u20132143",
+            "lines": "2142–2143",
             "description": "Detailed sensible-heating/cooling output variables refer to the convergence source quantities."
           }
         ]
@@ -4360,5 +4528,13 @@
       "title": "EnergyPlus 26.2 convergence implementation",
       "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc"
     }
-  ]
+  ],
+  "objective_comparison_policy": {
+    "baseline_engine": "8.5.0",
+    "candidate_engine": "26.2.0",
+    "signed_difference_formula": "f26.2 - f8.5",
+    "percentage_change_formula": "100 * (f26.2 - f8.5) / abs(f8.5)",
+    "availability": "Both canonical evaluations must pass strict diagnostics. Differences are null when either evaluation is rejected; percentage is null for a zero baseline.",
+    "interpretation": "Positive means an increase, negative a decrease. Cross-engine changes are descriptive and do not use the same-engine equivalence acceptance threshold."
+  }
 }
