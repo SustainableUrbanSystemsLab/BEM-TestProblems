@@ -126,6 +126,9 @@ severe/fatal diagnostics raise errors. Custom solvers must handle those failures
 according to their own documented policy; no objective penalty is invented.
 The runner retains the generated input, engine/weather hashes and diagnostics.
 
+The [complete canonical-case table and warmup analysis](docs/warmup-diagnostics.md)
+record the known rejected designs and the separate numerical-control experiments.
+
 ## Default optimizer
 
 Install the optional PDFO BOBYQA adapter in the same environment:
