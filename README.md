@@ -31,9 +31,11 @@ python3.12 -m venv .venv
 On Windows, use `py -3.12 -m venv .venv` and replace `.venv/bin/python` with
 `.venv\Scripts\python.exe` in subsequent commands. Activation is optional.
 
-The installer verifies the official EnergyPlus 26.2 archive's SHA-256 and extracts
-it into `.tools/energyplus/26.2.0`. It does not change the system PATH. Downloaded
-tools and raw simulation directories stay local; fixed numerical test fixtures
+The installer reads its pinned version, build and archive checksums from
+[`assets/energyplus-downloads.json`](assets/energyplus-downloads.json), verifies
+the archive's SHA-256 and extracts it into `.tools/energyplus/<version>`.
+It does not change the system PATH. Downloaded tools and raw simulation
+directories stay local; fixed numerical test fixtures
 and their provenance are versioned.
 
 The [model transition guide](docs/model-transition.md) documents the official

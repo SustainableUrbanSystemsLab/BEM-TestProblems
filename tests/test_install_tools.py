@@ -161,10 +161,13 @@ def test_unknown_platform_requires_an_explicit_choice(monkeypatch):
         tool.platform_key()
 
 
-def test_modern_install_uses_verified_archive_and_refuses_unstamped_directory(tmp_path, monkeypatch):
+@pytest.mark.parametrize("version", ["26.2.0", "99.3.1"])
+@pytest.mark.parametrize("custom_destination", [False, True])
+def test_modern_install_uses_manifest_version_and_refuses_unstamped_directory(
+        tmp_path, monkeypatch, version, custom_destination):
     from tools import install_energyplus as tool
 
-    metadata = {"version": "26.2.0", "build": "test", "archives": {
+    metadata = {"version": version, "build": "test", "archives": {
         "windows-x86_64": ["Windows.zip", "1" * 64]}}
     assets = tmp_path / "assets"
     assets.mkdir()
@@ -181,14 +184,22 @@ def test_modern_install_uses_verified_archive_and_refuses_unstamped_directory(tm
 
     monkeypatch.setattr(tool, "ROOT", tmp_path)
     monkeypatch.setattr(tool, "download", fake_download)
-    destination = tmp_path / "installed"
-    executable = tool.install("windows-x86_64", destination)
+    default_destination = tmp_path / ".tools/energyplus" / version
+    destination = tmp_path / "installed" if custom_destination else default_destination
+    requested_destination = destination if custom_destination else None
+    executable = tool.install("windows-x86_64", requested_destination)
     assert executable == destination / "energyplus.exe"
     assert executable.read_bytes() == b"mock executable, never launched"
-    assert calls[0][2] == "1" * 64
+    archive_name = f"EnergyPlus-{version}-test-Windows.zip"
+    assert calls == [(
+        f"https://github.com/NatLabRockies/EnergyPlus/releases/download/v{version}/{archive_name}",
+        tmp_path / ".tools/downloads" / archive_name,
+        "1" * 64,
+    )]
     stamp = json.loads((destination / "bem-install.json").read_text())
     assert stamp["archive_sha256"] == "1" * 64 and stamp["platform"] == "windows-x86_64"
-    assert tool.install("windows-x86_64", destination) == executable
+    assert stamp["version"] == version and stamp["archive"] == archive_name
+    assert tool.install("windows-x86_64", requested_destination) == executable
     assert len(calls) == 1
     unverified = tmp_path / "unverified"
     unverified.mkdir()
