@@ -21,6 +21,7 @@ def main(argv=None):
     parser.add_argument("--budget", type=int, help="Override100*(n+1); labels the experiment as a pilot")
     parser.add_argument("--seed", type=int, default=2019)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--schedule", choices=("balanced", "problem-first"), default="balanced")
     parser.add_argument("--project-root", type=Path)
     parser.add_argument("--weather-dir", type=Path)
     parser.add_argument("--output-root", type=Path)

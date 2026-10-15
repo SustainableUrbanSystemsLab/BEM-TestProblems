@@ -101,6 +101,21 @@ def test_solver_alias_is_canonical_before_direct_initialization(local_setup):
     assert manifest["runs"][0]["x0"] == list(get_problem(13).midpoint)
 
 
+def test_problem_first_schedule_changes_only_execution_order(local_setup):
+    configuration, _ = local_setup
+    configuration.update(problems=[1, 13], versions=["8.5.0", "26.2.0"],
+                         solvers=["direct", "bobyqa"], repetitions=2)
+    balanced = replication.prepare_manifest(**configuration)
+    problem_first = replication.prepare_manifest(**configuration, schedule="problem-first")
+    assert balanced["schedule"] == "balanced"
+    assert problem_first["schedule"] == "problem-first"
+    assert {run["id"]: run for run in balanced["runs"]} == {
+        run["id"]: run for run in problem_first["runs"]}
+    assert [run["problem"] for run in problem_first["runs"]] == [1] * 8 + [13] * 8
+    assert [run["repetition"] for run in problem_first["runs"][:8]] == [0] * 4 + [1] * 4
+    assert balanced["runs"] != problem_first["runs"]
+
+
 def test_hard_budget_retains_independently_observed_best_and_trace(local_setup, tmp_path, monkeypatch):
     configuration, calls = local_setup
 

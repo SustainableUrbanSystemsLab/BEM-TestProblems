@@ -101,6 +101,7 @@ From a checkout with both engines in `.tools/energyplus/<version>/`:
 .venv/bin/python tools/run_replication.py \
   --solvers direct crs2 sbplex cma_es bobyqa pybobyqa \
   --workers 8 --seed 2019 \
+  --problems 1 13 2 3 4 5 6 8 9 10 --schedule problem-first \
   --diagnostics-policy reference-warmup \
   --output-root .validation-local/replication-paper
 ```
@@ -108,6 +109,9 @@ From a checkout with both engines in `.tools/energyplus/<version>/`:
 The defaults are all ten continuous problems, both engines, 20 repetitions and
 the paper's budget. Use `--executable-8-5` or `--executable-26-2` for other local
 engine locations. No experiment command downloads or installs anything.
+The example completes P1 first, then P13, so each figure group has a populated
+panel early. `--schedule balanced` instead interleaves problems by repetition.
+Only execution order changes; starts, seeds and per-run budgets stay identical.
 Each worker is a separate process to isolate optimizer random states. Successful
 raw simulator outputs are removed after numerical/provenance checkpoints are
 saved; failure diagnostics are retained. `--retain-success diagnostics` keeps
