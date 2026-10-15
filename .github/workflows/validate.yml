@@ -41,8 +41,11 @@ jobs:
       - name: Create project-local environment
         run: |
           python -m venv .venv
-          "$VENV_PY" -m pip install -e '.[dev,optimize]'
+          "$VENV_PY" -m pip install -e '.[dev,optimize,replication]'
           "$VENV_PY" tools/fetch_reference.py
+      - name: Install optional NLopt adapters for analytic tests
+        if: runner.os == 'Linux' || runner.os == 'Windows'
+        run: '"$VENV_PY" -m pip install -e ".[replication-nlopt]"'
       - name: Lint and test
         run: |
           "$VENV_PY" -m ruff check src tests tools

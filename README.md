@@ -187,6 +187,16 @@ print(problem.objective_terms(x, outputs))
 print(problem.outer_loss(x, outputs), problem.objective_unit)
 ```
 
+## Random-start optimization experiments
+
+The [optimization experiment guide](docs/optimization-replication.md) runs the
+continuous problems with the 2019 study's 20 random-start runs and `100(n+1)`
+evaluation budgets using EnergyPlus 8.5 and 26.2. It includes DIRECT, CRS2,
+Sbplex and CMA-ES, followed by added PDFO BOBYQA and Py-BOBYQA comparisons.
+Experiments use canonical weather, save starts/seeds and per-run checkpoints,
+and generate Figure 8/9-style boxplots with visible sample/failure counts.
+Reduced-budget smoke runs and incomplete campaigns are explicitly labeled.
+
 ## Tests and numerical comparisons
 
 ```sh
