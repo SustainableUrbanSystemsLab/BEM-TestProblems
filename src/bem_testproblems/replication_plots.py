@@ -32,6 +32,9 @@ def collect_boxplot_data(root):
         spec = specs[row["id"]]
         if row["id"] in records or any(row.get(key) != value for key, value in spec.items()):
             raise ValueError(f"Run specification does not match the experiment: {path.name}")
+        # Plotting needs completed-run summaries, not millions of call records.
+        for key in ("trace", "problem_provenance", "engine_provenance", "solver_metadata"):
+            row.pop(key, None)
         records[row["id"]] = row
     solvers = [name for name in SOLVER_ORDER if name in manifest["solvers"]
                and manifest["solvers"][name]["implemented"]]

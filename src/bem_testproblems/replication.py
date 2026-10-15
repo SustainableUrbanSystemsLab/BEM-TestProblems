@@ -168,7 +168,8 @@ def _dependency_identity(name):
 
 def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "26.2.0"),
                      repetitions=20, budget=None, seed=2019, project_root=None,
-                     executables=None, weather_dir=None, diagnostics_policy="strict"):
+                     executables=None, weather_dir=None, diagnostics_policy="strict",
+                     schedule="balanced"):
     """Resolve all inputs and fixed random starts without running simulations."""
     repetitions = _positive_integer(repetitions, "repetitions")
     if budget is not None:
@@ -177,6 +178,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("seed must be an integer")
     if diagnostics_policy not in {"strict", "reference-warmup"}:
         raise ValueError("diagnostics_policy must be strict or reference-warmup")
+    if schedule not in {"balanced", "problem-first"}:
+        raise ValueError("schedule must be balanced or problem-first")
     definitions = [get_problem(number) for number in problems]
     if not definitions or len({p.id for p in definitions}) != len(definitions):
         raise ValueError("Select at least one problem, without duplicates")
@@ -222,6 +225,13 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
                         "problem": p.id, "version": version, "solver": solver,
                         "repetition": repetition, "seed": _seed(seed, "solver", p.id, repetition, solver),
                         "x0": start, "budget": budget if budget is not None else 100 * (p.dimension + 1)})
+    if schedule == "problem-first":
+        problem_order = {problem.id: index for index, problem in enumerate(definitions)}
+        solver_order = {name: index for index, name in enumerate(selected_solvers)}
+        version_order = {version: index for index, version in enumerate(selected_versions)}
+        specifications.sort(key=lambda run: (
+            problem_order[run["problem"]], run["repetition"],
+            solver_order[run["solver"]], version_order[run["version"]]))
     configuration = {"schema_version": 1, "protocol": "paper-start-and-budget-protocol"
         if repetitions == 20 and budget is None else "pilot-overrides",
         "paper_doi": "10.1016/j.enbuild.2019.01.048", "requested_repetitions": repetitions,
@@ -242,7 +252,10 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         "dependency_provenance": {name: _dependency_identity(name) for name in
             sorted({item["dependency"] for item in metadata.values() if item.get("dependency")}
                    | {"numpy", "scipy"})},
-        "schedule": "Repetition first, then selected problem, solver and engine order",
+        "schedule": schedule,
+        "schedule_order": "Repetition first, then selected problem, solver and engine order"
+            if schedule == "balanced" else
+            "Selected problem first, then repetition, solver and engine order",
         "code_sha256": code_hashes,
         "runs": specifications}
     configuration = _json_value(configuration)
