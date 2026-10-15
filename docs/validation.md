@@ -243,20 +243,21 @@ do not establish successful simulation of the full continuous domains.
 The midpoint measurements below use identical canonical weather bytes across
 versions and each version's recorded model identity. Units are kWh/(m² year) for
 problems 1–8, MJ/m² for 9–10 and EUR for 13. Values are rounded for display; the
-ledgers retain full precision. The change is `(modern / historical - 1) × 100%`.
+ledgers retain full precision. The baseline is version 8.5. The signed difference
+is `modern - historical`; the percentage is `100 × (modern - historical) / |historical|`.
 
-| Problem | Version 8.5 | Version 26.2 | Change |
-| --- | ---: | ---: | ---: |
-| 1 | 153.181082 | 147.566000 | -3.67% |
-| 2 | 194.745959 | 186.875943 | -4.04% |
-| 3 | 173.274743 | 170.143885 | -1.81% |
-| 4 | 147.638635 | 172.688497 | +16.97% |
-| 5 | 214.609328 | 241.746830 | +12.65% |
-| 6 | 179.577025 | 201.960714 | +12.46% |
-| 8 | 173.938191 | 190.621682 | +9.59% |
-| 9 | 843.380000 | 840.870000 | -0.30% |
-| 10 | 1198.570000 | 1201.820000 | +0.27% |
-| 13 | 1932.967349 | 1928.196660 | -0.25% |
+| Problem | Version 8.5 | Version 26.2 | Δ objective | Δ (%) |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 153.181082 | 147.566000 | -5.615082 | -3.6656% |
+| 2 | 194.745959 | 186.875943 | -7.870016 | -4.0412% |
+| 3 | 173.274743 | 170.143885 | -3.130858 | -1.8069% |
+| 4 | 147.638635 | 172.688497 | +25.049861 | +16.9670% |
+| 5 | 214.609328 | 241.746830 | +27.137502 | +12.6451% |
+| 6 | 179.577025 | 201.960714 | +22.383688 | +12.4647% |
+| 8 | 173.938191 | 190.621682 | +16.683491 | +9.5916% |
+| 9 | 843.380000 | 840.870000 | -2.510000 | -0.2976% |
+| 10 | 1198.570000 | 1201.820000 | +3.250000 | +0.2712% |
+| 13 | 1932.967349 | 1928.196660 | -4.770689 | -0.2468% |
 
 These are newly measured evaluator values, not published optima. In particular,
 the detailed-office increases require visible component-level drift reporting;
@@ -269,7 +270,8 @@ A [P1 BOBYQA integration record](validation-results/p1-bobyqa-smoke.json) uses
 commit `f08ce001fcbc8f94040b9a1e694f1595ca55b601`, canonical Seattle weather,
 physical midpoint `[0, 3, 3, 0.5]` and a 100-objective-call budget. EnergyPlus
 26.2 completed after 84 calls, reducing the objective from `147.5659999247044`
-to `133.33534913204608` kWh/(m² year). Its best design was
+to `133.33534913204608` kWh/(m² year): a decrease of **14.23065079
+kWh/(m² year), or 9.6436%**, relative to the starting value. Its best design was
 `[-1.1214112901192836, 4.856626576011762, 5.1732490024320175, 0.27307365349378676]`.
 All 84 distinct simulations passed strict diagnostics; termination occurred at
 BOBYQA's lower trust-region-radius bound. This demonstrates solver integration,
@@ -283,7 +285,9 @@ limitation surfaced by the deliberate acceptance policy; the unchanged C# did
 not reject those diagnostics. The CI designs do not include this trial.
 
 A scratch 100-day cap removed that severe diagnostic but changed the objective
-by about `5.99e-6` relatively against the failed run's diagnostic-only value.
+by **+0.00093710 kWh/(m² year), or +0.000599%**, against the failed run's
+diagnostic-only value (relative change approximately `5.99e-6`). This is a
+diagnostic comparison, not a comparison of two accepted canonical evaluations.
 That exceeds the configured `1e-6` comparison threshold and changes the input
 identity. Neither the scratch variant nor the failed-run value is an accepted
 historical optimization result. Original models and convergence tolerances remain

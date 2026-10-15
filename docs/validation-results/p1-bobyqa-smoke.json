@@ -108,7 +108,13 @@
     },
     "unique_successful_simulations": 84,
     "run_requests_including_start_and_verification": 86,
-    "cache_hits": 2
+    "cache_hits": 2,
+    "objective_change_against_start": {
+      "baseline_role": "Accepted modern starting objective at the physical midpoint.",
+      "signed_difference": -14.230650792658338,
+      "absolute_difference": 14.230650792658338,
+      "percentage_change": -9.643583752300348
+    }
   },
   "historical": {
     "engine": {
@@ -169,7 +175,8 @@
     ],
     "objective_relative_difference_against_failed_run": 5.989445617646309e-06,
     "historical_model_modified": false,
-    "objective_100_minus_failed_25": 0.0009371049331150516
+    "objective_100_minus_failed_25": 0.0009371049331150516,
+    "objective_percentage_difference_against_failed_run": 0.0005989445617646309
   },
   "interpretation": "Modern solver integration succeeded. Historical optimization stopped under the deliberate strict severe-diagnostic policy. No result establishes agreement with the winning designs or values published by Waibel, Wortmann, Evins and Carmeliet (2019).",
   "x0": [

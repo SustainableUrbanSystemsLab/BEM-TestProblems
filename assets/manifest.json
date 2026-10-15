@@ -649,14 +649,14 @@
     },
     {
       "path": "docs/validation-results/p1-bobyqa-smoke.json",
-      "sha256": "b0e9aeb90a74ed51281658155196dbea2810617ec970dade184e27189db02a29",
+      "sha256": "978d02e2ea7d62dc63ccc4fccd50f791e0f98d1e1687716c28b60abf6fe436e0",
       "license_expression": "MIT",
       "source": "New solver integration and scratch diagnostic measurements made by this project; no published winning vector/objective, raw weather, external XML or model body is copied.",
       "scope": "Problem 1 midpoint-start BOBYQA integration only: EnergyPlus 26.2 succeeded, while EnergyPlus 8.5 stopped at a strict warmup diagnostic failure. Scratch warmup-cap measurements are excluded from historical optimizer results. No published-ground-truth or certified-optimum claim for Waibel, Wortmann, Evins and Carmeliet (2019)."
     },
     {
       "path": "docs/validation-results/warmup-diagnostics.json",
-      "sha256": "630aa8d8445750d9b6dc3f1ef5cfdd9d87accb49eb29af275bd890b9f0052591",
+      "sha256": "8eb250ac3a04183018446d3de64e97a5cfe9c7a4a0842bf8940143283bfd44d7",
       "license_expression": "MIT",
       "source": "New project simulation measurements, numeric model facts and earlier project canonical measurements; no raw external model, weather, source code or publication body is copied.",
       "scope": "Recorded canonical cases and separate scratch numerical-control variants only; no full-domain guarantee, accepted benchmark repair or published-optimum claim."
