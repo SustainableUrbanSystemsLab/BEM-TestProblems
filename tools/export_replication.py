@@ -8,6 +8,7 @@ import argparse
 import json
 import math
 import re
+from collections import Counter
 from pathlib import Path
 
 if __package__:
@@ -135,12 +136,53 @@ def _public_best(row):
         "manifest_id": _hash_value(row["manifest_id"]),
         "x": [_number(x) for x in row["best_x"]],
         "f": _number(row["best_f"]),
+        "seed": row["seed"],
+        "budget": row["budget"],
+        "repetition": row["repetition"],
+        "evaluation_count": row["evaluation_count"],
+        "x0": [_number(x) for x in row["x0"]],
         "dimension": definition.dimension,
         "objective_unit": definition.objective_unit,
         "parameter_names": [p.name for p in definition.parameters],
         "parameter_symbols": [p.paper_symbol for p in definition.parameters],
         "parameter_units": [p.unit for p in definition.parameters],
         "bounds": [list(pair) for pair in definition.bounds],
+    }
+
+
+def _solver_protocol(name):
+    from bem_testproblems.replication_solvers import solver_metadata
+
+    metadata = solver_metadata(name)
+    return {key: metadata[key] for key in ("dependency", "settings", "paper_method", "implemented")}
+
+
+def _public_experiment(dataset):
+    """Keep the complete numerical experiment recipe while discarding local runtime paths."""
+    manifest = dataset["origin_manifest"]
+    solvers = {}
+    for name, recorded in manifest["solvers"].items():
+        expected = _solver_protocol(name)
+        if any(recorded.get(key) != value for key, value in expected.items()):
+            raise ValueError("Frozen solver settings differ from the authoritative adapter")
+        solvers[name] = expected
+    return {
+        "protocol": manifest["protocol"],
+        "master_seed": manifest["master_seed"],
+        "requested_repetitions": manifest["requested_repetitions"],
+        "budget_override": manifest["budget_override"],
+        "budget_rule": "100*(dimension+1)",
+        "diagnostics_policy": manifest["diagnostics_policy"],
+        "schedule": manifest["schedule"],
+        "start_policy": "paired-uniform-physical-box-direct-midpoint",
+        "numerical_variants": {
+            str(number): definition.get("numerical_variant")
+            for number, definition in manifest["problem_definitions"].items()
+        },
+        "solvers": solvers,
+        "runs": [
+            {key: spec[key] for key in replay.continuation.SPEC_FIELDS} for spec in dataset["specs"]
+        ],
     }
 
 
@@ -380,6 +422,7 @@ def export_results(
         "status_counts": {_token(key): int(value) for key, value in statuses.items()},
         "origin_manifest_id": _hash_value(dataset["origin_manifest"]["manifest_id"]),
         "provenance": _public_provenance(dataset),
+        "experiment": _public_experiment(dataset),
         "best_per_solver": [_public_group(row) for row in review["per_solver_best"]],
         "best_across_methods": [_public_group(row) for row in review["best_across_methods"]],
         "replay": validation,
@@ -420,6 +463,9 @@ def export_results(
         "[model notices](licenses/BEOBenchmark-MODEL-NOTICES.txt).\n"
         "- [Bibliographic references](references.bib), including the originating studies.\n"
         "- [All exported file hashes](inventory.json).\n\n"
+        "The experiment block in [results.json](results.json) records the protocol, solver settings, "
+        "model variants, and every run's exact seed, initial vector, and evaluation budget. "
+        "Winning runs also record their call counts.\n\n"
         "Vectors retain full numerical precision. Status denominators include failed, skipped, "
         "non-strict, and unfinished runs. Groups with no strict completed run have no winner.\n\n"
         "This export contains our computed results. Original models, weather, native engines, "
@@ -464,6 +510,108 @@ def _counts(value):
         raise ValueError("Invalid public status counts")
 
 
+def _verify_experiment(result):
+    from bem_testproblems import get_problem
+    from bem_testproblems.replication import _seed, paired_start
+
+    experiment = result["experiment"]
+    _keys(
+        experiment,
+        (
+            "protocol",
+            "master_seed",
+            "requested_repetitions",
+            "budget_override",
+            "budget_rule",
+            "diagnostics_policy",
+            "schedule",
+            "start_policy",
+            "numerical_variants",
+            "solvers",
+            "runs",
+        ),
+    )
+    repetitions, budget = experiment["requested_repetitions"], experiment["budget_override"]
+    if (
+        experiment["protocol"] not in {"pilot-overrides", "paper-start-and-budget-protocol"}
+        or type(experiment["master_seed"]) is not int
+        or type(repetitions) is not int
+        or repetitions < 1
+        or budget is not None
+        and (type(budget) is not int or budget < 1)
+        or experiment["budget_rule"] != "100*(dimension+1)"
+        or experiment["diagnostics_policy"] not in {"strict", "reference-warmup"}
+        or experiment["schedule"] not in {"balanced", "problem-first"}
+        or experiment["start_policy"] != "paired-uniform-physical-box-direct-midpoint"
+        or experiment["protocol"]
+        != (
+            "paper-start-and-budget-protocol"
+            if repetitions == 20 and budget is None
+            else "pilot-overrides"
+        )
+    ):
+        raise ValueError("Invalid public experiment protocol")
+    for name, metadata in experiment["solvers"].items():
+        if metadata != _solver_protocol(name):
+            raise ValueError("Public solver settings differ from the authoritative adapter")
+    definitions = {
+        int(number): get_problem(number, numerical_variant=variant)
+        for number, variant in experiment["numerical_variants"].items()
+    }
+    versions = set().union(*(source["engines"] for source in result["provenance"]))
+    specifications, combinations, groups = {}, set(), Counter()
+    for spec in experiment["runs"]:
+        _keys(spec, replay.continuation.SPEC_FIELDS)
+        if (
+            type(spec["problem"]) is not int
+            or spec["problem"] not in definitions
+            or spec["solver"] not in experiment["solvers"]
+            or spec["version"] not in versions
+            or any(
+                type(spec[key]) is not int or spec[key] < 0
+                for key in ("repetition", "seed", "budget")
+            )
+            or spec["repetition"] >= repetitions
+            or spec["budget"] < 1
+        ):
+            raise ValueError("Invalid scheduled public run")
+        _token(spec["id"])
+        problem = definitions[spec["problem"]]
+        problem.validate(spec["x0"])
+        for x in spec["x0"]:
+            _number(x)
+        start = (
+            problem.midpoint
+            if spec["solver"] == "direct"
+            else paired_start(problem, spec["repetition"], experiment["master_seed"])
+        )
+        if (
+            spec["x0"] != list(start)
+            or spec["seed"]
+            != _seed(
+                experiment["master_seed"], "solver", problem.id, spec["repetition"], spec["solver"]
+            )
+            or spec["budget"] != (budget if budget is not None else 100 * (problem.dimension + 1))
+        ):
+            raise ValueError("Scheduled seeds, starts, or budgets differ from the public protocol")
+        key = (spec["problem"], spec["version"], spec["solver"], spec["repetition"])
+        if spec["id"] in specifications or key in combinations:
+            raise ValueError("Duplicate scheduled public run")
+        specifications[spec["id"]] = spec
+        combinations.add(key)
+        groups[key[:3]] += 1
+    expected = {
+        (problem, version, solver, repetition)
+        for problem in definitions
+        for version in versions
+        for solver in experiment["solvers"]
+        for repetition in range(repetitions)
+    }
+    if combinations != expected or len(specifications) != result["planned_runs"]:
+        raise ValueError("Public run schedule is incomplete or differs from the planned count")
+    return specifications, groups
+
+
 def _verify_public_schema(result):
     """Enforce the publication allowlist, canonical parameter metadata, and vector links."""
     from bem_testproblems import get_problem
@@ -480,6 +628,7 @@ def _verify_public_schema(result):
             "status_counts",
             "origin_manifest_id",
             "provenance",
+            "experiment",
             "best_per_solver",
             "best_across_methods",
             "replay",
@@ -567,6 +716,7 @@ def _verify_public_schema(result):
                 _hashes(model)
     if _hash_value(result["origin_manifest_id"]) not in identities:
         raise ValueError("Origin is absent from public manifest lineage")
+    specifications, planned_groups = _verify_experiment(result)
 
     def winner(value, group):
         if value is None:
@@ -581,6 +731,11 @@ def _verify_public_schema(result):
                 "manifest_id",
                 "x",
                 "f",
+                "seed",
+                "budget",
+                "repetition",
+                "evaluation_count",
+                "x0",
                 "dimension",
                 "objective_unit",
                 "parameter_names",
@@ -590,7 +745,8 @@ def _verify_public_schema(result):
             ),
         )
         if (
-            value["problem"] != group["problem"]
+            type(value["problem"]) is not int
+            or value["problem"] != group["problem"]
             or value["version"] != group["version"]
             or value["solver"] not in SOLVER_ORDER
             or value["manifest_id"] not in identities
@@ -599,6 +755,18 @@ def _verify_public_schema(result):
             raise ValueError("Public winner identity differs from its group")
         problem = get_problem(value["problem"])
         problem.validate(value["x"])
+        spec = specifications.get(value["run_id"])
+        if (
+            spec is None
+            or any(type(value[key]) is not int for key in ("seed", "budget", "repetition"))
+            or any(
+                value[key] != spec[key]
+                for key in ("problem", "version", "solver", "seed", "budget", "repetition", "x0")
+            )
+            or type(value["evaluation_count"]) is not int
+            or not 1 <= value["evaluation_count"] <= spec["budget"]
+        ):
+            raise ValueError("Public winner search differs from its scheduled run")
         expected = _public_best({**value, "best_x": value["x"], "best_f": value["f"]})
         if value != expected:
             raise ValueError("Public vector or parameter metadata is not canonical")
@@ -634,6 +802,8 @@ def _verify_public_schema(result):
             raise ValueError("Public solver denominators differ from status counts")
         winner(group["winner"], group)
         key = (group["problem"], group["version"], group["solver"])
+        if group["requested"] != planned_groups.get(key):
+            raise ValueError("Public solver denominator differs from its scheduled runs")
         if key in groups:
             raise ValueError("Duplicate public solver group")
         groups[key] = group

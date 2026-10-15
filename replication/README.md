@@ -30,6 +30,10 @@ copied into another configuration.
 The original and Windows records retain their actual manifest IDs and platforms.
 Review joins them by the validated continuation relationship. It never creates
 replacement checkpoints with invented provenance.
+The preserved campaign's numerical source is frozen at
+[0a06e384](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/commit/0a06e384663e4b2a6dbd3453a4255b90e935e511);
+its nine numerical module hashes match the original manifest. The workflow and
+reporting code can be newer than that frozen simulator caller.
 
 ## Check, measure, and launch
 
@@ -127,6 +131,9 @@ Run this stage on the workstation after the campaign finishes.
 Export requires a complete campaign and passing replays of the current strict
 winners. It creates a fresh public package containing our computed results,
 figures, sanitized provenance, replay comparisons, attribution, and checksums.
+The public protocol also records solver settings, starts, seeds, budgets, and
+the exact scheduled designs so others can reproduce the searches without the
+private raw manifests.
 Raw checkpoints, local machine paths, native outputs, original models, weather,
 engines, and thesis transcriptions are excluded.
 
