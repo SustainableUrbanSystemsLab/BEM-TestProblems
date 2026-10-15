@@ -13,7 +13,8 @@ def experiment(tmp_path):
              for i in range(4)]
     manifest = {"manifest_id": "example", "runs": specs, "protocol": "pilot-overrides",
                 "requested_repetitions": 4, "engines": {"8.5.0": {}},
-                "problem_definitions": {"1": {"name": "Example", "objective_unit": "kWh"}},
+                "problem_definitions": {"1": {"name": "Example", "dimension": 1,
+                                                "objective_unit": "kWh"}},
                 "solvers": {"bobyqa": {"implemented": True}},
                 "solver_registry": [{"name": "bobyqa", "implemented": True},
                                     {"name": "galapagos_ga", "implemented": False}]}
@@ -71,6 +72,10 @@ def test_partial_plot_is_labeled_and_numerical_summary_is_preserved(tmp_path):
     assert report["skipped_original_methods"][0]["name"] == "galapagos_ga"
     assert len(result["plots"]) == 2
     assert (tmp_path / "plots/figure8-energyplus-8.5.0.png").stat().st_size > 0
+    svg = (tmp_path / "plots/figure8-energyplus-8.5.0.svg").read_text()
+    assert "Example (n=1)" in svg
+    assert "runs: 1/4; failed runs: 1" in svg
+    assert "n=1/4" not in svg
 
 
 @pytest.mark.parametrize("value", [None, float("nan"), float("inf")])
@@ -161,6 +166,9 @@ def test_strict_plot_reports_excluded_searches_and_preserves_failure_counts(tmp_
     assert report["groups"][0]["excluded_non_strict_completed_runs"] == 1
     assert report["groups"][0]["statuses"]["failed"] == 1
     assert len(result["plots"]) == 2
+    svg = (root / "plots/figure8-energyplus-8.5.0.svg").read_text()
+    assert "runs: 0/4; failed runs: 1" in svg
+    assert "excluded non-strict runs: 1" in svg
 
 
 def test_numerical_variant_is_visible_in_figures_and_numerical_groups(tmp_path):
