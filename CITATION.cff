@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "Please cite Waibel et al. (2019) and the originating studies for the problems used; see docs/references.md."
+message: "Please cite Waibel, Wortmann, Evins and Carmeliet (2019) and the originating studies for the problems used; see docs/references.md."
 type: software
 title: "BEM-TestProblems"
 authors:

@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Sustainable Urban Systems Lab
 """Independent specification checks, not claimed published simulation fixtures.
 
-Source: Waibel et al. (2019), doi:10.1016/j.enbuild.2019.01.048,
+Source: Waibel, Wortmann, Evins and Carmeliet (2019), doi:10.1016/j.enbuild.2019.01.048,
 Tables 2–5 and 7; Eqs. (5)–(7) and (10); Sections 3.3.1–3.3.5.
 The observables used below are synthetic algebra probes. They are never
 represented as published input/objective pairs or as EnergyPlus runs.

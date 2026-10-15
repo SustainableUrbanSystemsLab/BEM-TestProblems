@@ -63,7 +63,8 @@ verified. The upstream repository's BSD grant is the recorded basis for includin
 the derived benchmark models. No separate model-specific license file accompanied
 the selected upstream templates.
 
-Please cite Waibel et al. (2019) and the applicable originating studies in
+Please cite Waibel, Wortmann, Evins and Carmeliet (2019) and the applicable
+originating studies in
 `references.bib` when publishing work using these problems.
 
 ## External engines, tools and weather
