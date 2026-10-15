@@ -169,11 +169,12 @@ from pathlib import Path
 from bem_testproblems import EnergyPlusRunner, get_problem
 
 problem = get_problem(1)
+energyplus_version = '26.2.0'
 engine_name = 'energyplus.exe' if os.name == 'nt' else 'energyplus'
 runner = EnergyPlusRunner(
-    Path('.tools/energyplus/26.2.0') / engine_name,
-    expected_version='26.2.0',
-    output_root='.runs/26.2.0',
+    Path('.tools/energyplus') / energyplus_version / engine_name,
+    expected_version=energyplus_version,
+    output_root=Path('.runs') / energyplus_version,
 )
 weather = None if problem.design_day else Path('.cache/weather') / problem.weather_filename
 x = problem.midpoint
