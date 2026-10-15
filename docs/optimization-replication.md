@@ -197,8 +197,12 @@ share objective-axis limits. Axes are uncapped so poor outcomes remain visible.
 
 The default figures include only completed trajectories with explicit evidence
 that no warmup-Severe outputs were used anywhere in the search. A strict winning
-point alone is insufficient. Labels show the included/requested counts, failed
-attempts, and excluded non-strict trajectories. Missing strictness evidence is
+point alone is insufficient. Labels such as **runs: 9/20** mean nine included
+completed runs out of twenty planned runs for that solver, problem, and engine.
+Budget-exhausted runs count as completed; failed, pending, running, and excluded
+trajectories do not enter the box. The variable count appears as **n** in each
+panel title and in the budget formula `100(n+1)`. Labels also report failed
+attempts and excluded non-strict trajectories. Missing strictness evidence is
 also excluded. Selecting only successful trajectories can bias distributions;
 these figures do not turn a permissive campaign into a strict-policy rerun.
 

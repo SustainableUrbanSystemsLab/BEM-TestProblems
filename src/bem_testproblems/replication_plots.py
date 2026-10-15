@@ -163,16 +163,16 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
                 for solver in solvers:
                     data = lookup[(number, version, solver)]
                     failed = data["statuses"].get("failed", 0)
-                    labels.append(f"{LABELS.get(solver, solver)}\nn={data['accepted']}/{data['requested']}"
-                                  + (f"; failed={failed}" if failed else "")
-                                  + (f"\nwarmup={data['runs_using_warmup_severe_outputs']} runs"
+                    labels.append(f"{LABELS.get(solver, solver)}\nruns: {data['accepted']}/{data['requested']}"
+                                  + (f"; failed runs: {failed}" if failed else "")
+                                  + (f"\nwarmup errors used: {data['runs_using_warmup_severe_outputs']} runs"
                                      if data['runs_using_warmup_severe_outputs'] else "")
-                                  + (f"\nnon-strict excluded={data['excluded_non_strict_completed_runs']}"
+                                  + (f"\nexcluded non-strict runs: {data['excluded_non_strict_completed_runs']}"
                                      if data['excluded_non_strict_completed_runs'] else ""))
                 axis.set_xticks(range(1, len(solvers) + 1), labels, rotation=40, ha="right")
                 axis.set_xlim(0.4, len(solvers) + 0.6)
                 axis.tick_params(axis="x", labelsize=8)
-                title = f"P{number}: {problem['name']}"
+                title = f"P{number}: {problem['name']} (n={problem['dimension']})"
                 if problem.get("numerical_variant"):
                     title += f"\nNumerical variant: {problem['numerical_variant']}"
                 axis.set_title(title, fontsize=11)
@@ -184,9 +184,9 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
                             f"{scope} - {manifest['requested_repetitions']} runs/solver; {budget_text}\n"
                             f"{selection_title}\nExperiment policy: {policy}",
                             fontsize=14)
-            footer = ("Canonical benchmark weather. Failed/interrupted attempts excluded and counted. "
+            footer = ("Runs: included/planned repetitions; n: decision variables. Failures excluded. "
                       "Blue: study methods; orange: added methods.\n"
-                      "Completed-trajectory selection can bias distributions. "
+                      "Canonical benchmark weather. Completed-trajectory selection can bias distributions. "
                       "Boxes Q1-Q3, red median, whiskers 1.5 IQR.\n"
                       "Study: Waibel, Wortmann, Evins, and Carmeliet (2019).")
             figure.text(0.5, 0.015, footer, ha="center", fontsize=8)
