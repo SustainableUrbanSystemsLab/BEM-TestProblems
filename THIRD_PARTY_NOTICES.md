@@ -102,5 +102,23 @@ Small factual validation records must cite their source and distinguish printed,
 rounded values from reconstructed outputs. A future supplementary dataset must
 be reviewed under its own license before inclusion.
 
+## Optional optimization experiment libraries
+
+The new experiment adapters contain independently authored orchestration, with
+no solver implementation source bundled. Optional dependencies are downloaded
+separately into a local virtual environment and retain their own terms:
+
+- [NLopt](https://nlopt.readthedocs.io/en/latest/NLopt_License_and_Copyright/):
+  LGPL and algorithm-specific notices; retain the applicable build's complete notices.
+- [pycma](https://github.com/CMA-ES/pycma/blob/development/LICENSE) and
+  [PDFO](https://github.com/pdfo/pdfo/blob/main/LICENCE.txt): BSD-3-Clause.
+- [Py-BOBYQA](https://github.com/numericalalgorithmsgroup/pybobyqa/blob/master/LICENSE.txt):
+  GPL-3.0; its package is an optional external dependency and is not relicensed
+  by this project's MIT/BSD notices.
+
+No BB-O/FrOG/MetaheuristicsLibrary implementation is translated or bundled in the
+experiment adapters. In particular, an MIT license on a repository stub does not
+replace the GPL terms of the separately linked implementation.
+
 See `docs/licensing.md` for the asset and release checks. These notices do not
 relicense any third-party material under MIT.
