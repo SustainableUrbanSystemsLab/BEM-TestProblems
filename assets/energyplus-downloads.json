@@ -1,0 +1,13 @@
+{
+  "version": "26.2.0",
+  "build": "4bd7a1f26f",
+  "release": "https://github.com/NatLabRockies/EnergyPlus/releases/tag/v26.2.0",
+  "archives": {
+    "macos-arm64": ["Darwin-macOS14.0-arm64.tar.gz", "e32766aa8e81c56ee3771d6eb25b31ffde1512c4b191749c3f4de5a38a4ba560"],
+    "macos-x86_64": ["Darwin-macOS13.3-x86_64.tar.gz", "4746bb63f8419c3666fb1e390e2a387a0300474113694ebcd14b3c9745d3b68f"],
+    "linux-x86_64": ["Linux-Ubuntu24.04-x86_64.tar.gz", "b848da8236482a2171a67d7eab00c82162105b653ffab3ae3b6c2217c433a8a1"],
+    "linux-arm64": ["Linux-Ubuntu24.04-arm64.tar.gz", "55c56e47dfca6ca3a967c9442d2f1d934e4806bcec40a0e41c3d03d1ad67fae8"],
+    "windows-x86_64": ["Windows-x86_64.zip", "15ab698803f459444ec3e97ee52ab9f99db93a583819c7821b17dfcd7b4461e7"],
+    "windows-arm64": ["Windows-arm64.zip", "327abdb00facaad5659b6184503de2292ec5b87ed827c402b208a9ccda901040"]
+  }
+}

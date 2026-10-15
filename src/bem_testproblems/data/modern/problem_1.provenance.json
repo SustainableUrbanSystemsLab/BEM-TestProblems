@@ -1,0 +1,257 @@
+{
+  "additional_notices": {
+    "original_notice": "Full original IDF header retained in ../legacy/simple_seattle_template.idf",
+    "path": "../../../../THIRD_PARTY_NOTICES.md"
+  },
+  "baseline_parameters": {
+    "east_window_width": 3.0,
+    "orientation": 0.0,
+    "shade_transmittance": 0.5,
+    "west_window_width": 3.0
+  },
+  "copyright": "Copyright (c) 2018, Christoph Waibel. All rights reserved.",
+  "format_converter": "ConvertInputFormat",
+  "format_converter_sha256": "b4e12f8081f63398d6c2d3937e96a4d9928358b474799b4b8eff797eb5c460c9",
+  "license": "BSD-3-Clause",
+  "license_notice": "../licenses/BEOBenchmark-LICENSE.txt",
+  "modern_numerical_adjustments": [
+    {
+      "field": "maximum_number_of_warmup_days",
+      "new": 100,
+      "object_name": "office zone",
+      "object_type": "Building",
+      "old": 25,
+      "reason": "Allow 26.2 warmup to converge without relaxing convergence tolerances. P1 midpoint with canonical Seattle weather produced a warmup Severe at 25 days and passed with 100; this family shares that stringent convergence setup. The cap does not force additional warmup after convergence."
+    }
+  ],
+  "normalized_idf_sha256": "14efb97d561df5a8242d4a31b11da13e4ff68e292eaed7549d1d315e3ad6d065",
+  "official_engine_release": "https://github.com/NatLabRockies/EnergyPlus/releases/tag/v26.2.0",
+  "official_transition_archive": "https://energyplushelp.freshdesk.com/helpdesk/attachments/67089987420",
+  "output_epjson": "problem_1.epJSON",
+  "output_sha256": "3b87cf11743f1388d75c4efe415aca891371e3e024f3a880627670971109eaa9",
+  "removed_obsolete_section_markers": [
+    "End Lead Input",
+    "Simulation Data",
+    "End Simulation Data"
+  ],
+  "rendered_source_sha256": "a33d9a1c845cca025107d73115c63ec84c7792431ce36b13304b01232d45e631",
+  "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "source_repository": "https://github.com/milzj/BEOBenchmark",
+  "source_template": "simple_seattle_template.idf",
+  "source_template_sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
+  "source_version": "8.5.0",
+  "target_version": "26.2.0",
+  "transition_steps": [
+    {
+      "elapsed_seconds": 3.391931,
+      "from": "8.5.0",
+      "new_idd_sha256": "df785a81f09a0afd490023cdc81ca421d80b693b1e1d1dbf24a789f00c696843",
+      "old_idd_sha256": "c55ec6cd15221540a821c4b6697bfade5e30800e5e6d24adbd9e1473c4963ed4",
+      "output_idf_sha256": "5d42caaec209f2b884d2bc3a97961feb8f28165ae4d9400af873d27c1f510810",
+      "to": "8.6.0",
+      "tool": "Transition-V8-5-0-to-V8-6-0",
+      "tool_sha256": "5e3aa6937cd75332c5fda305f80a4ddce82ab206b65e649658505812a1bc23d3"
+    },
+    {
+      "elapsed_seconds": 4.49545,
+      "from": "8.6.0",
+      "new_idd_sha256": "25a44d4e602e1eb3451a1400b55aaa7e0b9fdcf6ef4c5ce0f7252a75ca3adde4",
+      "old_idd_sha256": "df785a81f09a0afd490023cdc81ca421d80b693b1e1d1dbf24a789f00c696843",
+      "output_idf_sha256": "53cae9633cc26d3dd93c4cda77e164b53ec2d57cae79fdb630a8bb376d43ff3d",
+      "to": "8.7.0",
+      "tool": "Transition-V8-6-0-to-V8-7-0",
+      "tool_sha256": "064c32d2c0191e350cd5b23c8ec6ff9d634b5daae8f06c29b8208f380f90a681"
+    },
+    {
+      "elapsed_seconds": 3.588258,
+      "from": "8.7.0",
+      "new_idd_sha256": "010a457d392f666bd1ba9be26c50cacdd12eada9d690e57d1e556a54c9fe2d89",
+      "old_idd_sha256": "25a44d4e602e1eb3451a1400b55aaa7e0b9fdcf6ef4c5ce0f7252a75ca3adde4",
+      "output_idf_sha256": "414a01e34c8a675c4eb1b970d34f7644d0496a83871bd8f8a059b78437a02b97",
+      "to": "8.8.0",
+      "tool": "Transition-V8-7-0-to-V8-8-0",
+      "tool_sha256": "41899807dabd4c545a4e5cc10728aa305ea10719484241a020b03439e506cf56"
+    },
+    {
+      "elapsed_seconds": 4.144401,
+      "from": "8.8.0",
+      "new_idd_sha256": "30816c9ff732021ebd805aa3e62aa6a7060bbd8a6c30c390fbfafe9f6bac63a6",
+      "old_idd_sha256": "010a457d392f666bd1ba9be26c50cacdd12eada9d690e57d1e556a54c9fe2d89",
+      "output_idf_sha256": "978612676d11d80606d646ba0455d497f0fb9275a4859eefa44f03e4f43e0d9e",
+      "to": "8.9.0",
+      "tool": "Transition-V8-8-0-to-V8-9-0",
+      "tool_sha256": "1b311ea7cb9226f7aea060be6b219b2ebb0290f5d489a5ddcb72f4ca5b034b86"
+    },
+    {
+      "elapsed_seconds": 4.349603,
+      "from": "8.9.0",
+      "new_idd_sha256": "ca8fa293d24ac2d735972811f8a6b0969c8d655ed905c6c1bdc464bba2360f6e",
+      "old_idd_sha256": "30816c9ff732021ebd805aa3e62aa6a7060bbd8a6c30c390fbfafe9f6bac63a6",
+      "output_idf_sha256": "dacc71af6c7d31f50d319428a40efc075b9c31c674d4b71bc8a3dd57034eb8ac",
+      "to": "9.0.0",
+      "tool": "Transition-V8-9-0-to-V9-0-0",
+      "tool_sha256": "3981082bc640641e530971273fb14f76429fc334fe58371b095019c2413f6e82"
+    },
+    {
+      "elapsed_seconds": 3.574738,
+      "from": "9.0.0",
+      "new_idd_sha256": "54f477d58fa642084bb90cd0613d587abcfd8ba2c3b2310aee06383f3f842d97",
+      "old_idd_sha256": "504ac0bf83a0e4f33b1fb9254359300c046367624ab82b4af219b973674cc3d8",
+      "output_idf_sha256": "ae50d532b9d5a6a3d5925b0d0a359737fedc3c629cc6b905bfa99abcd5ef36d4",
+      "to": "9.1.0",
+      "tool": "Transition-V9-0-0-to-V9-1-0",
+      "tool_sha256": "c61c02608fa4844605123bda09a71e33e3e32d06024ab96a5ea33946df8edfb2"
+    },
+    {
+      "elapsed_seconds": 4.406431,
+      "from": "9.1.0",
+      "new_idd_sha256": "1fafba2766070fac10023f93e92336706d7cd01720f7c7060922db1d22cf4b6f",
+      "old_idd_sha256": "54f477d58fa642084bb90cd0613d587abcfd8ba2c3b2310aee06383f3f842d97",
+      "output_idf_sha256": "88fff69e24364b0ec5285f8c28b22901ded533fd169a726905df75ba5bfc10d1",
+      "to": "9.2.0",
+      "tool": "Transition-V9-1-0-to-V9-2-0",
+      "tool_sha256": "99f48f5e96bca8038d9ce9f052942d97a06bff1553c8a4a1ddbcdcac1d998514"
+    },
+    {
+      "elapsed_seconds": 4.398692,
+      "from": "9.2.0",
+      "new_idd_sha256": "5e35e71ad13bc8a8228f0f2dc3bf745b2dcdb7aebefaed6246e6e7a09a01b3ce",
+      "old_idd_sha256": "1fafba2766070fac10023f93e92336706d7cd01720f7c7060922db1d22cf4b6f",
+      "output_idf_sha256": "fb8220ea9337f90fe816b2584f39838009de684614822fdf07ee361426e0b2c5",
+      "to": "9.3.0",
+      "tool": "Transition-V9-2-0-to-V9-3-0",
+      "tool_sha256": "8c772e3dbf87a42a5d8b9d79cdc922ae6ee029ca0ce08ede043930b664432abf"
+    },
+    {
+      "elapsed_seconds": 4.219585,
+      "from": "9.3.0",
+      "new_idd_sha256": "1e884d276ebfe66747fbe6f8dff2eafc3fffe37fe2aa2e409ba96e387420f700",
+      "old_idd_sha256": "5e35e71ad13bc8a8228f0f2dc3bf745b2dcdb7aebefaed6246e6e7a09a01b3ce",
+      "output_idf_sha256": "6d654d00d1a24c85c7ff58e96cf103005a9756cec2bb2f0ad7d51fc202a14883",
+      "to": "9.4.0",
+      "tool": "Transition-V9-3-0-to-V9-4-0",
+      "tool_sha256": "d624db61b9446f8c749b770a24e89bc46952e24d59632a348fbf08bc72488400"
+    },
+    {
+      "elapsed_seconds": 4.267358,
+      "from": "9.4.0",
+      "new_idd_sha256": "24be213115e6242f636cc50a2332f0ae9069aacb05334e032178ec149e277f30",
+      "old_idd_sha256": "1e884d276ebfe66747fbe6f8dff2eafc3fffe37fe2aa2e409ba96e387420f700",
+      "output_idf_sha256": "65f93062e4394033e65d61a31043364998176ddc9d1427a1f837d484eeb41184",
+      "to": "9.5.0",
+      "tool": "Transition-V9-4-0-to-V9-5-0",
+      "tool_sha256": "98ee28e88ffd11b02d8d1755aa6ef6b070d6d6760baff8ffd631b78a15389f06"
+    },
+    {
+      "elapsed_seconds": 4.305394,
+      "from": "9.5.0",
+      "new_idd_sha256": "599dd36490d2bed6df90e6a801d27084b266f517f74f9e545dd5902156806e5c",
+      "old_idd_sha256": "24be213115e6242f636cc50a2332f0ae9069aacb05334e032178ec149e277f30",
+      "output_idf_sha256": "22566cd6486be3eb0536a8dc2d866ff2d90fd75b2918ca935f9828fa8832a06a",
+      "to": "9.6.0",
+      "tool": "Transition-V9-5-0-to-V9-6-0",
+      "tool_sha256": "129a0da65c3fed5e9522524b98ab52b9ab56ccd8044ca24609be4ae384b51d3a"
+    },
+    {
+      "elapsed_seconds": 3.925491,
+      "from": "9.6.0",
+      "new_idd_sha256": "87497f859a1bc0e05a6143cd0ad5b3fccd4b2557dfe9233a5dda3ed59ce2bdb0",
+      "old_idd_sha256": "599dd36490d2bed6df90e6a801d27084b266f517f74f9e545dd5902156806e5c",
+      "output_idf_sha256": "c40d9ad28f24df36af639d1e13037b712f70e41682f265195d90d5fb08792921",
+      "to": "22.1.0",
+      "tool": "Transition-V9-6-0-to-V22-1-0",
+      "tool_sha256": "7f67632f4d025ebe6f811912e13c5e09805628e3fe23a4766468ef003dc14aa5"
+    },
+    {
+      "elapsed_seconds": 4.263778,
+      "from": "22.1.0",
+      "new_idd_sha256": "ca537c4dde2c45d82ae0fad286f8cff037034a6b50968cdb1f28643cc25fb2f2",
+      "old_idd_sha256": "87497f859a1bc0e05a6143cd0ad5b3fccd4b2557dfe9233a5dda3ed59ce2bdb0",
+      "output_idf_sha256": "ca35e698fe6968af73593df627c836a9dcbd9279b678b579e1a742f619c63b0f",
+      "to": "22.2.0",
+      "tool": "Transition-V22-1-0-to-V22-2-0",
+      "tool_sha256": "1bb5706f2feb04f3f3f93c4ee25a78e0c023809c4acaed640ad48c4632bfa4c2"
+    },
+    {
+      "elapsed_seconds": 4.114484,
+      "from": "22.2.0",
+      "new_idd_sha256": "7ce43cf32c95f42d79acec3cf47f8d3e81d9cdc403cec875705261643a7c48d3",
+      "old_idd_sha256": "ca537c4dde2c45d82ae0fad286f8cff037034a6b50968cdb1f28643cc25fb2f2",
+      "output_idf_sha256": "f5ddd84a64254649a2010f5f371094a3bab84421e7dfa9ff8f4125f9a07631b7",
+      "to": "23.1.0",
+      "tool": "Transition-V22-2-0-to-V23-1-0",
+      "tool_sha256": "7c6aecf7016f9ab3cec9bfe918297c0e4d67aec5f536346141d5d232a96be5c2"
+    },
+    {
+      "elapsed_seconds": 4.042984,
+      "from": "23.1.0",
+      "new_idd_sha256": "0582fd8a0fbfc53b55b614b22927ab3e7ecff999b9639c3ca8bcc070ea0435ae",
+      "old_idd_sha256": "7ce43cf32c95f42d79acec3cf47f8d3e81d9cdc403cec875705261643a7c48d3",
+      "output_idf_sha256": "262df2e0ce72ab82825451b97b7ad1b9b63538fe288b331cfd5e84adc4878d25",
+      "to": "23.2.0",
+      "tool": "Transition-V23-1-0-to-V23-2-0",
+      "tool_sha256": "4977845f77cf0f66dd16adde9c28925f530da3fdb389de1dd62c624ad4341100"
+    },
+    {
+      "elapsed_seconds": 4.365059,
+      "from": "23.2.0",
+      "new_idd_sha256": "b8a6025bee4f33cb1d97055c642e149e38f4a233504f3b065f544331ac320a8c",
+      "old_idd_sha256": "0582fd8a0fbfc53b55b614b22927ab3e7ecff999b9639c3ca8bcc070ea0435ae",
+      "output_idf_sha256": "e2898d7bd49d874785abd51f6f011a7e515681f3a6bab22b1171df4627a635bc",
+      "to": "24.1.0",
+      "tool": "Transition-V23-2-0-to-V24-1-0",
+      "tool_sha256": "839a07efda23a7d6f8d43d66c54fbadfc6dd9738e00c0ceec0164d1529c5d863"
+    },
+    {
+      "elapsed_seconds": 4.15554,
+      "from": "24.1.0",
+      "new_idd_sha256": "7cdf1bb0a2c5084c5c54dba79bf0d806285d4e9f39836d7164e1de3ac289977e",
+      "old_idd_sha256": "b8a6025bee4f33cb1d97055c642e149e38f4a233504f3b065f544331ac320a8c",
+      "output_idf_sha256": "68b297b06d1e2677ebd85d3d3f1b1eb3c891abc6b90a82aebc7caae99c08aec6",
+      "to": "24.2.0",
+      "tool": "Transition-V24-1-0-to-V24-2-0",
+      "tool_sha256": "959a450edd884115ad3397b957b747f733a10d3b8c5e1527f33b115cf3088e4c"
+    },
+    {
+      "elapsed_seconds": 4.679294,
+      "from": "24.2.0",
+      "new_idd_sha256": "1d49c707beb99230c6552536007138a4b91e0be5012b6fc0c169ab0062c04878",
+      "old_idd_sha256": "7cdf1bb0a2c5084c5c54dba79bf0d806285d4e9f39836d7164e1de3ac289977e",
+      "output_idf_sha256": "b0dab66b00998632b218052b2cdd6b4196a20260d2a6c651a447884231d5c06f",
+      "to": "25.1.0",
+      "tool": "Transition-V24-2-0-to-V25-1-0",
+      "tool_sha256": "c4b130bb4e03f4755e1d4ab5524f09179bab617a890667994c86910c58c95739"
+    },
+    {
+      "elapsed_seconds": 5.170457,
+      "from": "25.1.0",
+      "new_idd_sha256": "fe5b5e8f1086945e525963a1d2e8f29e9f2c3ea60f04b0297ad924fe701c6861",
+      "old_idd_sha256": "1d49c707beb99230c6552536007138a4b91e0be5012b6fc0c169ab0062c04878",
+      "output_idf_sha256": "260049191898542a23dd2313648c553d9b228197b6c07e933e58bae9dcee1e5d",
+      "to": "25.2.0",
+      "tool": "Transition-V25-1-0-to-V25-2-0",
+      "tool_sha256": "ed31c273d5c402830532e4f5c3e5488d79627ca18fb70ce5ff51fdb104b0d74d"
+    },
+    {
+      "elapsed_seconds": 4.005311,
+      "from": "25.2.0",
+      "new_idd_sha256": "0bc882a38e9229c28289615ac6469a990f9050a4f95b071ac89584ffaac58e59",
+      "old_idd_sha256": "fe5b5e8f1086945e525963a1d2e8f29e9f2c3ea60f04b0297ad924fe701c6861",
+      "output_idf_sha256": "12b5641a3ddadbd88ccef39b74cbc963453c4afa2ea467cd7444e73bec4a5591",
+      "to": "26.1.0",
+      "tool": "Transition-V25-2-0-to-V26-1-0",
+      "tool_sha256": "e81578de5c6b69971b763e67dab853f1e0ca3a390bad6f01d050c013cc81aa6b"
+    },
+    {
+      "elapsed_seconds": 4.364037,
+      "from": "26.1.0",
+      "new_idd_sha256": "9d622d72ce2375e3bc5ac14b9e129479b003bf8a59d4838c83a2c4989f1f74f3",
+      "old_idd_sha256": "0bc882a38e9229c28289615ac6469a990f9050a4f95b071ac89584ffaac58e59",
+      "output_idf_sha256": "2390be40a8a0c6efb51d42a3b6cae99bf59425549fd73caa4605696c53c68730",
+      "to": "26.2.0",
+      "tool": "Transition-V26-1-0-to-V26-2-0",
+      "tool_sha256": "0fd3db8780d4943c23b9aac2cf4bd29f80c0663dfa6bcdab0003ddf193421c69"
+    }
+  ],
+  "transitioned_epjson_sha256": "3cce7c73d786a46d7f2329c5a6a976632b4aafd2af119f18cb7c694099325c4e"
+}

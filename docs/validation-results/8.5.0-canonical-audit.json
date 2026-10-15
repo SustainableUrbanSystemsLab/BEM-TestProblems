@@ -1,0 +1,956 @@
+{
+  "engine_version": "8.5.0",
+  "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+  "upstream_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "platform": "Darwin-arm64",
+  "weather_kind": "canonical",
+  "comparison": "measurement-only",
+  "rtol": 1e-08,
+  "atol": 1e-07,
+  "cases": [
+    {
+      "case_id": "p01-midpoint",
+      "problem": 1,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 153.18108166841446,
+      "components": {
+        "Q_h": 2.892227858083667,
+        "Q_c": 2367.644743189197,
+        "E_L": 3874.6490973975556
+      },
+      "terms": {
+        "heating": 0.06847130345842015,
+        "cooling": 32.02982607128243,
+        "lighting": 121.08278429367361
+      },
+      "input_sha256": "a33d9a1c845cca025107d73115c63ec84c7792431ce36b13304b01232d45e631",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "elapsed_seconds": 1.1937046661041677,
+      "passed": true
+    },
+    {
+      "case_id": "p02-midpoint",
+      "problem": 2,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 194.74595895142755,
+      "components": {
+        "Q_h": 0.5096496979331028,
+        "Q_c": 6872.9080276526665,
+        "E_L": 3256.1997277339724
+      },
+      "terms": {
+        "heating": 0.012065570500310199,
+        "cooling": 92.97765188924062,
+        "lighting": 101.75624149168664
+      },
+      "input_sha256": "ed596aa790f4419f54188d4f1d04912fb42d63ae19f0d55316f347edb0246ea4",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "elapsed_seconds": 0.9887127499096096,
+      "passed": true
+    },
+    {
+      "case_id": "p03-midpoint",
+      "problem": 3,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 173.27474290208883,
+      "components": {
+        "Q_h": 934.0988236612444,
+        "Q_c": 3168.5426222127776,
+        "E_L": 3465.477676061667
+      },
+      "terms": {
+        "heating": 22.114081999555975,
+        "cooling": 42.864483525605756,
+        "lighting": 108.2961773769271
+      },
+      "input_sha256": "8e52cf78854757a696620dd6c5761c27a0ae20cf231ef311a9ccf4dbb9521025",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "elapsed_seconds": 0.9975597080774605,
+      "passed": true
+    },
+    {
+      "case_id": "p04-midpoint",
+      "problem": 4,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 147.63863523578922,
+      "components": {
+        "H_1": 22.380480282970943,
+        "H_2": 151.58353705686835,
+        "H_3": 150.77736065916307,
+        "H_4": 2.000443623943786,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 796.4310759828945,
+        "L_N": 1992.4654583696222,
+        "L_W": 5604.464546277777,
+        "L_E": 5435.436083780722,
+        "L_S": 1519.677726071,
+        "L_I": 6345.6,
+        "V_legacy": 9239.728098992471,
+        "V_return": 9239.728098992471
+      },
+      "terms": {
+        "heating": 0.29596179494832076,
+        "cooling": 2.1642148803883003,
+        "lighting": 94.96254497897178,
+        "fans": 50.21591358148083
+      },
+      "input_sha256": "bff5e099f6584529b0d2c7c2c28b7fccbf7fdf1c1f243cdc288cb0f0c0eac61b",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "elapsed_seconds": 2.657863666769117,
+      "passed": true
+    },
+    {
+      "case_id": "p05-midpoint",
+      "problem": 5,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 214.6093283200323,
+      "components": {
+        "H_1": 4.784174521783028,
+        "H_2": 23.41699942567961,
+        "H_3": 20.318579427801026,
+        "H_4": 0.0,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 23679.309625382804,
+        "L_N": 1749.6114351682306,
+        "L_W": 4601.370859392833,
+        "L_E": 4407.877238446139,
+        "L_S": 1319.7924127847612,
+        "L_I": 6345.6,
+        "V_legacy": 12289.441303830028,
+        "V_return": 12289.441303830028
+      },
+      "terms": {
+        "heating": 0.04394905197034752,
+        "cooling": 64.34595006897501,
+        "lighting": 83.42898733044545,
+        "fans": 66.79044186864147
+      },
+      "input_sha256": "bddc743a0b3f521de841b073829ec1b76091a7399372aa52ef2743cdb4a8bf58",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "elapsed_seconds": 2.7665319996885955,
+      "passed": true
+    },
+    {
+      "case_id": "p06-midpoint",
+      "problem": 6,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 179.57702533854365,
+      "components": {
+        "H_1": 2840.605368278361,
+        "H_2": 3216.6438191762777,
+        "H_3": 3230.0044593642224,
+        "H_4": 1891.5427994751112,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 5961.086783395305,
+        "L_N": 1877.3739465637777,
+        "L_W": 4842.186745443666,
+        "L_E": 4781.523318497333,
+        "L_S": 1368.562528118286,
+        "L_I": 6345.6,
+        "V_legacy": 12099.000310869722,
+        "V_return": 12099.000310869722
+      },
+      "terms": {
+        "heating": 10.12572141874454,
+        "cooling": 16.198605389661157,
+        "lighting": 87.4972620580199,
+        "fans": 65.75543647211806
+      },
+      "input_sha256": "62a9abb3c05dec05027c26305f951690c28c91f4a3e5a8c5f977848ae8e5cc6c",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "elapsed_seconds": 2.6717340839095414,
+      "passed": true
+    },
+    {
+      "case_id": "p08-midpoint",
+      "problem": 8,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 173.93819111448886,
+      "components": {
+        "H_1": 2835.0899175255554,
+        "H_2": 3342.670991529222,
+        "H_3": 3353.603001120361,
+        "H_4": 1880.9426978013555,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 7272.268393744083,
+        "L_N": 1877.3739465637777,
+        "L_W": 4842.186745443666,
+        "L_E": 4781.523318497333,
+        "L_S": 1368.562528118286,
+        "L_I": 6345.6,
+        "V_legacy": 10366.945648188832,
+        "V_return": 10366.945648188832
+      },
+      "terms": {
+        "heating": 10.33723424635552,
+        "cooling": 19.761598896043708,
+        "lighting": 87.4972620580199,
+        "fans": 56.34209591406974
+      },
+      "input_sha256": "0eb4b49d67926209a65ad6339463134da357542ea114e62c4468cad8d3fa3815",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "elapsed_seconds": 2.517661209218204,
+      "passed": true
+    },
+    {
+      "case_id": "p09-midpoint",
+      "problem": 9,
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 843.38,
+      "components": {
+        "Y": 843.38
+      },
+      "terms": {
+        "source_energy": 843.38,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "75b761cb4d0ec7ad00660c76f4ef33176d1c2a7a37c149d0b288f7ef412d9f3a",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 2.4130591666325927,
+      "passed": true
+    },
+    {
+      "case_id": "p10-midpoint",
+      "problem": 10,
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 1198.57,
+      "components": {
+        "Y": 1198.57
+      },
+      "terms": {
+        "source_energy": 1198.57,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "18d206bc04432d6699e813102aa415ba007a7b2b6c9b466ee9ae63116c5eb0de",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 11.19664195831865,
+      "passed": true
+    },
+    {
+      "case_id": "p13-midpoint",
+      "problem": 13,
+      "x": [
+        0.175,
+        600.0,
+        90.0,
+        80.0,
+        120.0,
+        35.0,
+        130.0,
+        210.0,
+        570.0,
+        525.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "objective": 1932.967349477319,
+      "components": {
+        "Q": 441.7973106070278,
+        "P": 18.4082212752928
+      },
+      "terms": {
+        "energy": 787.119849477319,
+        "insulation": 113.34749999999998,
+        "radiators": 1032.5
+      },
+      "input_sha256": "fdfb0e1c7268f235fc51356b71d6d4a8c7fa2823ac847e0b8c6d6826b6b6af5b",
+      "weather_file": "YUG_Belgrade_IWEC.epw",
+      "weather_sha256": "a1d29feac311cd9d3db4948ef9f8c4e71253410b93b392f43654ce111a04ac62",
+      "elapsed_seconds": 1.2094041253440082,
+      "passed": true
+    },
+    {
+      "case_id": "p01-lower",
+      "problem": 1,
+      "x": [
+        -180.0,
+        0.1,
+        0.1,
+        0.2
+      ],
+      "purpose": "representative family bounds",
+      "objective": 237.04229079924937,
+      "components": {
+        "Q_h": 0.0,
+        "Q_c": 3450.5959704105835,
+        "E_L": 6091.588816220749
+      },
+      "terms": {
+        "heating": 0.0,
+        "cooling": 46.68014029235096,
+        "lighting": 190.36215050689842
+      },
+      "input_sha256": "094b8d2e021b8a6e57ec6b937f8c426d0bf8f7af1322244e822228f374572bef",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "elapsed_seconds": 0.9432318327017128,
+      "passed": true
+    },
+    {
+      "case_id": "p01-upper",
+      "problem": 1,
+      "x": [
+        180.0,
+        5.9,
+        5.9,
+        0.8
+      ],
+      "purpose": "representative family bounds",
+      "objective": 148.3372514330389,
+      "components": {
+        "Q_h": 90.53436265436555,
+        "Q_c": 3427.7416521991668,
+        "E_L": 3194.334562374861
+      },
+      "terms": {
+        "heating": 2.14333244920373,
+        "cooling": 46.37096390962076,
+        "lighting": 99.8229550742144
+      },
+      "input_sha256": "addd718c23e5b2b4ca41c862240bb1eaf49c21d873578fc67211cf679c00203c",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "elapsed_seconds": 0.8998207501135767,
+      "passed": true
+    },
+    {
+      "case_id": "p04-lower",
+      "problem": 4,
+      "x": [
+        1.224,
+        7.344,
+        7.344,
+        1.224,
+        0.05,
+        0.05,
+        0.05,
+        100.0,
+        100.0,
+        100.0,
+        20.0,
+        20.0,
+        12.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 202.64311430347504,
+      "components": {
+        "H_1": 137.66814363107667,
+        "H_2": 191.0672098413536,
+        "H_3": 186.71949345561111,
+        "H_4": 97.16230395391916,
+        "H_5": 0.041742502800108605,
+        "H_6": 0.0,
+        "C": 233.00308481043723,
+        "L_N": 2382.472033287022,
+        "L_W": 7721.249939268138,
+        "L_E": 8003.869702544555,
+        "L_S": 2137.5148177301307,
+        "L_I": 6345.6,
+        "V_legacy": 14732.394725420832,
+        "V_return": 14732.394725420832
+      },
+      "terms": {
+        "heating": 0.5549446498050368,
+        "cooling": 0.6331605565501012,
+        "lighting": 121.3876464589632,
+        "fans": 80.0673626381567
+      },
+      "input_sha256": "85441c95a4db9beae346c1eea414dcfa71e03759ce51b6f196258487b856ee9e",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "elapsed_seconds": 2.4683942501433194,
+      "passed": true
+    },
+    {
+      "case_id": "p04-upper",
+      "problem": 4,
+      "x": [
+        5.832,
+        25.668,
+        25.668,
+        5.832,
+        1.05,
+        1.05,
+        1.05,
+        600.0,
+        600.0,
+        600.0,
+        25.0,
+        25.0,
+        18.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 147.72543931339308,
+      "components": {
+        "H_1": 51.85725641138417,
+        "H_2": 215.14531247666332,
+        "H_3": 211.87825755624834,
+        "H_4": 3.7709492033763055,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 3185.5370489579445,
+        "L_N": 1629.6780955672637,
+        "L_W": 5288.470778320417,
+        "L_E": 5126.717719839334,
+        "L_S": 1370.1196330166833,
+        "L_I": 6345.6,
+        "V_legacy": 9628.381776037668,
+        "V_return": 9628.381776037668
+      },
+      "terms": {
+        "heating": 0.43718457939100736,
+        "cooling": 8.656350676516155,
+        "lighting": 86.30374223119425,
+        "fans": 52.32816182629167
+      },
+      "input_sha256": "4c251b888aaac06db4b25d17a40db2c0b3f989f1a783ae77e6a08bd81ecaced3",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "elapsed_seconds": 2.5664480826817453,
+      "passed": true
+    },
+    {
+      "case_id": "p09-lower",
+      "problem": 9,
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 830.19,
+      "components": {
+        "Y": 830.19
+      },
+      "terms": {
+        "source_energy": 830.19,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "17fee5d1c2a733cf137cb0041d1a890e65064e01eb18f92a9223f2a641dad366",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 2.403132333420217,
+      "passed": true
+    },
+    {
+      "case_id": "p09-upper",
+      "problem": 9,
+      "x": [
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        18.0,
+        21.0,
+        21.0,
+        36.0,
+        36.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 909.47,
+      "components": {
+        "Y": 909.47
+      },
+      "terms": {
+        "source_energy": 909.47,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "e501a3b595e40eafab6a5a23a84fe9f79fa6de5e1325674b0aa15ee911d4c871",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 2.6175792920403183,
+      "passed": true
+    },
+    {
+      "case_id": "p10-lower",
+      "problem": 10,
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": false,
+      "failure": "EnergyPlus emitted severe warmup-convergence diagnostics; rejected by the runner despite process exit 0.",
+      "failure_reason": "simulation",
+      "input_sha256": "24eb5ba94df24dc45243e2be2625aab39175494d4d70bcf695e6d6bc610108f3",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "known_source_condition": "Unchanged version-8.5 model at simultaneous lower bounds emitted seven warmup-convergence severe diagnostics at the original 25-day cap."
+    },
+    {
+      "case_id": "p10-upper",
+      "problem": 10,
+      "x": [
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        18.0,
+        21.0,
+        21.0,
+        36.0,
+        36.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 1646.56,
+      "components": {
+        "Y": 1646.56
+      },
+      "terms": {
+        "source_energy": 1646.56,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "74a9e5be088871e44ea7d9cf112f38c5e5f3655c28d7709cecfb69708b5fdb9e",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 14.77189812483266,
+      "passed": true
+    },
+    {
+      "case_id": "p13-lower",
+      "problem": 13,
+      "x": [
+        0.05,
+        400.0,
+        60.0,
+        50.0,
+        80.0,
+        20.0,
+        80.0,
+        140.0,
+        380.0,
+        350.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 1983.0351759669265,
+      "components": {
+        "Q": 713.9385600226584,
+        "P": 29.747440000944103
+      },
+      "terms": {
+        "energy": 1271.9751759669266,
+        "insulation": 28.56,
+        "radiators": 682.5
+      },
+      "input_sha256": "444ecd9d6b7b825100e0530ca59ba57e138cd78c5762916ffc8fda399e9053ab",
+      "weather_file": "YUG_Belgrade_IWEC.epw",
+      "weather_sha256": "a1d29feac311cd9d3db4948ef9f8c4e71253410b93b392f43654ce111a04ac62",
+      "elapsed_seconds": 1.108972290996462,
+      "passed": true
+    },
+    {
+      "case_id": "p13-upper",
+      "problem": 13,
+      "x": [
+        0.3,
+        800.0,
+        120.0,
+        110.0,
+        160.0,
+        50.0,
+        180.0,
+        280.0,
+        760.0,
+        700.0
+      ],
+      "purpose": "representative family bounds",
+      "objective": 2212.9267156133583,
+      "components": {
+        "Q": 354.89484817665556,
+        "P": 14.787285340694
+      },
+      "terms": {
+        "energy": 632.2917156133583,
+        "insulation": 198.135,
+        "radiators": 1382.5
+      },
+      "input_sha256": "fe2303cd13196fd361e7b393994560da5b30a6b7a2dafc34525ded1fb496847d",
+      "weather_file": "YUG_Belgrade_IWEC.epw",
+      "weather_sha256": "a1d29feac311cd9d3db4948ef9f8c4e71253410b93b392f43654ce111a04ac62",
+      "elapsed_seconds": 1.3837192910723388,
+      "passed": true
+    },
+    {
+      "case_id": "p09-penalty-below",
+      "problem": 9,
+      "x": [
+        1.0,
+        1.5487,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "objective": 1262.055,
+      "components": {
+        "Y": 841.37
+      },
+      "terms": {
+        "source_energy": 841.37,
+        "window_penalty": 420.685
+      },
+      "input_sha256": "2cf4ed2733a913d8be1bc86d55f5a555933f1d4c3131373544dabadca3faa25f",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 2.4055384173989296,
+      "passed": true
+    },
+    {
+      "case_id": "p09-penalty-above",
+      "problem": 9,
+      "x": [
+        1.0,
+        1.5489000000000002,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "objective": 841.37,
+      "components": {
+        "Y": 841.37
+      },
+      "terms": {
+        "source_energy": 841.37,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "2613287bffb10e3a081a816be40149b4777b8c2ff4a07006a6974c2f9ec251f5",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 2.5680746668949723,
+      "passed": true
+    },
+    {
+      "case_id": "p10-penalty-below",
+      "problem": 10,
+      "x": [
+        1.0,
+        1.5487,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "objective": 1801.1999999999998,
+      "components": {
+        "Y": 1200.8
+      },
+      "terms": {
+        "source_energy": 1200.8,
+        "window_penalty": 600.4
+      },
+      "input_sha256": "26cb88110a13c2451d46454e901747a47c7d96a261ac90185d7ab5e6c6b417a3",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 12.194968374911696,
+      "passed": true
+    },
+    {
+      "case_id": "p10-penalty-above",
+      "problem": 10,
+      "x": [
+        1.0,
+        1.5489000000000002,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "objective": 1200.79,
+      "components": {
+        "Y": 1200.79
+      },
+      "terms": {
+        "source_energy": 1200.79,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "d3ccbd0a37800384b26f8d2337d61e8856841c58594028d7821dc14de667dc5c",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "elapsed_seconds": 12.208569499664009,
+      "passed": true
+    },
+    {
+      "case_id": "p06-embedded-p08",
+      "problem": 6,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        25.0,
+        22.5,
+        12.0
+      ],
+      "purpose": "P8 equivalent full-dimensional design",
+      "objective": 173.93819111448886,
+      "components": {
+        "H_1": 2835.0899175255554,
+        "H_2": 3342.670991529222,
+        "H_3": 3353.603001120361,
+        "H_4": 1880.9426978013555,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 7272.268393744083,
+        "L_N": 1877.3739465637777,
+        "L_W": 4842.186745443666,
+        "L_E": 4781.523318497333,
+        "L_S": 1368.562528118286,
+        "L_I": 6345.6,
+        "V_legacy": 10366.945648188832,
+        "V_return": 10366.945648188832
+      },
+      "terms": {
+        "heating": 10.33723424635552,
+        "cooling": 19.761598896043708,
+        "lighting": 87.4972620580199,
+        "fans": 56.34209591406974
+      },
+      "input_sha256": "4465ac97df978c6c304a54439b798f1ac84be6e167e933a450a9f2aee54789a7",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "elapsed_seconds": 2.868985458277166,
+      "passed": true
+    },
+    {
+      "case_id": "p08-embedded-check",
+      "problem": 8,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "purpose": "P8 equivalent reduced-dimensional design",
+      "objective": 173.93819111448886,
+      "components": {
+        "H_1": 2835.0899175255554,
+        "H_2": 3342.670991529222,
+        "H_3": 3353.603001120361,
+        "H_4": 1880.9426978013555,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 7272.268393744083,
+        "L_N": 1877.3739465637777,
+        "L_W": 4842.186745443666,
+        "L_E": 4781.523318497333,
+        "L_S": 1368.562528118286,
+        "L_I": 6345.6,
+        "V_legacy": 10366.945648188832,
+        "V_return": 10366.945648188832
+      },
+      "terms": {
+        "heating": 10.33723424635552,
+        "cooling": 19.761598896043708,
+        "lighting": 87.4972620580199,
+        "fans": 56.34209591406974
+      },
+      "input_sha256": "4465ac97df978c6c304a54439b798f1ac84be6e167e933a450a9f2aee54789a7",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "elapsed_seconds": 3.29634983278811,
+      "passed": true
+    }
+  ],
+  "passed": false,
+  "summary": {
+    "case_count": 26,
+    "passed": 25,
+    "failed": 1,
+    "nominal_midpoints_passed": 10
+  },
+  "evidence_scope": "Python renderer and named output extraction with immutable legacy models and external canonical weather; measurement only, not a C# parity claim or a published-paper solution.",
+  "recorded_on": "2026-10-14"
+}

@@ -1,0 +1,431 @@
+{
+  "additional_notices": {
+    "original_notice": "Full original IDF header retained in ../legacy/Problem13_template.idf",
+    "path": "../../../../THIRD_PARTY_NOTICES.md"
+  },
+  "baseline_parameters": {
+    "insulation_thickness": 0.175,
+    "radiator_ua_big_zone": 210.0,
+    "radiator_ua_class_zone_1": 570.0,
+    "radiator_ua_class_zone_2": 600.0,
+    "radiator_ua_kitchen_zone": 80.0,
+    "radiator_ua_music_zone": 120.0,
+    "radiator_ua_office_zone": 525.0,
+    "radiator_ua_service_zone": 35.0,
+    "radiator_ua_washing_zone": 130.0,
+    "radiator_ua_work_zone": 90.0
+  },
+  "compatibility_adjustments": [
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "BigZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "ClassZone1Radiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "ClassZone2Radiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "KitchenZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "MusiceZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "OfficeZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "ServiceZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "WashingZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    },
+    {
+      "after": 0.0,
+      "before": "Autosize",
+      "path": [
+        "ZoneHVAC:Baseboard:Convective:Water",
+        "WorkZoneRadiant",
+        "heating_design_capacity"
+      ],
+      "preserved_fields": [
+        "u_factor_times_area_value",
+        "maximum_water_flow_rate"
+      ],
+      "reason": "Explicit inactive sizing-field value. With hard UA, hard maximum water flow and no zone sizing, both 8.5 and 26.2 bypass capacity sizing. Version 26.2 newly checks an unused Autosize capacity at startup; runtime heat transfer depends on UA and water flow, so this field does not cap heat output.",
+      "source": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/BaseboardRadiator.cc#L692-L789",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L590-L708",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L908-L917",
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/BaseboardRadiator.cc#L965-L1030"
+      ]
+    }
+  ],
+  "copyright": "Copyright (c) 2018, Christoph Waibel. All rights reserved.",
+  "format_converter": "ConvertInputFormat",
+  "format_converter_sha256": "b4e12f8081f63398d6c2d3937e96a4d9928358b474799b4b8eff797eb5c460c9",
+  "license": "BSD-3-Clause",
+  "license_notice": "../licenses/BEOBenchmark-LICENSE.txt",
+  "normalized_idf_sha256": "4271de8c107a7496225f71060246ac9c31745da8de6654048ef9375da5988061",
+  "official_engine_release": "https://github.com/NatLabRockies/EnergyPlus/releases/tag/v26.2.0",
+  "official_transition_archive": "https://energyplushelp.freshdesk.com/helpdesk/attachments/67089987420",
+  "output_epjson": "problem_13.epJSON",
+  "output_sha256": "483cc0d46da16526e41547a7c7dccd34d7afd7ffd30979a4ec48a1d3479aaea2",
+  "removed_obsolete_section_markers": [],
+  "rendered_source_sha256": "fdfb0e1c7268f235fc51356b71d6d4a8c7fa2823ac847e0b8c6d6826b6b6af5b",
+  "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "source_repository": "https://github.com/milzj/BEOBenchmark",
+  "source_template": "Problem13_template.idf",
+  "source_template_sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
+  "source_version": "8.5.0",
+  "target_version": "26.2.0",
+  "transition_steps": [
+    {
+      "elapsed_seconds": 11.000008,
+      "from": "8.5.0",
+      "new_idd_sha256": "df785a81f09a0afd490023cdc81ca421d80b693b1e1d1dbf24a789f00c696843",
+      "old_idd_sha256": "c55ec6cd15221540a821c4b6697bfade5e30800e5e6d24adbd9e1473c4963ed4",
+      "output_idf_sha256": "68cd5ebdfa653b025fad69443b9e12a60e30bb0bea91b5dbd57dfe1133ee4101",
+      "to": "8.6.0",
+      "tool": "Transition-V8-5-0-to-V8-6-0",
+      "tool_sha256": "5e3aa6937cd75332c5fda305f80a4ddce82ab206b65e649658505812a1bc23d3"
+    },
+    {
+      "elapsed_seconds": 11.310063,
+      "from": "8.6.0",
+      "new_idd_sha256": "25a44d4e602e1eb3451a1400b55aaa7e0b9fdcf6ef4c5ce0f7252a75ca3adde4",
+      "old_idd_sha256": "df785a81f09a0afd490023cdc81ca421d80b693b1e1d1dbf24a789f00c696843",
+      "output_idf_sha256": "f51ad7511490c40922c2db63232ea7a3db0ae83ba081fdf30ce53d121650cd55",
+      "to": "8.7.0",
+      "tool": "Transition-V8-6-0-to-V8-7-0",
+      "tool_sha256": "064c32d2c0191e350cd5b23c8ec6ff9d634b5daae8f06c29b8208f380f90a681"
+    },
+    {
+      "elapsed_seconds": 11.073742,
+      "from": "8.7.0",
+      "new_idd_sha256": "010a457d392f666bd1ba9be26c50cacdd12eada9d690e57d1e556a54c9fe2d89",
+      "old_idd_sha256": "25a44d4e602e1eb3451a1400b55aaa7e0b9fdcf6ef4c5ce0f7252a75ca3adde4",
+      "output_idf_sha256": "84f5bba388c12b4c426a3a1d4a1aaca7e35e7e8b35b32e331ef827ad89eb9b32",
+      "to": "8.8.0",
+      "tool": "Transition-V8-7-0-to-V8-8-0",
+      "tool_sha256": "41899807dabd4c545a4e5cc10728aa305ea10719484241a020b03439e506cf56"
+    },
+    {
+      "elapsed_seconds": 11.87198,
+      "from": "8.8.0",
+      "new_idd_sha256": "30816c9ff732021ebd805aa3e62aa6a7060bbd8a6c30c390fbfafe9f6bac63a6",
+      "old_idd_sha256": "010a457d392f666bd1ba9be26c50cacdd12eada9d690e57d1e556a54c9fe2d89",
+      "output_idf_sha256": "91884f9f8c5e1874a0384e3b4c1909ddc2617b6aae0e6edcfb4e84c86dbb4908",
+      "to": "8.9.0",
+      "tool": "Transition-V8-8-0-to-V8-9-0",
+      "tool_sha256": "1b311ea7cb9226f7aea060be6b219b2ebb0290f5d489a5ddcb72f4ca5b034b86"
+    },
+    {
+      "elapsed_seconds": 11.532502,
+      "from": "8.9.0",
+      "new_idd_sha256": "ca8fa293d24ac2d735972811f8a6b0969c8d655ed905c6c1bdc464bba2360f6e",
+      "old_idd_sha256": "30816c9ff732021ebd805aa3e62aa6a7060bbd8a6c30c390fbfafe9f6bac63a6",
+      "output_idf_sha256": "0f60f127b5211217367690a91d693c5dfff099d7b46cc6d7effb2bea006718fd",
+      "to": "9.0.0",
+      "tool": "Transition-V8-9-0-to-V9-0-0",
+      "tool_sha256": "3981082bc640641e530971273fb14f76429fc334fe58371b095019c2413f6e82"
+    },
+    {
+      "elapsed_seconds": 11.269394,
+      "from": "9.0.0",
+      "new_idd_sha256": "54f477d58fa642084bb90cd0613d587abcfd8ba2c3b2310aee06383f3f842d97",
+      "old_idd_sha256": "504ac0bf83a0e4f33b1fb9254359300c046367624ab82b4af219b973674cc3d8",
+      "output_idf_sha256": "0265b09b182210225bb9e480dfb6e495059daa5ebfc3592df9de8cff59776b45",
+      "to": "9.1.0",
+      "tool": "Transition-V9-0-0-to-V9-1-0",
+      "tool_sha256": "c61c02608fa4844605123bda09a71e33e3e32d06024ab96a5ea33946df8edfb2"
+    },
+    {
+      "elapsed_seconds": 13.776772,
+      "from": "9.1.0",
+      "new_idd_sha256": "1fafba2766070fac10023f93e92336706d7cd01720f7c7060922db1d22cf4b6f",
+      "old_idd_sha256": "54f477d58fa642084bb90cd0613d587abcfd8ba2c3b2310aee06383f3f842d97",
+      "output_idf_sha256": "65612b887c07527c44c6788cc0948990787ee732ab1ef5c8e7133091d154d1f0",
+      "to": "9.2.0",
+      "tool": "Transition-V9-1-0-to-V9-2-0",
+      "tool_sha256": "99f48f5e96bca8038d9ce9f052942d97a06bff1553c8a4a1ddbcdcac1d998514"
+    },
+    {
+      "elapsed_seconds": 13.418542,
+      "from": "9.2.0",
+      "new_idd_sha256": "5e35e71ad13bc8a8228f0f2dc3bf745b2dcdb7aebefaed6246e6e7a09a01b3ce",
+      "old_idd_sha256": "1fafba2766070fac10023f93e92336706d7cd01720f7c7060922db1d22cf4b6f",
+      "output_idf_sha256": "65bc5de68643e8cb96a8a3c25676594efcdf78bdca9367ebe7e62d05711211f2",
+      "to": "9.3.0",
+      "tool": "Transition-V9-2-0-to-V9-3-0",
+      "tool_sha256": "8c772e3dbf87a42a5d8b9d79cdc922ae6ee029ca0ce08ede043930b664432abf"
+    },
+    {
+      "elapsed_seconds": 13.996308,
+      "from": "9.3.0",
+      "new_idd_sha256": "1e884d276ebfe66747fbe6f8dff2eafc3fffe37fe2aa2e409ba96e387420f700",
+      "old_idd_sha256": "5e35e71ad13bc8a8228f0f2dc3bf745b2dcdb7aebefaed6246e6e7a09a01b3ce",
+      "output_idf_sha256": "e5707caef86909ca773f32d017f8942a14d4d99bf67370bc89e3f62f1961aeba",
+      "to": "9.4.0",
+      "tool": "Transition-V9-3-0-to-V9-4-0",
+      "tool_sha256": "d624db61b9446f8c749b770a24e89bc46952e24d59632a348fbf08bc72488400"
+    },
+    {
+      "elapsed_seconds": 13.830029,
+      "from": "9.4.0",
+      "new_idd_sha256": "24be213115e6242f636cc50a2332f0ae9069aacb05334e032178ec149e277f30",
+      "old_idd_sha256": "1e884d276ebfe66747fbe6f8dff2eafc3fffe37fe2aa2e409ba96e387420f700",
+      "output_idf_sha256": "28db6b1659bac18a409fdb1785ba9bfe746dffd96aa3926b862fd40e50fff131",
+      "to": "9.5.0",
+      "tool": "Transition-V9-4-0-to-V9-5-0",
+      "tool_sha256": "98ee28e88ffd11b02d8d1755aa6ef6b070d6d6760baff8ffd631b78a15389f06"
+    },
+    {
+      "elapsed_seconds": 13.750674,
+      "from": "9.5.0",
+      "new_idd_sha256": "599dd36490d2bed6df90e6a801d27084b266f517f74f9e545dd5902156806e5c",
+      "old_idd_sha256": "24be213115e6242f636cc50a2332f0ae9069aacb05334e032178ec149e277f30",
+      "output_idf_sha256": "8c0c8fc7ab3e068424cd2d74c30ef9f6fd27fcee31f9f64a122606e7aaab8942",
+      "to": "9.6.0",
+      "tool": "Transition-V9-5-0-to-V9-6-0",
+      "tool_sha256": "129a0da65c3fed5e9522524b98ab52b9ab56ccd8044ca24609be4ae384b51d3a"
+    },
+    {
+      "elapsed_seconds": 12.740846,
+      "from": "9.6.0",
+      "new_idd_sha256": "87497f859a1bc0e05a6143cd0ad5b3fccd4b2557dfe9233a5dda3ed59ce2bdb0",
+      "old_idd_sha256": "599dd36490d2bed6df90e6a801d27084b266f517f74f9e545dd5902156806e5c",
+      "output_idf_sha256": "4dac94791c3cbfd7d60d1ec0f61d059fab1bae5a4838c4e9dedc454e70d11062",
+      "to": "22.1.0",
+      "tool": "Transition-V9-6-0-to-V22-1-0",
+      "tool_sha256": "7f67632f4d025ebe6f811912e13c5e09805628e3fe23a4766468ef003dc14aa5"
+    },
+    {
+      "elapsed_seconds": 12.809819,
+      "from": "22.1.0",
+      "new_idd_sha256": "ca537c4dde2c45d82ae0fad286f8cff037034a6b50968cdb1f28643cc25fb2f2",
+      "old_idd_sha256": "87497f859a1bc0e05a6143cd0ad5b3fccd4b2557dfe9233a5dda3ed59ce2bdb0",
+      "output_idf_sha256": "fb0de37c460dac5c151ae28f803090947d44265308d71e278c80e33636a92012",
+      "to": "22.2.0",
+      "tool": "Transition-V22-1-0-to-V22-2-0",
+      "tool_sha256": "1bb5706f2feb04f3f3f93c4ee25a78e0c023809c4acaed640ad48c4632bfa4c2"
+    },
+    {
+      "elapsed_seconds": 13.087546,
+      "from": "22.2.0",
+      "new_idd_sha256": "7ce43cf32c95f42d79acec3cf47f8d3e81d9cdc403cec875705261643a7c48d3",
+      "old_idd_sha256": "ca537c4dde2c45d82ae0fad286f8cff037034a6b50968cdb1f28643cc25fb2f2",
+      "output_idf_sha256": "d47d5b11866b02a292af6bfa098bdd1bf2a13dc9a3adab2d89a0cccec8d08415",
+      "to": "23.1.0",
+      "tool": "Transition-V22-2-0-to-V23-1-0",
+      "tool_sha256": "7c6aecf7016f9ab3cec9bfe918297c0e4d67aec5f536346141d5d232a96be5c2"
+    },
+    {
+      "elapsed_seconds": 13.276071,
+      "from": "23.1.0",
+      "new_idd_sha256": "0582fd8a0fbfc53b55b614b22927ab3e7ecff999b9639c3ca8bcc070ea0435ae",
+      "old_idd_sha256": "7ce43cf32c95f42d79acec3cf47f8d3e81d9cdc403cec875705261643a7c48d3",
+      "output_idf_sha256": "5ec7c0657e8dbb7a886539a918f7e32f4cede975cee8f4f0e7cabf422894f351",
+      "to": "23.2.0",
+      "tool": "Transition-V23-1-0-to-V23-2-0",
+      "tool_sha256": "4977845f77cf0f66dd16adde9c28925f530da3fdb389de1dd62c624ad4341100"
+    },
+    {
+      "elapsed_seconds": 13.159742,
+      "from": "23.2.0",
+      "new_idd_sha256": "b8a6025bee4f33cb1d97055c642e149e38f4a233504f3b065f544331ac320a8c",
+      "old_idd_sha256": "0582fd8a0fbfc53b55b614b22927ab3e7ecff999b9639c3ca8bcc070ea0435ae",
+      "output_idf_sha256": "cd321a3770fea99716756d001f4b3ae6d2456c8a3a2f46e092f4a3756bcc2699",
+      "to": "24.1.0",
+      "tool": "Transition-V23-2-0-to-V24-1-0",
+      "tool_sha256": "839a07efda23a7d6f8d43d66c54fbadfc6dd9738e00c0ceec0164d1529c5d863"
+    },
+    {
+      "elapsed_seconds": 13.102894,
+      "from": "24.1.0",
+      "new_idd_sha256": "7cdf1bb0a2c5084c5c54dba79bf0d806285d4e9f39836d7164e1de3ac289977e",
+      "old_idd_sha256": "b8a6025bee4f33cb1d97055c642e149e38f4a233504f3b065f544331ac320a8c",
+      "output_idf_sha256": "4297a0dfcb3059fa7b3bd0febbbce6755e43d73461263f1b45ce1059729d1450",
+      "to": "24.2.0",
+      "tool": "Transition-V24-1-0-to-V24-2-0",
+      "tool_sha256": "959a450edd884115ad3397b957b747f733a10d3b8c5e1527f33b115cf3088e4c"
+    },
+    {
+      "elapsed_seconds": 12.706132,
+      "from": "24.2.0",
+      "new_idd_sha256": "1d49c707beb99230c6552536007138a4b91e0be5012b6fc0c169ab0062c04878",
+      "old_idd_sha256": "7cdf1bb0a2c5084c5c54dba79bf0d806285d4e9f39836d7164e1de3ac289977e",
+      "output_idf_sha256": "af45c0884ec4a6f589f2eb257844d2c203bfa514bc16c3d7d533864b25e55721",
+      "to": "25.1.0",
+      "tool": "Transition-V24-2-0-to-V25-1-0",
+      "tool_sha256": "c4b130bb4e03f4755e1d4ab5524f09179bab617a890667994c86910c58c95739"
+    },
+    {
+      "elapsed_seconds": 13.045405,
+      "from": "25.1.0",
+      "new_idd_sha256": "fe5b5e8f1086945e525963a1d2e8f29e9f2c3ea60f04b0297ad924fe701c6861",
+      "old_idd_sha256": "1d49c707beb99230c6552536007138a4b91e0be5012b6fc0c169ab0062c04878",
+      "output_idf_sha256": "8ff67d3601a6cf8985e7dc2a21ea05dbfc3909d12bda1444775f07ab1bf3ce4b",
+      "to": "25.2.0",
+      "tool": "Transition-V25-1-0-to-V25-2-0",
+      "tool_sha256": "ed31c273d5c402830532e4f5c3e5488d79627ca18fb70ce5ff51fdb104b0d74d"
+    },
+    {
+      "elapsed_seconds": 12.830466,
+      "from": "25.2.0",
+      "new_idd_sha256": "0bc882a38e9229c28289615ac6469a990f9050a4f95b071ac89584ffaac58e59",
+      "old_idd_sha256": "fe5b5e8f1086945e525963a1d2e8f29e9f2c3ea60f04b0297ad924fe701c6861",
+      "output_idf_sha256": "d7d7d15cc12d32b0f2583a19f573479d37e4f9b3825cf96fd5df380b98e9a7c8",
+      "to": "26.1.0",
+      "tool": "Transition-V25-2-0-to-V26-1-0",
+      "tool_sha256": "e81578de5c6b69971b763e67dab853f1e0ca3a390bad6f01d050c013cc81aa6b"
+    },
+    {
+      "elapsed_seconds": 13.734173,
+      "from": "26.1.0",
+      "new_idd_sha256": "9d622d72ce2375e3bc5ac14b9e129479b003bf8a59d4838c83a2c4989f1f74f3",
+      "old_idd_sha256": "0bc882a38e9229c28289615ac6469a990f9050a4f95b071ac89584ffaac58e59",
+      "output_idf_sha256": "4271de8c107a7496225f71060246ac9c31745da8de6654048ef9375da5988061",
+      "to": "26.2.0",
+      "tool": "Transition-V26-1-0-to-V26-2-0",
+      "tool_sha256": "0fd3db8780d4943c23b9aac2cf4bd29f80c0663dfa6bcdab0003ddf193421c69"
+    }
+  ],
+  "transitioned_epjson_sha256": "560e4b61614529df70cbd77aab7ee4aab081b460e46c68f8132317760bf6fade"
+}

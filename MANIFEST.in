@@ -1,11 +1,12 @@
 include LICENSE THIRD_PARTY_NOTICES.md CITATION.cff references.bib
 recursive-include assets *.json
-recursive-include docs *.md
-recursive-include reference *.cs *.csproj LICENSE *.md
-recursive-include src/bem_testproblems/data *
+recursive-include docs *.md *.json
+recursive-include reference *.cs *.csproj LICENSE *.md *.txt *.json
+recursive-include src/bem_testproblems/data *.idf *.epJSON *.json *.txt
 recursive-include tests *.py *.json
 recursive-include tools *.py
 prune reference/Oracle/bin
 prune reference/Oracle/obj
 prune reference/EngineProxy/bin
 prune reference/EngineProxy/obj
+global-exclude .DS_Store *.py[cod]

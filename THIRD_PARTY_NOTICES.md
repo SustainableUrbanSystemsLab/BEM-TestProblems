@@ -15,6 +15,8 @@ The following material is covered by the upstream BSD-3-Clause license:
 
 - The nine unchanged templates in `src/bem_testproblems/data/legacy/`.
 - The six unchanged C# files in `reference/legacy-source/`.
+- The derived models, bindings and provenance records in
+  `src/bem_testproblems/data/modern/`.
 - The translated benchmark specifications, parameter mappings and objective
   calculations in `src/bem_testproblems/parameters.py`, `problems.py`, `losses.py`
   and `models.py`.
@@ -29,8 +31,10 @@ without prior written permission.
 
 `assets/manifest.json` records original paths, immutable-source hashes, license
 coverage and additional provenance. Generated or transitioned models remain
-derivatives of the input models; retain their original comment headers and this
-notice, even when a converter changes formatting.
+derivatives of the input models. Retain original comment headers in formats that
+support them. Commentless epJSON files have adjacent provenance records and keep
+the original templates, their embedded notices and the full BSD text available
+in the same distribution.
 
 ## Model attribution
 
@@ -73,6 +77,16 @@ An official source making data available to its users does not itself establish
 that this project may rehost it. Obtain and use a file under its applicable terms;
 keep external weather out of source archives, wheels, CI caches and published
 artifacts unless its redistribution rights have been established.
+
+The exact EnergyPlus version 8.5.0 release agreement is reproduced at
+`reference/licenses/EnergyPlus-8.5-LICENSE.txt` to accompany the CI reference-engine
+acquisition. No engine or runtime binaries are included in this repository.
+
+`tools/synthetic_weather.py` independently generates new MIT-licensed analytic
+weather fixtures labeled **SYNTHETIC-CI**. No historical weather records are read
+or copied. These fixtures test same-input executable parity and modern-model
+execution; they are not canonical benchmark or paper-reference weather. Generated
+filenames have a `synthetic_` prefix and do not replace original weather metadata.
 
 No publication PDFs, screenshots, figures or copied article text are bundled.
 Small factual validation records must cite their source and distinguish printed,
