@@ -60,6 +60,43 @@ Failed simulations raise errors and retain their diagnostics. Some designs
 within the bounds fail warmup convergence; the [warmup guide](docs/warmup-diagnostics.md)
 explains these cases and the separately validated P1 extended-warmup option.
 
+## Solve with SciPy
+
+After setup, install SciPy in the same virtual environment:
+
+```sh
+.venv/bin/python -m pip install -c constraints/replication-py312.txt scipy
+```
+
+This complete example uses problem 13, which needs no weather file, and
+[SciPy's Powell method](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-powell.html),
+which supports box bounds and needs only objective evaluations:
+
+```python
+from scipy.optimize import minimize
+
+from bem_testproblems import get_problem, make_objective
+
+problem = get_problem(13)
+objective = make_objective(problem)
+result = minimize(
+    objective,
+    x0=problem.midpoint,
+    bounds=problem.bounds,
+    method="Powell",
+    options={"maxfev": 100},
+)
+
+print("Parameters:", result.x)
+print("Objective:", result.fun, problem.objective_unit)
+print("Evaluations:", result.nfev)
+print("Converged:", result.success, result.message)
+```
+
+The package handles EnergyPlus for each objective evaluation. The 100-call
+budget is illustrative and may be reached before convergence; increase
+`maxfev` for a longer search, and inspect the termination message.
+
 ## Solve with BOBYQA
 
 The optional default solver is PDFO BOBYQA. Install it in the same environment:
