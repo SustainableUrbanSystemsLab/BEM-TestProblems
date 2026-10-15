@@ -14,6 +14,10 @@ def get_problem(problem_id):
 
 
 def __getattr__(name):
+    if name == "make_objective":
+        from .evaluation import make_objective
+
+        return make_objective
     if name == "EnergyPlusRunner":
         from .energyplus import EnergyPlusRunner
 
