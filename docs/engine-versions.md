@@ -27,11 +27,12 @@ from pathlib import Path
 from bem_testproblems import EnergyPlusRunner, get_problem
 
 problem = get_problem(1)
+modern_version = '26.2.0'
 executable_name = 'energyplus.exe' if os.name == 'nt' else 'energyplus'
 modern = EnergyPlusRunner(
-    Path('.tools/energyplus/26.2.0') / executable_name,
-    expected_version='26.2.0',
-    output_root='.runs/26.2',
+    Path('.tools/energyplus') / modern_version / executable_name,
+    expected_version=modern_version,
+    output_root=Path('.runs') / modern_version,
 )
 weather = Path('.cache/weather') / problem.weather_filename
 value_26_2 = problem.evaluate(problem.midpoint, runner=modern, weather=weather)
@@ -69,10 +70,11 @@ binaries run on every current operating system.
 With the Windows installer above, evaluate the same design and weather as follows:
 
 ```python
+historical_version = '8.5.0'
 historical = EnergyPlusRunner(
-    Path('.tools/energyplus/8.5.0/energyplus.exe'),
-    expected_version='8.5.0',
-    output_root='.runs/8.5',
+    Path('.tools/energyplus') / historical_version / 'energyplus.exe',
+    expected_version=historical_version,
+    output_root=Path('.runs') / historical_version,
 )
 value_8_5 = problem.evaluate(problem.midpoint, runner=historical, weather=weather)
 ```
