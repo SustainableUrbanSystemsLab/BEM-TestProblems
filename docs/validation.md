@@ -1,279 +1,242 @@
 # Validation evidence and coverage
 
-The continuous scope is **1–6, 8–10 and 13**. Validation separates the published
-specification, the executable C#/EnergyPlus-8.5 implementation and the modern
-EnergyPlus-26.2 model. Agreement with one does not establish agreement with all
-three.
+- **Scope:** continuous problems **1–6, 8–10, and 13**.
+- **Three separate comparisons:** the published specification, the original
+  C#/EnergyPlus 8.5 implementation, and the modern EnergyPlus 26.2 models.
+  Agreement with one does not establish agreement with all three.
+- **Detailed diagnostics:** the [canonical-case table and warmup analysis](warmup-diagnostics.md)
+  cover the 26 original audit designs, the additional P1 orientation-90 trial,
+  and the diagnostic experiments for rejected evaluations.
+- **Related guides:** [automated testing](testing.md),
+  [optimization replication](optimization-replication.md), and
+  [problem origins and references](references.md).
 
-See the [complete canonical-case table and warmup failure analysis](warmup-diagnostics.md)
-for all 26 audited designs, the additional P1 trial and the separate diagnostic
-experiments investigating the rejected evaluations.
+## What public CI checks
 
-## Published specification
+The [validation workflow](../.github/workflows/validate.yml) has seven jobs:
 
-The independent assertions in `tests/test_paper_specification.py` use
-Waibel, Wortmann, Evins and Carmeliet
-(2019), [doi:10.1016/j.enbuild.2019.01.048](https://doi.org/10.1016/j.enbuild.2019.01.048).
-They compare published numerical bounds, constants, fixed settings and formula
-structure against the Python definitions. Their algebra probes use explicitly
-synthetic observables; they are not fabricated published simulation outcomes.
-
-| Problems | Direct specification evidence | Pointwise published `x → f(x)` coverage |
+| Jobs | Inputs | What they check |
 | --- | --- | --- |
-| 1–3 | Table 2: four coordinates; Table 3: order/bounds; §3.3.1: Seattle/Houston/Chicago TMY2 mapping; Eq. (5): efficiencies 0.44/0.77, electricity factor 3 and area normalization | No complete pair identified in the main paper |
-| 4–6 | Table 2: 13 coordinates; Table 4: order/bounds; §3.3.2: climates; Eq. (6): electricity factor 3 and gas factor 1 | No complete pair identified in the main paper |
-| 8 | Eleven free coordinates; original x11 fixed at 25°C, x13 at 12°C; Chicago; Table 4 and Eq. (6) | No complete pair identified in the main paper |
-| 9–10 | 13 coordinates; Table 5: order/bounds; San Francisco; Eq. (7): factors 1.092/3.095 and multiplicative window penalties | No complete pair identified in the main paper |
-| 13 | Ten coordinates; Table 7: insulation/radiator bounds; nine-zone school; Eq. (10): energy + insulation + radiator cost | No complete pair identified in the main paper; component formulas require the reference implementation/original study |
+| Three pytest jobs | Linux, Windows, and macOS | Python behavior, branch coverage, and lint; Linux also builds the distribution |
+| Canonical C# versus Python | EnergyPlus 8.5; 27 canonical designs | Unchanged C# versus Python, generated model fields, and recorded successful/rejected outcomes |
+| Canonical modern model | EnergyPlus 26.2; the same 27 designs | Objective/components and diagnostics against reviewed modern references; exact repeatability of five midpoints |
+| Supplemental C# versus Python | EnergyPlus 8.5; 26 synthetic-weather designs | Executable parity with controlled analytic weather |
+| Supplemental modern model | EnergyPlus 26.2; the same 26 synthetic-weather designs | Modern references and exact repeatability of five midpoints |
 
-The preserved model/reference-code areas used in algebra checks are separate
-model facts; they are not presented as numerical solution points printed in
-the study's tables. Likewise, the detailed model's individual fan observations are
-not specified by the paper's aggregate electricity symbol alone.
+### Inputs and acceptance rules
+
+- **Canonical inputs:** [canonical-cases.json](../reference/canonical-cases.json)
+  contains the 26 audit designs plus the paired P1 orientation-90 trial.
+  [fetch_weather.py](../tools/fetch_weather.py) retrieves the four exact US weather
+  files into temporary storage and verifies their checksums.
+- **Canonical references:**
+  [8.5.0-canonical.json](../reference/baselines/8.5.0-canonical.json) and
+  [26.2.0-canonical.json](../reference/baselines/26.2.0-canonical.json) record
+  project measurements and diagnostic outcomes. They are not published optima.
+- **Supplemental inputs:** [cases.json](../reference/cases.json) contains the 26
+  synthetic-weather designs; [26.2.0-synthetic.json](../reference/baselines/26.2.0-synthetic.json)
+  records their modern references.
+- **Successful simulations:** no Severe/Fatal diagnostics; objective and simulator
+  components must match at relative tolerance `1e-6`, with absolute tolerance
+  `1e-7` near zero.
+- **Strict input checks:** coordinates, weather checksums, model schema, and field
+  identities must match. Modern generated model hashes must match the reviewed
+  inputs. Numerical tolerances do not permit input changes.
+- **Recorded rejections:** EnergyPlus 8.5 rejects P10 lower bounds and P1
+  orientation 90; EnergyPlus 26.2 rejects P4 lower bounds. Their warmup-only
+  diagnostic signatures must match, and they have no accepted scalar objective
+  in the baselines.
+- **Changes requiring review:** unexpected failures, changed diagnostic signatures,
+  and newly successful previously rejected cases fail CI. A passing outcome
+  check does not mean that all 27 simulations succeeded.
+- **Reports:** numerical JSON reports include actual values, signed/absolute
+  differences, percentage changes, diagnostic outcomes, and provenance. Job
+  summaries distinguish successful and rejected cases. Raw weather, source
+  models, and simulation directories are never uploaded.
+
+### Problem 13's weather input
+
+- Python uses the embedded design day without an EPW.
+- The unchanged C# caller requires a weather-path argument. A verified Seattle
+  file fills that unused argument and is recorded separately.
+- Independent no-EPW measurements cover the lower, midpoint, and upper designs.
+  A C#-mode command check confirms identical midpoint components/objective with
+  no EPW and with Seattle.
+- Belgrade IWEC is not downloaded or redistributed.
+
+## Checks against the published specification
+
+- [test_paper_specification.py](../tests/test_paper_specification.py) checks the
+  bounds, constants, fixed settings, and formula structure in
+  [Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048).
+- Algebra probes use explicitly synthetic observables. They are not published
+  simulation results.
+- Model/reference-code areas used in those probes are separate model facts.
+  The paper's aggregate electricity symbol alone does not specify the detailed
+  model's individual fan observations.
+
+| Problems | Specification checked | Complete published `x → f(x)` pair available? |
+| --- | --- | --- |
+| 1–3 | Table 2: four coordinates; Table 3: order/bounds; §3.3.1: Seattle/Houston/Chicago TMY2 mapping; Eq. (5): efficiencies 0.44/0.77, electricity factor 3, and area normalization | No |
+| 4–6 | Table 2: 13 coordinates; Table 4: order/bounds; §3.3.2: climates; Eq. (6): electricity factor 3 and gas factor 1 | No |
+| 8 | Eleven free coordinates; original x11 fixed at 25°C and x13 at 12°C; Chicago; Table 4 and Eq. (6) | No |
+| 9–10 | 13 coordinates; Table 5: order/bounds; San Francisco; Eq. (7): factors 1.092/3.095 and multiplicative window penalties | No |
+| 13 | Ten coordinates; Table 7: insulation/radiator bounds; nine-zone school; Eq. (10): energy + insulation + radiator cost | No; detailed component formulas also require the reference implementation/original study |
 
 ### Known paper/code differences
 
-- **Problems 9–10, minimum window height:** Eq. (7) prints 0.55 m with a `>= 0`
-  violation test. The original C# uses 0.5488 m. Compatibility mode preserves the
-  C# threshold. Tests exercise values on both sides and in the intervening
-  interval; they retain the paper value as separate metadata.
-- **Problems 4–6 and 8, fan accounting:** Eq. (6) uses aggregate fan/lighting
-  electricity. The C# implementation reads the same supply-fan ESO row twice
-  instead of combining distinct supply/return observations. Compatibility mode
-  preserves that mapping. A synthetic algebra probe makes the mapping difference
-  visible; it is not a claimed reconstruction of the paper's physical fan total.
-- **Problem 13:** Eq. (10) specifies additive cost categories, not all component
-  constants or annualization assumptions. Detailed component checks identify the
-  original C# as their source. The embedded Belgrade design day and the historical
-  location discrepancy remain part of the preserved model definition.
+- **Problems 9–10 — minimum window height:** Eq. (7) prints 0.55 m with a
+  `>= 0` violation test; the C# code uses 0.5488 m. Compatibility mode preserves
+  the C# threshold. Tests cover both sides and the intervening interval, with
+  the paper value retained as separate metadata.
+- **Problems 4–6 and 8 — fan accounting:** Eq. (6) uses aggregate fan/lighting
+  electricity. The C# code reads the same supply-fan ESO row twice instead of
+  combining distinct supply/return observations. Compatibility mode preserves
+  that mapping. A synthetic algebra probe exposes the difference without
+  claiming to reconstruct the paper's physical fan total.
+- **Problem 13 — cost details:** Eq. (10) gives additive cost categories, but not
+  every component constant or annualization assumption. Detailed checks identify
+  the C# code as their source. The embedded Belgrade design day and historical
+  location discrepancy remain part of the preserved model.
+- **Versioning:** a scientifically revised definition would need a separately
+  identified version. These differences are not silently corrected.
 
-These differences are not silently corrected to force an apparent match. A
-scientifically revised definition would require a separately identified version.
+## Limits of comparison with the paper's results
 
-### Numerical paper-result gap
+**Complete pointwise result coverage for the 2019 study is currently 0/10.**
 
-**Complete pointwise result coverage for the 2019 study is currently 0/10.** The
-numerical publication reference is Waibel, Wortmann, Evins and Carmeliet (2019),
-using EnergyPlus 8.5.0. Earlier
-studies remain cited for problem origins and formula attribution; their numerical
-results are not validation targets for this project.
+- **Numerical target:** Waibel, Wortmann, Evins, and Carmeliet (2019), using
+  EnergyPlus 8.5.0. Earlier studies are cited for problem origins and formulas;
+  their numerical results are not this project's validation targets.
+- **Available results:** Figures 8–9 show final-objective distributions, Figures
+  10–11 show ranks, and later figures show normalized or aggregate metrics.
+  These provide approximate visual context.
+- **Missing results:** full-precision winning objectives paired with complete
+  decision vectors. The paper defers variable-space analysis to future work
+  (printed page 220). Approximate prose values cannot supply those missing pairs.
+- **Supplement:** [Supplement S1](https://ars.els-cdn.com/content/image/1-s2.0-S0378778818331682-mmc1.xml)
+  is a 927-byte XML metadata record linking
+  [BEOBenchmark_V1](https://github.com/christophwaibel/BEOBenchmark/tree/master/BEOBenchmark_V1)
+  and identifying EnergyPlus 8.5.0. It contains no winning objectives or vectors.
+  The [publisher's CC BY 4.0 label](https://www.sciencedirect.com/science/article/pii/S0378778818331682)
+  for the supplement does not replace the code license or establish licenses
+  for external models/weather.
+- **No inferred ground truth:** no exact `f_opt` or `x_opt` is inferred from a
+  plot or supplied by a new optimization run. Missing published vectors also
+  prevent decision-variable difference comparisons against the winning designs.
 
-Figures 8–9 show distributions of final objective values, Figures 10–11 show
-ranks, and later figures show normalized or aggregate metrics. The boxplots
-support approximate visual context only. They do not provide full-precision
-winning objective values together with the complete corresponding decision
-vectors. The paper explicitly defers analysis in variable space to future work
-(printed page 220). Approximate costs in prose cannot fill that gap.
+A usable pointwise publication reference would need:
 
-The inspected [Supplement S1](https://ars.els-cdn.com/content/image/1-s2.0-S0378778818331682-mmc1.xml)
-is a 927-byte XML metadata record identifying `BEOBenchmark_V1` and EnergyPlus
-8.5.0. It links to the [GitHub implementation](https://github.com/christophwaibel/BEOBenchmark/tree/master/BEOBenchmark_V1),
-and contains no winning objective values or decision vectors. The
-[publisher](https://www.sciencedirect.com/science/article/pii/S0378778818331682)
-labels the supplement CC BY 4.0; that label does not replace the repository's
-code license or establish licenses for its external models/weather. Complete
-winning numerical records remain an unresolved data requirement. No exact
-`f_opt` or `x_opt` has been inferred from a plot or invented by a new run.
+- The complete decision vector and matching objective, at full available precision.
+- The engine/build, model identity/modifications, and weather hash or design-day
+  definition.
+- The variable mapping and a justified comparison tolerance.
 
-A numerical fixture from that study needs the complete vector and matching objective,
-engine/build, model identity/modifications, weather hash or design-day definition,
-variable mapping, full available precision and justified comparison tolerance.
-The missing winning vectors currently block comparison of decision-variable
-differences against the study's winning designs. New midpoint measurements or newly optimized
-best-found designs would not establish the missing publication ground truth.
+The optimization protocol is a separate comparison:
 
-The paper's optimization protocol is also distinct from a single short solver
-run: it uses 20 reruns, random initial solutions except DIRECT's domain-centre
-start, and an evaluation budget of `100(n+1)` for the scoped problems. Those
-conditions describe the study; they do not supply its unavailable winning
-vectors. The implementation must not be advertised as numerically validated
-against the study's pointwise results until the required evidence is obtained.
+- The paper uses **20 reruns**, random initial solutions except DIRECT's
+  domain-centre start, and **`100(n+1)` objective evaluations**.
+- A short solver smoke test does not reproduce that protocol.
+- New midpoint or best-found values do not replace missing published solution
+  records. Qualitative boxplot replication is described in the
+  [optimization replication guide](optimization-replication.md).
+- Pointwise numerical validation against the study remains unresolved until the
+  required records are available.
 
-## Original reference implementation
+## Original C# implementation
 
-The five relevant original C# components plus `Misc.cs`, and the nine original
-IDF templates, are retrieved on demand from upstream commit
-`54736a6b899a488222ad3184f306c1f401daf4f9` into the ignored reference cache.
-`data/reference-assets.json` pins their URLs and checksums. The repository and
-its packages contain the derived Python/modern models and full required notices,
-not the original C#/IDF bodies. `tests/test_licenses.py` checks that boundary and
-the recorded provenance; `tools/fetch_reference.py` verifies fetched bytes.
+### Source and comparison method
 
-The oracle in `reference/Oracle/`, with the engine proxy in
-`reference/EngineProxy/`, compiles/executes that source with lightweight host
-stubs. It is a reference-code comparison, not a second Python implementation of
-the same formulas. Each numerical parity result must identify its input vector,
-engine build, model/weather identities and comparison tolerance. A compilation
-success or passing formula test alone is not evidence that all ten simulations
-matched.
+- **Acquisition:** [fetch_reference.py](../tools/fetch_reference.py) retrieves the
+  five relevant C# components, their shared helper, and nine IDF templates from
+  commit `54736a6b899a488222ad3184f306c1f401daf4f9` into an ignored cache.
+- **Identity:** [reference-assets.json](../src/bem_testproblems/data/reference-assets.json)
+  pins the URLs and checksums. [test_licenses.py](../tests/test_licenses.py) checks
+  provenance, required notices, and exclusion of the original C#/IDF bodies from
+  the repository/packages.
+- **Execution:** [Oracle.csproj](../reference/Oracle/Oracle.csproj) compiles the
+  original code with lightweight host stubs;
+  [EngineProxy.csproj](../reference/EngineProxy/EngineProxy.csproj) provides the
+  engine proxy. This executes the reference C# rather than duplicating its
+  formulas in Python.
+- **Comparison:** unchanged C# and Python receive the same EnergyPlus 8.5
+  engine/weather. Checks compare objectives, generated IDF fields, and fixed-row
+  C# observations against named Python observations.
+- **Evidence required:** each result identifies its vector, engine build,
+  model/weather identities, and tolerances. Compilation or formula tests alone
+  cannot establish simulation parity for all ten problems.
 
-The configured simulation-result acceptance policy is relative error `1e-6`
-against the reference value, with absolute tolerance `1e-7` for values near zero.
-It applies to objectives and simulator components. Input coordinates, weather
-checksums, model schema and field identities remain strict checks; this numerical
-policy does not authorize changing those inputs or widening tolerances until a
-comparison passes. Published rounding and unmatched historical engine/model
-conditions remain separately reported limitations of literature comparisons.
+### Recorded runs
 
-The executed [cache-based Windows reference comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38670364758/job/116211825885)
-passed all **26 synthetic-weather cases** at commit
-`d4b2c5cfce3002de0fca15a77781310085a584af`. It fetched checksum-verified originals
-into the ignored cache, then compared the unchanged C# objective,
-generated IDF fields and fixed-row reference observations with the Python
-objective and named observations using the same EnergyPlus-8.5 engine/weather.
-The C# objective/component tolerance was relative `2e-12`, absolute `1e-9`;
-numeric IDF fields used absolute `1e-11`. The workflow retained the numerical
-comparison artifact. A [job-specific evidence record](validation-results/original-csharp-ci.json)
-links its status, commit, timing and conditions. This establishes reference-code
-parity for those cases at that commit, including reference acquisition, fixed-file
-compilation and execution. The ledger also retains the earlier successful job
-at commit `3bbd439`.
+| Evidence | Result | Scope and limitations |
+| --- | --- | --- |
+| [Historical Windows comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38670364758/job/116211825885) at `d4b2c5c` | All 26 synthetic-weather cases passed | Objective/components used relative `2e-12`, absolute `1e-9`; numeric IDF fields used absolute `1e-11` |
+| [Later Windows comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196/job/116218106526) at `f08ce00` | All 26 synthetic-weather cases passed | Objective/components used the current relative `1e-6`, absolute `1e-7` policy |
+| [Same five-job workflow](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196) | All five jobs passed | Modern checks passed 26 cases/169 values; five repeats reproduced all 39 values exactly |
+| [8.5.0-canonical-audit.json](validation-results/8.5.0-canonical-audit.json) | 25 of 26 canonical-weather cases passed strict diagnostics; all ten midpoints completed | Python with the historical engine; this ledger alone does not establish executable C# parity |
 
-That historical artifact used the stricter tolerances stated above. The current
-configured `1e-6`/`1e-7` policy is a later acceptance decision; the historical job
-has not been relabeled as having run with the new settings.
+- [original-csharp-ci.json](validation-results/original-csharp-ci.json) retains
+  job statuses, full commits, timing, conditions, and the earlier success at
+  `3bbd439`. Historical jobs retain their actual tolerances.
+- The 26-case canonical audit includes ten physical midpoints and sixteen
+  boundary/penalty/embedded cases. P10 at simultaneous lower bounds emitted
+  seven warmup-convergence Severe diagnostics at its original 25-day cap.
+- EnergyPlus **8.5.0-c87e61b44b** also ran an untouched official design-day
+  example on the development Mac without warnings or Severe errors. That
+  establishes local feasibility, not numerical equivalence to the publication's
+  Windows runs.
+- These results cover explicit designs and conditions, not whole continuous
+  domains or published optima. Rounding and unmatched historical engine/model
+  conditions remain separate limitations for literature comparisons.
 
-A previous [workflow run](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196)
-passed all five jobs at commit `f08ce001fcbc8f94040b9a1e694f1595ca55b601`.
-Its [C#/Python comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196/job/116218106526)
-passed all 26 cases using the current relative `1e-6`, absolute `1e-7` policy.
-The modern regression passed 26 cases and all 169 checked values; five repeated
-cases reproduced all 39 checked values exactly. These checks cover their explicit
-designs and synthetic weather, not entire continuous domains or published optima.
+## Modern models and engine differences
 
-EnergyPlus version **8.5.0-c87e61b44b** was verified to load and run an untouched
-official design-day example on the development Mac. That smoke test completed
-without warnings or severe errors; it establishes environment feasibility, not
-benchmark numerical equivalence with the original publication's Windows runs.
+### Model identity
 
-The local canonical-weather [version-8.5 audit ledger](validation-results/8.5.0-canonical-audit.json)
-records all ten physical midpoints and sixteen additional boundary/penalty/embedded
-cases, with explicit vectors and engine/model/weather hashes. All ten midpoints
-completed; **25 of 26 cases** completed without severe/fatal diagnostics. The
-unchanged problem-10 simultaneous-lower-bound case emitted seven warmup-convergence
-severe diagnostics at its original 25-day cap. It remains a recorded source-model
-failure. This ledger measures the Python runner with the historical engine; it
-does not itself claim executable C# parity.
+- Modern models have provenance sidecars connecting them to checksum-pinned
+  templates, transition steps, and required notices. See the
+  [model transition guide](model-transition.md).
+- Sidecar `original_notice` paths preserve the historical derivation layout;
+  originals are resolved through the linked
+  [reference-assets.json](../src/bem_testproblems/data/reference-assets.json)
+  index/cache.
+- [parameter_bindings.json](../src/bem_testproblems/data/modern/parameter_bindings.json)
+  must cover the original placeholders and preserve their physical meanings.
+  P8 shares the detailed Chicago model with its two fixed settings.
+- Sidecars record every manual compatibility change beyond the official
+  transition chain:
 
-## Canonical and supplemental public-CI weather
+| Models | Recorded compatibility change |
+| --- | --- |
+| Simple offices | Up to 100 warmup days instead of 25 after a measured 26.2 convergence failure; original convergence tolerances retained |
+| Detailed offices | An effective historical reciprocal surface reference made explicit for modern validation; original geometry and documented noncoincident surface/multiplier caveat retained |
+| P10 | An unreferenced duplicate setpoint manager renamed before the 24.2 transition |
+| P13 | An inactive autosized capacity replaced by explicit zero; hard radiator UA and maximum water flow retained as runtime inputs; sidecar cites old/new engine source paths |
 
-The current workflow has separate canonical-weather checks for both engines.
-Each retrieves the four exact US files into temporary runner storage using
-`tools/fetch_weather.py`, verifies their checksums and exercises
-`reference/canonical-cases.json`. That fixture contains the 26 audit designs and
-the paired P1 orientation-90 trial. The 8.5 job also compiles and executes the
-unchanged C# components; the 26.2 job compares with measured canonical references.
+- These changes define the modern model identity; historical 8.5 inputs remain
+  immutable.
+- Modern tests require successful 26.2 execution and named output extraction.
+  Conversion and binding checks alone do not establish simulation success.
+- Engine changes can alter physical results. Modern CI checks stable modern
+  values against its own baseline. The midpoint table below reports drift from
+  8.5; equality across engines is not required.
 
-The checks compare both values and simulation outcomes. A successful case must
-have no Severe/Fatal diagnostics and match the recorded objective/components at
-relative `1e-6`, absolute `1e-7`. The two recorded 8.5 rejections (P10 lower and
-P1 orientation90) and the recorded 26.2 rejection (P4 lower) must retain their
-warmup-only diagnostic signatures. They have no accepted scalar objective in
-the baselines. Unexpected failures, changed signatures and newly successful
-previously rejected cases fail the check pending review. The job summary reports
-successful and rejected counts explicitly; a passing outcome check does not mean
-all 27 simulations succeeded.
+### Canonical midpoint results
 
-P13's Python cases use no EPW. The unchanged C# caller requires a weather-path
-argument; a verified Seattle file fills that unused argument, recorded separately.
-Independent no-EPW measurements cover its lower, midpoint and upper designs,
-and a C#-mode command check confirms the midpoint components/objective are
-identical with no EPW and with Seattle. Its embedded design day remains the
-physical climate input. Belgrade IWEC is not downloaded or redistributed.
-
-Raw weather, source models and simulation directories are never uploaded.
-Numerical JSON reports retain actual values, signed/absolute differences,
-percentage changes, diagnostic outcomes and provenance. Canonical baselines
-are frozen project measurements; they are not published optimum references.
-
-Supplemental public-CI code parity uses **independently generated analytic weather**, produced
-by:
-
-```sh
-python tools/synthetic_weather.py --output-dir /path/to/temporary/synthetic-weather
-```
-
-The generator writes 8,760-record files named `synthetic_seattle.epw`,
-`synthetic_houston.epw`, `synthetic_chicago.epw` and
-`synthetic_san_francisco.epw`. Their headers say **SYNTHETIC-CI**, identify the new
-MIT authorship and state that they are not measured/canonical weather. The
-standard-library generator reads no weather dataset. It prescribes seasonal and
-diurnal temperatures and simplified analytic solar/humidity/wind quantities.
-The output directory includes the complete `SYNTHETIC-CI-LICENSE.txt` notice.
-Tests check record coverage, field counts, physical ranges, deterministic output
-and unmistakable synthetic filenames.
-
-The generated Seattle EPW was also accepted by a real annual EnergyPlus-8.5 run
-of the untouched official `1ZoneUncontrolled.idf` example: exit 0, no severe/fatal
-errors and no weather-format warnings. Its three location/pressure warnings were
-caused by that stock Denver model being paired deliberately with synthetic
-Seattle weather. This establishes EPW ingestion, not benchmark numerical parity.
-
-The unchanged C# and Python evaluators must receive **the same synthetic file**
-for a supplemental public-CI comparison. This tests executable equivalence under controlled
-inputs; it does not reproduce a TMY-based published objective or certify canonical
-benchmark climate performance. The problem objects keep their historical weather
-filenames. Canonical local setup uses `python tools/fetch_weather.py`, which
-retrieves the four original US files into `.cache/weather/` and verifies their
-frozen hashes. Never rename synthetic files to historical weather filenames.
-
-Problem 13 is a design-day case. Separate local checks with versions 8.5 and 26.2
-found identical heating-energy/rate observables at the physical midpoint under
-three invocations: no EPW, an unrelated Seattle EPW, and an explicit design-day
-flag/no EPW. Each engine agreed exactly across its own three invocations; the
-two engines produced different values. This supports a weather-free CI path for
-that design. The [numeric ledger](validation-results/problem-13-weather-invariance.json)
-retains the parameters, input/engine/weather hashes and observables. It is not a
-proof of invariance for every parameter vector.
-
-## Modern model checks
-
-Modern epJSON models have conversion/provenance sidecars linking them to the
-checksum-pinned external templates, transition steps and packaged license/model
-notices. Sidecar `original_notice` paths preserve the historical derivation
-layout; the named original is now resolved through the reference index/cache.
-Typed parameter
-bindings must cover the original placeholders and retain the same physical
-coordinate meanings. Problem 8 shares the detailed Chicago model with its two
-fixed settings.
-
-Per-model sidecars also describe every manual compatibility change beyond the
-official transition chain:
-
-- Simple office models allow up to 100 warmup days instead of 25 after a measured
-  version-26.2 convergence failure, preserving the original convergence tolerances.
-- Detailed office models make an effective historical reciprocal surface reference
-  explicit for stricter modern validation. Their original geometry is preserved,
-  including the documented noncoincident surface/multiplier caveat.
-- Problem 10 renames a duplicate setpoint manager with no name references before
-  the version-24.2 transition.
-- Problem 13 replaces an inactive autosized capacity field with an explicit zero;
-  hard radiator UA and maximum water flow remain the runtime inputs. The sidecar
-  cites the relevant old/new engine source paths.
-
-These changes are part of the modern model identity and remain separate from the
-immutable version-8.5 inputs. They do not silently redefine the legacy benchmark.
-
-Modern tests require successful version-26.2 execution and named output extraction,
-and report objective/component drift relative to version 8.5. A solver upgrade can
-change physical results. Modern results must not be forced to equal old-engine
-fixtures by widening tolerances or changing the historical objective silently.
-Actual successful case counts belong in the generated validation reports; a
-model-conversion or binding-coverage check alone is not a simulation pass.
-
-The local canonical-weather [version-26.2 audit ledger](validation-results/26.2.0-canonical-audit.json)
-records the same 26 explicit designs: **25 completed**, including all ten
-midpoints. Problem 4 at simultaneous lower bounds emitted a South-zone warmup
-severe diagnostic at the original 25-day cap. A scratch 100-day cap also failed;
-the recorded model and convergence tolerances were retained. This is a different
-failure from the version-8.5 problem-10 corner. Successful midpoint tests therefore
-do not establish successful simulation of the full continuous domains.
-
-The midpoint measurements below use identical canonical weather bytes across
-versions and each version's recorded model identity. Units are kWh/(m² year) for
-problems 1–8, MJ/m² for 9–10 and EUR for 13. Values are rounded for display; the
-ledgers retain full precision. The baseline is version 8.5. The signed difference
-is `modern - historical`; the percentage is `100 × (modern - historical) / |historical|`.
+- [26.2.0-canonical-audit.json](validation-results/26.2.0-canonical-audit.json)
+  records the same 26 designs as the historical audit: **25 completed**, including
+  all ten midpoints.
+- P4 at simultaneous lower bounds emitted a South-zone warmup Severe diagnostic
+  at the original 25-day cap. A scratch 100-day cap also failed; the recorded
+  model and convergence tolerances were retained.
+- This differs from the historical P10 failure. Successful midpoints do not
+  establish successful simulation throughout the continuous domains.
+- The table uses identical canonical weather bytes across engines and each
+  engine's recorded model identity. Values are rounded; the ledgers retain full
+  precision.
+- Units: kWh/(m² year) for P1–8, MJ/m² for P9–10, and EUR for P13.
+- **Baseline:** 8.5. Signed difference: `modern - historical`. Percentage:
+  `100 × (modern - historical) / |historical|`.
 
 | Problem | Version 8.5 | Version 26.2 | Δ objective | Δ (%) |
 | --- | ---: | ---: | ---: | ---: |
@@ -288,55 +251,84 @@ is `modern - historical`; the percentage is `100 × (modern - historical) / |his
 | 10 | 1198.570000 | 1201.820000 | +3.250000 | +0.2712% |
 | 13 | 1932.967349 | 1928.196660 | -4.770689 | -0.2468% |
 
-These are newly measured evaluator values, not published optima. In particular,
-the detailed-office increases require visible component-level drift reporting;
-a passing modern regression means stable modern results, not numerical equality
-to the old engine.
+- These are newly measured evaluator values, not published optima.
+- The detailed-office increases require component-level drift reporting. Neither
+  objective definitions nor tolerances are changed to force old/new agreement.
 
-## Real default-solver smoke
+## Default-solver smoke test
 
-A [P1 BOBYQA integration record](validation-results/p1-bobyqa-smoke.json) uses
+The [p1-bobyqa-smoke.json](validation-results/p1-bobyqa-smoke.json) record uses
 commit `f08ce001fcbc8f94040b9a1e694f1595ca55b601`, canonical Seattle weather,
-physical midpoint `[0, 3, 3, 0.5]` and a 100-objective-call budget. EnergyPlus
-26.2 completed after 84 calls, reducing the objective from `147.5659999247044`
-to `133.33534913204608` kWh/(m² year): a decrease of **14.23065079
-kWh/(m² year), or 9.6436%**, relative to the starting value. Its best design was
-`[-1.1214112901192836, 4.856626576011762, 5.1732490024320175, 0.27307365349378676]`.
-All 84 distinct simulations passed strict diagnostics; termination occurred at
-BOBYQA's lower trust-region-radius bound. This demonstrates solver integration,
-not a global optimum, agreement with the study's optimum or replication of its protocol.
+the physical midpoint `[0, 3, 3, 0.5]`, and a 100-objective-call budget.
 
-EnergyPlus 8.5 stopped at its first new trial, `[90, 3, 3, 0.5]`: minimum-temperature
-warmup change was `0.00647 K`, exceeding the `0.004 K` tolerance after 25 days.
-The strict evaluator propagated the severe-diagnostic error instead of accepting
-an objective or substituting a penalty. This is a source-model convergence
-limitation surfaced by the deliberate acceptance policy; the unchanged C# did
-not reject those diagnostics. The CI designs do not include this trial.
+### EnergyPlus 26.2
 
-A scratch 100-day cap removed that severe diagnostic but changed the objective
-by **+0.00093710 kWh/(m² year), or +0.000599%**, against the failed run's
-diagnostic-only value (relative change approximately `5.99e-6`). This is a
-diagnostic comparison, not a comparison of two accepted canonical evaluations.
-That exceeds the configured `1e-6` comparison threshold and changes the input
-identity. Neither the scratch variant nor the failed-run value is an accepted
-historical optimization result. Original models and convergence tolerances remain
-unchanged.
+- **Calls:** 84 distinct simulations, all passing strict diagnostics.
+- **Objective:** `147.5659999247044 → 133.33534913204608` kWh/(m² year).
+- **Improvement:** **14.23065079 kWh/(m² year), or 9.6436%**, relative to the
+  starting value.
+- **Best design:**
+  `[-1.1214112901192836, 4.856626576011762, 5.1732490024320175, 0.27307365349378676]`.
+- **Termination:** BOBYQA's lower trust-region-radius bound.
+- **Meaning:** solver integration demonstrated; no claim of global optimality,
+  agreement with the study's optimum, or replication of its protocol.
 
-## Weather use and distribution boundary
+### EnergyPlus 8.5
 
-No historical weather data is bundled or published in CI caches/artifacts. The
-official [EnergyPlus weather documentation](https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format)
-describes TMY2's intended use in building-system simulation comparisons and its
-download availability. Current [NLR Data and Software terms](https://www.nlr.gov/disclaimer)
-grant use/copy of data on that server with notice retention and publication credit.
-That server-specific grant does not by itself establish the exact terms of each
-converted EPW hosted elsewhere, including embedded ASHRAE design conditions.
+- **Failure:** the first new trial, `[90, 3, 3, 0.5]`, exceeded the minimum-temperature
+  warmup tolerance after 25 days: `0.00647 K` versus `0.004 K`.
+- **Strict behavior:** the evaluator propagated the Severe-diagnostic error.
+  It accepted neither an objective nor a substitute penalty. The unchanged C#
+  caller did not reject those diagnostics.
+- **Current coverage:** canonical CI now includes this orientation-90 trial as
+  a recorded rejection.
+- **Diagnostic experiment:** a scratch 100-day cap removed the Severe diagnostic
+  but changed the objective by **+0.00093710 kWh/(m² year), or +0.000599%**,
+  relative to the failed run's diagnostic-only value.
+- **Interpretation:** that relative change (about `5.99e-6`) exceeds the `1e-6`
+  threshold and changes input identity. Neither value is an accepted historical
+  optimization result; original models and convergence tolerances remain unchanged.
 
-Local acquisition is implemented by `python tools/fetch_weather.py`: it downloads
-the four frozen US files from the pinned fork into the ignored `.cache/weather/`
-directory and verifies their hashes. This reproducibility mechanism does not
-claim a blanket redistribution license for the converted EPWs. Canonical CI
-fetches the same files temporarily, synthetic weather remains supplemental, and
-raw canonical data is excluded from published caches/artifacts. Problem 13 uses the embedded winter design day without
-an EPW; Belgrade IWEC remains outside the downloader. See
-[licensing.md](licensing.md) and `assets/manifest.json` for source terms and scope.
+## Supplemental synthetic weather
+
+- **Purpose:** controlled inputs for additional C#/Python parity and modern-model
+  checks. Canonical-weather checks remain separate.
+- **Generator:** [synthetic_weather.py](../tools/synthetic_weather.py) uses only
+  the standard library and reads no weather dataset.
+- **Output:** four clearly synthetic EPWs with 8,760 records each, analytic
+  seasonal/diurnal temperatures, and simplified solar/humidity/wind quantities.
+  Headers identify **SYNTHETIC-CI**, new MIT authorship, and noncanonical weather.
+  The output includes the complete generated-weather license notice.
+- **Tests:** [test_weather_fixture.py](../tests/test_weather_fixture.py) checks
+  coverage, field counts, physical ranges, determinism, and unmistakable filenames.
+- **Parity rule:** the C# and Python evaluators receive the same synthetic file.
+  Never rename synthetic files to historical weather filenames.
+- **Ingestion smoke:** a real annual 8.5 run of an untouched official single-zone
+  example accepted generated Seattle weather: exit 0, no Severe/Fatal errors,
+  and no weather-format warnings. Three location/pressure warnings came from
+  deliberately pairing the stock Denver model with Seattle weather. This checks
+  EPW ingestion, not benchmark parity.
+- **P13 invariance check:** [problem-13-weather-invariance.json](validation-results/problem-13-weather-invariance.json)
+  records identical midpoint heating observables within each engine for no EPW,
+  an unrelated Seattle EPW, and an explicit design-day flag/no EPW. The engines
+  differed from each other. This supports that design's weather-free path, not
+  invariance for every vector.
+
+## Weather use and distribution
+
+- **Acquisition:** [fetch_weather.py](../tools/fetch_weather.py) retrieves the four
+  original US EPWs from the pinned fork into an ignored local cache and verifies
+  their frozen hashes. Canonical CI retrieves the same bytes temporarily.
+- **Distribution:** historical weather is excluded from the repository and
+  published CI caches/artifacts. Acquisition does not establish blanket
+  redistribution rights for converted EPWs.
+- **Source terms:** the [EnergyPlus weather documentation](https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format)
+  describes TMY2 use and availability. [NLR's server terms](https://www.nlr.gov/disclaimer)
+  allow use/copy of data on that server with notice retention and credit. That
+  server-specific grant does not establish each externally hosted converted EPW's
+  terms, including embedded ASHRAE design conditions.
+- **P13:** uses its embedded winter design day; Belgrade IWEC remains outside the
+  downloader.
+- **Further details:** [licensing.md](licensing.md),
+  [weather-redistribution.md](weather-redistribution.md), and
+  [manifest.json](../assets/manifest.json).
