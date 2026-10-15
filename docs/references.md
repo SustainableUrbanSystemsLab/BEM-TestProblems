@@ -41,9 +41,7 @@ dimensions, domains and objectives. The main paper's boxplots, ranks and aggrega
 statistics are not complete pointwise `x → f(x)` records. Its supplementary
 material must be inventoried separately before its numerical coverage is claimed.
 
-Wetter and Wright Table 1 contains rounded vectors/results from EnergyPlus 1.1.0;
-Kämpf et al. Tables 5/9 and 10/11 contain candidate vectors and rounded results
-from EnergyPlus 2.2. Those are candidates for checks under their original
-conditions, not unconditional expected values for the modified version-8.5 or
-version-26.2 models. Paper-derived fixtures must record the exact source and
-conditions and account for printed precision.
+The originating studies remain cited for problem provenance and formula
+attribution. Numerical publication validation targets only Waibel et al. (2019)
+and its EnergyPlus-8.5 benchmark; values from earlier simulator/model versions
+are not numerical fixtures for this project.

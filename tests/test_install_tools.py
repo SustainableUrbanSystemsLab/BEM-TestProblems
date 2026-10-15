@@ -82,8 +82,15 @@ def test_regression_differences_record_units_precision_and_zero_scale():
     result = numerical_difference(10.001, 10, "kWh", rtol=1e-6, atol=1e-7)
     assert not result["passed"]
     assert result["absolute_difference"] == pytest.approx(.001)
-    assert result["allowed_difference"] == pytest.approx(10.001e-6)
-    assert result["relative_difference"] == pytest.approx(.001 / 10.001)
+    assert result["allowed_difference"] == pytest.approx(10e-6)
+    assert result["relative_difference"] == pytest.approx(.001 / 10)
     assert result["unit"] == "kWh"
     zero = numerical_difference(0, 0, "kW", rtol=1e-8, atol=1e-7)
     assert zero["passed"] and zero["relative_difference"] == 0
+
+
+def test_function_value_tolerance_uses_the_reference_and_absolute_zero_fallback():
+    assert numerical_difference(1000.0005, 1000, "EUR", rtol=1e-6, atol=1e-7)["passed"]
+    assert not numerical_difference(1000.002, 1000, "EUR", rtol=1e-6, atol=1e-7)["passed"]
+    small = numerical_difference(1e-8, 0, "kWh", rtol=1e-6, atol=1e-7)
+    assert small["passed"] and small["relative_difference"] is None

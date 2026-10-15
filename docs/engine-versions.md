@@ -48,10 +48,11 @@ Fetch the checksum-pinned historical templates separately:
 .venv/bin/python tools/fetch_reference.py
 ```
 
-They remain outside the package in `.reference-cache/beobenchmark`. Set
-`BEM_REFERENCE_DIR` to that cache directory when using another working directory
-or an installed package without the checkout. Every original template is checked
-against the package's pinned manifest before use.
+They remain outside the package in `.reference-cache/beobenchmark`. A source
+checkout resolves this cache from its repository root. For an installed package
+without the checkout, the default is relative to the current working directory;
+set `BEM_REFERENCE_DIR` to use a cache elsewhere. Every original template is
+checked against the package's pinned manifest before use.
 
 On Windows x64, the historical reference installer retrieves the original pinned
 8.5 core into this project; it requires the official Visual C++ 2013 x64 runtime:

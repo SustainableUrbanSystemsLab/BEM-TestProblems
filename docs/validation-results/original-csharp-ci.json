@@ -2,14 +2,14 @@
   "schema_version": 1,
   "scope": "Job-specific original-C#/Python equivalence under identical independently generated synthetic weather; no claim of paper-value or old/new-engine equality.",
   "repository": "SustainableUrbanSystemsLab/BEM-TestProblems",
-  "commit": "3bbd4391dbf0b41d7f4318fb2476ca46970f0aaf",
-  "workflow_run_id": 38668638849,
-  "job_id": 116206341850,
+  "commit": "d4b2c5cfce3002de0fca15a77781310085a584af",
+  "workflow_run_id": 38670364758,
+  "job_id": 116211825885,
   "job_name": "Original C# versus Python (EnergyPlus 8.5)",
-  "job_url": "https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38668638849/job/116206341850",
+  "job_url": "https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38670364758/job/116211825885",
   "conclusion": "success",
-  "started_at_utc": "2026-10-15T02:00:14Z",
-  "completed_at_utc": "2026-10-15T02:04:48Z",
+  "started_at_utc": "2026-10-15T02:19:24Z",
+  "completed_at_utc": "2026-10-15T02:27:52Z",
   "runner": "windows-2022",
   "engine_version": "8.5.0",
   "case_count": 26,
@@ -27,6 +27,30 @@
     "generated_idf_text_fields": "equal after removing comments and normalizing whitespace; original bytes remain checksum-pinned"
   },
   "artifact_name": "original-csharp-comparison",
-  "evidence": "Public GitHub job metadata confirms successful comparison/report steps. The numerical artifact is retained by that workflow; this concise record contains no weather or simulator outputs.",
-  "later_changes": "The opt-in reference-cache workflow introduced after this commit requires its own successful CI run."
+  "evidence": "Public GitHub check-run metadata confirms successful completion of the cache-based comparison job. Its numerical comparison artifact is retained by the workflow; this concise record contains no weather or simulator outputs.",
+  "later_changes": "The subsequently configured objective/component tolerances are relative 1e-6 and absolute 1e-7 near zero; the recorded job still used the stricter 2e-12/1e-9 conditions above.",
+  "source_acquisition": "Original C# and IDF bodies were fetched from the pinned fork into an ignored reference cache and verified before compiling/executing the original code.",
+  "previous_successful_jobs": [
+    {
+      "commit": "3bbd4391dbf0b41d7f4318fb2476ca46970f0aaf",
+      "workflow_run_id": 38668638849,
+      "job_id": 116206341850,
+      "job_url": "https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38668638849/job/116206341850",
+      "conclusion": "success",
+      "started_at_utc": "2026-10-15T02:00:14Z",
+      "completed_at_utc": "2026-10-15T02:04:48Z",
+      "case_count": 26,
+      "comparisons": {
+        "objective_and_components": {
+          "relative_tolerance": 2e-12,
+          "absolute_tolerance": 1e-09
+        },
+        "generated_idf_numeric_fields": {
+          "relative_tolerance": 2e-12,
+          "absolute_tolerance": 1e-11
+        },
+        "generated_idf_text_fields": "equal after removing comments and normalizing whitespace; original bytes remain checksum-pinned"
+      }
+    }
+  ]
 }

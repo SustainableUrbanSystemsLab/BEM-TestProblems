@@ -117,6 +117,17 @@
         "cache_path": ".cache/weather/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
         "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
         "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      },
+      "redistribution_review": {
+        "status": "Unresolved for exact historical EPW; not asserted prohibited.",
+        "audit": "docs/weather-redistribution.md",
+        "embedded_design_source": "Climate Design Data 2009 ASHRAE Handbook",
+        "remaining_issue": "No downstream grant identified for the embedded ASHRAE design record in this exact package.",
+        "primary_permissions_source": "https://www.ashrae.org/permissions/permissions-and-licensing",
+        "affirmative_underlying_data_evidence": {
+          "url": "https://simulationresearch.lbl.gov/dirpubs/un_articleEP02.pdf#page=7",
+          "scope": "EnergyPlus Team/LBNL explicitly identify underlying US TMY2 data as public domain in2002; does not establish later ASHRAE design-record rights."
+        }
       }
     },
     {
@@ -154,6 +165,17 @@
         "cache_path": ".cache/weather/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
         "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
         "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      },
+      "redistribution_review": {
+        "status": "Unresolved for exact historical EPW; not asserted prohibited.",
+        "audit": "docs/weather-redistribution.md",
+        "embedded_design_source": "Climate Design Data 2009 ASHRAE Handbook",
+        "remaining_issue": "No downstream grant identified for the embedded ASHRAE design record in this exact package.",
+        "primary_permissions_source": "https://www.ashrae.org/permissions/permissions-and-licensing",
+        "affirmative_underlying_data_evidence": {
+          "url": "https://simulationresearch.lbl.gov/dirpubs/un_articleEP02.pdf#page=7",
+          "scope": "EnergyPlus Team/LBNL explicitly identify underlying US TMY2 data as public domain in2002; does not establish later ASHRAE design-record rights."
+        }
       }
     },
     {
@@ -192,6 +214,17 @@
         "cache_path": ".cache/weather/USA_IL_Chicago-OHare.725300_TMY2.epw",
         "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
         "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      },
+      "redistribution_review": {
+        "status": "Unresolved for exact historical EPW; not asserted prohibited.",
+        "audit": "docs/weather-redistribution.md",
+        "embedded_design_source": "Climate Design Data 2009 ASHRAE Handbook",
+        "remaining_issue": "No downstream grant identified for the embedded ASHRAE design record in this exact package.",
+        "primary_permissions_source": "https://www.ashrae.org/permissions/permissions-and-licensing",
+        "affirmative_underlying_data_evidence": {
+          "url": "https://simulationresearch.lbl.gov/dirpubs/un_articleEP02.pdf#page=7",
+          "scope": "EnergyPlus Team/LBNL explicitly identify underlying US TMY2 data as public domain in2002; does not establish later ASHRAE design-record rights."
+        }
       }
     },
     {
@@ -229,6 +262,21 @@
         "cache_path": ".cache/weather/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
         "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
         "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      },
+      "redistribution_review": {
+        "status": "Unresolved for exact historical EPW; not asserted prohibited.",
+        "audit": "docs/weather-redistribution.md",
+        "embedded_design_source": "Climate Design Data 2005 ASHRAE Handbook",
+        "remaining_issue": "No downstream grant identified for the embedded ASHRAE design record in this exact package.",
+        "primary_permissions_source": "https://www.ashrae.org/permissions/permissions-and-licensing",
+        "official_comparison": {
+          "dataset": "https://data.nlr.gov/submissions/128",
+          "license": "https://data.nlr.gov/node/128/license",
+          "member": "USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw",
+          "sha256": "7d4d35cd413bbac64ddb87150996a7ac3b9fcff4b21a8160925de225467e4def",
+          "match": false,
+          "scope": "Official conditionally copyable member differs from benchmark in design records and hourly fields; not an exact-file permission match."
+        }
       }
     },
     {
@@ -593,19 +641,11 @@
       "scope": "Evidence for the recorded vectors, engine builds and model/weather identities only; not complete-domain or paper-pointwise validation."
     },
     {
-      "path": "docs/validation-results/literature-simple-comparison.json",
-      "sha256": "4f026e3a6a02d4c5cfcb0470e333b1d727c8afc3850bbc75d75395be0ad31a2e",
-      "license_expression": "MIT",
-      "license_scope": "MIT covers this project's original report structure and new measurements. Published factual input/objective transcriptions remain attributed to Wetter and Wright Table 1; this does not relicense or include the publication, figures or table expression.",
-      "source": "Six small factual input/objective transcriptions from Wetter and Wright (2004) Table 1 compared with new simulation measurements; no publication file, figure or table expression included.",
-      "scope": "Cross-version empirical comparison under explicit model/weather identities. Original EnergyPlus 1.1.0 models/weather bytes and unrounded best iterates are not matched; not a strict published-value fixture."
-    },
-    {
       "path": "docs/validation-results/original-csharp-ci.json",
-      "sha256": "de4afed1ce125a8c213587c7b72f221e70c5e1032a093adee30616f9a289ec87",
+      "sha256": "d916fba563203b8599d5fb48857d180f5cc14e7a2055fd1ec0fdc98e8f3abc94",
       "license_expression": "MIT",
       "source": "New project GitHub Actions job metadata and project-owned comparison conditions; links retained numerical artifact.",
-      "scope": "Successful Windows C# reference-comparison job at the recorded commit, not a complete workflow or later-commit status claim."
+      "scope": "Successful cache-based Windows C# reference comparison at the recorded commit, with prior job history; no complete-workflow or subsequent-policy status claim."
     }
   ],
   "external_reference_assets": [
@@ -913,5 +953,15 @@
     "license_expression": "BSD-3-Clause",
     "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
     "coverage": "All selected derived models: original Wetter/BESTEST attribution plus complete DOE publication-credit/no-endorsement/disclaimer notice; source model bodies are external."
+  },
+  "weather_assets_index": {
+    "path": "src/bem_testproblems/data/weather-assets.json",
+    "sha256": "0468da194bcef761ac0da00439066f62dfd3cb9d25ddaf12e3cbe66f3d42b606",
+    "source_repository": "https://github.com/milzj/BEOBenchmark",
+    "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+    "file_count": 4,
+    "cache_root": ".cache/weather",
+    "license_expression": "MIT",
+    "license_scope": "MIT covers project-authored acquisition metadata only; no weather data grant is asserted."
   }
 }

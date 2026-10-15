@@ -99,7 +99,7 @@ jobs:
           if-no-files-found: error
 
   modern-regression:
-    name: Reviewed EnergyPlus 26.2 regression
+    name: EnergyPlus 26.2 reference-value checks
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
@@ -114,6 +114,7 @@ jobs:
           .venv/bin/python tools/install_energyplus.py
           .venv/bin/python tools/synthetic_weather.py --output-dir .validation-local/weather
       - name: Compare explicit designs with reviewed 26.2 references
+        id: modern_compare
         run: >-
           .venv/bin/python tools/validate_cases.py
           --engine .tools/energyplus/26.2.0/energyplus --version 26.2.0
@@ -121,11 +122,24 @@ jobs:
           --work-dir .validation-local/modern-comparison
           --output .validation-local/reports/modern-regression.json
           --baseline reference/baselines/26.2.0-synthetic.json
+      - name: Check exact repeatability of five midpoint cases
+        if: always() && (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
+        run: >-
+          .venv/bin/python tools/validate_cases.py
+          --engine .tools/energyplus/26.2.0/energyplus --version 26.2.0
+          --weather-dir .validation-local/weather --weather-kind synthetic-ci
+          --work-dir .validation-local/modern-repeatability
+          --output .validation-local/reports/modern-repeatability.json
+          --baseline .validation-local/reports/modern-regression.json
+          --case-id p01-midpoint --case-id p04-midpoint --case-id p06-midpoint
+          --case-id p09-midpoint --case-id p13-midpoint --rtol 0 --atol 0
       - name: Retain numerical regression report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: modern-regression
-          path: .validation-local/reports/modern-regression.json
+          path: |
+            .validation-local/reports/modern-regression.json
+            .validation-local/reports/modern-repeatability.json
           include-hidden-files: true
           if-no-files-found: error
