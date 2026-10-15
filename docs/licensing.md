@@ -127,7 +127,8 @@ A paper pointwise assertion requires the full parameter vector, corresponding
 objective, and sufficient engine/model/weather conditions. Missing information is
 a validation gap, not permission to invent a fixture. Paper-specification checks,
 original-C#/8.5 equivalence and version-26.2 regression checks have separate labels.
-Record paper/code discrepancies explicitly, including 0.55 m in Waibel Eq. (7)
+Record paper/code discrepancies explicitly, including 0.55 m in Eq. (7) of
+Waibel, Wortmann, Evins and Carmeliet (2019)
 versus 0.5488 m in the reference C# penalty.
 
 ## Distribution checks

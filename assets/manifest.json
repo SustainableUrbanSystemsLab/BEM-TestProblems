@@ -350,8 +350,8 @@
     "reference_code_equivalence": "Separate original-C#/8.5 baseline; reconstructed runs must not be mislabeled as published measurements.",
     "modern_regression": "Separate EnergyPlus 26.2 regression/drift record.",
     "known_paper_code_discrepancies": [
-      "Waibel Eq. (7): minimum window height 0.55 m; reference C# problems 9/10: 0.5488 m.",
-      "Waibel Eq. (6) aggregates fan/lighting electricity; original detailed-office C# duplicates the same supply-fan ESO row instead of combining separate supply/return observations. No published per-fan numerical fixture is inferred."
+      "Waibel, Wortmann, Evins and Carmeliet (2019), Eq. (7): minimum window height 0.55 m; reference C# problems 9/10: 0.5488 m.",
+      "Waibel, Wortmann, Evins and Carmeliet (2019), Eq. (6) aggregates fan/lighting electricity; original detailed-office C# duplicates the same supply-fan ESO row instead of combining separate supply/return observations. No published per-fan numerical fixture is inferred."
     ]
   },
   "bundled_external_notices": [
@@ -649,10 +649,10 @@
     },
     {
       "path": "docs/validation-results/p1-bobyqa-smoke.json",
-      "sha256": "470ba55679a5323447d027ff4727f2ca109be857adeded0bfaa8f3e9164f229f",
+      "sha256": "b0e9aeb90a74ed51281658155196dbea2810617ec970dade184e27189db02a29",
       "license_expression": "MIT",
       "source": "New solver integration and scratch diagnostic measurements made by this project; no published winning vector/objective, raw weather, external XML or model body is copied.",
-      "scope": "Problem 1 midpoint-start BOBYQA integration only: EnergyPlus 26.2 succeeded, while EnergyPlus 8.5 stopped at a strict warmup diagnostic failure. Scratch warmup-cap measurements are excluded from historical optimizer results. No Waibel 2019 published-ground-truth or certified-optimum claim."
+      "scope": "Problem 1 midpoint-start BOBYQA integration only: EnergyPlus 26.2 succeeded, while EnergyPlus 8.5 stopped at a strict warmup diagnostic failure. Scratch warmup-cap measurements are excluded from historical optimizer results. No published-ground-truth or certified-optimum claim for Waibel, Wortmann, Evins and Carmeliet (2019)."
     }
   ],
   "external_reference_assets": [
@@ -820,7 +820,7 @@
         13
       ],
       "modifications": "none; fetched bytes must match SHA-256",
-      "additional_notices": "Original school model attributed to Djuric et al. (2007) by BEOBenchmark; embedded Belgrade design day and ground temperatures retained.",
+      "additional_notices": "Original school model attributed to Djuric, Novakovic, Holst and Mitrovic (2007) by BEOBenchmark; embedded Belgrade design day and ground temperatures retained.",
       "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
       "text_encoding": "utf-8",
       "former_repository_path": "src/bem_testproblems/data/legacy/Problem13_template.idf",

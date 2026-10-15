@@ -3,7 +3,7 @@
 Continuous building energy optimization benchmarks with separate problem
 definitions, EnergyPlus models, objective terms and optimization adapters.
 
-This implementation follows [Waibel et al. (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
+This implementation follows [Waibel, Wortmann, Evins and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
 and the original problem literature listed in [references](docs/references.md).
 Historical calculation behavior is the default. See the
 [validation record](docs/validation.md) for the evidence, known discrepancies,
@@ -84,7 +84,7 @@ its shared runner caches successful evaluations at identical inputs.
 | Scalar function for a solver | `make_objective(problem)` |
 
 The midpoint is a convenient default, not a recovered starting point from
-Waibel's runs. To choose another start, use `x0 = problem.validate(your_start)`;
+the study's runs. To choose another start, use `x0 = problem.validate(your_start)`;
 this checks its dimension, finiteness and bounds. Metadata inspection with
 `get_problem` requires no EnergyPlus installation or optional solver packages.
 
@@ -201,7 +201,7 @@ The [reference harness](reference/README.md) documents the numerical comparisons
 | --- | --- | --- |
 | C# versus Python, EnergyPlus 8.5 | Two implementations, identical engine and test weather | Check that the Python translation preserves reference behavior |
 | EnergyPlus 26.2 reference values | Current Python results versus a previous measured run | Catch future changes; these expected values are not independent paper results |
-| Published specification | Bounds and formulas versus Waibel et al. and the original problem sources | Check mathematical definitions; exact Waibel winning vectors and objective values remain unavailable |
+| Published specification | Bounds and formulas versus Waibel, Wortmann, Evins and Carmeliet (2019) and the original problem sources | Check mathematical definitions; exact winning vectors and objective values from the 2019 study remain unavailable |
 
 Public CI uses independently generated **synthetic test weather**. This is an
 explicit test variant, not the canonical benchmark climate or published results.

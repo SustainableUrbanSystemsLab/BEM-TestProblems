@@ -36,12 +36,14 @@ implied.
 
 ## Numerical interpretation
 
-Waibel et al. Tables 2–5 and 7 and Eqs. (5)–(7) and (10) specify the scoped problem
-dimensions, domains and objectives. The main paper's boxplots, ranks and aggregate
+Tables 2–5 and 7 and Eqs. (5)–(7) and (10) in Waibel, Wortmann, Evins and Carmeliet
+(2019) specify the scoped problem dimensions, domains and objectives. The main
+paper's boxplots, ranks and aggregate
 statistics are not complete pointwise `x → f(x)` records. Its supplementary
 material must be inventoried separately before its numerical coverage is claimed.
 
 The originating studies remain cited for problem provenance and formula
-attribution. Numerical publication validation targets only Waibel et al. (2019)
+attribution. Numerical publication validation targets only
+Waibel, Wortmann, Evins and Carmeliet (2019)
 and its EnergyPlus-8.5 benchmark; values from earlier simulator/model versions
 are not numerical fixtures for this project.

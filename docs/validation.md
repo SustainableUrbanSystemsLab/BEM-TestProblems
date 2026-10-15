@@ -7,7 +7,8 @@ three.
 
 ## Published specification
 
-The independent assertions in `tests/test_paper_specification.py` use Waibel et al.
+The independent assertions in `tests/test_paper_specification.py` use
+Waibel, Wortmann, Evins and Carmeliet
 (2019), [doi:10.1016/j.enbuild.2019.01.048](https://doi.org/10.1016/j.enbuild.2019.01.048).
 They compare published numerical bounds, constants, fixed settings and formula
 structure against the Python definitions. Their algebra probes use explicitly
@@ -23,7 +24,7 @@ synthetic observables; they are not fabricated published simulation outcomes.
 
 The preserved model/reference-code areas used in algebra checks are separate
 model facts; they are not presented as numerical solution points printed in
-Waibel's tables. Likewise, the detailed model's individual fan observations are
+the study's tables. Likewise, the detailed model's individual fan observations are
 not specified by the paper's aggregate electricity symbol alone.
 
 ### Known paper/code differences
@@ -47,8 +48,9 @@ scientifically revised definition would require a separately identified version.
 
 ### Numerical paper-result gap
 
-**Complete Waibel pointwise result coverage is currently 0/10.** The numerical
-publication reference is Waibel et al. (2019), using EnergyPlus 8.5.0. Earlier
+**Complete pointwise result coverage for the 2019 study is currently 0/10.** The
+numerical publication reference is Waibel, Wortmann, Evins and Carmeliet (2019),
+using EnergyPlus 8.5.0. Earlier
 studies remain cited for problem origins and formula attribution; their numerical
 results are not validation targets for this project.
 
@@ -69,11 +71,11 @@ code license or establish licenses for its external models/weather. Complete
 winning numerical records remain an unresolved data requirement. No exact
 `f_opt` or `x_opt` has been inferred from a plot or invented by a new run.
 
-A numerical Waibel fixture needs the complete vector and matching objective,
+A numerical fixture from that study needs the complete vector and matching objective,
 engine/build, model identity/modifications, weather hash or design-day definition,
 variable mapping, full available precision and justified comparison tolerance.
 The missing winning vectors currently block comparison of decision-variable
-differences against Waibel's designs. New midpoint measurements or newly optimized
+differences against the study's winning designs. New midpoint measurements or newly optimized
 best-found designs would not establish the missing publication ground truth.
 
 The paper's optimization protocol is also distinct from a single short solver
@@ -81,7 +83,7 @@ run: it uses 20 reruns, random initial solutions except DIRECT's domain-centre
 start, and an evaluation budget of `100(n+1)` for the scoped problems. Those
 conditions describe the study; they do not supply its unavailable winning
 vectors. The implementation must not be advertised as numerically validated
-against Waibel's pointwise results until the required evidence is obtained.
+against the study's pointwise results until the required evidence is obtained.
 
 ## Original reference implementation
 
@@ -267,7 +269,7 @@ to `133.33534913204608` kWh/(m² year). Its best design was
 `[-1.1214112901192836, 4.856626576011762, 5.1732490024320175, 0.27307365349378676]`.
 All 84 distinct simulations passed strict diagnostics; termination occurred at
 BOBYQA's lower trust-region-radius bound. This demonstrates solver integration,
-not a global optimum, Waibel optimum agreement or replication of the study protocol.
+not a global optimum, agreement with the study's optimum or replication of its protocol.
 
 EnergyPlus 8.5 stopped at its first new trial, `[90, 3, 3, 0.5]`: minimum-temperature
 warmup change was `0.00647 K`, exceeding the `0.004 K` tolerance after 25 days.

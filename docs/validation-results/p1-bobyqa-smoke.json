@@ -2,7 +2,7 @@
   "schema_version": 1,
   "evidence_kind": "independently_generated_solver_integration_measurement",
   "license": "MIT",
-  "purpose": "Real default PDFO BOBYQA integration smoke; not a Waibel published-optimum comparison or study-protocol replication.",
+  "purpose": "Real default PDFO BOBYQA integration smoke; not a published-optimum comparison or study-protocol replication for Waibel, Wortmann, Evins and Carmeliet (2019).",
   "code_commit": "f08ce001fcbc8f94040b9a1e694f1595ca55b601",
   "runtime_source_working_tree_clean": true,
   "problem": 1,
@@ -171,7 +171,7 @@
     "historical_model_modified": false,
     "objective_100_minus_failed_25": 0.0009371049331150516
   },
-  "interpretation": "Modern solver integration succeeded. Historical optimization stopped under the deliberate strict severe-diagnostic policy. No result establishes agreement with Waibel 2019 winning designs or values.",
+  "interpretation": "Modern solver integration succeeded. Historical optimization stopped under the deliberate strict severe-diagnostic policy. No result establishes agreement with the winning designs or values published by Waibel, Wortmann, Evins and Carmeliet (2019).",
   "x0": [
     0.0,
     3.0,
