@@ -45,7 +45,11 @@ jobs:
       - name: Lint and test
         run: |
           "$VENV_PY" -m ruff check src tests tools
-          "$VENV_PY" -m pytest -m 'not integration' -q
+          "$VENV_PY" -m pytest -m 'not integration' -q --junitxml=.validation-local/unit.xml
+      - name: Publish concise failed-test annotations
+        if: failure()
+        run: |
+          "$VENV_PY" tools/ci_failure_summary.py .validation-local/unit.xml
       - name: Build distribution
         if: runner.os == 'Linux'
         run: |
