@@ -64,10 +64,11 @@ def extract(archive, directory):
 
 def install(key=None, destination=None):
     metadata = json.loads((ROOT / "assets/energyplus-downloads.json").read_text())
+    version = metadata["version"]
     key = key or platform_key()
     suffix, checksum = metadata["archives"][key]
-    name = f"EnergyPlus-{metadata['version']}-{metadata['build']}-{suffix}"
-    destination = Path(destination or ROOT / ".tools/energyplus/26.2.0").resolve()
+    name = f"EnergyPlus-{version}-{metadata['build']}-{suffix}"
+    destination = Path(destination or ROOT / ".tools/energyplus" / version).resolve()
     executable = destination / ("energyplus.exe" if key.startswith("windows") else "energyplus")
     stamp = destination / "bem-install.json"
     if stamp.is_file():
@@ -78,7 +79,7 @@ def install(key=None, destination=None):
     if destination.exists():
         raise FileExistsError(f"Destination is not a verified installation: {destination}")
     archive = download(
-        f"https://github.com/NatLabRockies/EnergyPlus/releases/download/v26.2.0/{name}",
+        f"https://github.com/NatLabRockies/EnergyPlus/releases/download/v{version}/{name}",
         ROOT / ".tools/downloads" / name, checksum,
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -89,7 +90,7 @@ def install(key=None, destination=None):
         if len(candidates) != 1:
             raise ValueError(f"Expected one EnergyPlus executable, found {len(candidates)}")
         shutil.move(str(candidates[0].parent), str(destination))
-    stamp.write_text(json.dumps({"version": metadata["version"], "platform": key,
+    stamp.write_text(json.dumps({"version": version, "platform": key,
                                  "archive": name, "archive_sha256": checksum}, indent=2) + "\n")
     print(executable)
     return executable

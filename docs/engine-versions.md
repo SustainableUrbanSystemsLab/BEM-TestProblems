@@ -17,7 +17,9 @@ the canonical US weather files explicitly:
 ```
 
 On Windows, replace `.venv/bin/python` with `.venv\Scripts\python.exe`.
-The engine stays in this project's ignored `.tools/energyplus/26.2.0` directory;
+The installer reads the pinned version from
+[`assets/energyplus-downloads.json`](../assets/energyplus-downloads.json) and
+places the engine in this project's ignored `.tools/energyplus/<version>` directory;
 weather stays in `.cache/weather`. Neither importing the package nor evaluating a
 problem downloads files. Modern evaluations do not need the original-source cache.
 
