@@ -118,6 +118,64 @@ def test_problem_first_schedule_changes_only_execution_order(local_setup):
     assert balanced["runs"] != problem_first["runs"]
 
 
+def test_p1_variant_changes_identity_without_changing_starts_seeds_or_budgets(local_setup):
+    configuration, _ = local_setup
+    configuration.update(problems=[1, 13], versions=["8.5.0", "26.2.0"], budget=None)
+    canonical = replication.prepare_manifest(**configuration)
+    explicit_default = replication.prepare_manifest(**configuration, p1_warmup_100=False)
+    variant = replication.prepare_manifest(**configuration, p1_warmup_100=True)
+    assert canonical == explicit_default
+    assert "p1_warmup_100" not in canonical
+    assert all("numerical_variant" not in row for row in canonical["problem_definitions"].values())
+    assert variant["p1_warmup_100"] is True
+    assert variant["manifest_id"] != canonical["manifest_id"]
+    assert variant["runs"] == canonical["runs"]
+    assert variant["problem_definitions"]["1"]["numerical_variant"] == "warmup-100"
+    assert variant["problem_definitions"]["13"] == canonical["problem_definitions"]["13"]
+    assert variant["diagnostics_policy"] == "strict"
+
+
+@pytest.mark.parametrize("options", [{"p1_warmup_100": True}, {"p1_warmup_100": 1}])
+def test_p1_variant_requires_p1_and_an_explicit_boolean(local_setup, options):
+    configuration, _ = local_setup
+    with pytest.raises(ValueError, match="p1_warmup_100"):
+        replication.prepare_manifest(**configuration, **options)
+
+
+def test_worker_reconstructs_the_variant_and_still_rejects_severe_outputs(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, _ = local_setup
+    configuration.update(problems=[1], p1_warmup_100=True)
+    selected = []
+    error = EnergyPlusError("Strict warmup rejection", reason="simulation", directory=tmp_path)
+
+    def bind(problem, **kwargs):
+        selected.append(problem)
+
+        def evaluate(x):
+            raise error
+        return evaluate
+
+    def solver(name, objective, start, *args):
+        return {"status": "terminated", "fun": objective(start)}
+
+    monkeypatch.setattr(replication, "make_objective", bind)
+    monkeypatch.setattr(replication, "solve_solver", solver)
+    monkeypatch.setattr(replication, "extract_outputs", lambda *args:
+                        pytest.fail("A Severe diagnostic must not supply simulator outputs"))
+    manifest = replication.prepare_manifest(**configuration)
+    record = replication._run_one(manifest["runs"][0], manifest, tmp_path / "experiment", "none")
+    assert selected == [get_problem(1, numerical_variant="warmup-100")]
+    assert record["problem_provenance"]["numerical_variant"] == "warmup-100"
+    assert record["status"] == "failed"
+    assert record["best_f"] is None and record["best_x"] is None
+    assert record["trace"][0]["f"] is None
+    assert record["error"]["reason"] == "simulation"
+    assert record["strict_benchmark_evaluation"] is True
+    assert record["warmup_severe_evaluations_used"] == 0
+
+
 def test_hard_budget_retains_independently_observed_best_and_trace(local_setup, tmp_path, monkeypatch):
     configuration, calls = local_setup
 

@@ -1,6 +1,7 @@
 """Published-domain and independent outer-algebra checks; no EnergyPlus needed."""
 
 import math
+from dataclasses import FrozenInstanceError, replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -31,6 +32,43 @@ def test_published_continuous_problem_inventory_and_climates():
         "summer_night_cooling_setpoint": 25.0,
         "cooling_supply_temperature": 12.0,
     }
+
+
+def test_p1_numerical_variant_is_frozen_separate_and_keeps_the_objective_definition():
+    from bem_testproblems import get_problem as public_lookup
+
+    canonical = get_problem(1)
+    variant = public_lookup("p1", numerical_variant="warmup-100")
+    assert variant is get_problem(1, numerical_variant="warmup-100")
+    assert canonical is get_problem(1, numerical_variant=None)
+    assert variant is not canonical and variant != canonical
+    assert variant.parameters == canonical.parameters
+    assert variant.constants == canonical.constants
+    assert variant.weather_filename == canonical.weather_filename
+    outputs = {"Q_h": 44.0, "Q_c": 77.0, "E_L": 10.0}
+    assert variant.outer_loss(variant.midpoint, outputs) == canonical.outer_loss(
+        canonical.midpoint, outputs
+    )
+    assert "numerical_variant" not in canonical.provenance
+    provenance = variant.provenance
+    assert provenance["definition"] != canonical.provenance["definition"]
+    assert provenance["numerical_variant"]["canonical_by_engine"] == {
+        "8.5.0": 25, "26.2.0": 100,
+    }
+    assert provenance["numerical_variant"]["value"] == 100
+    provenance["numerical_variant"]["value"] = 999
+    assert variant.provenance["numerical_variant"]["value"] == 100
+    with pytest.raises(FrozenInstanceError):
+        variant.numerical_variant = None
+
+
+@pytest.mark.parametrize("number,variant", [(2, "warmup-100"), (13, "warmup-100"),
+                                            (1, "warmup-25"), (1, True)])
+def test_unsupported_numerical_variants_are_rejected(number, variant):
+    with pytest.raises(ValueError, match="numerical variant"):
+        get_problem(number, numerical_variant=variant)
+    with pytest.raises(ValueError, match="numerical variant"):
+        replace(get_problem(number), numerical_variant=variant)
 
 
 @pytest.mark.parametrize("identifier", [0, 7, 11, 12, 14, 15, True, "seven", 1.0])

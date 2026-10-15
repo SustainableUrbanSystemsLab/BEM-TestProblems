@@ -30,6 +30,8 @@ def main(argv=None):
     parser.add_argument("--retain-success", choices=("none", "diagnostics", "all"), default="none")
     parser.add_argument("--diagnostics-policy", choices=("strict", "reference-warmup"), default="strict")
     parser.add_argument("--retry-failed", action="store_true")
+    parser.add_argument("--p1-warmup-100", action="store_true",
+                        help="Use the explicit P1 warmup-100 numerical model variant")
     args = vars(parser.parse_args(argv))
     args["executables"] = {version: path for version, path in (
         ("8.5.0", args.pop("executable_8_5")), ("26.2.0", args.pop("executable_26_2"))) if path}

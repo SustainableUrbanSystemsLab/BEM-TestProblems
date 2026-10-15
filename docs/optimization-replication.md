@@ -107,8 +107,8 @@ From a checkout with both engines in `.tools/energyplus/<version>/`:
   --solvers direct crs2 sbplex cma_es bobyqa pybobyqa \
   --workers 8 --seed 2019 \
   --problems 1 13 2 3 4 5 6 8 9 10 --schedule problem-first \
-  --diagnostics-policy reference-warmup \
-  --output-root .validation-local/replication-paper
+  --diagnostics-policy strict \
+  --output-root .validation-local/replication-strict
 ```
 
 The defaults are all ten continuous problems, both engines, 20 repetitions and
@@ -169,10 +169,23 @@ The study does not explicitly state its simulator-diagnostic policy, so matching
 the supplied C# behavior is distinct from proving that every study run had that
 condition.
 
+### P1 extended-warmup comparison
+
+The explicit P1 `warmup-100` model extends the legacy maximum warmup allowance
+from 25 to 100 days while retaining the original tolerances. The modern model
+already uses 100 days, so its rendered input is unchanged. The variant has its
+own provenance and manifest identity; it is not exact historical model parity.
+See the [native validation](warmup-diagnostics.md#p1-extended-warmup-variant).
+
+Add `--p1-warmup-100` to a strict replication command and use a new output
+directory. Starts, seeds, solver settings, and budgets stay paired with the
+canonical experiment. Severe/Fatal diagnostics still reject evaluations; this
+option does not recover their objective outputs or invent penalty values.
+
 Generate or refresh plots from the saved experiment, including while it runs:
 
 ```sh
-.venv/bin/python tools/plot_replication.py .validation-local/replication-paper
+.venv/bin/python tools/plot_replication.py .validation-local/replication-strict
 ```
 
 PNG and SVG files are generated for the Figure 8 continuous subset (P1–6, P8)
@@ -182,9 +195,21 @@ and 1.5-IQR whiskers. Exact quartile/whisker rules were not specified by the stu
 NumPy linear quartiles are our documented convention. Matching engine panels
 share objective-axis limits. Axes are uncapped so poor outcomes remain visible.
 
-Each solver label shows accepted completed runs out of requested runs and failure
-counts, including runs that used warmup-Severe output under the explicit
-experiment policy. Pending/running runs are not values. Partial campaigns are labeled
+The default figures include only completed trajectories with explicit evidence
+that no warmup-Severe outputs were used anywhere in the search. A strict winning
+point alone is insufficient. Labels show the included/requested counts, failed
+attempts, and excluded non-strict trajectories. Missing strictness evidence is
+also excluded. Selecting only successful trajectories can bias distributions;
+these figures do not turn a permissive campaign into a strict-policy rerun.
+
+For a separately recorded `reference-warmup` experiment, explicitly request its
+diagnostic figures with `--include-diagnostic-runs`. They are labelled **NOT
+STRICT** and saved to a different default directory, so they cannot overwrite
+the strict figures. The numerical summary records the selection policy and
+warmup-error usage. These figures describe compatibility with the original
+caller, rather than establishing simulation correctness.
+
+Pending/running runs are not values. Partial campaigns are labeled
 **INCOMPLETE**; failed attempts are never replaced by penalties or silently
 counted as successful. Numerical summaries retain distributions, best designs,
 failure counts and engine-median differences with percentages against 8.5.
@@ -200,4 +225,4 @@ for the newer engine or a different diagnostic policy.
 
 Please also cite [Ragonneau and Zhang (2023)](https://doi.org/10.48550/arXiv.2302.13246)
 for PDFO and [Cartis, Fiala, Marteau and Roberts (2019)](https://doi.org/10.1145/3338517)
-for Py-BOBYQA. Full bibliography entries are in `references.bib`.
+for Py-BOBYQA. Full bibliography entries are in [references.bib](../references.bib).

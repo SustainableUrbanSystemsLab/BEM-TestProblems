@@ -56,6 +56,67 @@ def test_simple_geometry_material_and_orientation_follow_physical_inputs(tmp_pat
         assert span == pytest.approx(width)
 
 
+@pytest.mark.parametrize("design", [(0, 3, 3, 0.5), (90, 3, 3, 0.5), (-180, 0.1, 5.9, 0.8)])
+def test_p1_warmup_variant_changes_only_the_rendered_legacy_cap(design, tmp_path):
+    canonical = get_problem(1)
+    variant = get_problem(1, numerical_variant="warmup-100")
+    original = legacy_template_path(canonical.template_filename)
+    before = original.read_bytes()
+    base = canonical.render_legacy(design, tmp_path / "canonical.idf")
+    changed = variant.render_legacy(design, tmp_path / "variant.idf")
+    base_objects, changed_objects = idf_objects(base), idf_objects(changed)
+    differences = [
+        (old[0], index, left, right)
+        for old, new in zip(base_objects, changed_objects, strict=True)
+        for index, (left, right) in enumerate(zip(old, new, strict=True))
+        if left != right
+    ]
+    assert differences == [("Building", 7, "25", "100")]
+    assert original.read_bytes() == before
+    assert canonical.render_legacy(design, tmp_path / "again.idf").read_bytes() == base.read_bytes()
+
+
+@pytest.mark.parametrize("change", ["cap", "missing", "duplicate", "name"])
+def test_p1_warmup_variant_refuses_unexpected_legacy_building(tmp_path, monkeypatch, change):
+    problem = get_problem(1, numerical_variant="warmup-100")
+    text = legacy_template_path(problem.template_filename).read_text()
+    if change == "cap":
+        text = text.replace("    25,                      !- Maximum Number of Warmup Days",
+                            "    26,                      !- Maximum Number of Warmup Days")
+    elif change == "missing":
+        text = text.replace("  Building,", "  UnexpectedBuilding,")
+    elif change == "name":
+        text = text.replace("    office zone,", "    unexpected name,")
+    else:
+        text += "\nBuilding,office zone,0,Country,.04,.004,FullExterior,25,6;\n"
+    source = tmp_path / "changed-template.idf"
+    source.write_text(text)
+    monkeypatch.setattr(models, "legacy_template_path", lambda filename: source)
+    destination = tmp_path / "rejected.idf"
+    with pytest.raises(ValueError, match="warmup-100"):
+        problem.render_legacy(problem.midpoint, destination)
+    assert not destination.exists()
+
+
+def test_modern_p1_variant_is_a_checked_byte_identical_noop(tmp_path, monkeypatch):
+    canonical = get_problem(1)
+    variant = get_problem(1, numerical_variant="warmup-100")
+    for azimuth in (0, 90):
+        design = (azimuth, 3, 3, 0.5)
+        base = canonical.render_modern(design, tmp_path / "canonical.epJSON")
+        changed = variant.render_modern(design, tmp_path / "variant.epJSON")
+        assert changed.read_bytes() == base.read_bytes()
+    resource = models._data_resource
+    model = json.loads(resource("modern", "problem_1.epJSON").read_text())
+    model["Building"]["office zone"]["maximum_number_of_warmup_days"] = 25
+    unexpected = tmp_path / "unexpected-model.epJSON"
+    unexpected.write_text(json.dumps(model))
+    monkeypatch.setattr(models, "_data_resource", lambda directory, filename:
+                        unexpected if filename == "problem_1.epJSON" else resource(directory, filename))
+    with pytest.raises(ValueError, match="existing Building cap of 100"):
+        variant.render_modern(variant.midpoint, tmp_path / "rejected.epJSON")
+
+
 def test_detailed_window_centering_overhang_margin_and_schedule(tmp_path):
     problem = get_problem(6)
     design = list(problem.midpoint)

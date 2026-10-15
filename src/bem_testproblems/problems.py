@@ -5,7 +5,7 @@
 """The ten continuous BEOBenchmark problems, in published problem order."""
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import MappingProxyType
@@ -39,8 +39,13 @@ class Problem:
     paper_equation: int = 0
     paper_table: int = 0
     definition: str = "historical-implementation"
+    numerical_variant: str | None = None
 
     def __post_init__(self):
+        if self.numerical_variant is not None and (
+            self.id != 1 or self.numerical_variant != "warmup-100"
+        ):
+            raise ValueError("The warmup-100 numerical variant is available only for problem 1")
         object.__setattr__(self, "constants", MappingProxyType(dict(self.constants)))
         object.__setattr__(self, "fixed_parameters", MappingProxyType(dict(self.fixed_parameters)))
 
@@ -62,7 +67,7 @@ class Problem:
 
     @property
     def provenance(self) -> dict:
-        return {
+        provenance = {
             "upstream_commit": UPSTREAM_COMMIT,
             "paper_doi": PAPER_DOI,
             "paper_equation": self.paper_equation,
@@ -70,6 +75,17 @@ class Problem:
             "source_references": self.source_references,
             "definition": self.definition,
         }
+        if self.numerical_variant is not None:
+            provenance["numerical_variant"] = {
+                "name": self.numerical_variant,
+                "object_type": "Building",
+                "object_name": "office zone",
+                "field": "maximum_number_of_warmup_days",
+                "canonical_by_engine": {"8.5.0": 25, "26.2.0": 100},
+                "value": 100,
+                "other_fields": "unchanged, including convergence tolerances",
+            }
+        return provenance
 
     def validate(self, x: Sequence[float]) -> tuple[float, ...]:
         try:
@@ -277,9 +293,13 @@ def _make_problems() -> dict[int, Problem]:
 
 
 _PROBLEMS = _make_problems()
+_P1_WARMUP_100 = replace(
+    _PROBLEMS[1], definition="numerical-variant", numerical_variant="warmup-100"
+)
 
 
-def get_problem(problem_id) -> Problem:
+def get_problem(problem_id, *, numerical_variant=None) -> Problem:
+    """Select a canonical problem or the explicit P1 warmup-100 variant."""
     if isinstance(problem_id, bool):
         raise ValueError(f"Expected one of {PROBLEM_IDS}")
     if isinstance(problem_id, str):
@@ -291,7 +311,11 @@ def get_problem(problem_id) -> Problem:
         raise ValueError(
             f"Only continuous problems {PROBLEM_IDS} are available; received {problem_id!r}"
         )
-    return _PROBLEMS[problem_id]
+    if numerical_variant is None:
+        return _PROBLEMS[problem_id]
+    if problem_id == 1 and numerical_variant == "warmup-100":
+        return _P1_WARMUP_100
+    raise ValueError("The warmup-100 numerical variant is available only for problem 1")
 
 
 def list_problems() -> tuple[Problem, ...]:

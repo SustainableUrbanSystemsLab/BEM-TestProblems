@@ -111,14 +111,18 @@ def paired_start(problem, repetition, seed):
 
 def _model_identity(problem, version):
     if version == "8.5.0":
-        return {"format": "IDF", "template_sha256": sha256_file(
+        identity = {"format": "IDF", "template_sha256": sha256_file(
             legacy_template_path(problem.template_filename))}
-    data = files("bem_testproblems").joinpath("data", "modern")
-    number = 6 if problem.id == 8 else problem.id
-    return {"format": "epJSON", "template_sha256": hashlib.sha256(
-        data.joinpath(f"problem_{number}.epJSON").read_bytes()).hexdigest(),
-        "bindings_sha256": hashlib.sha256(data.joinpath(
-            "parameter_bindings.json").read_bytes()).hexdigest()}
+    else:
+        data = files("bem_testproblems").joinpath("data", "modern")
+        number = 6 if problem.id == 8 else problem.id
+        identity = {"format": "epJSON", "template_sha256": hashlib.sha256(
+            data.joinpath(f"problem_{number}.epJSON").read_bytes()).hexdigest(),
+            "bindings_sha256": hashlib.sha256(data.joinpath(
+                "parameter_bindings.json").read_bytes()).hexdigest()}
+    if problem.numerical_variant is not None:
+        identity["numerical_variant"] = problem.provenance["numerical_variant"]
+    return identity
 
 
 def _weather_identity(problem, directory):
@@ -169,7 +173,7 @@ def _dependency_identity(name):
 def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "26.2.0"),
                      repetitions=20, budget=None, seed=2019, project_root=None,
                      executables=None, weather_dir=None, diagnostics_policy="strict",
-                     schedule="balanced"):
+                     schedule="balanced", p1_warmup_100=False):
     """Resolve all inputs and fixed random starts without running simulations."""
     repetitions = _positive_integer(repetitions, "repetitions")
     if budget is not None:
@@ -180,9 +184,16 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("diagnostics_policy must be strict or reference-warmup")
     if schedule not in {"balanced", "problem-first"}:
         raise ValueError("schedule must be balanced or problem-first")
+    if not isinstance(p1_warmup_100, bool):
+        raise ValueError("p1_warmup_100 must be a boolean")
     definitions = [get_problem(number) for number in problems]
     if not definitions or len({p.id for p in definitions}) != len(definitions):
         raise ValueError("Select at least one problem, without duplicates")
+    if p1_warmup_100:
+        if not any(problem.id == 1 for problem in definitions):
+            raise ValueError("p1_warmup_100 requires problem 1 to be selected")
+        definitions = [get_problem(1, numerical_variant="warmup-100") if problem.id == 1
+                       else problem for problem in definitions]
     selected_solvers = [solver_metadata(name)["name"] for name in (
         SOLVER_ORDER if solvers is None else solvers)]
     if not selected_solvers or len(set(selected_solvers)) != len(selected_solvers):
@@ -210,6 +221,9 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         "objective_unit": p.objective_unit, "weather": _weather_identity(p, weather_directory),
         "models": {version: _model_identity(p, version) for version in selected_versions}}
         for p in definitions}
+    for problem in definitions:
+        if problem.numerical_variant is not None:
+            identities[str(problem.id)]["numerical_variant"] = problem.numerical_variant
     source = Path(__file__).parent
     code_hashes = {name: sha256_file(source / name) for name in (
         "problems.py", "losses.py", "models.py", "outputs.py", "energyplus.py",
@@ -258,6 +272,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
             "Selected problem first, then repetition, solver and engine order",
         "code_sha256": code_hashes,
         "runs": specifications}
+    if p1_warmup_100:
+        configuration["p1_warmup_100"] = True
     configuration = _json_value(configuration)
     configuration["manifest_id"] = _digest(configuration)
     return configuration
@@ -378,7 +394,8 @@ def _run_one(spec, manifest, root, retain_success):
     observed = None
     failure = None
     try:
-        problem = get_problem(spec["problem"])
+        problem = get_problem(spec["problem"], numerical_variant=record[
+            "problem_provenance"].get("numerical_variant"))
         runner = EnergyPlusRunner(manifest["engines"][spec["version"]]["executable"],
             expected_version=spec["version"], output_root=attempt_root, cache=False)
         if runner.executable_sha256 != record["engine_provenance"]["executable_sha256"]:

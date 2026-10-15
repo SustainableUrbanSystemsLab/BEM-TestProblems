@@ -131,6 +131,12 @@ The runner retains the generated input, engine/weather hashes and diagnostics.
 The [complete canonical-case table and warmup analysis](docs/warmup-diagnostics.md)
 record the known rejected designs and the separate numerical-control experiments.
 
+For P1, `get_problem(1, numerical_variant="warmup-100")` selects a tested numerical
+variant with a longer warmup allowance and unchanged convergence tolerances.
+Use it with the same objective and solver API. Its separate identity distinguishes
+the repaired legacy model from exact historical reproduction; see the
+[variant validation](docs/warmup-diagnostics.md#p1-extended-warmup-variant).
+
 ## Default optimizer
 
 Install the optional PDFO BOBYQA adapter in the same environment using the tested
