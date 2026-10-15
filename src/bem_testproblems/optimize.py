@@ -1,14 +1,20 @@
 """Optional PDFO BOBYQA adapter; simulator definitions do not depend on PDFO."""
 
+from functools import partial
 from math import isfinite
 
+from .evaluation import make_objective
+from .problems import Problem
 
-def solve(problem, *, runner, weather=None, x0=None, max_evaluations=1000):
+
+def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
     """Minimize a problem with bounded, scaled BOBYQA evaluations.
 
     ``max_evaluations`` counts objective calls, including initialization. Failed
     simulations propagate as errors; no invented objective penalty is substituted.
     The returned object is PDFO's documented ``OptimizeResult``.
+    Benchmark problems use the same local setup defaults as ``make_objective``
+    when no runner is supplied. Explicit runners retain their selected engine.
     """
     if isinstance(max_evaluations, bool) or not isinstance(max_evaluations, int):
         raise ValueError("max_evaluations must be an integer")
@@ -25,6 +31,11 @@ def solve(problem, *, runner, weather=None, x0=None, max_evaluations=1000):
     except ImportError as exc:
         raise ImportError("Install bem-testproblems[optimize] to use PDFO BOBYQA") from exc
 
+    evaluate = (
+        make_objective(problem, runner=runner, weather=weather)
+        if isinstance(problem, Problem)
+        else partial(problem.evaluate, runner=runner, weather=weather)
+    )
     failure = None
 
     def objective(x):
@@ -35,7 +46,7 @@ def solve(problem, *, runner, weather=None, x0=None, max_evaluations=1000):
         if failure is not None:
             return float("nan")
         try:
-            value = float(problem.evaluate(x, runner=runner, weather=weather))
+            value = float(evaluate(x))
             if not isfinite(value):
                 raise ValueError("The simulator returned a nonfinite objective")
             return value

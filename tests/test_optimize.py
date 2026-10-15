@@ -1,7 +1,12 @@
 """Exercise the public optimizer against a bounded analytic objective."""
 
+import sys
+from types import SimpleNamespace
+
 import pytest
 
+import bem_testproblems.optimize as optimize
+from bem_testproblems import get_problem
 from bem_testproblems.optimize import solve
 
 
@@ -49,3 +54,53 @@ def test_simulator_errors_propagate():
 
     with pytest.raises(RuntimeError, match="simulation failed"):
         solve(Broken(), runner=None, max_evaluations=10)
+
+
+def test_benchmark_setup_is_bound_once_before_solver_receives_physical_vectors(monkeypatch):
+    problem = get_problem(1)
+    runner = object()
+    weather = object()
+    bindings = []
+    evaluations = []
+    trial = [45.0, 2.5, 4.5, 0.3]
+
+    def bind(selected, **kwargs):
+        bindings.append((selected, kwargs))
+
+        def objective(x):
+            evaluations.append(tuple(x))
+            return sum(x)
+
+        return objective
+
+    def fake_pdfo(objective, start, *, bounds, method, options):
+        assert bindings == [(problem, {"runner": runner, "weather": weather})]
+        assert start == problem.midpoint
+        assert bounds == problem.bounds
+        assert method == "bobyqa"
+        assert options == {"maxfev": 20, "scale": True, "quiet": True}
+        objective(start)
+        return SimpleNamespace(x=trial, fun=objective(trial), nfev=2)
+
+    monkeypatch.setattr(optimize, "make_objective", bind)
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(pdfo=fake_pdfo))
+    result = solve(problem, runner=runner, weather=weather, max_evaluations=20)
+    assert result.fun == sum(trial)
+    assert evaluations == [problem.midpoint, tuple(trial)]
+    assert len(bindings) == 1
+
+
+def test_missing_benchmark_setup_fails_before_entering_solver(monkeypatch):
+    expected = FileNotFoundError("Missing project-local EnergyPlus; run the installer")
+
+    def bind(*args, **kwargs):
+        raise expected
+
+    def forbidden_solver(*args, **kwargs):
+        pytest.fail("Setup errors must not enter a compiled optimizer callback")
+
+    monkeypatch.setattr(optimize, "make_objective", bind)
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(pdfo=forbidden_solver))
+    with pytest.raises(FileNotFoundError) as error:
+        solve(get_problem(1), max_evaluations=20)
+    assert error.value is expected
