@@ -161,3 +161,17 @@ def test_strict_plot_reports_excluded_searches_and_preserves_failure_counts(tmp_
     assert report["groups"][0]["excluded_non_strict_completed_runs"] == 1
     assert report["groups"][0]["statuses"]["failed"] == 1
     assert len(result["plots"]) == 2
+
+
+def test_numerical_variant_is_visible_in_figures_and_numerical_groups(tmp_path):
+    pytest.importorskip("matplotlib")
+    root = experiment(tmp_path)
+    path = root / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["problem_definitions"]["1"]["numerical_variant"] = "warmup-100"
+    path.write_text(json.dumps(manifest))
+    plot_replication(root)
+    report = json.loads((root / "plots/boxplot-summary.json").read_text())
+    assert report["groups"][0]["numerical_variant"] == "warmup-100"
+    assert "Numerical variant: warmup-100" in (
+        root / "plots/figure8-energyplus-8.5.0.svg").read_text()

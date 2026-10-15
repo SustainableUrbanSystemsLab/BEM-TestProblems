@@ -70,6 +70,7 @@ def collect_boxplot_data(root, *, include_diagnostic_runs=False):
                         warmup_evaluations += used
                         warmup_runs += bool(used)
                 groups.append({"problem": int(number), "version": version, "solver": solver,
+                               "numerical_variant": problem.get("numerical_variant"),
                                "unit": problem["objective_unit"], "values": values,
                                "best_designs": designs, "accepted": len(values),
                                "requested": len(selected), "statuses": dict(statuses),
@@ -171,7 +172,10 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
                 axis.set_xticks(range(1, len(solvers) + 1), labels, rotation=40, ha="right")
                 axis.set_xlim(0.4, len(solvers) + 0.6)
                 axis.tick_params(axis="x", labelsize=8)
-                axis.set_title(f"P{number}: {problem['name']}", fontsize=11)
+                title = f"P{number}: {problem['name']}"
+                if problem.get("numerical_variant"):
+                    title += f"\nNumerical variant: {problem['numerical_variant']}"
+                axis.set_title(title, fontsize=11)
                 axis.set_ylabel(problem["objective_unit"])
                 axis.grid(axis="y", alpha=0.22)
             for axis in list(axes.flat)[len(numbers):]:
