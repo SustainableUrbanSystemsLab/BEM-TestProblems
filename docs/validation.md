@@ -4,6 +4,16 @@
 - **Three separate comparisons:** the published specification, the original
   C#/EnergyPlus 8.5 implementation, and the modern EnergyPlus 26.2 models.
   Agreement with one does not establish agreement with all three.
+- **Severe:** EnergyPlus reports a serious problem needing attention, such as
+  failure of warmup convergence. The simulation may still finish and write
+  numerical results; completion alone does not establish a valid evaluation.
+- **Fatal:** an error that stops the simulation before successful completion.
+  See [EnergyPlus's message-level definitions](https://energyplus.readthedocs.io/en/v26.2.0/guides/interface-developer/7-running-energyplus.html).
+- **Acceptance:** the normal evaluator rejects both Severe and Fatal outcomes.
+  Explicitly labelled [reference-warmup experiments](optimization-replication.md#diagnostics-and-figures)
+  may use verified, completed runs containing only warmup-convergence Severe
+  messages. Those remain outside strict validation; Fatal outcomes are always
+  rejected.
 - **Detailed diagnostics:** the [canonical-case table and warmup analysis](warmup-diagnostics.md)
   cover the 26 original audit designs, the additional P1 orientation-90 trial,
   and the diagnostic experiments for rejected evaluations.
