@@ -48,7 +48,8 @@ jobs:
           "$VENV_PY" -m pytest -m 'not integration' -q
       - name: Build distribution
         if: runner.os == 'Linux'
-        run: "$VENV_PY" -m build
+        run: |
+          "$VENV_PY" -m build
 
   original-csharp:
     name: Original C# versus Python (EnergyPlus 8.5)
