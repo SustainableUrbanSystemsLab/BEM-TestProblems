@@ -3,6 +3,7 @@
 
 import copy
 import json
+import platform
 import subprocess
 import sys
 import textwrap
@@ -222,6 +223,36 @@ def test_resume_retains_terminal_and_resource_change_does_not_change_identity(se
     result = execute(setup, run=True, workers=120)
     assert result["remaining_runs"] == 0 and not setup.calls
     assert (setup.output / "manifest.json").read_bytes() == before
+
+
+def test_destination_records_the_actual_python_runtime(setup):
+    _, manifest, _, _ = continuation.prepare_continuation(
+        setup.origin, setup.project, setup.output
+    )
+    assert manifest["execution_runtime"] == {
+        "python_version": sys.version,
+        "python_implementation": sys.implementation.name,
+        "python_executable_sha256": sha256_file(Path(sys.executable)),
+        "platform": platform.platform(),
+        "machine": platform.machine(),
+    }
+    assert "execution_runtime" not in setup.original
+
+
+@pytest.mark.parametrize("field", [
+    "python_version", "python_implementation", "python_executable_sha256", "platform", "machine",
+])
+def test_runtime_change_rejects_resume_before_any_new_evaluation(setup, monkeypatch, field):
+    execute(setup, run=True)
+    before = {path: path.read_bytes() for path in setup.output.rglob("*.json")}
+    identity = continuation._runtime_identity()
+    identity[field] = "f" * 64 if field.endswith("sha256") else "changed-runtime"
+    monkeypatch.setattr(continuation, "_runtime_identity", lambda: identity)
+    setup.calls.clear()
+    with pytest.raises(ValueError, match="Existing continuation manifest differs"):
+        execute(setup, run=True)
+    assert not setup.calls
+    assert before == {path: path.read_bytes() for path in setup.output.rglob("*.json")}
 
 
 def test_own_interrupted_attempt_is_archived_by_existing_worker(setup):

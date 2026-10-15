@@ -2,6 +2,7 @@
 """Protect scientific plot denominators against incomplete and failed results."""
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -183,3 +184,77 @@ def test_numerical_variant_is_visible_in_figures_and_numerical_groups(tmp_path):
     assert report["groups"][0]["numerical_variant"] == "warmup-100"
     assert "Numerical variant: warmup-100" in (
         root / "plots/figure8-energyplus-8.5.0.svg").read_text()
+
+
+@pytest.mark.parametrize("call", [
+    {"strict_benchmark_evaluation": False},
+    {"diagnostics": {"accepted_warmup_only": True}},
+    {"diagnostics": {"severe_count": 1}},
+    {"diagnostics": {"fatal_count": 1}},
+])
+def test_call_diagnostics_override_a_contradictory_strict_run_flag(tmp_path, call):
+    root = experiment(tmp_path)
+    path = root / "runs/0.json"
+    record = json.loads(path.read_text())
+    record["trace"] = [call]
+    path.write_text(json.dumps(record))
+    _, groups = collect_boxplot_data(root)
+    assert groups[0]["accepted"] == 0
+    assert groups[0]["excluded_non_strict_completed_runs"] == 1
+
+
+@pytest.mark.parametrize("alias", ["symlink", "hardlink"])
+def test_plot_output_aliases_cannot_replace_checkpoints(tmp_path, alias):
+    root = experiment(tmp_path)
+    checkpoint = root / "runs/0.json"
+    before = checkpoint.read_bytes()
+    output = root / "plots"
+    output.mkdir()
+    path = output / "figure8-energyplus-8.5.0.svg"
+    try:
+        path.symlink_to(checkpoint) if alias == "symlink" else path.hardlink_to(checkpoint)
+    except OSError as error:
+        pytest.skip(f"Filesystem alias creation unavailable: {error}")
+    with pytest.raises(ValueError, match="symlink|hard-linked"):
+        plot_replication(root)
+    assert checkpoint.read_bytes() == before
+    assert not (output / "figure8-energyplus-8.5.0.png").exists()
+
+
+def test_plot_directory_alias_and_checkpoint_output_are_rejected(tmp_path):
+    root = experiment(tmp_path)
+    try:
+        (root / "plots").symlink_to(root / "runs", target_is_directory=True)
+    except OSError as error:
+        pytest.skip(f"Symlink creation unavailable: {error}")
+    with pytest.raises(ValueError, match="symlink"):
+        plot_replication(root)
+    with pytest.raises(ValueError, match="protected"):
+        plot_replication(root, output_dir=root / "runs/generated")
+
+
+def test_ordinary_plot_files_can_be_refreshed(tmp_path):
+    pytest.importorskip("matplotlib")
+    root = experiment(tmp_path)
+    first = plot_replication(root)
+    second = plot_replication(root)
+    assert first == second
+    assert (root / "plots/figure8-energyplus-8.5.0.png").stat().st_size > 0
+
+
+def test_publication_preview_marker_is_visible_in_exported_figures(tmp_path):
+    pytest.importorskip("matplotlib")
+    root = experiment(tmp_path)
+    manifest = json.loads((root / "manifest.json").read_text())
+    records = {}
+    for path in (root / "runs").glob("*.json"):
+        row = json.loads(path.read_text())
+        records[row["id"]] = row
+    dataset = {"origin_manifest": manifest, "manifests": {"example": manifest},
+               "records": records, "source_roots": {"example": str(root)},
+               "publication_preview": True}
+    result = plot_replication(root, output_dir=tmp_path.parent / (tmp_path.name + "-preview"),
+                              dataset=dataset)
+    assert "UNVALIDATED PREVIEW" in result["scope"]
+    svg = next(path for path in result["plots"] if path.endswith(".svg"))
+    assert "UNVALIDATED PREVIEW" in Path(svg).read_text()

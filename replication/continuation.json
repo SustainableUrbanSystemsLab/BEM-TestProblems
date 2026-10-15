@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "workers": 120,
+  "paths": {
+    "origin": ".validation-local/handoff/origin",
+    "frozen_source": ".validation-local/handoff/source",
+    "continuation": ".validation-local/windows-continuation",
+    "preflight": ".validation-local/windows-checks",
+    "pilot": ".validation-local/windows-throughput",
+    "review": ".validation-local/replication-review",
+    "replay": ".validation-local/replication-replay",
+    "preview": ".validation-local/publication-preview",
+    "publication": "replication/results/continuous-rerun"
+  },
+  "pilot": {
+    "workers": 48,
+    "problems": [1, 4, 10, 13],
+    "repetitions": 1,
+    "budget": 25
+  }
+}

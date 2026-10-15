@@ -27,8 +27,9 @@ Once set up, evaluations run offline. The default engine is EnergyPlus 26.2;
 the [engine guide](docs/engine-versions.md) explains how to use historical 8.5
 models and a compatible local engine.
 
-To move an unfinished experiment to a Windows workstation, follow the
-[Windows continuation guide](docs/windows-continuation.md).
+For the experiment pipeline, combined reports, native replay checks, and
+reviewed GitHub results, start with the [replication workflow](replication/README.md).
+The [Windows guide](docs/windows-continuation.md) covers installation and persistent jobs.
 
 ## Evaluate a problem with your own solver
 

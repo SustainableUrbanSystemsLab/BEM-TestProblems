@@ -11,6 +11,7 @@ import json
 import math
 import multiprocessing
 import os
+import platform
 import re
 import socket
 import sys
@@ -37,6 +38,17 @@ def _digest(value):
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     ).hexdigest()
+
+
+def _runtime_identity():
+    """Bind destination results to the actual interpreter and operating system."""
+    return {
+        "python_version": sys.version,
+        "python_implementation": sys.implementation.name,
+        "python_executable_sha256": hashlib.sha256(Path(sys.executable).read_bytes()).hexdigest(),
+        "platform": platform.platform(),
+        "machine": platform.machine(),
+    }
 
 
 def _read(path):
@@ -321,6 +333,7 @@ def prepare_continuation(origin, project_root, output_root, *, workers=48, froze
             raise ValueError(f"Target {key} differs from the frozen origin")
     terminal = {name for name, row in records.items() if row["status"] in TERMINAL}
     target["runs"] = [row for row in target["runs"] if row["id"] not in terminal]
+    target["execution_runtime"] = _runtime_identity()
     target["continuation"] = {
         "origin_manifest_id": original["manifest_id"],
         **identity,
