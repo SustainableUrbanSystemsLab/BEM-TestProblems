@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bem-testproblems"
+version = "0.1.0.dev0"
+description = "Reproducible continuous building energy optimization benchmarks"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT AND BSD-3-Clause"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "src/bem_testproblems/data/licenses/*"]
+authors = [{name = "Sustainable Urban Systems Lab"}]
+dependencies = []
+
+[project.optional-dependencies]
+optimize = ["pdfo==2.2.0", "numpy>=1.26.4,<2", "scipy>=1.12,<2"]
+dev = ["pytest>=8,<10", "ruff>=0.11,<1", "build>=1.2,<2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+bem_testproblems = ["data/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: invokes an externally installed EnergyPlus executable"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
