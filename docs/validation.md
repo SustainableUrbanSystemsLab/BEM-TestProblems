@@ -59,10 +59,14 @@ winning objective values together with the complete corresponding decision
 vectors. The paper explicitly defers analysis in variable space to future work
 (printed page 220). Approximate costs in prose cannot fill that gap.
 
-The main paper identifies supplementary material through its DOI (printed
-page 238). Its raw contents and applicable terms have not been established from
-the available main paper. This is an unresolved data requirement, not a claim
-that supplementary results or an external dataset do not exist. No exact
+The inspected [Supplement S1](https://ars.els-cdn.com/content/image/1-s2.0-S0378778818331682-mmc1.xml)
+is a 927-byte XML metadata record identifying `BEOBenchmark_V1` and EnergyPlus
+8.5.0. It links to the [GitHub implementation](https://github.com/christophwaibel/BEOBenchmark/tree/master/BEOBenchmark_V1),
+and contains no winning objective values or decision vectors. The
+[publisher](https://www.sciencedirect.com/science/article/pii/S0378778818331682)
+labels the supplement CC BY 4.0; that label does not replace the repository's
+code license or establish licenses for its external models/weather. Complete
+winning numerical records remain an unresolved data requirement. No exact
 `f_opt` or `x_opt` has been inferred from a plot or invented by a new run.
 
 A numerical Waibel fixture needs the complete vector and matching objective,
@@ -122,6 +126,14 @@ at commit `3bbd439`.
 That historical artifact used the stricter tolerances stated above. The current
 configured `1e-6`/`1e-7` policy is a later acceptance decision; the historical job
 has not been relabeled as having run with the new settings.
+
+The current [workflow run](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196)
+passed all five jobs at commit `f08ce001fcbc8f94040b9a1e694f1595ca55b601`.
+Its [C#/Python comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196/job/116218106526)
+passed all 26 cases using the current relative `1e-6`, absolute `1e-7` policy.
+The modern regression passed 26 cases and all 169 checked values; five repeated
+cases reproduced all 39 checked values exactly. These checks cover their explicit
+designs and synthetic weather, not entire continuous domains or published optima.
 
 EnergyPlus version **8.5.0-c87e61b44b** was verified to load and run an untouched
 official design-day example on the development Mac. That smoke test completed
@@ -244,6 +256,32 @@ These are newly measured evaluator values, not published optima. In particular,
 the detailed-office increases require visible component-level drift reporting;
 a passing modern regression means stable modern results, not numerical equality
 to the old engine.
+
+## Real default-solver smoke
+
+A [P1 BOBYQA integration record](validation-results/p1-bobyqa-smoke.json) uses
+commit `f08ce001fcbc8f94040b9a1e694f1595ca55b601`, canonical Seattle weather,
+physical midpoint `[0, 3, 3, 0.5]` and a 100-objective-call budget. EnergyPlus
+26.2 completed after 84 calls, reducing the objective from `147.5659999247044`
+to `133.33534913204608` kWh/(m² year). Its best design was
+`[-1.1214112901192836, 4.856626576011762, 5.1732490024320175, 0.27307365349378676]`.
+All 84 distinct simulations passed strict diagnostics; termination occurred at
+BOBYQA's lower trust-region-radius bound. This demonstrates solver integration,
+not a global optimum, Waibel optimum agreement or replication of the study protocol.
+
+EnergyPlus 8.5 stopped at its first new trial, `[90, 3, 3, 0.5]`: minimum-temperature
+warmup change was `0.00647 K`, exceeding the `0.004 K` tolerance after 25 days.
+The strict evaluator propagated the severe-diagnostic error instead of accepting
+an objective or substituting a penalty. This is a source-model convergence
+limitation surfaced by the deliberate acceptance policy; the unchanged C# did
+not reject those diagnostics. The CI designs do not include this trial.
+
+A scratch 100-day cap removed that severe diagnostic but changed the objective
+by about `5.99e-6` relatively against the failed run's diagnostic-only value.
+That exceeds the configured `1e-6` comparison threshold and changes the input
+identity. Neither the scratch variant nor the failed-run value is an accepted
+historical optimization result. Original models and convergence tolerances remain
+unchanged.
 
 ## Weather use and distribution boundary
 
