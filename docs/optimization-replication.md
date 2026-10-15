@@ -1,11 +1,14 @@
 # Optimization experiments following the 2019 study
 
 The experiment follows the random-start and evaluation-budget protocol of
-[Waibel, Wortmann, Evins and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048).
+[Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048).
 Its aim is a qualitative comparison with Figures 8 and 9 for the ten continuous
-problems, using both EnergyPlus 8.5 and 26.2. Exact historical seeds, winning
-vectors and raw optimizer trajectories are unavailable. Fresh recorded seeds
+problems, using both EnergyPlus 8.5 and 26.2. Exact historical seeds, starting
+vectors, and raw optimizer trajectories are unavailable. Fresh recorded seeds
 make this rerun reproducible without claiming the original trajectories.
+[Waibel's 2018 thesis Appendix C](published-solutions.md) supplies rounded final
+designs for a separate literature comparison. Those are neither starting points
+nor verified full-precision winning records from the journal study.
 
 ## Protocol and solver coverage
 

@@ -3,11 +3,11 @@
 Continuous building energy optimization benchmarks with separate problem
 definitions, EnergyPlus models, objective terms and optimization adapters.
 
-This implementation follows [Waibel, Wortmann, Evins and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
+This implementation follows [Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
 and the original problem literature listed in [references](docs/references.md).
 Historical calculation behavior is the default. See the
 [validation record](docs/validation.md) for the evidence, known discrepancies,
-and numerical paper references that remain unavailable.
+published solution references, and remaining limitations.
 
 | Problems | Variables | Building and climate | Objective |
 |---|---:|---|---|
@@ -224,7 +224,8 @@ comparisons. The [testing guide](docs/testing.md) maps the code to those checks.
 | Canonical C# versus Python, EnergyPlus 8.5 | Successful objectives/components and explicit rejected outcomes on 27 designs | Check translation against the original caller with the benchmark climate inputs |
 | Canonical EnergyPlus 26.2 checks | Successful values versus measured references; known warmup rejections versus diagnostic signatures | Detect numerical or simulation-outcome changes under benchmark climate inputs |
 | Supplemental synthetic weather | Separate controlled-weather checks of both implementations and modern repeatability | Broaden software checks with independent deterministic weather fixtures |
-| Published specification | Bounds and formulas versus Waibel, Wortmann, Evins and Carmeliet (2019) and the original problem sources | Check mathematical definitions; exact winning vectors and objective values from the 2019 study remain unavailable |
+| Published specification | Bounds and formulas versus Waibel, Wortmann, Evins, and Carmeliet (2019) and the original problem sources | Check mathematical definitions; exact winning records from the journal study remain unavailable |
+| Rounded published designs | [Waibel's 2018 thesis Appendix C](docs/published-solutions.md), covering all ten continuous problems | Additional best-found reference candidates; separate comparison pending because coordinates/objectives are rounded and four coordinate mappings need verification |
 
 Public CI downloads the four checksum-verified **canonical benchmark weather
 files** into temporary runner storage. It publishes numerical JSON reports, with
