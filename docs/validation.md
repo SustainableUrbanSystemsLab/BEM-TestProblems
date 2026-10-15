@@ -34,9 +34,11 @@
   20 fresh simulations. Both comparison tolerances were zero; every objective
   difference was **0%**. This is same-machine repeatability with fixed inputs and
   engine builds.
-- **Public CI:** the [seven-job run at fc23f79](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38694858683)
+- **Public CI:** the [seven-job run at 0418ca1](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38748877433)
   passed the three operating-system test jobs, both original-C# comparisons, and
-  both modern-engine checks. Cross-platform canonical references use relative
+  both modern-engine checks. Its canonical 8.5 job also passed the separate
+  P1 extended-warmup check, which is distinct from unchanged-C# parity.
+  Cross-platform canonical references use relative
   tolerance `1e-6`, with absolute tolerance `1e-7` near zero; this is distinct
   from demanding identical bits across platforms.
 - **Solver experiments:** starts, seeds, settings, model/weather identities,
