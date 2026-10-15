@@ -133,7 +133,7 @@ That historical artifact used the stricter tolerances stated above. The current
 configured `1e-6`/`1e-7` policy is a later acceptance decision; the historical job
 has not been relabeled as having run with the new settings.
 
-The current [workflow run](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196)
+A previous [workflow run](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196)
 passed all five jobs at commit `f08ce001fcbc8f94040b9a1e694f1595ca55b601`.
 Its [C#/Python comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38672334196/job/116218106526)
 passed all 26 cases using the current relative `1e-6`, absolute `1e-7` policy.
@@ -155,9 +155,38 @@ severe diagnostics at its original 25-day cap. It remains a recorded source-mode
 failure. This ledger measures the Python runner with the historical engine; it
 does not itself claim executable C# parity.
 
-## Independent public-CI weather
+## Canonical and supplemental public-CI weather
 
-Public-CI code parity uses **independently generated analytic weather**, produced
+The current workflow has separate canonical-weather checks for both engines.
+Each retrieves the four exact US files into temporary runner storage using
+`tools/fetch_weather.py`, verifies their checksums and exercises
+`reference/canonical-cases.json`. That fixture contains the 26 audit designs and
+the paired P1 orientation-90 trial. The 8.5 job also compiles and executes the
+unchanged C# components; the 26.2 job compares with measured canonical references.
+
+The checks compare both values and simulation outcomes. A successful case must
+have no Severe/Fatal diagnostics and match the recorded objective/components at
+relative `1e-6`, absolute `1e-7`. The two recorded 8.5 rejections (P10 lower and
+P1 orientation90) and the recorded 26.2 rejection (P4 lower) must retain their
+warmup-only diagnostic signatures. They have no accepted scalar objective in
+the baselines. Unexpected failures, changed signatures and newly successful
+previously rejected cases fail the check pending review. The job summary reports
+successful and rejected counts explicitly; a passing outcome check does not mean
+all 27 simulations succeeded.
+
+P13's Python cases use no EPW. The unchanged C# caller requires a weather-path
+argument; a verified Seattle file fills that unused argument, recorded separately.
+Independent no-EPW measurements cover its lower, midpoint and upper designs,
+and a C#-mode command check confirms the midpoint components/objective are
+identical with no EPW and with Seattle. Its embedded design day remains the
+physical climate input. Belgrade IWEC is not downloaded or redistributed.
+
+Raw weather, source models and simulation directories are never uploaded.
+Numerical JSON reports retain actual values, signed/absolute differences,
+percentage changes, diagnostic outcomes and provenance. Canonical baselines
+are frozen project measurements; they are not published optimum references.
+
+Supplemental public-CI code parity uses **independently generated analytic weather**, produced
 by:
 
 ```sh
@@ -181,7 +210,7 @@ caused by that stock Denver model being paired deliberately with synthetic
 Seattle weather. This establishes EPW ingestion, not benchmark numerical parity.
 
 The unchanged C# and Python evaluators must receive **the same synthetic file**
-for a public-CI comparison. This tests executable equivalence under controlled
+for a supplemental public-CI comparison. This tests executable equivalence under controlled
 inputs; it does not reproduce a TMY-based published objective or certify canonical
 benchmark climate performance. The problem objects keep their historical weather
 filenames. Canonical local setup uses `python tools/fetch_weather.py`, which
@@ -306,8 +335,8 @@ converted EPW hosted elsewhere, including embedded ASHRAE design conditions.
 Local acquisition is implemented by `python tools/fetch_weather.py`: it downloads
 the four frozen US files from the pinned fork into the ignored `.cache/weather/`
 directory and verifies their hashes. This reproducibility mechanism does not
-claim a blanket redistribution license for the converted EPWs. Public CI keeps
-its independently generated weather, and raw canonical data is excluded from
-published caches/artifacts. Problem 13 uses the embedded winter design day without
+claim a blanket redistribution license for the converted EPWs. Canonical CI
+fetches the same files temporarily, synthetic weather remains supplemental, and
+raw canonical data is excluded from published caches/artifacts. Problem 13 uses the embedded winter design day without
 an EPW; Belgrade IWEC remains outside the downloader. See
 [licensing.md](licensing.md) and `assets/manifest.json` for source terms and scope.

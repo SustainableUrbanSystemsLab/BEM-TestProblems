@@ -97,7 +97,7 @@
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
+      "public_ci_policy": "Canonical CI explicitly retrieves checksum-verified US EPWs into temporary runner storage for evaluation. Synthetic weather remains supplemental. Raw EPWs, weather caches and simulator directories are excluded from published CI artifacts/caches; only numerical JSON reports are uploaded.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -145,7 +145,7 @@
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
+      "public_ci_policy": "Canonical CI explicitly retrieves checksum-verified US EPWs into temporary runner storage for evaluation. Synthetic weather remains supplemental. Raw EPWs, weather caches and simulator directories are excluded from published CI artifacts/caches; only numerical JSON reports are uploaded.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -194,7 +194,7 @@
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
+      "public_ci_policy": "Canonical CI explicitly retrieves checksum-verified US EPWs into temporary runner storage for evaluation. Synthetic weather remains supplemental. Raw EPWs, weather caches and simulator directories are excluded from published CI artifacts/caches; only numerical JSON reports are uploaded.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -242,7 +242,7 @@
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
+      "public_ci_policy": "Canonical CI explicitly retrieves checksum-verified US EPWs into temporary runner storage for evaluation. Synthetic weather remains supplemental. Raw EPWs, weather caches and simulator directories are excluded from published CI artifacts/caches; only numerical JSON reports are uploaded.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -387,7 +387,7 @@
     "records_per_file": 8760,
     "source_data": "none; independently prescribed analytic climate test inputs",
     "canonical_benchmark_weather": false,
-    "use": "Same-input public-CI source-code parity and execution smoke tests only; never substitute for canonical or published weather in reported benchmark results."
+    "use": "Supplemental same-input public-CI source-code parity and execution checks; canonical CI separately uses exact checksum-verified benchmark weather. Synthetic files never replace canonical weather or published results."
   },
   "derived_assets": [
     {
@@ -660,6 +660,27 @@
       "license_expression": "MIT",
       "source": "New project simulation measurements, numeric model facts and earlier project canonical measurements; no raw external model, weather, source code or publication body is copied.",
       "scope": "Recorded canonical cases and separate scratch numerical-control variants only; no full-domain guarantee, accepted benchmark repair or published-optimum claim."
+    },
+    {
+      "path": "reference/canonical-cases.json",
+      "sha256": "de5ff68ea61d20036a75607fa847bc1e00172957bd2f7d1eab2250fa071e23cb",
+      "license_expression": "MIT",
+      "source": "Independently generated project designs, numerical observations and diagnostic identities; no raw model, weather, original code or publication body is copied.",
+      "scope": "27 explicit designs, including the paired orientation-90 trial; not published winning vectors."
+    },
+    {
+      "path": "reference/baselines/8.5.0-canonical.json",
+      "sha256": "670efc4db256f04fcfb30dc51afd841df743103ab2078a418fdcaae14f6f41e0",
+      "license_expression": "MIT",
+      "source": "Independently generated project designs, numerical observations and diagnostic identities; no raw model, weather, original code or publication body is copied.",
+      "scope": "25 strict successful values and two expected warmup rejections; exact input/weather identities and byte-only CRLF-to-LF normalization are recorded."
+    },
+    {
+      "path": "reference/baselines/26.2.0-canonical.json",
+      "sha256": "383055079a573cdd296f75112fa9f3d07eca92fbc28fdc7043caf5903482e56b",
+      "license_expression": "MIT",
+      "source": "Independently generated project designs, numerical observations and diagnostic identities; no raw model, weather, original code or publication body is copied.",
+      "scope": "26 strict successful values and one expected warmup rejection; no accepted scalar is supplied for rejected simulations."
     }
   ],
   "external_reference_assets": [

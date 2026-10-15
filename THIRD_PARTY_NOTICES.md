@@ -82,7 +82,8 @@ retrieves the four historical US EPWs from the checksum-pinned fork into the
 ignored `.cache/weather/` directory for local evaluation. The packaged weather
 index records source identifiers and hashes; it is not a weather license or
 redistribution grant. Raw weather stays out of Git, source archives, wheels and
-published CI artifacts/caches. Public CI uses independently generated weather.
+published CI artifacts/caches. Canonical CI uses temporary checksum-verified
+downloads; supplemental CI also uses independently generated weather.
 Problem 13 needs no EPW because its winter design day is embedded in the model;
 the downloader does not retrieve the separately licensed Belgrade IWEC package.
 ASHRAE IWEC carries its own copyright and references additional license conditions.

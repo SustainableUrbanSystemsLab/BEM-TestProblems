@@ -218,8 +218,15 @@ objective/component changes and separately reviewed references before it becomes
 a benchmark definition. Exact historical compatibility and a revised numerical
 variant must remain distinguishable.
 
-The [current code CI](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38674953272)
+The [recorded code CI](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38674953272)
 passed all five jobs, including both 26-case engine comparisons. Those public
 simulation checks use independently generated synthetic weather; they do not
 erase the canonical failures above. No benchmark asset, warmup tolerance or
 simulation acceptance policy was changed by this analysis.
+
+The current workflow additionally runs canonical-weather checks over all 27
+listed designs. Successful values are checked numerically; each recorded warmup
+rejection is checked as a rejected diagnostic outcome with no accepted objective.
+Unexpected failures, changed signatures or newly successful previously rejected
+cases require review. Synthetic checks remain supplemental. Only numerical JSON
+reports are uploaded; no raw canonical weather is published.

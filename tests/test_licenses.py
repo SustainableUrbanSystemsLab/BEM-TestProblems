@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -181,6 +183,134 @@ def test_canonical_weather_fetch_metadata_has_exact_external_pins() -> None:
         assert index["source_commit"] in pin["url"]
         assert "milzj/BEOBenchmark" in pin["url"]
     assert "YUG_Belgrade_IWEC.epw" not in {pin["cache_path"] for pin in index["files"]}
+
+
+def test_public_ci_uploads_only_explicit_numeric_report_files() -> None:
+    """Ephemeral use of external inputs must not publish their raw/cache bodies."""
+    workflow = (ROOT / ".github/workflows/validate.yml").read_text()
+    steps = re.split(r"(?m)(?=^      - )", workflow)
+    uploads = [step for step in steps if "uses: actions/upload-artifact@" in step]
+    assert uploads, "Numerical CI evidence needs explicit artifact paths"
+    for step in uploads:
+        lines = step.splitlines()
+        paths = []
+        for number, line in enumerate(lines):
+            match = re.fullmatch(r"( +)path: *(.*)", line)
+            if match is None:
+                continue
+            value = match.group(2).strip()
+            if value == "|":
+                indentation = len(match.group(1))
+                for continuation in lines[number + 1:]:
+                    if not continuation.strip():
+                        continue
+                    if len(continuation) - len(continuation.lstrip()) <= indentation:
+                        break
+                    paths.append(continuation.strip())
+            else:
+                paths.append(value.strip("'\""))
+        assert paths, "Every upload needs literal, reviewable report filenames"
+        for path in paths:
+            assert re.fullmatch(r"\.validation-local/reports/[A-Za-z0-9_.-]+\.json", path), (
+                "Public artifacts may contain explicit numeric JSON reports only; "
+                "never weather, reference caches, raw simulation outputs, directories or wildcards",
+                path,
+            )
+
+
+def test_public_ci_checks_canonical_weather_and_keeps_synthetic_supplemental() -> None:
+    workflow = (ROOT / ".github/workflows/validate.yml").read_text()
+    for job, runner, baseline in (
+        ("original-csharp", "windows-2022", "8.5.0-canonical.json"),
+        ("modern-regression", "ubuntu-24.04", "26.2.0-canonical.json"),
+    ):
+        match = re.search(
+            rf"(?ms)^  {job}:\n(.*?)(?=^  [A-Za-z0-9_-]+:\n|\Z)", workflow
+        )
+        assert match, f"Missing required public numerical job {job}"
+        body = match.group(1)
+        assert f"runs-on: {runner}" in body
+        assert "weather_kind: canonical" in body
+        assert "weather_kind: synthetic-ci" in body
+        assert "cases: reference/canonical-cases.json" in body
+        assert "cases: reference/cases.json" in body
+        assert f"baseline: reference/baselines/{baseline}" in body
+        assert "if: matrix.weather_kind == 'canonical'" in body
+        assert "tools/fetch_weather.py --directory .validation-local/weather" in body
+        assert "if: matrix.weather_kind == 'synthetic-ci'" in body
+        assert "tools/synthetic_weather.py --output-dir .validation-local/weather" in body
+        assert "--weather-kind ${{ matrix.weather_kind }}" in body
+        assert "--cases ${{ matrix.cases }}" in body
+
+
+def test_canonical_ci_fixtures_cover_pinned_inputs_and_explicit_rejections(tmp_path) -> None:
+    from bem_testproblems import get_problem
+
+    fixture_path = ROOT / "reference/canonical-cases.json"
+    raw = fixture_path.read_bytes()
+    specifications = {case["case_id"]: case for case in json.loads(raw)["cases"]}
+    assert len(specifications) == 27
+    weather_index = json.loads((ROOT / MANIFEST["weather_assets_index"]["path"]).read_bytes())
+    weather_hashes = {item["cache_path"]: item["sha256"] for item in weather_index["files"]}
+    expected_rejections = {
+        "8.5.0": {"p01-orientation90": 1, "p10-lower": 7},
+        "26.2.0": {"p04-lower": 1},
+    }
+    for version, failures in expected_rejections.items():
+        baseline = json.loads((ROOT / f"reference/baselines/{version}-canonical.json").read_bytes())
+        assert baseline["license"] == "MIT"
+        assert baseline["engine_version"] == version
+        assert re.fullmatch(r"[a-f0-9]{64}", baseline["engine_sha256"])
+        assert baseline["upstream_commit"] == MANIFEST["upstream"]["commit"]
+        assert baseline["weather_kind"] == "canonical"
+        assert baseline["diagnostics_policy"] == "strict"
+        assert baseline["case_fixture"] == {
+            "path": "reference/canonical-cases.json",
+            "sha256": hashlib.sha256(raw).hexdigest(),
+        }
+        records = {case["case_id"]: case for case in baseline["cases"]}
+        assert len(baseline["cases"]) == len(records) == len(specifications)
+        assert set(records) == set(specifications)
+        assert {key for key, row in records.items() if row["passed"] is False} == set(failures)
+        for case_id, row in records.items():
+            spec = specifications[case_id]
+            assert all(row[key] == spec[key] for key in ("problem", "x", "purpose"))
+            problem = get_problem(row["problem"])
+            assert tuple(row["x"]) == problem.validate(row["x"])
+            if problem.design_day:
+                assert row["weather_file"] is None and row["weather_sha256"] is None
+            else:
+                assert row["weather_file"] == problem.weather_filename
+                assert row["weather_sha256"] == weather_hashes[problem.weather_filename]
+
+            suffix = "idf" if version == "8.5.0" else "epJSON"
+            path = tmp_path / f"{version}-{case_id}.{suffix}"
+            render = problem.render_legacy if version == "8.5.0" else problem.render_modern
+            render(row["x"], path)
+            rendered = path.read_bytes()
+            assert hashlib.sha256(rendered).hexdigest() == row["input_sha256"]
+            if "source_input_sha256" in row:
+                assert "CRLF" in row["input_identity_normalization"]
+                assert hashlib.sha256(rendered.replace(b"\n", b"\r\n")).hexdigest() == (
+                    row["source_input_sha256"]
+                )
+
+            if case_id in failures:
+                assert row["passed"] is False
+                assert all(row[key] is None for key in ("objective", "components", "terms"))
+                expected = row["expected_failure"]
+                assert expected["stage"] == expected["reason"] == "simulation"
+                assert expected["severe_count"] == failures[case_id]
+                assert expected["fatal_count"] == 0
+                assert len(expected["signatures"]) == failures[case_id]
+                for signature in expected["signatures"]:
+                    assert signature["kind"] == "CheckWarmupConvergence"
+                    assert signature["zone"] and signature["environment"]
+            else:
+                assert row["passed"] is True
+                assert math.isfinite(row["objective"])
+                for values in (row["components"], row["terms"]):
+                    assert values and all(math.isfinite(value) for value in values.values())
 
 
 def test_publication_and_license_notices_are_present() -> None:

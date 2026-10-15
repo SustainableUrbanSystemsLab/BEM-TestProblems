@@ -213,14 +213,27 @@ The [reference harness](reference/README.md) documents the numerical comparisons
 
 | Check | Comparison | Purpose |
 | --- | --- | --- |
-| C# versus Python, EnergyPlus 8.5 | Two implementations, identical engine and test weather | Check that the Python translation preserves reference behavior |
-| EnergyPlus 26.2 reference values | Current Python results versus a previous measured run | Catch future changes; these expected values are not independent paper results |
+| Canonical C# versus Python, EnergyPlus 8.5 | Successful objectives/components and explicit rejected outcomes on 27 designs | Check translation against the original caller with the benchmark climate inputs |
+| Canonical EnergyPlus 26.2 checks | Successful values versus measured references; known warmup rejections versus diagnostic signatures | Detect numerical or simulation-outcome changes under benchmark climate inputs |
+| Supplemental synthetic weather | Separate controlled-weather checks of both implementations and modern repeatability | Broaden software checks with independent deterministic weather fixtures |
 | Published specification | Bounds and formulas versus Waibel, Wortmann, Evins and Carmeliet (2019) and the original problem sources | Check mathematical definitions; exact winning vectors and objective values from the 2019 study remain unavailable |
 
-Public CI uses independently generated **synthetic test weather**. This is an
-explicit test variant, not the canonical benchmark climate or published results.
-Canonical weather checks are recorded separately. Reference updates are reviewed
-changes, never an automatic response to a failed test.
+Public CI downloads the four checksum-verified **canonical benchmark weather
+files** into temporary runner storage. It publishes numerical JSON reports, with
+no raw EPWs, weather caches or simulation directories uploaded. Independently
+generated synthetic weather remains a separate supplemental test.
+
+The canonical fixture includes 27 designs. Known warmup failures stay rejected:
+8.5 rejects P10 at its lower bounds and the P1 orientation-90 trial; 26.2 rejects
+P4 at its lower bounds. CI checks those diagnostic outcomes explicitly and shows
+them in its summary. A newly failing case, a changed diagnostic signature or a
+previously rejected case becoming successful requires review. Reference updates
+are reviewed changes, never an automatic response to a failed test.
+
+Problem 13 uses its embedded design day. Python supplies no EPW; the unchanged
+C# caller receives a verified US file only to satisfy its weather-path argument.
+That auxiliary argument is recorded separately and its output is checked against
+the no-EPW design-day reference. No Belgrade IWEC download is required.
 
 Original C# files and historical IDFs are fetched from the fork at a fixed commit,
 verified by SHA-256, and kept in `.reference-cache/beobenchmark`. They are excluded
