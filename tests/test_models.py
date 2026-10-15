@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+import bem_testproblems.models as models
 from bem_testproblems.models import csharp_number, legacy_token_values
 from bem_testproblems.problems import PROBLEM_IDS, get_problem
 from bem_testproblems.reference import legacy_template_path, reference_root
@@ -314,3 +315,58 @@ def test_legacy_reference_bytes_are_checked_against_the_packaged_manifest(tmp_pa
         legacy_template_path(filename)
     with pytest.raises(ValueError, match="known original template"):
         legacy_template_path("../outside.idf")
+
+
+@pytest.mark.parametrize("encoding", ["cp1252", "utf-8-sig"])
+def test_original_comment_encoding_is_preserved_in_portable_rendering(tmp_path, monkeypatch, encoding):
+    template = tmp_path / "original.idf"
+    text = "! Temperature in °C\r\nVersion,8.5;\r\n%azimuth%,%w_we_win%,%w_ea_win%,%tau%;\r\n"
+    template.write_bytes(text.encode(encoding))
+    monkeypatch.setattr(models, "legacy_template_path", lambda filename: template)
+    result = get_problem(1).render_legacy([45, 2.5, 4.5, 0.3], tmp_path / "output.idf")
+    assert result.read_bytes() == "! Temperature in °C\nVersion,8.5;\n45,2.5,4.5,0.3;\n".encode()
+    assert template.read_bytes() == text.encode(encoding)
+
+
+@pytest.mark.parametrize("tokens", [
+    "%azimuth%,%w_we_win%,%w_ea_win%;",
+    "%azimuth%,%w_we_win%,%w_ea_win%,%tau%,%unexpected%;",
+])
+def test_legacy_token_mismatch_fails_without_writing_output(tmp_path, monkeypatch, tokens):
+    template = tmp_path / "original.idf"
+    template.write_text(tokens)
+    monkeypatch.setattr(models, "legacy_template_path", lambda filename: template)
+    output = tmp_path / "output.idf"
+    with pytest.raises(ValueError, match="Template/token mismatch"):
+        get_problem(1).render_legacy(get_problem(1).midpoint, output)
+    assert not output.exists()
+
+
+def test_incomplete_modern_binding_manifest_fails_without_writing_output(tmp_path, monkeypatch):
+    real_resource = models._data_resource
+    bindings = json.loads(real_resource("modern", "parameter_bindings.json").read_text())
+    bindings["models"]["1"]["bindings"] = [
+        binding for binding in bindings["models"]["1"]["bindings"] if binding["token"] != "%tau%"
+    ]
+    incomplete = tmp_path / "bindings.json"
+    incomplete.write_text(json.dumps(bindings))
+
+    def resource(directory, filename):
+        return incomplete if filename == "parameter_bindings.json" else real_resource(directory, filename)
+
+    monkeypatch.setattr(models, "_data_resource", resource)
+    output = tmp_path / "output.epJSON"
+    with pytest.raises(ValueError, match="Modern binding coverage differs"):
+        get_problem(1).render_modern(get_problem(1).midpoint, output)
+    assert not output.exists()
+
+
+def test_modern_rendering_is_deterministic_and_keeps_packaged_model_immutable(tmp_path):
+    problem = get_problem(1)
+    resource = models._data_resource("modern", "problem_1.epJSON")
+    original = resource.read_bytes()
+    first = problem.render_modern([45, 2.5, 4.5, 0.3], tmp_path / "one.epJSON")
+    problem.render_modern(problem.midpoint, tmp_path / "different.epJSON")
+    again = problem.render_modern([45, 2.5, 4.5, 0.3], tmp_path / "two.epJSON")
+    assert first.read_bytes() == again.read_bytes()
+    assert resource.read_bytes() == original

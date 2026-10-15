@@ -182,7 +182,12 @@ def test_missing_or_nonfinite_observables_are_not_valid_penalties():
 
 @pytest.mark.parametrize(
     ("version", "selected", "suffix"),
-    [("8.5.0", "legacy", ".idf"), ("26.2.0", "modern", ".epJSON")],
+    [
+        ("8.5.0", "legacy", ".idf"),
+        ("26.2.0", "modern", ".epJSON"),
+        ("EnergyPlus, Version 8.5.0-c87e61b44b", "legacy", ".idf"),
+        ("26.2", "modern", ".epJSON"),
+    ],
 )
 def test_same_evaluate_interface_selects_model_for_explicit_runner_version(
     monkeypatch, tmp_path, version, selected, suffix
@@ -234,3 +239,26 @@ def test_unsupported_engine_is_rejected_before_rendering(monkeypatch, version):
     runner = SimpleNamespace(version=version, run=unexpected_render)
     with pytest.raises(ValueError, match="EnergyPlus version"):
         problem.evaluate(problem.midpoint, runner=runner)
+
+
+def test_missing_annual_weather_fails_before_rendering_or_running(monkeypatch):
+    def forbidden(*args, **kwargs):
+        pytest.fail("A missing annual EPW must fail before rendering or running")
+
+    monkeypatch.setattr(Problem, "render_modern", forbidden)
+    problem = get_problem(1)
+    with pytest.raises(ValueError, match="requires weather=.*Seattle"):
+        problem.evaluate(problem.midpoint, runner=SimpleNamespace(version="26.2.0", run=forbidden))
+
+
+def test_noniterable_vector_is_an_actionable_validation_error():
+    with pytest.raises(ValueError, match="requires 4 coordinates"):
+        get_problem(1).validate(None)
+
+
+@pytest.mark.parametrize("number", PROBLEM_IDS)
+def test_closed_physical_bounds_are_accepted(number):
+    problem = get_problem(number)
+    for index in (0, 1):
+        endpoint = tuple(bounds[index] for bounds in problem.bounds)
+        assert problem.validate(endpoint) == endpoint

@@ -218,3 +218,45 @@ def test_native_guard_preserves_external_budget_exception_and_stops(monkeypatch)
     with pytest.raises(ExternalBudgetExceeded) as caught:
         adapters.solve_solver("crs2", objective, START, BOUNDS, 30, 123)
     assert caught.value is failure
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
+def test_nonfinite_objective_is_rejected_after_one_call(value):
+    pytest.importorskip("cma")
+    calls = []
+
+    def objective(x):
+        calls.append(x)
+        return value
+
+    with pytest.raises(ValueError, match="nonfinite value"):
+        adapters.solve_solver("cma_es", objective, START, BOUNDS, 20, 123)
+    assert len(calls) == 1
+
+
+@pytest.mark.parametrize("method", ("bobyqa", "pybobyqa"))
+def test_undersized_interpolation_budget_is_rejected_without_objective_calls(method):
+    pytest.importorskip(adapters.solver_metadata(method)["dependency"])
+
+    def objective(_):
+        pytest.fail("An impossible interpolation budget must not evaluate the objective")
+
+    with pytest.raises(ValueError, match="needs at least dimension"):
+        adapters.solve_solver(method, objective, START, BOUNDS, 1, 123)
+
+
+def test_pybobyqa_restores_the_callers_rng_after_objective_failure():
+    pytest.importorskip("pybobyqa")
+    np = pytest.importorskip("numpy")
+    before = np.random.get_state()
+    failure = RuntimeError("simulation rejected")
+
+    def objective(_):
+        raise failure
+
+    with pytest.raises(RuntimeError) as caught:
+        adapters.solve_solver("pybobyqa", objective, START, BOUNDS, 20, 123)
+    after = np.random.get_state()
+    assert caught.value is failure
+    assert before[0] == after[0] and before[2:] == after[2:]
+    np.testing.assert_array_equal(before[1], after[1])

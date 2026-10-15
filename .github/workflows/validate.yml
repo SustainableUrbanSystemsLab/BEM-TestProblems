@@ -46,10 +46,27 @@ jobs:
       - name: Install optional NLopt adapters for analytic tests
         if: runner.os == 'Linux' || runner.os == 'Windows'
         run: '"$VENV_PY" -m pip install -e ".[replication-nlopt]"'
-      - name: Lint and test
+      - name: Lint
+        run: '"$VENV_PY" -m ruff check src tests tools'
+      - name: Test behavior and measure branch coverage
+        id: unit_tests
         run: |
-          "$VENV_PY" -m ruff check src tests tools
-          "$VENV_PY" -m pytest -m 'not integration' -q --junitxml=.validation-local/unit.xml
+          "$VENV_PY" -m coverage run -m pytest -m 'not integration' -q --junitxml=.validation-local/unit.xml
+      - name: Report coverage for all Python modules and tools
+        id: coverage_report
+        if: always() && !cancelled() && (steps.unit_tests.outcome == 'success' || steps.unit_tests.outcome == 'failure')
+        run: |
+          "$VENV_PY" -m coverage json --fail-under=0 -o .validation-local/reports/pytest-coverage.json
+          "$VENV_PY" tools/check_coverage.py .validation-local/reports/pytest-coverage.json
+          "$VENV_PY" -m coverage report
+      - name: Retain coverage report
+        if: always() && !cancelled() && (steps.coverage_report.outcome == 'success' || steps.coverage_report.outcome == 'failure')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: pytest-coverage-${{ matrix.os }}
+          path: .validation-local/reports/pytest-coverage.json
+          include-hidden-files: true
+          if-no-files-found: error
       - name: Publish concise failed-test annotations
         if: failure()
         run: |

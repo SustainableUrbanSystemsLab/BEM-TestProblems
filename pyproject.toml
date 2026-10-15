@@ -21,7 +21,7 @@ replication = [
     "matplotlib>=3.8,<3.11", "contourpy>=1.0,<1.4",
 ]
 replication-nlopt = ["nlopt==2.7.1"]
-dev = ["pytest>=8,<10", "ruff>=0.11,<1", "build>=1.2,<2"]
+dev = ["pytest>=8,<10", "coverage>=7.6,<8", "ruff>=0.11,<1", "build>=1.2,<2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -32,6 +32,15 @@ bem_testproblems = ["data/*.json", "data/licenses/*.txt", "data/modern/*.epJSON"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = ["integration: invokes an externally installed EnergyPlus executable"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/bem_testproblems", "tools"]
+data_file = ".validation-local/.coverage"
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 85
 
 [tool.ruff]
 target-version = "py312"

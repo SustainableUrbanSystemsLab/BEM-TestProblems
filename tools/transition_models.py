@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -115,8 +116,20 @@ def transition_model(input_idf: str | Path, output_epjson: str | Path, *,
     """Create one 26.2 epJSON and provenance sidecar; preserve all input files."""
     source = Path(input_idf).resolve(strict=True)
     target = Path(output_epjson).resolve()
+    template = Path(source_template).resolve(strict=True) if source_template else source
+    protected = {source, template}
+    if target in protected or target.with_suffix(".provenance.json") in protected:
+        raise ValueError("Transition outputs must not overwrite the source input or template")
     if target.suffix.lower() != ".epjson":
         raise ValueError("output_epjson must have .epJSON extension")
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("timeout must be positive and finite")
+    if minimum_max_warmup_days is not None and (
+        isinstance(minimum_max_warmup_days, bool)
+        or not isinstance(minimum_max_warmup_days, int)
+        or minimum_max_warmup_days <= 0
+    ):
+        raise ValueError("minimum_max_warmup_days must be a positive integer")
     text = source.read_text(encoding="utf-8-sig", errors="replace")
     uncommented = "\n".join(line.split("!", 1)[0] for line in text.splitlines())
     if re.search(r"%[A-Za-z0-9_]+%", uncommented):
@@ -131,6 +144,7 @@ def transition_model(input_idf: str | Path, output_epjson: str | Path, *,
     audit.mkdir(parents=True, exist_ok=True)
     target.parent.mkdir(parents=True, exist_ok=True)
     source_hash = sha256(source)
+    template_hash = sha256(template)
     previous = source
     steps = []
     input_normalizations = []
@@ -197,8 +211,6 @@ def transition_model(input_idf: str | Path, output_epjson: str | Path, *,
         raise RuntimeError("Converted epJSON does not declare Version 26.2")
     adjustments = []
     if minimum_max_warmup_days is not None:
-        if minimum_max_warmup_days <= 0:
-            raise ValueError("minimum_max_warmup_days must be positive")
         for name, building in model.get("Building", {}).items():
             old = building.get("maximum_number_of_warmup_days", 25)
             if old < minimum_max_warmup_days:
@@ -207,13 +219,12 @@ def transition_model(input_idf: str | Path, output_epjson: str | Path, *,
                                     "field": "maximum_number_of_warmup_days", "old": old,
                                     "new": minimum_max_warmup_days,
                                     "reason": "Allow 26.2 warmup to converge without relaxing convergence tolerances"})
+    if sha256(source) != source_hash or sha256(template) != template_hash:
+        raise RuntimeError("Source input or template changed during transition")
     if adjustments:
         target.write_text(json.dumps(model, indent=2) + "\n")
     else:
         shutil.copyfile(candidates[0], target)
-    if sha256(source) != source_hash:
-        raise RuntimeError("Source input changed during transition")
-    template = Path(source_template).resolve(strict=True) if source_template else source
     notices = {
         "path": "../../../../THIRD_PARTY_NOTICES.md",
         "original_notice": "Full original IDF header in the verified external reference cache: models/" + template.name,

@@ -89,8 +89,6 @@ def object_names(old_type, old_name, model, old_objects, fields, schema):
     if modern_type not in model:
         raise ValueError(f"Transitioned model has no {modern_type}")
     exact = [key for key in model[modern_type] if key.casefold() == old_name.casefold()]
-    if exact and modern_type != "WindowShadingControl":
-        return modern_type, exact
     first_field = schema["properties"][modern_type]["legacy_idd"]["fields"][0]
     if first_field != "name":
         # Nameless IDF objects use generated epJSON keys. Their first field is
@@ -103,6 +101,8 @@ def object_names(old_type, old_name, model, old_objects, fields, schema):
         if len(references) == 1:
             return modern_type, references
         raise ValueError(f"Cannot uniquely identify {old_type} by {first_field}={old_name!r}")
+    if exact and modern_type != "WindowShadingControl":
+        return modern_type, exact
     if modern_type == "WindowShadingControl":
         # The 9.2 transition splits controls by zone and may rename them. Trace
         # the original windows and their modern control membership explicitly.
@@ -127,6 +127,8 @@ def object_names(old_type, old_name, model, old_objects, fields, schema):
                     raise ValueError(
                         f"Modern shading control {name} merges unexpected original windows"
                     )
+                if members & covered:
+                    raise ValueError("Original windows belong to multiple transitioned shading controls")
                 matches.append(name)
                 covered.update(members)
         if windows and covered == windows:

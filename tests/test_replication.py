@@ -4,6 +4,8 @@
 import copy
 import json
 import tempfile
+from concurrent.futures import Future
+from concurrent.futures.process import BrokenProcessPool
 from pathlib import Path
 
 import pytest
@@ -344,3 +346,34 @@ def test_reference_policy_records_recovered_severes_and_retains_compact_diagnost
     assert (directory / "eplusout.err").is_file()
     assert (directory / "run.json").is_file()
     assert not (directory / "large-output.eso").exists()
+
+
+def test_worker_exit_is_checkpointed_as_interrupted_without_fabricating_an_objective(
+        local_setup, tmp_path, monkeypatch):
+    configuration, calls = local_setup
+
+    class FailedPool:
+        def __init__(self, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            pass
+
+        def submit(self, *_):
+            future = Future()
+            future.set_exception(BrokenProcessPool("worker exited"))
+            return future
+
+    monkeypatch.setattr(replication, "ProcessPoolExecutor", FailedPool)
+    root = tmp_path / "experiment"
+    summary = replication.run_replication(output_root=root, workers=2, **configuration)
+    record = json.loads(next((root / "runs").glob("*.json")).read_text())
+    assert summary["statuses"]["interrupted"] == 1
+    assert record["status"] == "interrupted" and record["best_f"] is None
+    assert record["error"]["reason"] == "worker-process-failure"
+    assert record["error"]["message"] == "worker exited"
+    assert record["evaluation_count"] == 0 and calls == []
+    assert not (root / "experiment.lock").exists()

@@ -14,6 +14,7 @@ import threading
 import time
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
+from math import isfinite
 from pathlib import Path
 
 SUPPORTED_VERSIONS = ("8.5.0", "26.2.0")
@@ -118,8 +119,8 @@ class EnergyPlusRunner:
         if not self.executable.is_file():
             raise ValueError("The EnergyPlus executable must be a file")
         self.expected_version = _version(expected_version)
-        if timeout <= 0:
-            raise ValueError("timeout must be positive")
+        if not isfinite(timeout) or timeout <= 0:
+            raise ValueError("timeout must be finite and positive")
         self.timeout = float(timeout)
         self.output_root = Path(output_root).expanduser().resolve() if output_root else None
         if self.output_root:
@@ -182,7 +183,11 @@ class EnergyPlusRunner:
     def run(self, input_file: str | Path, weather_file: str | Path | None = None,
             *, design_day: bool = False) -> RunResult:
         source = Path(input_file).expanduser().resolve(strict=True)
+        if not source.is_file() or source.suffix.lower() not in {".idf", ".epjson"}:
+            raise ValueError("EnergyPlus input must be an .idf or .epJSON file")
         weather = Path(weather_file).expanduser().resolve(strict=True) if weather_file else None
+        if weather is not None and not weather.is_file():
+            raise ValueError("weather_file must be an EPW file")
         if sha256_file(self.executable) != self.executable_sha256:
             raise EnergyPlusError("EnergyPlus executable changed after runner configuration", reason="version")
         if not self.cache:

@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
+from tools import synthetic_weather
 from tools.synthetic_weather import CLIMATES, generate_weather_files, write_epw
 
 
@@ -63,4 +64,27 @@ def test_generator_is_deterministic_and_does_not_use_historical_names(tmp_path):
 def test_leap_year_is_rejected_before_creating_an_incomplete_fixture(tmp_path):
     with pytest.raises(ValueError, match="non-leap"):
         write_epw("chicago", tmp_path, year=2024)
+    assert not list(tmp_path.iterdir())
+
+
+@pytest.mark.parametrize("city,year", [
+    ("unrecognized", 2017), ("chicago", 0), ("chicago", 10000), ("chicago", True),
+])
+def test_invalid_generator_requests_do_not_create_files(city, year, tmp_path):
+    with pytest.raises(ValueError, match="Unknown synthetic climate|calendar year"):
+        write_epw(city, tmp_path, year=year)
+    assert not list(tmp_path.iterdir())
+
+
+def test_synthetic_cli_dispatches_year_and_reports_explicit_variant(tmp_path, monkeypatch, capsys):
+    import json
+
+    calls = []
+    monkeypatch.setattr(synthetic_weather, "generate_weather_files", lambda directory, *, year:
+                        calls.append((directory, year)) or {"chicago": directory / "synthetic_chicago.epw"})
+    assert synthetic_weather.main(["--output-dir", str(tmp_path), "--year", "2019"]) == 0
+    assert calls == [(tmp_path, 2019)]
+    result = json.loads(capsys.readouterr().out)
+    assert result["kind"] == "SYNTHETIC-CI" and result["canonical_benchmark_weather"] is False
+    assert result["files"]["chicago"].endswith("synthetic_chicago.epw")
     assert not list(tmp_path.iterdir())
