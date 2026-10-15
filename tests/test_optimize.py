@@ -33,7 +33,7 @@ def test_bobyqa_solves_and_honors_budget():
     assert result.nfev == problem.calls
 
 
-@pytest.mark.parametrize("budget", [True, 1.5, 0, 3])
+@pytest.mark.parametrize("budget", [True, 1.5, 0, 3, 4])
 def test_invalid_budget(budget):
     with pytest.raises(ValueError):
         solve(Quadratic(), runner=None, max_evaluations=budget)
@@ -78,7 +78,9 @@ def test_benchmark_setup_is_bound_once_before_solver_receives_physical_vectors(m
         assert start == problem.midpoint
         assert bounds == problem.bounds
         assert method == "bobyqa"
-        assert options == {"maxfev": 20, "scale": True, "quiet": True}
+        assert options == {
+            "maxfev": 20, "npt": 9, "scale": True, "quiet": True, "honour_x0": True,
+        }
         objective(start)
         return SimpleNamespace(x=trial, fun=objective(trial), nfev=2)
 
@@ -144,3 +146,57 @@ def test_optional_solver_import_error_has_actionable_installation_hint(monkeypat
     monkeypatch.setitem(sys.modules, "pdfo", None)
     with pytest.raises(ImportError, match=r"bem-testproblems\[optimize\]"):
         solve(Quadratic())
+
+
+@pytest.mark.parametrize("dimension", [2, 4, 13])
+def test_smallest_budget_is_a_hard_cap_with_real_pdfo(dimension):
+    pytest.importorskip("pdfo")
+
+    class Problem:
+        bounds = ((-1.0, 1.0),) * dimension
+        midpoint = (0.0,) * dimension
+
+        def __init__(self):
+            self.dimension = dimension
+            self.calls = 0
+
+        def evaluate(self, x, **kwargs):
+            self.calls += 1
+            return sum((value - 0.2) ** 2 for value in x)
+
+    problem = Problem()
+    budget = dimension + 3
+    result = solve(problem, max_evaluations=budget)
+    assert 0 < problem.calls <= budget
+    assert result.nfev == problem.calls
+
+
+def test_real_pdfo_first_evaluates_the_requested_near_bound_start():
+    pytest.importorskip("pdfo")
+    points = []
+
+    class Problem(Quadratic):
+        def evaluate(self, x, **kwargs):
+            points.append(tuple(float(value) for value in x))
+            return super().evaluate(x, **kwargs)
+
+    problem = Problem()
+    start = (1.99, -1.99)
+    result = solve(problem, x0=start, max_evaluations=20)
+    assert points[0] == start
+    assert len(points) == result.nfev <= 20
+
+
+def test_solver_cannot_evaluate_beyond_the_public_budget(monkeypatch):
+    problem = Quadratic()
+    budget = 5
+
+    def overrun(objective, start, **kwargs):
+        for _ in range(budget + 2):
+            objective(start)
+        return object()
+
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(pdfo=overrun))
+    with pytest.raises(RuntimeError, match="evaluation budget"):
+        solve(problem, max_evaluations=budget)
+    assert problem.calls == budget
