@@ -1,4 +1,11 @@
 # Byte-compiled / optimized / DLL files
+.tools/
+.runs/
+.reference-cache/
+.validation-local/
+reference/**/bin/
+reference/**/obj/
+*.egg-info/
 __pycache__/
 *.py[codz]
 *$py.class

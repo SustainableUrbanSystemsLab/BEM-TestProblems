@@ -1,0 +1,106 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Sustainable Urban Systems Lab
+"""Check retained notices, immutable upstream assets and distribution boundaries."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = json.loads((ROOT / "assets/manifest.json").read_text(encoding="utf-8"))
+
+
+def test_original_asset_hashes_and_complete_coverage() -> None:
+    assets = MANIFEST["bundled_assets"]
+    paths = [asset["path"] for asset in assets]
+    assert len(paths) == len(set(paths))
+    assert len([a for a in assets if a["kind"] == "legacy_model"]) == 9
+    assert len([a for a in assets if a["kind"] == "legacy_source"]) == 6
+    for asset in assets:
+        path = ROOT / asset["path"]
+        assert path.is_file(), asset["path"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == asset["sha256"], asset["path"]
+        assert asset["license_expression"] == "BSD-3-Clause"
+        assert MANIFEST["upstream"]["commit"] in asset["source_url"]
+
+    originals = {
+        path.relative_to(ROOT).as_posix()
+        for directory in (
+            ROOT / "src/bem_testproblems/data/legacy",
+            ROOT / "src/bem_testproblems/data/licenses",
+            ROOT / "reference/legacy-source",
+        )
+        for path in directory.rglob("*")
+        if path.is_file()
+    }
+    assert originals == set(paths), "Every imported original/license needs provenance coverage"
+
+
+def test_complete_upstream_license_is_retained_verbatim() -> None:
+    copies = [a for a in MANIFEST["bundled_assets"] if a["kind"] == "license_copy"]
+    assert len(copies) == 2
+    for asset in copies:
+        raw = (ROOT / asset["path"]).read_bytes()
+        assert hashlib.sha256(raw).hexdigest() == MANIFEST["upstream"]["license_sha256"]
+        text = raw.decode("utf-8")
+        assert "Copyright (c) 2018, Christoph Waibel" in text
+        assert "Redistributions of source code" in text
+        assert "Redistributions in binary form" in text
+        assert "endorse or promote" in text
+        assert "THIS SOFTWARE IS PROVIDED" in text
+
+
+def test_translated_modules_identify_bsd_coverage() -> None:
+    expected = {"parameters.py", "problems.py", "losses.py", "models.py"}
+    derived = MANIFEST["derived_files"]
+    assert {Path(asset["path"]).name for asset in derived} == expected
+    for asset in derived:
+        text = (ROOT / asset["path"]).read_text(encoding="utf-8")
+        assert "SPDX-License-Identifier: BSD-3-Clause" in text, asset["path"]
+        assert "2018" in text and "Christoph Waibel" in text, asset["path"]
+        assert "BEOBenchmark-LICENSE.txt" in text, asset["path"]
+        assert (ROOT / asset["license_file"]).is_file()
+
+
+def test_doe_model_credit_and_no_endorsement_notices_remain() -> None:
+    for name in ("problem_9_template.idf", "problem_10_template.idf"):
+        text = (ROOT / "src/bem_testproblems/data/legacy" / name).read_bytes().decode("cp1252")
+        assert "credit DOE, NREL, PNNL, and LBNL" in text
+        assert "advertising or publicity that implies endorsement" in text
+        assert "NOTICE" in text
+
+
+def test_external_weather_binaries_and_publications_are_not_packaged() -> None:
+    prohibited = {
+        ".epw", ".ddy", ".stat", ".exe", ".dll", ".dylib", ".so", ".dmg",
+        ".zip", ".pdf", ".png", ".jpg", ".jpeg", ".gha", ".gh",
+    }
+    for directory in (ROOT / "src/bem_testproblems/data", ROOT / "reference/legacy-source"):
+        for path in directory.rglob("*"):
+            if path.is_file():
+                assert path.suffix.lower() not in prohibited, path.relative_to(ROOT)
+    external = MANIFEST["external_assets"]
+    assert len([a for a in external if a["kind"] == "weather"]) == 5
+    assert {a["version"] for a in external if a["kind"] == "engine"} == {"8.5.0", "26.2.0"}
+    for asset in external:
+        assert "not bundled" in asset["distribution_policy"]
+        assert asset["rights_status"]
+
+
+def test_publication_and_license_notices_are_present() -> None:
+    assert "MIT License" in (ROOT / "LICENSE").read_text()
+    notices = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
+    assert "BSD-3-Clause" in notices and "Christoph Waibel" in notices
+    assert "DOE, NREL, PNNL and LBNL" in notices
+    bib = (ROOT / "references.bib").read_text()
+    for doi in (
+        "10.1016/j.enbuild.2019.01.048",
+        "10.1016/j.buildenv.2004.01.022",
+        "10.1080/19401490903494597",
+        "10.1016/j.enbuild.2006.08.009",
+    ):
+        assert doi in bib
+    assert "10.1016/j.enbuild.2019.01.048" in (ROOT / "CITATION.cff").read_text()

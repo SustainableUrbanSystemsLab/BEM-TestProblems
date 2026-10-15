@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "Please cite Waibel et al. (2019) and the originating studies for the problems used; see docs/references.md."
+type: software
+title: "BEM-TestProblems"
+authors:
+  - name: "Sustainable Urban Systems Lab"
+repository-code: "https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems"
+license:
+  - MIT
+  - BSD-3-Clause
+abstract: "Python building-energy optimization benchmarks. New orchestration is MIT-licensed; imported and translated BEOBenchmark material retains BSD-3-Clause terms and attribution."
+preferred-citation:
+  type: article
+  title: "Building energy optimization: An extensive benchmark of global search algorithms"
+  authors:
+    - family-names: Waibel
+      given-names: Christoph
+    - family-names: Wortmann
+      given-names: Thomas
+    - family-names: Evins
+      given-names: Ralph
+    - family-names: Carmeliet
+      given-names: Jan
+  journal: "Energy and Buildings"
+  volume: "187"
+  start: "218"
+  end: "240"
+  year: 2019
+  doi: "10.1016/j.enbuild.2019.01.048"
