@@ -29,249 +29,6 @@
   ],
   "bundled_assets": [
     {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/simple_seattle_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/simple_seattle_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_seattle_template.idf",
-      "sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        1
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Michael Wetter, SRG-LBNL; based on BESTEST Case 930 from R. H. Henninger, GARD Analytics; author/modification headers retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/simple_houston_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/simple_houston_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_houston_template.idf",
-      "sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        2
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Michael Wetter, SRG-LBNL; based on BESTEST Case 930 from R. H. Henninger, GARD Analytics; author/modification headers retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/simple_chicago_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/simple_chicago_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_chicago_template.idf",
-      "sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        3
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Michael Wetter, SRG-LBNL; based on BESTEST Case 930 from R. H. Henninger, GARD Analytics; author/modification headers retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/detailed_seattle_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/detailed_seattle_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_seattle_template.idf",
-      "sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        4
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Michael Wetter, SRG-LBNL; author/model headers retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/detailed_houston_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/detailed_houston_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_houston_template.idf",
-      "sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        5
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Michael Wetter, SRG-LBNL; author/model headers retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/detailed_chicago_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/detailed_chicago_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_chicago_template.idf",
-      "sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        6,
-        8
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Michael Wetter, SRG-LBNL; author/model headers retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/problem_9_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/problem_9_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_9_template.idf",
-      "sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        9
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "DOE Commercial Building Benchmark; credit DOE, NREL, PNNL and LBNL in resulting publications; no endorsement publicity; full embedded notice retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "windows-1252"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/problem_10_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/problem_10_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_10_template.idf",
-      "sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        10
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "DOE Commercial Building Benchmark; credit DOE, NREL, PNNL and LBNL in resulting publications; no endorsement publicity; full embedded notice retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "windows-1252"
-    },
-    {
-      "kind": "legacy_model",
-      "path": "src/bem_testproblems/data/legacy/Problem13_template.idf",
-      "upstream_path": "BEOBenchmark_V1/Input/Problem13_template.idf",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/Problem13_template.idf",
-      "sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
-      "problem_ids": [
-        13
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Original school model attributed to Djuric et al. (2007) by BEOBenchmark; embedded Belgrade design day and ground temperatures retained.",
-      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
-      "text_encoding": "utf-8"
-    },
-    {
-      "kind": "legacy_source",
-      "path": "reference/legacy-source/GHEPlusRunParametric1to3.cs",
-      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs",
-      "sha256": "b8f2238118bc39cf0c3f204ac1001753a32bf0b797c497062a9c9f57673d8b89",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "reference/legacy-source/LICENSE",
-      "problem_ids": [
-        1,
-        2,
-        3
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included."
-    },
-    {
-      "kind": "legacy_source",
-      "path": "reference/legacy-source/GHEPlusRunParametric4to8.cs",
-      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs",
-      "sha256": "4f56bfc5d5bbc8c9a224e67672bac0b28ce002937c62fce36e49dd9ef79f36e1",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "reference/legacy-source/LICENSE",
-      "problem_ids": [
-        4,
-        5,
-        6,
-        8
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included."
-    },
-    {
-      "kind": "legacy_source",
-      "path": "reference/legacy-source/GHEPlusRunParametric9.cs",
-      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs",
-      "sha256": "e69828fbde5217e41ef522645365036654961fd6f606db68fc44d0da96ea9644",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "reference/legacy-source/LICENSE",
-      "problem_ids": [
-        9
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included."
-    },
-    {
-      "kind": "legacy_source",
-      "path": "reference/legacy-source/GHEPlusRunParametric10.cs",
-      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs",
-      "sha256": "eb2237cbbe241f4cc662fce2dc829a4ce9c07a843e67b19c4217232b544bf0c3",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "reference/legacy-source/LICENSE",
-      "problem_ids": [
-        10
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included."
-    },
-    {
-      "kind": "legacy_source",
-      "path": "reference/legacy-source/GHEPlusRunParametric13.cs",
-      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs",
-      "sha256": "1694dfc2c0dda1c77ae3e57decc565cc95eb04de725875bb1da24b4fcbc5ec0c",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "reference/legacy-source/LICENSE",
-      "problem_ids": [
-        13
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included."
-    },
-    {
-      "kind": "legacy_source",
-      "path": "reference/legacy-source/Misc.cs",
-      "upstream_path": "BEOBenchmark_V1/Sourcecode/Misc.cs",
-      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/Misc.cs",
-      "sha256": "3f2c60724e3a8d7fda7a32f7080e5302f1357e21d8868a2896570dfd5cbecaf5",
-      "license_expression": "BSD-3-Clause",
-      "license_file": "reference/legacy-source/LICENSE",
-      "problem_ids": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        8,
-        9,
-        10,
-        13
-      ],
-      "modifications": "none; byte-for-byte copy",
-      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included."
-    },
-    {
       "kind": "license_copy",
       "path": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "upstream_path": "LICENSE",
@@ -282,7 +39,7 @@
     },
     {
       "kind": "license_copy",
-      "path": "reference/legacy-source/LICENSE",
+      "path": "reference/licenses/BEOBenchmark-LICENSE.txt",
       "upstream_path": "LICENSE",
       "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/LICENSE",
       "sha256": "44f4cccff7554dfb3600a189b3493e78be6f2ce1ec6b8cd082d493a89b762099",
@@ -336,11 +93,11 @@
       "historical_source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
       "location_header": "LOCATION,SEATTLE,WA,USA,TMY2-24233,727930,47.45,-122.30,-8.0,122.0",
       "license_expression": null,
-      "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
+      "rights_status": "Explicit local acquisition from the pinned fork is implemented for benchmark evaluation. Exact converted-EPW redistribution terms remain unverified; no MIT/BSD weather license or blanket redistribution grant is asserted.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
-      "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
+      "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -350,7 +107,17 @@
           "url": "https://www.nlr.gov/disclaimer",
           "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
         }
-      ]
+      ],
+      "acquisition": {
+        "command": "python tools/fetch_weather.py",
+        "source_repository": "https://github.com/milzj/BEOBenchmark",
+        "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+        "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+        "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+        "cache_path": ".cache/weather/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+        "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
+        "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      }
     },
     {
       "kind": "weather",
@@ -363,11 +130,11 @@
       "historical_source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
       "location_header": "LOCATION,HOUSTON,TX,USA,TMY2-12960,722430,29.98,-95.37,-6.0,33.0",
       "license_expression": null,
-      "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
+      "rights_status": "Explicit local acquisition from the pinned fork is implemented for benchmark evaluation. Exact converted-EPW redistribution terms remain unverified; no MIT/BSD weather license or blanket redistribution grant is asserted.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
-      "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
+      "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -377,7 +144,17 @@
           "url": "https://www.nlr.gov/disclaimer",
           "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
         }
-      ]
+      ],
+      "acquisition": {
+        "command": "python tools/fetch_weather.py",
+        "source_repository": "https://github.com/milzj/BEOBenchmark",
+        "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+        "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+        "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+        "cache_path": ".cache/weather/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+        "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
+        "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      }
     },
     {
       "kind": "weather",
@@ -391,11 +168,11 @@
       "historical_source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_IL_Chicago-OHare.725300_TMY2.epw",
       "location_header": "LOCATION,CHICAGO,IL,USA,TMY2-94846,725300,41.78,-87.75,-6.0,190.0",
       "license_expression": null,
-      "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
+      "rights_status": "Explicit local acquisition from the pinned fork is implemented for benchmark evaluation. Exact converted-EPW redistribution terms remain unverified; no MIT/BSD weather license or blanket redistribution grant is asserted.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
-      "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
+      "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -405,7 +182,17 @@
           "url": "https://www.nlr.gov/disclaimer",
           "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
         }
-      ]
+      ],
+      "acquisition": {
+        "command": "python tools/fetch_weather.py",
+        "source_repository": "https://github.com/milzj/BEOBenchmark",
+        "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+        "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_IL_Chicago-OHare.725300_TMY2.epw",
+        "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_IL_Chicago-OHare.725300_TMY2.epw",
+        "cache_path": ".cache/weather/USA_IL_Chicago-OHare.725300_TMY2.epw",
+        "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
+        "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      }
     },
     {
       "kind": "weather",
@@ -418,11 +205,11 @@
       "historical_source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
       "location_header": "LOCATION,San Francisco Intl AP,CA,USA,TMY3,724940,37.62,-122.40,-8.0,2.0",
       "license_expression": null,
-      "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
+      "rights_status": "Explicit local acquisition from the pinned fork is implemented for benchmark evaluation. Exact converted-EPW redistribution terms remain unverified; no MIT/BSD weather license or blanket redistribution grant is asserted.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
-      "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
+      "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
       "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
-      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "public_ci_policy": "Public CI continues to use independently generated SYNTHETIC-CI weather. The canonical-weather fetch is an explicit local setup command, not a CI artifact/cache distribution.",
       "use_evidence": [
         {
           "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
@@ -432,7 +219,17 @@
           "url": "https://www.nlr.gov/disclaimer",
           "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
         }
-      ]
+      ],
+      "acquisition": {
+        "command": "python tools/fetch_weather.py",
+        "source_repository": "https://github.com/milzj/BEOBenchmark",
+        "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+        "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+        "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+        "cache_path": ".cache/weather/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+        "checksum_policy": "Fetched bytes must match historical_sha256 before use; existing mismatched files are rejected.",
+        "license_scope": "Fetch/cache metadata does not apply the project MIT or upstream code BSD grant to the weather data."
+      }
     },
     {
       "kind": "weather",
@@ -446,9 +243,13 @@
       "license_expression": null,
       "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
       "additional_notices": "ASHRAE IWEC copyright 2001; original source notice references License Agreement and Additional Conditions.",
-      "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
-      "simulation_role": "Legacy command-line binding. Embedded design-day benchmark; effect of EPW headers requires a separate invariance check.",
-      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths."
+      "distribution_policy": "not bundled; retrieved into an ignored local cache for evaluation; exclude raw EPWs from Git, source archives, wheels and published CI artifacts/caches.",
+      "simulation_role": "Historical optional EPW identity only. Problem 13 evaluates the embedded winter design day without an EPW; midpoint invariance was verified independently with versions 8.5 and 26.2.",
+      "public_ci_policy": "No Belgrade IWEC fetch or weather redistribution is configured. Problem 13 can use its embedded design day without an EPW.",
+      "acquisition": {
+        "default_fetch": false,
+        "reason": "Problem 13 uses its embedded Belgrade winter design day and does not require an EPW."
+      }
     },
     {
       "kind": "engine",
@@ -480,6 +281,7 @@
     }
   ],
   "excluded_material": [
+    "Original legacy C# and IDF files; retrieved into an ignored reference cache",
     "Weather EPW/DDY/STAT data",
     "EnergyPlus and transition executables, IDDs and runtime libraries",
     "Rhino/Grasshopper assemblies and compiled GHA/GH components",
@@ -521,7 +323,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source": "Selected pinned legacy IDFs and source parameter mappings",
-      "notice_policy": "Preserved original IDFs and full BSD text accompany commentless epJSON; per-model provenance sidecars retain source hashes and attribution."
+      "notice_policy": "Full upstream BSD and retained model notices accompany commentless epJSON; per-model provenance retains source hashes. Original models are externally fetched from the pinned commit, not bundled."
     }
   ],
   "synthetic_ci_weather": {
@@ -547,7 +349,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source": "Selected pinned legacy IDFs and source parameter mappings, with adjacent per-model provenance"
     },
     {
@@ -557,7 +359,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "simple_seattle_template.idf",
       "source_template_sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
       "provenance": "src/bem_testproblems/data/modern/problem_1.provenance.json"
@@ -569,7 +371,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "simple_seattle_template.idf",
       "source_template_sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0"
     },
@@ -580,7 +382,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "problem_10_template.idf",
       "source_template_sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0",
       "provenance": "src/bem_testproblems/data/modern/problem_10.provenance.json"
@@ -592,7 +394,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "problem_10_template.idf",
       "source_template_sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0"
     },
@@ -603,7 +405,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "Problem13_template.idf",
       "source_template_sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
       "provenance": "src/bem_testproblems/data/modern/problem_13.provenance.json"
@@ -615,7 +417,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "Problem13_template.idf",
       "source_template_sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60"
     },
@@ -626,7 +428,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "simple_houston_template.idf",
       "source_template_sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885",
       "provenance": "src/bem_testproblems/data/modern/problem_2.provenance.json"
@@ -638,7 +440,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "simple_houston_template.idf",
       "source_template_sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885"
     },
@@ -649,7 +451,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "simple_chicago_template.idf",
       "source_template_sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77",
       "provenance": "src/bem_testproblems/data/modern/problem_3.provenance.json"
@@ -661,7 +463,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "simple_chicago_template.idf",
       "source_template_sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77"
     },
@@ -672,7 +474,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "detailed_seattle_template.idf",
       "source_template_sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a",
       "provenance": "src/bem_testproblems/data/modern/problem_4.provenance.json"
@@ -684,7 +486,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "detailed_seattle_template.idf",
       "source_template_sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a"
     },
@@ -695,7 +497,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "detailed_houston_template.idf",
       "source_template_sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612",
       "provenance": "src/bem_testproblems/data/modern/problem_5.provenance.json"
@@ -707,7 +509,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "detailed_houston_template.idf",
       "source_template_sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612"
     },
@@ -718,7 +520,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "detailed_chicago_template.idf",
       "source_template_sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
       "provenance": "src/bem_testproblems/data/modern/problem_6.provenance.json"
@@ -730,7 +532,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "detailed_chicago_template.idf",
       "source_template_sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b"
     },
@@ -741,7 +543,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "problem_9_template.idf",
       "source_template_sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780",
       "provenance": "src/bem_testproblems/data/modern/problem_9.provenance.json"
@@ -753,7 +555,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source_template": "problem_9_template.idf",
       "source_template_sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780"
     },
@@ -764,7 +566,7 @@
       "license_expression": "BSD-3-Clause",
       "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
       "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
-      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "notice_policy": "Full upstream BSD and retained model notices accompany this derived asset. Original model/source bytes are retrieved externally using the pinned reference-assets index.",
       "source": "Selected pinned legacy IDFs and source parameter mappings, with adjacent per-model provenance"
     }
   ],
@@ -789,6 +591,319 @@
       "license_expression": "MIT",
       "source": "New simulation measurements made by this project; no published numerical solution or raw external dataset is copied.",
       "scope": "Evidence for the recorded vectors, engine builds and model/weather identities only; not complete-domain or paper-pointwise validation."
+    },
+    {
+      "path": "docs/validation-results/original-csharp-ci.json",
+      "sha256": "de4afed1ce125a8c213587c7b72f221e70c5e1032a093adee30616f9a289ec87",
+      "license_expression": "MIT",
+      "source": "New project GitHub Actions job metadata and project-owned comparison conditions; links retained numerical artifact.",
+      "scope": "Successful Windows C# reference-comparison job at the recorded commit, not a complete workflow or later-commit status claim."
     }
-  ]
+  ],
+  "external_reference_assets": [
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/simple_seattle_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_seattle_template.idf",
+      "sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        1
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Michael Wetter, SRG-LBNL; based on BESTEST Case 930 from R. H. Henninger, GARD Analytics; author/modification headers retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/simple_seattle_template.idf",
+      "cache_path": "models/simple_seattle_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_seattle_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/simple_houston_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_houston_template.idf",
+      "sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        2
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Michael Wetter, SRG-LBNL; based on BESTEST Case 930 from R. H. Henninger, GARD Analytics; author/modification headers retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/simple_houston_template.idf",
+      "cache_path": "models/simple_houston_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_houston_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/simple_chicago_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_chicago_template.idf",
+      "sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        3
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Michael Wetter, SRG-LBNL; based on BESTEST Case 930 from R. H. Henninger, GARD Analytics; author/modification headers retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/simple_chicago_template.idf",
+      "cache_path": "models/simple_chicago_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_chicago_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/detailed_seattle_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_seattle_template.idf",
+      "sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        4
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Michael Wetter, SRG-LBNL; author/model headers retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/detailed_seattle_template.idf",
+      "cache_path": "models/detailed_seattle_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_seattle_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/detailed_houston_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_houston_template.idf",
+      "sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        5
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Michael Wetter, SRG-LBNL; author/model headers retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/detailed_houston_template.idf",
+      "cache_path": "models/detailed_houston_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_houston_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/detailed_chicago_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_chicago_template.idf",
+      "sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        6,
+        8
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Michael Wetter, SRG-LBNL; author/model headers retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/detailed_chicago_template.idf",
+      "cache_path": "models/detailed_chicago_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_chicago_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/problem_9_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_9_template.idf",
+      "sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        9
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "DOE Commercial Building Benchmark; credit DOE, NREL, PNNL and LBNL in resulting publications; no endorsement publicity; full embedded notice retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "windows-1252",
+      "former_repository_path": "src/bem_testproblems/data/legacy/problem_9_template.idf",
+      "cache_path": "models/problem_9_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_9_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/problem_10_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_10_template.idf",
+      "sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        10
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "DOE Commercial Building Benchmark; credit DOE, NREL, PNNL and LBNL in resulting publications; no endorsement publicity; full embedded notice retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "windows-1252",
+      "former_repository_path": "src/bem_testproblems/data/legacy/problem_10_template.idf",
+      "cache_path": "models/problem_10_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_10_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_model",
+      "upstream_path": "BEOBenchmark_V1/Input/Problem13_template.idf",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/Problem13_template.idf",
+      "sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "problem_ids": [
+        13
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Original school model attributed to Djuric et al. (2007) by BEOBenchmark; embedded Belgrade design day and ground temperatures retained.",
+      "redistribution_basis": "Upstream repository BSD grant with all embedded notices retained. Separate originating-author/model grants were not independently verified.",
+      "text_encoding": "utf-8",
+      "former_repository_path": "src/bem_testproblems/data/legacy/Problem13_template.idf",
+      "cache_path": "models/Problem13_template.idf",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/Problem13_template.idf",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_source",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs",
+      "sha256": "b8f2238118bc39cf0c3f204ac1001753a32bf0b797c497062a9c9f57673d8b89",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "reference/legacy-source/LICENSE",
+      "problem_ids": [
+        1,
+        2,
+        3
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included.",
+      "former_repository_path": "reference/legacy-source/GHEPlusRunParametric1to3.cs",
+      "cache_path": "legacy-source/GHEPlusRunParametric1to3.cs",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_source",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs",
+      "sha256": "4f56bfc5d5bbc8c9a224e67672bac0b28ce002937c62fce36e49dd9ef79f36e1",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "reference/legacy-source/LICENSE",
+      "problem_ids": [
+        4,
+        5,
+        6,
+        8
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included.",
+      "former_repository_path": "reference/legacy-source/GHEPlusRunParametric4to8.cs",
+      "cache_path": "legacy-source/GHEPlusRunParametric4to8.cs",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_source",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs",
+      "sha256": "e69828fbde5217e41ef522645365036654961fd6f606db68fc44d0da96ea9644",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "reference/legacy-source/LICENSE",
+      "problem_ids": [
+        9
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included.",
+      "former_repository_path": "reference/legacy-source/GHEPlusRunParametric9.cs",
+      "cache_path": "legacy-source/GHEPlusRunParametric9.cs",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_source",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs",
+      "sha256": "eb2237cbbe241f4cc662fce2dc829a4ce9c07a843e67b19c4217232b544bf0c3",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "reference/legacy-source/LICENSE",
+      "problem_ids": [
+        10
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included.",
+      "former_repository_path": "reference/legacy-source/GHEPlusRunParametric10.cs",
+      "cache_path": "legacy-source/GHEPlusRunParametric10.cs",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_source",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs",
+      "sha256": "1694dfc2c0dda1c77ae3e57decc565cc95eb04de725875bb1da24b4fcbc5ec0c",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "reference/legacy-source/LICENSE",
+      "problem_ids": [
+        13
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included.",
+      "former_repository_path": "reference/legacy-source/GHEPlusRunParametric13.cs",
+      "cache_path": "legacy-source/GHEPlusRunParametric13.cs",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    },
+    {
+      "kind": "legacy_source",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/Misc.cs",
+      "source_url": "https://github.com/christophwaibel/BEOBenchmark/blob/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/Misc.cs",
+      "sha256": "3f2c60724e3a8d7fda7a32f7080e5302f1357e21d8868a2896570dfd5cbecaf5",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "reference/legacy-source/LICENSE",
+      "problem_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        13
+      ],
+      "modifications": "none; fetched bytes must match SHA-256",
+      "additional_notices": "Uses Rhino/Grasshopper APIs; those libraries and compiled components are not included.",
+      "former_repository_path": "reference/legacy-source/Misc.cs",
+      "cache_path": "legacy-source/Misc.cs",
+      "download_url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/Misc.cs",
+      "distribution_policy": "Not bundled; fetched from the pinned upstream commit into the ignored .reference-cache/beobenchmark directory."
+    }
+  ],
+  "reference_assets_index": {
+    "path": "src/bem_testproblems/data/reference-assets.json",
+    "sha256": "9481bd48ab0b5b7883714df2fd8fca3a409e915eb846d32d55bd27c0486d2360",
+    "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+    "file_count": 16,
+    "cache_root": ".reference-cache/beobenchmark",
+    "license_expression": "BSD-3-Clause",
+    "notice": "Source identifiers/checksums for externally fetched reference material; full upstream notice remains bundled."
+  },
+  "packaged_model_notices": {
+    "path": "src/bem_testproblems/data/licenses/BEOBenchmark-MODEL-NOTICES.txt",
+    "sha256": "a2df31f2539f42f1030475afc4fd7af5c7a4998aff17901cb3d86492ee3803ee",
+    "license_expression": "BSD-3-Clause",
+    "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+    "coverage": "All selected derived models: original Wetter/BESTEST attribution plus complete DOE publication-credit/no-endorsement/disclaimer notice; source model bodies are external."
+  }
 }

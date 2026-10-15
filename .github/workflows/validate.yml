@@ -22,7 +22,7 @@ env:
 
 jobs:
   unit:
-    name: Unit tests (${{ matrix.os }})
+    name: pytest (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
@@ -42,6 +42,7 @@ jobs:
         run: |
           python -m venv .venv
           "$VENV_PY" -m pip install -e '.[dev,optimize]'
+          "$VENV_PY" tools/fetch_reference.py
       - name: Lint and test
         run: |
           "$VENV_PY" -m ruff check src tests tools
@@ -71,6 +72,7 @@ jobs:
         run: |
           python -m venv .venv
           .venv/Scripts/python.exe -m pip install -e '.[dev]'
+          .venv/Scripts/python.exe tools/fetch_reference.py
           .venv/Scripts/python.exe tools/install_reference_engine.py
           .venv/Scripts/python.exe tools/synthetic_weather.py --output-dir .validation-local/weather
       - name: Compile unchanged original components and evidence launcher

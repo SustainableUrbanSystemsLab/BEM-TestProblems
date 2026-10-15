@@ -12,30 +12,45 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = json.loads((ROOT / "assets/manifest.json").read_text(encoding="utf-8"))
 
 
-def test_original_asset_hashes_and_complete_coverage() -> None:
+def test_external_reference_pins_and_bundled_notice_coverage() -> None:
     assets = MANIFEST["bundled_assets"]
-    paths = [asset["path"] for asset in assets]
-    assert len(paths) == len(set(paths))
-    assert len([a for a in assets if a["kind"] == "legacy_model"]) == 9
-    assert len([a for a in assets if a["kind"] == "legacy_source"]) == 6
+    assert len(assets) == 2
     for asset in assets:
         path = ROOT / asset["path"]
         assert path.is_file(), asset["path"]
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == asset["sha256"], asset["path"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == asset["sha256"]
         assert asset["license_expression"] == "BSD-3-Clause"
         assert MANIFEST["upstream"]["commit"] in asset["source_url"]
 
-    originals = {
+    index_record = MANIFEST["reference_assets_index"]
+    raw = (ROOT / index_record["path"]).read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == index_record["sha256"]
+    index = json.loads(raw)
+    assert index["source_commit"] == MANIFEST["upstream"]["commit"]
+    assert len(index["files"]) == 16
+    indexed = {asset["cache_path"]: asset for asset in index["files"]}
+    originals = MANIFEST["external_reference_assets"]
+    assert len([a for a in originals if a["kind"] == "legacy_model"]) == 9
+    assert len([a for a in originals if a["kind"] == "legacy_source"]) == 6
+    for asset in originals:
+        pin = indexed[asset["cache_path"]]
+        assert pin["sha256"] == asset["sha256"]
+        assert pin["upstream_path"] == asset["upstream_path"]
+        assert pin["url"] == asset["download_url"]
+        assert index["source_commit"] in pin["url"]
+        assert not (ROOT / asset["former_repository_path"]).exists()
+        assert asset["license_expression"] == "BSD-3-Clause"
+
+    notice_record = MANIFEST["packaged_model_notices"]
+    assert hashlib.sha256((ROOT / notice_record["path"]).read_bytes()).hexdigest() == notice_record["sha256"]
+    expected = {a["path"] for a in assets + MANIFEST["bundled_external_notices"]}
+    expected.add(notice_record["path"])
+    actual = {
         path.relative_to(ROOT).as_posix()
-        for directory in (
-            ROOT / "src/bem_testproblems/data/legacy",
-            ROOT / "src/bem_testproblems/data/licenses",
-            ROOT / "reference/legacy-source",
-        )
-        for path in directory.rglob("*")
-        if path.is_file()
+        for directory in (ROOT / "src/bem_testproblems/data/licenses", ROOT / "reference/licenses")
+        for path in directory.rglob("*") if path.is_file()
     }
-    assert originals == set(paths), "Every imported original/license needs provenance coverage"
+    assert actual == expected, "Every bundled notice needs provenance coverage"
 
 
 def test_complete_upstream_license_is_retained_verbatim() -> None:
@@ -81,8 +96,8 @@ def test_translated_modules_identify_bsd_coverage() -> None:
 
 def test_commentless_modern_models_retain_source_and_license_provenance() -> None:
     model_assets = {
-        Path(asset["path"]).name: asset
-        for asset in MANIFEST["bundled_assets"]
+        Path(asset["cache_path"]).name: asset
+        for asset in MANIFEST["external_reference_assets"]
         if asset["kind"] == "legacy_model"
     }
     directory = ROOT / "src/bem_testproblems/data/modern"
@@ -122,18 +137,21 @@ def test_derived_asset_hashes_and_license_coverage() -> None:
         assert "endorsement" in provenance["additional_notices"]["no_endorsement"]
 
 
-def test_doe_model_credit_and_no_endorsement_notices_remain() -> None:
-    for name in ("problem_9_template.idf", "problem_10_template.idf"):
-        text = (ROOT / "src/bem_testproblems/data/legacy" / name).read_bytes().decode("cp1252")
-        assert "credit DOE, NREL, PNNL, and LBNL" in text
-        assert "advertising or publicity that implies endorsement" in text
-        assert "NOTICE" in text
+def test_model_credit_and_complete_doe_notice_remain() -> None:
+    text = (ROOT / MANIFEST["packaged_model_notices"]["path"]).read_text()
+    assert "Michael Wetter, SRG-LBNL" in text
+    assert "R. H. Henninger,  GARD Analytics, Inc." in text
+    assert "credit DOE, NREL, PNNL, and LBNL" in text
+    assert "advertising or publicity that implies endorsement" in text
+    assert "any warranty, express or implied" in text
+    assert "The views and" in text and "opinions of authors expressed herein" in text
+    assert "Commercial Building Benchmarks. Washington, DC" in text
 
 
 def test_external_weather_binaries_and_publications_are_not_packaged() -> None:
     prohibited = {
         ".epw", ".ddy", ".stat", ".exe", ".dll", ".dylib", ".so", ".dmg",
-        ".zip", ".pdf", ".png", ".jpg", ".jpeg", ".gha", ".gh",
+        ".zip", ".pdf", ".png", ".jpg", ".jpeg", ".gha", ".gh", ".idf",
     }
     for directory in (ROOT / "src/bem_testproblems/data", ROOT / "reference/legacy-source"):
         for path in directory.rglob("*"):

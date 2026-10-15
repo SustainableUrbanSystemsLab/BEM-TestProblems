@@ -22,6 +22,7 @@ from bem_testproblems.energyplus import (
     _terminate_tree,
 )
 from bem_testproblems.outputs import extract_outputs
+from bem_testproblems.reference import legacy_template_path
 
 ROOT = Path(__file__).resolve().parents[1]
 SYNTHETIC_WEATHER = {
@@ -35,6 +36,17 @@ def require_close(actual, expected, label, *, rtol=2e-12, atol=1e-9):
         raise AssertionError(f"Nonfinite {label}")
     if not math.isclose(actual, expected, rel_tol=rtol, abs_tol=atol):
         raise AssertionError(f"{label}: {actual:.17g} != {expected:.17g}")
+
+
+def numerical_difference(actual, expected, unit, *, rtol, atol):
+    if not math.isfinite(actual) or not math.isfinite(expected):
+        raise AssertionError("Nonfinite regression value")
+    delta = abs(actual - expected)
+    scale = max(abs(actual), abs(expected))
+    allowed = max(atol, rtol * scale)
+    return {"actual": actual, "expected": expected, "absolute_difference": delta,
+            "relative_difference": delta / scale if scale else 0.0,
+            "allowed_difference": allowed, "unit": unit, "passed": delta <= allowed}
 
 
 def compare_inputs(actual, expected):
@@ -110,7 +122,7 @@ def run_oracle(problem, x, weather, directory, oracle, proxy, runner, folder=731
     (engine_dir / "WeatherData").mkdir(parents=True, exist_ok=True)
     shutil.copyfile(proxy, engine_dir / "energyplus.exe")
     shutil.copyfile(runner.executable.parent / "Energy+.idd", engine_dir / "Energy+.idd")
-    template = ROOT / "src/bem_testproblems/data/legacy" / problem.template_filename
+    template = legacy_template_path(problem.template_filename)
     shutil.copyfile(template, incoming / template.name)
     shutil.copyfile(weather, engine_dir / "WeatherData" / weather.name)
     request = directory / "request.json"
@@ -158,6 +170,7 @@ def validate(args):
               "weather_kind": args.weather_kind, "comparison": "original-csharp" if args.oracle else "engine-regression" if expected else "measurement-only",
               "rtol": args.rtol, "atol": args.atol, "cases": [], "passed": False}
     args.work_dir.mkdir(parents=True, exist_ok=True)
+    comparison_failures = []
     try:
         for case in fixtures["cases"]:
             if args.case_id and case["case_id"] not in args.case_id:
@@ -199,15 +212,30 @@ def validate(args):
                     raise AssertionError("Baseline weather bytes changed")
                 if previous["input_sha256"] != run.input_sha256:
                     raise AssertionError("Baseline model input bytes changed")
-                for key, number in previous["components"].items():
-                    require_close(outputs[key], number, key, rtol=args.rtol, atol=args.atol)
-                require_close(value, previous["objective"], "Objective", rtol=args.rtol, atol=args.atol)
+                if previous["components"].keys() != outputs.keys():
+                    raise AssertionError("Baseline output schema changed")
+                comparisons = {}
+                for key, number in {**previous["components"], "objective": previous["objective"]}.items():
+                    actual = value if key == "objective" else outputs[key]
+                    unit = problem.objective_unit if key == "objective" else "MJ/m2" if key == "Y" else "kW" if key == "P" else "kWh"
+                    difference = numerical_difference(actual, number, unit,
+                                                      rtol=args.rtol, atol=args.atol)
+                    comparisons[key] = difference
+                    if not difference["passed"]:
+                        comparison_failures.append(
+                            f"{case['case_id']} {key}: {actual:.17g} != {number:.17g} "
+                            f"(abs={difference['absolute_difference']:.6g}, "
+                            f"rel={difference['relative_difference']:.6g})")
+                item["regression_comparison"] = comparisons
             report["cases"].append(item)
             print(f"{case['case_id']}: {value:.12g} {problem.objective_unit}", flush=True)
         if not report["cases"]:
             raise AssertionError("No validation cases were selected")
         if expected and not args.case_id:
             raise AssertionError("Baseline contains cases that were not exercised")
+        if comparison_failures:
+            report["comparison_failures"] = comparison_failures
+            raise AssertionError("Regression differences:\n" + "\n".join(comparison_failures))
         report["passed"] = True
     except BaseException as error:
         report["failure"] = str(error)

@@ -10,14 +10,12 @@ represented as published input/objective pairs or as EnergyPlus runs.
 
 import re
 from decimal import Decimal
-from pathlib import Path
 
 import pytest
 
 from bem_testproblems import get_problem
 from bem_testproblems.problems import PROBLEM_IDS
-
-ROOT = Path(__file__).resolve().parents[1]
+from bem_testproblems.reference import legacy_template_path
 
 # Physical coordinate bounds transcribed from the named paper tables.
 TABLE_3 = ((-180, 180), (0.1, 5.9), (0.1, 5.9), (0.2, 0.8))
@@ -125,7 +123,7 @@ def test_equation_7_primary_factors_reach_the_actual_idf(number) -> None:
     assert problem.paper_equation == 7
     assert problem.constants["electricity_primary_factor"] == 3.095
     assert problem.constants["gas_primary_factor"] == 1.092
-    text = (ROOT / "src/bem_testproblems/data/legacy" / problem.template_filename).read_bytes().decode("cp1252")
+    text = legacy_template_path(problem.template_filename).read_bytes().decode("cp1252")
     factors = {}
     for block in re.sub(r"!.*", "", text).split(";"):
         fields = [item.strip() for item in block.split(",")]

@@ -13,8 +13,7 @@ Copyright (c) 2018, Christoph Waibel. All rights reserved.
 
 The following material is covered by the upstream BSD-3-Clause license:
 
-- The nine unchanged templates in `src/bem_testproblems/data/legacy/`.
-- The six unchanged C# files in `reference/legacy-source/`.
+- The pinned reference index in `src/bem_testproblems/data/reference-assets.json`.
 - The derived models, bindings and provenance records in
   `src/bem_testproblems/data/modern/`.
 - The translated benchmark specifications, parameter mappings and objective
@@ -24,26 +23,33 @@ The following material is covered by the upstream BSD-3-Clause license:
 The complete upstream license, including all three conditions and its warranty
 and liability disclaimer, is reproduced verbatim in
 `src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt` and
-`reference/legacy-source/LICENSE`. Keep it with redistributed source and include
+`reference/licenses/BEOBenchmark-LICENSE.txt`. Keep it with redistributed source and include
 it in documentation/materials accompanying binary distributions. Neither the
 copyright holder nor contributors may be used to endorse derived products
 without prior written permission.
 
 `assets/manifest.json` records original paths, immutable-source hashes, license
 coverage and additional provenance. Generated or transitioned models remain
-derivatives of the input models. Retain original comment headers in formats that
-support them. Commentless epJSON files have adjacent provenance records and keep
-the original templates, their embedded notices and the full BSD text available
-in the same distribution.
+derivatives of the input models. Their original attribution and full DOE notice
+are retained in `src/bem_testproblems/data/licenses/BEOBenchmark-MODEL-NOTICES.txt`,
+which accompanies the commentless epJSON and full BSD text.
+
+The nine original IDF templates and six original C# files are **not distributed**
+in this repository or its packages. Optional reference checks retrieve checksum-
+verified originals from the pinned fork into the ignored
+`.reference-cache/beobenchmark/` directory. The fetched material remains under
+the upstream terms; fetching does not change the license of the derived Python
+modules or modern models.
 
 ## Model attribution
 
-The simple and detailed office templates for problems 1–6 and 8 retain their
-Michael Wetter/LBNL author comments. The simple office files additionally credit
-BESTEST Case 930 by R. H. Henninger, GARD Analytics. See Wetter and Wright (2004).
+The derived simple and detailed office models for problems 1–6 and 8 retain their
+Michael Wetter/LBNL attribution in the packaged model-notices file. The simple
+models additionally credit BESTEST Case 930 by R. H. Henninger, GARD Analytics.
+See Wetter and Wright (2004).
 
-The templates for problems 9 and 10 retain the DOE Commercial Building Benchmark
-notices. Those notices require credit to **DOE, NREL, PNNL and LBNL** in resulting
+The complete DOE Commercial Building Benchmark notice for problems 9 and 10 is
+reproduced verbatim in the packaged model-notices file. That notice requires credit to **DOE, NREL, PNNL and LBNL** in resulting
 publications and prohibit publicity implying endorsement. Their reference is:
 U.S. Department of Energy, Energy Efficiency and Renewable Energy, Office of
 Building Technologies (2007), *Commercial Building Benchmarks*. See also Kämpf,
@@ -54,8 +60,8 @@ Novakovic, Holst and Mitrovic (2007). It includes an embedded Belgrade design da
 and ground temperatures. This provenance is retained; it is not a new claim that
 all underlying research-model grants or climate-data rights have been independently
 verified. The upstream repository's BSD grant is the recorded basis for including
-these benchmark copies. No separate model-specific license file accompanied the
-selected upstream templates.
+the derived benchmark models. No separate model-specific license file accompanied
+the selected upstream templates.
 
 Please cite Waibel et al. (2019) and the applicable originating studies in
 `references.bib` when publishing work using these problems.
@@ -70,13 +76,15 @@ agreement and any applicable dependency notices if redistributing it. Referring
 to the simulator as "EnergyPlus version 8.5.0" or "EnergyPlus version 26.2.0"
 does not imply endorsement.
 
-No EPW, DDY or STAT weather files are distributed. The manifest identifies the
-historical files for reproducibility, not a redistribution grant. ASHRAE IWEC
-weather carries its own copyright and references additional license conditions.
-An official source making data available to its users does not itself establish
-that this project may rehost it. Obtain and use a file under its applicable terms;
-keep external weather out of source archives, wheels, CI caches and published
-artifacts unless its redistribution rights have been established.
+No EPW, DDY or STAT weather files are distributed. `tools/fetch_weather.py`
+retrieves the four historical US EPWs from the checksum-pinned fork into the
+ignored `.cache/weather/` directory for local evaluation. The packaged weather
+index records source identifiers and hashes; it is not a weather license or
+redistribution grant. Raw weather stays out of Git, source archives, wheels and
+published CI artifacts/caches. Public CI uses independently generated weather.
+Problem 13 needs no EPW because its winter design day is embedded in the model;
+the downloader does not retrieve the separately licensed Belgrade IWEC package.
+ASHRAE IWEC carries its own copyright and references additional license conditions.
 
 The exact EnergyPlus version 8.5.0 release agreement is reproduced at
 `reference/licenses/EnergyPlus-8.5-LICENSE.txt` to accompany the CI reference-engine

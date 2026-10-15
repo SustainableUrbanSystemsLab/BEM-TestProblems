@@ -25,6 +25,7 @@ Use Python 3.12. From the repository root on macOS or Linux:
 python3.12 -m venv .venv
 .venv/bin/python -m pip install -e '.[dev,optimize]'
 .venv/bin/python tools/install_energyplus.py
+.venv/bin/python tools/fetch_weather.py
 ```
 
 On Windows, use `py -3.12 -m venv .venv` and replace `.venv/bin/python` with
@@ -34,10 +35,18 @@ The installer verifies the official EnergyPlus 26.2 archive's SHA-256 and extrac
 it into `.tools/energyplus/26.2.0`. It does not change the system PATH. Dependencies,
 simulators and generated results are not included in Git commits.
 
-Weather files are external inputs. Obtain the required file under its applicable
-terms and pass its path explicitly. `problem.weather_filename` identifies the
-canonical file. See [licensing](docs/licensing.md); a benchmark's source license
-does not automatically grant rights to its weather data.
+The [model transition guide](docs/model-transition.md) documents the official
+21-step IDF transition chain, the separate epJSON converter, and a scratch-only
+reproduction workflow with provenance and compatibility adjustments.
+
+The [engine version guide](docs/engine-versions.md) shows how to choose EnergyPlus
+8.5 or 26.2 through the same evaluation interface and compare their results.
+
+The weather command retrieves the four exact annual benchmark EPWs from the
+pinned fork into `.cache/weather` and verifies their SHA-256 hashes. This covers
+problems 1–6 and 8–10; problem 13 contains its design-day conditions and needs no
+EPW. See [licensing](docs/licensing.md) for weather provenance and applicable
+terms; the software license does not grant weather redistribution rights.
 
 ## Evaluate a problem
 
@@ -51,7 +60,7 @@ runner = EnergyPlusRunner(
     expected_version='26.2.0',
     output_root='.runs',
 )
-weather = Path('/your/authorized/weather') / problem.weather_filename
+weather = Path('.cache/weather') / problem.weather_filename
 x = problem.midpoint
 
 # Inspect the same parameter numbering used in the publication.
@@ -98,6 +107,7 @@ known partial derivatives for structured optimization methods.
 ## Tests and numerical comparisons
 
 ```sh
+.venv/bin/python tools/fetch_reference.py
 .venv/bin/python -m pytest -q
 .venv/bin/python -m ruff check src tests tools
 ```
@@ -111,6 +121,11 @@ Public CI uses independently generated **synthetic test weather**. This is an
 explicit test variant, not the canonical benchmark climate or published results.
 Canonical weather checks are recorded separately. Reference updates are reviewed
 changes, never an automatic response to a failed test.
+
+Original C# files and historical IDFs are fetched from the fork at a fixed commit,
+verified by SHA-256, and kept in `.reference-cache/beobenchmark`. They are excluded
+from the repository and Python distributions. Normal modern-model evaluations
+do not require this reference cache or a network connection.
 
 ## Attribution and development
 

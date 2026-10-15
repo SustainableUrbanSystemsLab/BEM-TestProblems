@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/milzj/BEOBenchmark",
+  "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "files": [
+    {
+      "cache_path": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "problem_ids": [
+        1,
+        4
+      ]
+    },
+    {
+      "cache_path": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "problem_ids": [
+        2,
+        5
+      ]
+    },
+    {
+      "cache_path": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "problem_ids": [
+        3,
+        6,
+        8
+      ]
+    },
+    {
+      "cache_path": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "upstream_path": "BEOBenchmark_V1/Input/ep/WeatherData/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/ep/WeatherData/USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "problem_ids": [
+        9,
+        10
+      ]
+    }
+  ],
+  "purpose": "Exact historical annual inputs for problems1\u20136,8\u201310. Problem13 uses embedded design-day conditions.",
+  "redistribution": "Acquisition index only; the repository software license does not license weather data. See docs/licensing.md."
+}

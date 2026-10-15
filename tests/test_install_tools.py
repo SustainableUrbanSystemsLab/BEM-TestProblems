@@ -6,7 +6,7 @@ import zipfile
 import pytest
 
 from tools.install_energyplus import download, extract
-from tools.validate_cases import compare_inputs, require_successful_archive
+from tools.validate_cases import compare_inputs, numerical_difference, require_successful_archive
 
 
 def test_download_rejects_changed_bytes_before_installation(tmp_path):
@@ -37,8 +37,8 @@ def test_zip_cannot_escape_local_extraction_directory(tmp_path):
 
 def test_reference_input_comparison_ignores_comments_but_checks_values(tmp_path):
     original, port = tmp_path / "original.idf", tmp_path / "python.idf"
-    original.write_text("Material, Wall, 0.100000000000000; ! degrees\ufffd\n")
-    port.write_text("Material,Wall, .1; ! degrees °\n")
+    original.write_text("Material, Wall, 0.100000000000000; ! degrees\ufffd\n", encoding="utf-8")
+    port.write_text("Material,Wall, .1; ! degrees °\n", encoding="utf-8")
     compare_inputs(original, port)
     port.write_text("Material,Wall,.2;\n")
     with pytest.raises(AssertionError, match="IDF field"):
@@ -76,3 +76,14 @@ def test_original_archive_requires_complete_evidence(tmp_path):
         require_successful_archive(tmp_path)
     (tmp_path / "eplusout.err").write_text(" ** Warning ** harmless warning")
     require_successful_archive(tmp_path)
+
+
+def test_regression_differences_record_units_precision_and_zero_scale():
+    result = numerical_difference(10.001, 10, "kWh", rtol=1e-6, atol=1e-7)
+    assert not result["passed"]
+    assert result["absolute_difference"] == pytest.approx(.001)
+    assert result["allowed_difference"] == pytest.approx(10.001e-6)
+    assert result["relative_difference"] == pytest.approx(.001 / 10.001)
+    assert result["unit"] == "kWh"
+    zero = numerical_difference(0, 0, "kW", rtol=1e-8, atol=1e-7)
+    assert zero["passed"] and zero["relative_difference"] == 0

@@ -10,6 +10,7 @@ import pytest
 
 from bem_testproblems.models import csharp_number, legacy_token_values
 from bem_testproblems.problems import PROBLEM_IDS, get_problem
+from bem_testproblems.reference import legacy_template_path, reference_root
 
 
 def idf_objects(path):
@@ -129,7 +130,7 @@ def test_every_original_physical_placeholder_occurrence_has_a_modern_binding():
         if number == 8:
             continue
         problem = get_problem(number)
-        raw = data.joinpath("legacy", problem.template_filename).read_bytes()
+        raw = legacy_template_path(problem.template_filename).read_bytes()
         # Token syntax and comments are ASCII in both UTF-8 and CP1252 sources.
         objects = re.sub(rb"!.*", b"", raw)
         original = Counter(
@@ -288,3 +289,28 @@ def test_modern_detailed_boundary_explicitly_preserves_historical_resolver_pair(
         surfaces["ZONE NORTH SURFACE SOUTH"]["outside_boundary_condition_object"]
         == "ZONE INTERIOR SURFACE NORTH"
     )
+
+
+def test_legacy_reference_cache_is_explicit_and_never_fetched_implicitly(tmp_path, monkeypatch):
+    missing = tmp_path / "absent-reference-cache"
+    monkeypatch.setenv("BEM_REFERENCE_DIR", str(missing))
+    assert reference_root() == missing
+    problem = get_problem(1)
+    with pytest.raises(FileNotFoundError, match="fetch_reference.py"):
+        problem.render_legacy(problem.midpoint, tmp_path / "legacy.idf")
+    assert not missing.exists()
+    # Normal native model rendering uses only the packaged modern assets.
+    assert problem.render_modern(problem.midpoint, tmp_path / "modern.epJSON").is_file()
+
+
+def test_legacy_reference_bytes_are_checked_against_the_packaged_manifest(tmp_path, monkeypatch):
+    filename = get_problem(1).template_filename
+    original = legacy_template_path(filename).read_bytes()
+    cache = tmp_path / "reference-cache"
+    (cache / "models").mkdir(parents=True)
+    (cache / "models" / filename).write_bytes(original + b"\n")
+    monkeypatch.setenv("BEM_REFERENCE_DIR", str(cache))
+    with pytest.raises(ValueError, match="checksum mismatch"):
+        legacy_template_path(filename)
+    with pytest.raises(ValueError, match="known original template"):
+        legacy_template_path("../outside.idf")
