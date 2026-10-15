@@ -227,7 +227,7 @@ comparisons. The [testing guide](docs/testing.md) maps the code to those checks.
 | Canonical EnergyPlus 26.2 checks | Successful values versus measured references; known warmup rejections versus diagnostic signatures | Detect numerical or simulation-outcome changes under benchmark climate inputs |
 | Supplemental synthetic weather | Separate controlled-weather checks of both implementations and modern repeatability | Broaden software checks with independent deterministic weather fixtures |
 | Published specification | Bounds and formulas versus Waibel, Wortmann, Evins, and Carmeliet (2019) and the original problem sources | Check mathematical definitions; exact winning records from the journal study remain unavailable |
-| Rounded published designs | [Waibel's 2018 thesis Appendix C](docs/published-solutions.md), covering all ten continuous problems | Additional best-found reference candidates; separate comparison pending because coordinates/objectives are rounded and four coordinate mappings need verification |
+| Rounded published designs | [Waibel's 2018 thesis Appendix C](docs/published-solutions.md), covering all ten continuous problems | 20 Python simulations across both engines passed strict diagnostics; two larger 8.5 discrepancies remain unresolved; rounded coordinates/objectives and four inferred mappings prevent full-precision publication claims |
 
 Public CI downloads the four checksum-verified **canonical benchmark weather
 files** into temporary runner storage. It publishes numerical JSON reports, with
