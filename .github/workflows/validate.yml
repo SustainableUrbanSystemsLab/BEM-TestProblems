@@ -88,6 +88,7 @@ jobs:
         with:
           name: original-csharp-comparison
           path: .validation-local/reports/original-csharp.json
+          include-hidden-files: true
           if-no-files-found: error
 
   modern-regression:
@@ -119,4 +120,5 @@ jobs:
         with:
           name: modern-regression
           path: .validation-local/reports/modern-regression.json
+          include-hidden-files: true
           if-no-files-found: error

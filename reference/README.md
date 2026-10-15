@@ -16,6 +16,9 @@ formatting more closely than rebuilding the source against modern .NET.
 point. `EngineProxy.exe` is staged at its hard-coded engine path, invokes the
 genuine pinned 8.5 executable, and copies the input and outputs before the original
 component deletes them. No source algorithm is replaced by a Python oracle.
+The validator also requires the captured engine exit status, successful completion
+marker and absence of severe/fatal diagnostics; the original caller alone does
+not check the engine status.
 
 From the repository root on a Windows runner with the official Visual C++ 2013
 x64 runtime already installed:
