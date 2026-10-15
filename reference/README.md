@@ -1,7 +1,11 @@
 # Independent reference comparisons
 
-`legacy-source` contains unchanged scoped components from BEOBenchmark commit
-`54736a6b899a488222ad3184f306c1f401daf4f9`, with their full BSD license.
+The unchanged scoped components are fetched from the BEOBenchmark fork at commit
+`54736a6b899a488222ad3184f306c1f401daf4f9`, with their full BSD license, into
+the ignored `.reference-cache/beobenchmark/legacy-source` directory. The pinned
+download index is `src/bem_testproblems/data/reference-assets.json`; every file's
+SHA-256 is verified. Original source and historical IDFs are not included in the
+repository or Python distribution.
 The oracle compiles those components against test-only Grasshopper interfaces.
 It exercises the published C# source, not the proprietary Grasshopper application
 or the compiled `.gha` binary. Unused Rhino operations throw if reached.
@@ -24,6 +28,7 @@ From the repository root on a Windows runner with the official Visual C++ 2013
 x64 runtime already installed:
 
 ```sh
+python tools/fetch_reference.py
 python tools/install_reference_engine.py
 python tools/synthetic_weather.py --output-dir .validation-local/weather
 dotnet build reference/Oracle/Oracle.csproj -c Release -o .tools/reference-bin/oracle

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/milzj/BEOBenchmark",
+  "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "files": [
+    {
+      "cache_path": "models/simple_seattle_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/simple_seattle_template.idf",
+      "sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_seattle_template.idf"
+    },
+    {
+      "cache_path": "models/simple_houston_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/simple_houston_template.idf",
+      "sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_houston_template.idf"
+    },
+    {
+      "cache_path": "models/simple_chicago_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/simple_chicago_template.idf",
+      "sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/simple_chicago_template.idf"
+    },
+    {
+      "cache_path": "models/detailed_seattle_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/detailed_seattle_template.idf",
+      "sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_seattle_template.idf"
+    },
+    {
+      "cache_path": "models/detailed_houston_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/detailed_houston_template.idf",
+      "sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_houston_template.idf"
+    },
+    {
+      "cache_path": "models/detailed_chicago_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/detailed_chicago_template.idf",
+      "sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/detailed_chicago_template.idf"
+    },
+    {
+      "cache_path": "models/problem_9_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/problem_9_template.idf",
+      "sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_9_template.idf"
+    },
+    {
+      "cache_path": "models/problem_10_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/problem_10_template.idf",
+      "sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/problem_10_template.idf"
+    },
+    {
+      "cache_path": "models/Problem13_template.idf",
+      "upstream_path": "BEOBenchmark_V1/Input/Problem13_template.idf",
+      "sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Input/Problem13_template.idf"
+    },
+    {
+      "cache_path": "legacy-source/GHEPlusRunParametric1to3.cs",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs",
+      "sha256": "b8f2238118bc39cf0c3f204ac1001753a32bf0b797c497062a9c9f57673d8b89",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric1to3.cs"
+    },
+    {
+      "cache_path": "legacy-source/GHEPlusRunParametric4to8.cs",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs",
+      "sha256": "4f56bfc5d5bbc8c9a224e67672bac0b28ce002937c62fce36e49dd9ef79f36e1",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric4to8.cs"
+    },
+    {
+      "cache_path": "legacy-source/GHEPlusRunParametric9.cs",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs",
+      "sha256": "e69828fbde5217e41ef522645365036654961fd6f606db68fc44d0da96ea9644",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric9.cs"
+    },
+    {
+      "cache_path": "legacy-source/GHEPlusRunParametric10.cs",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs",
+      "sha256": "eb2237cbbe241f4cc662fce2dc829a4ce9c07a843e67b19c4217232b544bf0c3",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric10.cs"
+    },
+    {
+      "cache_path": "legacy-source/GHEPlusRunParametric13.cs",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs",
+      "sha256": "1694dfc2c0dda1c77ae3e57decc565cc95eb04de725875bb1da24b4fcbc5ec0c",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/GHEPlusRunParametric13.cs"
+    },
+    {
+      "cache_path": "legacy-source/Misc.cs",
+      "upstream_path": "BEOBenchmark_V1/Sourcecode/Misc.cs",
+      "sha256": "3f2c60724e3a8d7fda7a32f7080e5302f1357e21d8868a2896570dfd5cbecaf5",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/BEOBenchmark_V1/Sourcecode/Misc.cs"
+    },
+    {
+      "cache_path": "licenses/BEOBenchmark-LICENSE.txt",
+      "upstream_path": "LICENSE",
+      "sha256": "44f4cccff7554dfb3600a189b3493e78be6f2ce1ec6b8cd082d493a89b762099",
+      "url": "https://raw.githubusercontent.com/milzj/BEOBenchmark/54736a6b899a488222ad3184f306c1f401daf4f9/LICENSE"
+    }
+  ]
+}

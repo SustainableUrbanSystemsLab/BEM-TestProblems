@@ -21,7 +21,7 @@ dev = ["pytest>=8,<10", "ruff>=0.11,<1", "build>=1.2,<2"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-bem_testproblems = ["data/legacy/*.idf", "data/licenses/*.txt", "data/modern/*.epJSON", "data/modern/*.json"]
+bem_testproblems = ["data/*.json", "data/licenses/*.txt", "data/modern/*.epJSON", "data/modern/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -216,7 +216,9 @@ def transition_model(input_idf: str | Path, output_epjson: str | Path, *,
     template = Path(source_template).resolve(strict=True) if source_template else source
     notices = {
         "path": "../../../../THIRD_PARTY_NOTICES.md",
-        "original_notice": "Full original IDF header retained in ../legacy/" + template.name,
+        "original_notice": "Full original IDF header in the verified external reference cache: models/" + template.name,
+        "source_commit_url": "https://github.com/milzj/BEOBenchmark/tree/" + UPSTREAM_COMMIT,
+        "reference_cache": ".reference-cache/beobenchmark or BEM_REFERENCE_DIR; original templates are not packaged",
     }
     if "DOE Commercial Building Benchmark" in template.read_text(errors="replace"):
         notices.update({

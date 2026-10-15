@@ -10,6 +10,8 @@ from importlib.resources import files
 from pathlib import Path
 from typing import TYPE_CHECKING, Sequence
 
+from .reference import legacy_template_path
+
 if TYPE_CHECKING:
     from .problems import Problem
 
@@ -82,7 +84,7 @@ def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
     Original CP1252 degree signs in template comments are decoded losslessly.
     Deterministic UTF-8/LF bytes make input hashes portable across platforms.
     """
-    raw = _data_resource("legacy", problem.template_filename).read_bytes()
+    raw = legacy_template_path(problem.template_filename).read_bytes()
     try:
         text = raw.decode("utf-8-sig")
     except UnicodeDecodeError:

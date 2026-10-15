@@ -121,6 +121,7 @@ class Problem:
         return render_modern(self, x, path)
 
     def simulate_outputs(self, x, *, runner, weather=None) -> dict[str, float]:
+        from .energyplus import SUPPORTED_VERSIONS
         from .outputs import extract_outputs
 
         self.validate(x)
@@ -129,10 +130,17 @@ class Problem:
                 f"Problem {self.id} requires weather={self.weather_filename!r}; weather is not bundled"
             )
         version = str(runner.version)
-        match = re.search(r"(\d+)\.(\d+)", version)
+        match = re.search(r"\b(\d+\.\d+(?:\.\d+)?)\b", version)
         if match is None:
             raise ValueError(f"Cannot identify EnergyPlus version {version!r}")
-        legacy = tuple(map(int, match.groups())) == (8, 5)
+        selected_version = match.group(1)
+        if selected_version.count(".") == 1:
+            selected_version += ".0"
+        if selected_version not in SUPPORTED_VERSIONS:
+            raise ValueError(
+                f"Supported EnergyPlus versions are {SUPPORTED_VERSIONS}, got {selected_version!r}"
+            )
+        legacy = selected_version == "8.5.0"
         with TemporaryDirectory(prefix=f"bem-problem-{self.id}-input-") as directory:
             path = Path(directory) / ("model.idf" if legacy else "model.epJSON")
             (self.render_legacy if legacy else self.render_modern)(x, path)

@@ -1,10 +1,12 @@
 """Published-domain and independent outer-algebra checks; no EnergyPlus needed."""
 
 import math
+from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
-from bem_testproblems.problems import PROBLEM_IDS, get_problem, list_problems
+from bem_testproblems.problems import PROBLEM_IDS, Problem, get_problem, list_problems
 
 
 def test_published_continuous_problem_inventory_and_climates():
@@ -176,3 +178,59 @@ def test_missing_or_nonfinite_observables_are_not_valid_penalties():
     for outputs in ({}, {"Q_h": math.nan}, {"Q_h": 1, "Q_c": 1, "E_L": math.inf}):
         with pytest.raises(ValueError):
             problem.outer_loss(problem.midpoint, outputs)
+
+
+@pytest.mark.parametrize(
+    ("version", "selected", "suffix"),
+    [("8.5.0", "legacy", ".idf"), ("26.2.0", "modern", ".epJSON")],
+)
+def test_same_evaluate_interface_selects_model_for_explicit_runner_version(
+    monkeypatch, tmp_path, version, selected, suffix
+):
+    problem = get_problem(1)
+    weather = tmp_path / problem.weather_filename
+    calls = []
+    run = object()
+
+    def renderer(kind):
+        def render(self, x, path):
+            assert self is problem
+            assert x == problem.midpoint
+            calls.append(kind)
+            Path(path).write_text(kind, encoding="utf-8")
+            return Path(path)
+
+        return render
+
+    def run_simulation(input_file, weather_file, *, design_day):
+        assert Path(input_file).suffix == suffix
+        assert Path(input_file).read_text(encoding="utf-8") == selected
+        assert weather_file == weather
+        assert not design_day
+        return run
+
+    def extract(family, result):
+        assert family == "simple"
+        assert result is run
+        return {"Q_h": 0.44 * 96, "Q_c": 0.77 * 96, "E_L": 96 / 3}
+
+    monkeypatch.setattr(Problem, "render_legacy", renderer("legacy"))
+    monkeypatch.setattr(Problem, "render_modern", renderer("modern"))
+    monkeypatch.setattr("bem_testproblems.outputs.extract_outputs", extract)
+    runner = SimpleNamespace(version=version, run=run_simulation)
+    assert problem.evaluate(problem.midpoint, runner=runner, weather=weather) == pytest.approx(3)
+    assert calls == [selected]
+
+
+@pytest.mark.parametrize("version", ["unknown", "7.2.0", "25.2.0", "26.2.1"])
+def test_unsupported_engine_is_rejected_before_rendering(monkeypatch, version):
+    problem = get_problem(13)
+
+    def unexpected_render(*args, **kwargs):
+        pytest.fail("Unsupported versions must fail before rendering or simulation")
+
+    monkeypatch.setattr(Problem, "render_legacy", unexpected_render)
+    monkeypatch.setattr(Problem, "render_modern", unexpected_render)
+    runner = SimpleNamespace(version=version, run=unexpected_render)
+    with pytest.raises(ValueError, match="EnergyPlus version"):
+        problem.evaluate(problem.midpoint, runner=runner)

@@ -20,6 +20,7 @@ sys.path.insert(0, str(REPOSITORY / "src"))
 
 from bem_testproblems.models import TOKEN_PATTERN, csharp_number, legacy_token_values  # noqa: E402
 from bem_testproblems.problems import UPSTREAM_COMMIT, list_problems  # noqa: E402
+from bem_testproblems.reference import legacy_template_path  # noqa: E402
 
 
 def sha256(path):
@@ -158,7 +159,7 @@ def build_manifest(legacy_idd, modern_schema, modern_directory, problem_ids=None
     for problem in list_problems():
         if problem.id == 8 or (problem_ids is not None and problem.id not in problem_ids):
             continue
-        source = REPOSITORY / "src/bem_testproblems/data/legacy" / problem.template_filename
+        source = legacy_template_path(problem.template_filename)
         base = modern_directory / f"problem_{problem.id}.epJSON"
         model = json.loads(base.read_text(encoding="utf-8"))
         old_objects = list(idf_objects(read_template(source)))

@@ -1,7 +1,5 @@
 * text=auto eol=lf
 # Preserve the exact upstream bytes and checksums, including original encodings.
-src/bem_testproblems/data/legacy/** -text
 src/bem_testproblems/data/licenses/** -text
-reference/legacy-source/** -text
 reference/licenses/** -text
 src/bem_testproblems/data/modern/*.epJSON text eol=lf

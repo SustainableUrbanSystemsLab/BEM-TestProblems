@@ -75,11 +75,52 @@ variable mapping, printed precision and justified tolerance. The new implementat
 must not be advertised as completely validated against published point values
 until that evidence is available.
 
+### Measured comparison with Wetter and Wright (2004)
+
+The originating [Wetter and Wright paper](https://simulationresearch.lbl.gov/dirpubs/04_nonsmooth.pdf),
+Table 1 on printed page 992, does provide paired inputs and rounded objectives
+for its simple office cases. Six points have now been evaluated: the printed base
+and best design for each of Seattle, Houston and Chicago, using both version 8.5
+and version 26.2. All twelve simulations completed without severe/fatal errors.
+The [comparison ledger](validation-results/literature-simple-comparison.json)
+records each vector, cited published value, measured value, component terms,
+engine/build, model/weather hashes, runtime and numerical difference.
+
+| Climate / point | Published | Version 8.5 | Difference | Version 26.2 | Difference |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Seattle / base | 164.9 | 153.181082 | -7.11% | 147.566000 | -10.51% |
+| Seattle / best | 138.0 | 134.777889 | -2.33% | 132.008912 | -4.34% |
+| Houston / base | 208.2 | 194.745959 | -6.46% | 186.875943 | -10.24% |
+| Houston / best | 190.3 | 186.527504 | -1.98% | 183.017622 | -3.83% |
+| Chicago / base | 185.1 | 173.274743 | -6.39% | 170.143885 | -8.08% |
+| Chicago / best | 155.8 | 153.465078 | -1.50% | 152.633107 | -2.03% |
+
+Objectives are kWh/(m² year). Percentages use `(measured / published - 1) × 100%`.
+This is an empirical comparison with an originating publication, not established
+numerical agreement with the same simulator/model definition. The paper used
+**EnergyPlus 1.1.0**, GenOpt 2.0.0 and Linux/AMD hardware. Its exact original model
+and TMY2 weather bytes have not been matched to the preserved version-8.5 assets.
+Published objectives are rounded to 0.1, and the printed best-design coordinates
+also have limited precision. Those precision limits do not supply a justified
+tolerance that absorbs the observed differences. No strict equality test or
+automatic acceptance threshold has been inferred from them.
+
+The detailed-office points in the same table require a further model mapping
+audit: the 2004 text describes normalized variables that change window width
+**and height**. The preserved benchmark C# instead fixes the bottom/top at
+0.6/2.4 m and varies width. Reordering variables and rescaling their bounds alone
+does not establish equivalent geometry, daylighting or shading. Those detailed
+points have not been claimed as directly comparable fixtures.
+
 ## Original reference implementation
 
-`reference/legacy-source/` preserves the five relevant C# components plus `Misc.cs`
-unchanged at upstream commit `54736a6b899a488222ad3184f306c1f401daf4f9`. Their
-checksums, templates and notices are checked by `tests/test_licenses.py`.
+The five relevant original C# components plus `Misc.cs`, and the nine original
+IDF templates, are retrieved on demand from upstream commit
+`54736a6b899a488222ad3184f306c1f401daf4f9` into the ignored reference cache.
+`data/reference-assets.json` pins their URLs and checksums. The repository and
+its packages contain the derived Python/modern models and full required notices,
+not the original C#/IDF bodies. `tests/test_licenses.py` checks that boundary and
+the recorded provenance; `tools/fetch_reference.py` verifies fetched bytes.
 
 The oracle in `reference/Oracle/`, with the engine proxy in
 `reference/EngineProxy/`, compiles/executes that source with lightweight host
@@ -88,6 +129,18 @@ the same formulas. Each numerical parity result must identify its input vector,
 engine build, model/weather identities and comparison tolerance. A compilation
 success or passing formula test alone is not evidence that all ten simulations
 matched.
+
+The first executed [Windows reference comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38668638849/job/116206341850)
+passed all **26 synthetic-weather cases** at commit
+`3bbd4391dbf0b41d7f4318fb2476ca46970f0aaf`. It compared the unchanged C# objective,
+generated IDF fields and fixed-row reference observations with the Python
+objective and named observations using the same EnergyPlus-8.5 engine/weather.
+The C# objective/component tolerance was relative `2e-12`, absolute `1e-9`;
+numeric IDF fields used absolute `1e-11`. The workflow retained the numerical
+comparison artifact. A [job-specific evidence record](validation-results/original-csharp-ci.json)
+links its status, commit, timing and conditions. This establishes reference-code
+parity for those cases at that commit. The later opt-in reference-cache workflow
+requires its own CI run.
 
 EnergyPlus version **8.5.0-c87e61b44b** was verified to load and run an untouched
 official design-day example on the development Mac. That smoke test completed
@@ -132,8 +185,9 @@ The unchanged C# and Python evaluators must receive **the same synthetic file**
 for a public-CI comparison. This tests executable equivalence under controlled
 inputs; it does not reproduce a TMY-based published objective or certify canonical
 benchmark climate performance. The problem objects keep their historical weather
-filenames, and canonical checks use separately provided, authorized, hash-frozen
-original weather. Never rename synthetic files to historical weather filenames.
+filenames. Canonical local setup uses `python tools/fetch_weather.py`, which
+retrieves the four original US files into `.cache/weather/` and verifies their
+frozen hashes. Never rename synthetic files to historical weather filenames.
 
 Problem 13 is a design-day case. Separate local checks with versions 8.5 and 26.2
 found identical heating-energy/rate observables at the physical midpoint under
@@ -147,7 +201,10 @@ proof of invariance for every parameter vector.
 ## Modern model checks
 
 Modern epJSON models have conversion/provenance sidecars linking them to the
-unchanged templates, transition steps and license notices. Typed parameter
+checksum-pinned external templates, transition steps and packaged license/model
+notices. Sidecar `original_notice` paths preserve the historical derivation
+layout; the named original is now resolved through the reference index/cache.
+Typed parameter
 bindings must cover the original placeholders and retain the same physical
 coordinate meanings. Problem 8 shares the detailed Chicago model with its two
 fixed settings.
@@ -217,9 +274,11 @@ grant use/copy of data on that server with notice retention and publication cred
 That server-specific grant does not by itself establish the exact terms of each
 converted EPW hosted elsewhere, including embedded ASHRAE design conditions.
 
-Accordingly, automatic acquisition rights for the **four exact historical US EPW
-packages remain incompletely established** here. Public CI avoids that assumption
-through independently generated weather. Belgrade IWEC has separate ASHRAE terms.
-Canonical integration runs require authorized external paths, hashes and retained
-source notices; publishing raw weather or source datasets requires a separate
-distribution review. See [licensing.md](licensing.md) and `assets/manifest.json`.
+Local acquisition is implemented by `python tools/fetch_weather.py`: it downloads
+the four frozen US files from the pinned fork into the ignored `.cache/weather/`
+directory and verifies their hashes. This reproducibility mechanism does not
+claim a blanket redistribution license for the converted EPWs. Public CI keeps
+its independently generated weather, and raw canonical data is excluded from
+published caches/artifacts. Problem 13 uses the embedded winter design day without
+an EPW; Belgrade IWEC remains outside the downloader. See
+[licensing.md](licensing.md) and `assets/manifest.json` for source terms and scope.
