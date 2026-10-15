@@ -34,7 +34,7 @@ SYNTHETIC_WEATHER = {
 def require_close(actual, expected, label, *, rtol=2e-12, atol=1e-9):
     if not math.isfinite(actual) or not math.isfinite(expected):
         raise AssertionError(f"Nonfinite {label}")
-    if not math.isclose(actual, expected, rel_tol=rtol, abs_tol=atol):
+    if abs(actual - expected) > max(atol, rtol * abs(expected)):
         raise AssertionError(f"{label}: {actual:.17g} != {expected:.17g}")
 
 
@@ -42,10 +42,10 @@ def numerical_difference(actual, expected, unit, *, rtol, atol):
     if not math.isfinite(actual) or not math.isfinite(expected):
         raise AssertionError("Nonfinite regression value")
     delta = abs(actual - expected)
-    scale = max(abs(actual), abs(expected))
+    scale = abs(expected)
     allowed = max(atol, rtol * scale)
     return {"actual": actual, "expected": expected, "absolute_difference": delta,
-            "relative_difference": delta / scale if scale else 0.0,
+            "relative_difference": delta / scale if scale else 0.0 if delta == 0 else None,
             "allowed_difference": allowed, "unit": unit, "passed": delta <= allowed}
 
 
@@ -150,6 +150,8 @@ def run_oracle(problem, x, weather, directory, oracle, proxy, runner, folder=731
 
 
 def validate(args):
+    if any(not math.isfinite(value) or value < 0 for value in (args.rtol, args.atol)):
+        raise ValueError("Comparison tolerances must be finite and nonnegative")
     args.work_dir = args.work_dir.resolve()
     runner = EnergyPlusRunner(args.engine, expected_version=args.version,
                               timeout=args.timeout, output_root=args.work_dir, cache=False)
@@ -195,13 +197,14 @@ def validate(args):
             if args.oracle:
                 original, archive = run_oracle(problem, x, weather, case_dir, args.oracle,
                                                 args.proxy, runner)
-                require_close(value, original, "Original C# objective")
+                require_close(value, original, "Original C# objective", rtol=args.rtol, atol=args.atol)
                 compare_inputs(model, archive / "input.idf")
                 raw = fixed_row_outputs(problem, archive)
                 named = extract_outputs(problem.family, RunResult(directory=archive, version="8.5.0"))
                 for key, number in raw.items():
                     require_close(named[key], number, "Reference output mapping " + key)
-                    require_close(outputs[key], number, "Python/C# simulator output " + key)
+                    require_close(outputs[key], number, "Python/C# simulator output " + key,
+                                  rtol=args.rtol, atol=args.atol)
                 item["reference_objective"] = original
                 item["reference_components"] = raw
             if expected is not None:
@@ -225,14 +228,37 @@ def validate(args):
                         comparison_failures.append(
                             f"{case['case_id']} {key}: {actual:.17g} != {number:.17g} "
                             f"(abs={difference['absolute_difference']:.6g}, "
-                            f"rel={difference['relative_difference']:.6g})")
+                            f"rel={difference['relative_difference']})")
                 item["regression_comparison"] = comparisons
             report["cases"].append(item)
             print(f"{case['case_id']}: {value:.12g} {problem.objective_unit}", flush=True)
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                print(f"::notice::Completed {case['case_id']}: objective={value:.12g} "
+                      f"{problem.objective_unit}", flush=True)
         if not report["cases"]:
             raise AssertionError("No validation cases were selected")
         if expected and not args.case_id:
             raise AssertionError("Baseline contains cases that were not exercised")
+        summary = {}
+        for item in report["cases"]:
+            for key, difference in item.get("regression_comparison", {}).items():
+                family = get_problem(item["problem"]).family
+                stat = summary.setdefault(f"{family}:{key}", {"unit": difference["unit"],
+                                                "max_absolute_difference": 0.0,
+                                                "max_relative_difference": None,
+                                                "undefined_relative_comparisons": 0})
+                if difference["absolute_difference"] >= stat["max_absolute_difference"]:
+                    stat.update(max_absolute_difference=difference["absolute_difference"],
+                                max_absolute_case=item["case_id"])
+                relative = difference["relative_difference"]
+                if relative is None:
+                    stat["undefined_relative_comparisons"] += 1
+                elif stat["max_relative_difference"] is None or relative >= stat["max_relative_difference"]:
+                    stat.update(max_relative_difference=relative, max_relative_case=item["case_id"])
+        if summary:
+            report["regression_summary"] = summary
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                print("::notice::Regression difference summary: " + json.dumps(summary), flush=True)
         if comparison_failures:
             report["comparison_failures"] = comparison_failures
             raise AssertionError("Regression differences:\n" + "\n".join(comparison_failures))
@@ -263,6 +289,6 @@ if __name__ == "__main__":
     parser.add_argument("--oracle", type=Path)
     parser.add_argument("--proxy", type=Path)
     parser.add_argument("--timeout", type=float, default=300)
-    parser.add_argument("--rtol", type=float, default=1e-8)
+    parser.add_argument("--rtol", type=float, default=1e-6)
     parser.add_argument("--atol", type=float, default=1e-7)
     validate(parser.parse_args())

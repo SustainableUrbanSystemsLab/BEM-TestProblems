@@ -104,6 +104,9 @@ to use independently generated synthetic weather. Rehosting a weather package
 requires establishing its exact distribution terms and retaining relevant notices.
 The unused Belgrade EPW identifies separate ASHRAE IWEC terms; the embedded
 design day does not grant rights to redistribute that EPW, DDY or STAT package.
+The [exact-file redistribution audit](weather-redistribution.md) separates the
+affirmative TMY/NLR permissions found from the remaining ASHRAE-header and
+San Francisco package questions.
 
 ## Paper-derived fixtures
 

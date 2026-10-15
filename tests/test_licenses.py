@@ -165,6 +165,24 @@ def test_external_weather_binaries_and_publications_are_not_packaged() -> None:
         assert asset["rights_status"]
 
 
+def test_canonical_weather_fetch_metadata_has_exact_external_pins() -> None:
+    record = MANIFEST["weather_assets_index"]
+    raw = (ROOT / record["path"]).read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == record["sha256"]
+    index = json.loads(raw)
+    assert index["source_commit"] == MANIFEST["upstream"]["commit"]
+    assert len(index["files"]) == 4
+    weather = {asset["filename"]: asset for asset in MANIFEST["external_assets"]
+               if asset["kind"] == "weather"}
+    for pin in index["files"]:
+        assert pin["cache_path"].startswith("USA_")
+        assert Path(pin["cache_path"]).name == pin["cache_path"]
+        assert pin["sha256"] == weather[pin["cache_path"]]["historical_sha256"]
+        assert index["source_commit"] in pin["url"]
+        assert "milzj/BEOBenchmark" in pin["url"]
+    assert "YUG_Belgrade_IWEC.epw" not in {pin["cache_path"] for pin in index["files"]}
+
+
 def test_publication_and_license_notices_are_present() -> None:
     assert "MIT License" in (ROOT / "LICENSE").read_text()
     notices = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()

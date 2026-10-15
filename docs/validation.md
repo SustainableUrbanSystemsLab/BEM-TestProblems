@@ -47,36 +47,37 @@ scientifically revised definition would require a separately identified version.
 
 ### Numerical paper-result gap
 
-**Complete Waibel pointwise result coverage is currently 0/10.** Figures 8–9 are
-boxplots, Figures 10–11 are ranks and later figures are normalized/aggregate
-metrics. Approximate costs mentioned in prose do not identify complete input
-vectors. They are unsuitable as exact evaluator fixtures.
+**Complete Waibel pointwise result coverage is currently 0/10.** The numerical
+publication reference is Waibel et al. (2019), using EnergyPlus 8.5.0. Earlier
+studies remain cited for problem origins and formula attribution; their numerical
+results are not validation targets for this project.
 
-Waibel et al. explicitly identify supplementary material associated with the DOI.
-Its contents and applicable license must be inventoried before any numerical
-fixture coverage is claimed. This is a known accepted validation gap, not a claim
-that a supplement or reference dataset does not exist.
+Figures 8–9 show distributions of final objective values, Figures 10–11 show
+ranks, and later figures show normalized or aggregate metrics. The boxplots
+support approximate visual context only. They do not provide full-precision
+winning objective values together with the complete corresponding decision
+vectors. The paper explicitly defers analysis in variable space to future work
+(printed page 220). Approximate costs in prose cannot fill that gap.
 
-The originating papers provide additional candidates:
+The main paper identifies supplementary material through its DOI (printed
+page 238). Its raw contents and applicable terms have not been established from
+the available main paper. This is an unresolved data requirement, not a claim
+that supplementary results or an external dataset do not exist. No exact
+`f_opt` or `x_opt` has been inferred from a plot or invented by a new run.
 
-- Wetter and Wright (2004), Table 1, pairs base/best vectors with rounded results
-  for six simple/detailed climate cases. These used **EnergyPlus 1.1.0** and a
-  different normalized parameter convention for detailed geometry.
-- Kämpf et al. (2010), Tables 5/9 and 10/11, give small/large-office candidate
-  vectors and rounded San Francisco results from **EnergyPlus 2.2**. Some window
-  columns contain heights rather than upper coordinates.
-- Djuric et al. (2007) is the source to inspect for the school cost constants and
-  any complete reference solution.
-
-Those values are not unconditional expected outputs for modified version-8.5 or
-version-26.2 models. A pointwise fixture must record the full vector, objective,
+A numerical Waibel fixture needs the complete vector and matching objective,
 engine/build, model identity/modifications, weather hash or design-day definition,
-variable mapping, printed precision and justified tolerance. The new implementation
-must not be advertised as completely validated against published point values
-until that evidence is available.
+variable mapping, full available precision and justified comparison tolerance.
+The missing winning vectors currently block comparison of decision-variable
+differences against Waibel's designs. New midpoint measurements or newly optimized
+best-found designs would not establish the missing publication ground truth.
 
-See [Wetter and Wright (2004)](https://simulationresearch.lbl.gov/dirpubs/04_nonsmooth.pdf)
-for the originating office-model study.
+The paper's optimization protocol is also distinct from a single short solver
+run: it uses 20 reruns, random initial solutions except DIRECT's domain-centre
+start, and an evaluation budget of `100(n+1)` for the scoped problems. Those
+conditions describe the study; they do not supply its unavailable winning
+vectors. The implementation must not be advertised as numerically validated
+against Waibel's pointwise results until the required evidence is obtained.
 
 ## Original reference implementation
 
@@ -96,17 +97,31 @@ engine build, model/weather identities and comparison tolerance. A compilation
 success or passing formula test alone is not evidence that all ten simulations
 matched.
 
-The first executed [Windows reference comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38668638849/job/116206341850)
+The configured simulation-result acceptance policy is relative error `1e-6`
+against the reference value, with absolute tolerance `1e-7` for values near zero.
+It applies to objectives and simulator components. Input coordinates, weather
+checksums, model schema and field identities remain strict checks; this numerical
+policy does not authorize changing those inputs or widening tolerances until a
+comparison passes. Published rounding and unmatched historical engine/model
+conditions remain separately reported limitations of literature comparisons.
+
+The executed [cache-based Windows reference comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38670364758/job/116211825885)
 passed all **26 synthetic-weather cases** at commit
-`3bbd4391dbf0b41d7f4318fb2476ca46970f0aaf`. It compared the unchanged C# objective,
+`d4b2c5cfce3002de0fca15a77781310085a584af`. It fetched checksum-verified originals
+into the ignored cache, then compared the unchanged C# objective,
 generated IDF fields and fixed-row reference observations with the Python
 objective and named observations using the same EnergyPlus-8.5 engine/weather.
 The C# objective/component tolerance was relative `2e-12`, absolute `1e-9`;
 numeric IDF fields used absolute `1e-11`. The workflow retained the numerical
 comparison artifact. A [job-specific evidence record](validation-results/original-csharp-ci.json)
 links its status, commit, timing and conditions. This establishes reference-code
-parity for those cases at that commit. The later opt-in reference-cache workflow
-requires its own CI run.
+parity for those cases at that commit, including reference acquisition, fixed-file
+compilation and execution. The ledger also retains the earlier successful job
+at commit `3bbd439`.
+
+That historical artifact used the stricter tolerances stated above. The current
+configured `1e-6`/`1e-7` policy is a later acceptance decision; the historical job
+has not been relabeled as having run with the new settings.
 
 EnergyPlus version **8.5.0-c87e61b44b** was verified to load and run an untouched
 official design-day example on the development Mac. That smoke test completed

@@ -45,8 +45,15 @@ both sides of the historical window-height penalty, and equivalent P6/P8 designs
 Generated IDFs are compared by effective fields, ignoring comment encoding and
 decimal formatting. Original asset bytes remain hash checked. Semantic output
 parsing is checked against the original fixed report selections. Final values are
-compared with the actual original C# result, using relative tolerance `2e-12` and
-absolute tolerance `1e-9`; field formatting differences use absolute `1e-11`.
+compared with the actual original C# result. The current configured simulation
+tolerance is relative error `1e-6` against the reference value and absolute
+`1e-7` near zero, for objectives and simulator components. Input coordinates,
+weather hashes and semantic field identities remain strict; numerical IDF
+formatting comparisons use absolute `1e-11`.
+
+The successful 26-case cache-based Windows job at commit `d4b2c5c` used the earlier, stricter
+`2e-12` relative / `1e-9` absolute simulation tolerances. Its historical evidence
+retains those original conditions; the current acceptance policy is a later change.
 
 ## Modern regressions
 
@@ -56,8 +63,8 @@ that file. Baseline changes must identify their input/model/weather provenance
 and explain material differences. Modern-versus-legacy physics drift is a separate
 comparison and is not tested as exact equality.
 
-The initial cross-platform comparison tolerance is relative `1e-8` and absolute
-`1e-7` in reported component units. Tabular office energy retains EnergyPlus's
+The configured cross-platform comparison tolerance is relative `1e-6` and absolute
+`1e-7` near zero in reported component units. Tabular office energy retains EnergyPlus's
 displayed precision. These tolerances must be checked against repeat runs and
 the Linux CI results before declaring the regression baseline validated.
 

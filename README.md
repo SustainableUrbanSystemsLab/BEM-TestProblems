@@ -32,8 +32,9 @@ On Windows, use `py -3.12 -m venv .venv` and replace `.venv/bin/python` with
 `.venv\Scripts\python.exe` in subsequent commands. Activation is optional.
 
 The installer verifies the official EnergyPlus 26.2 archive's SHA-256 and extracts
-it into `.tools/energyplus/26.2.0`. It does not change the system PATH. Dependencies,
-simulators and generated results are not included in Git commits.
+it into `.tools/energyplus/26.2.0`. It does not change the system PATH. Downloaded
+tools and raw simulation directories stay local; fixed numerical test fixtures
+and their provenance are versioned.
 
 The [model transition guide](docs/model-transition.md) documents the official
 21-step IDF transition chain, the separate epJSON converter, and a scratch-only
@@ -51,12 +52,14 @@ terms; the software license does not grant weather redistribution rights.
 ## Evaluate a problem
 
 ```python
+import os
 from pathlib import Path
 from bem_testproblems import EnergyPlusRunner, get_problem
 
 problem = get_problem(1)
+engine_name = 'energyplus.exe' if os.name == 'nt' else 'energyplus'
 runner = EnergyPlusRunner(
-    Path('.tools/energyplus/26.2.0/energyplus'),  # energyplus.exe on Windows
+    Path('.tools/energyplus/26.2.0') / engine_name,
     expected_version='26.2.0',
     output_root='.runs',
 )
@@ -116,6 +119,12 @@ GitHub Actions checks Python on Linux, Windows and macOS; compares unchanged
 original C# components with Python using the same EnergyPlus 8.5 engine; and
 checks modern results against separately reviewed EnergyPlus 26.2 references.
 The [reference harness](reference/README.md) documents the numerical comparisons.
+
+| Check | Comparison | Purpose |
+| --- | --- | --- |
+| C# versus Python, EnergyPlus 8.5 | Two implementations, identical engine and test weather | Check that the Python translation preserves reference behavior |
+| EnergyPlus 26.2 reference values | Current Python results versus a previous measured run | Catch future changes; these expected values are not independent paper results |
+| Published specification and literature points | Bounds/formulas versus publications; numerical comparisons with version conditions recorded | Check the mathematical definitions and expose remaining reproduction gaps |
 
 Public CI uses independently generated **synthetic test weather**. This is an
 explicit test variant, not the canonical benchmark climate or published results.

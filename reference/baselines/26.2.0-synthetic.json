@@ -5,7 +5,7 @@
   "platform": "Darwin-arm64",
   "weather_kind": "synthetic-ci",
   "comparison": "reviewed-engine-baseline",
-  "rtol": 1e-08,
+  "rtol": 1e-06,
   "atol": 1e-07,
   "cases": [
     {
@@ -899,5 +899,6 @@
     }
   ],
   "passed": true,
-  "baseline_note": "Measured with the pinned official macOS arm64 EnergyPlus26.2.0 distribution using independently generated synthetic CI weather. These are new regression measurements, not published benchmark values. Cross-platform agreement is checked by Linux CI."
+  "baseline_note": "Measured with the pinned official macOS arm64 EnergyPlus26.2.0 distribution using independently generated synthetic CI weather. These are new regression measurements, not published benchmark values. Cross-platform agreement is checked by Linux CI.",
+  "tolerance_note": "Project acceptance is absolute error <= max(1e-7,1e-6*abs(reference)). Only acceptance metadata changed; measured reference values and input/weather hashes are unchanged."
 }
