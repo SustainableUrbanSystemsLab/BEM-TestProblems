@@ -67,6 +67,10 @@ physical parameter in [parameters.py](../src/bem_testproblems/parameters.py).
 - All ten rounded candidate designs were measured with Python on both engines:
   **20 of 20 simulations completed with no Severe or Fatal diagnostics**.
   Canonical weather and the recorded model/engine identities were retained.
+- A second evaluation of every design, using zero relative and absolute
+  comparison tolerances, reproduced all **158 objective/component values
+  exactly**. Every objective difference was **0%**. Repeatability does not
+  establish agreement with the unrounded thesis results.
 - For eight problems, the 8.5 objective differs from the rounded thesis value
   by less than **0.12%**. P2 and P6 have larger unresolved differences, shown below.
   These percentages describe the observations; they are not new acceptance

@@ -52,16 +52,18 @@ and at most **2,592,000 objective calls**. Early termination can reduce the tota
 ## Local setup and execution
 
 Use the existing project virtual environment and the local engine/weather setup
-in the [engine guide](engine-versions.md). Optional experiment dependencies are:
+in the [engine guide](engine-versions.md). The tested numerical and plotting
+versions are recorded in [replication-py312.txt](../constraints/replication-py312.txt).
+Install optional experiment dependencies with those constraints:
 
 ```sh
-.venv/bin/python -m pip install -e '.[replication]'
+.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[replication]'
 ```
 
 On Windows or Linux with a compatible NLopt wheel, also install:
 
 ```sh
-.venv/bin/python -m pip install -e '.[replication-nlopt]'
+.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[replication-nlopt]'
 ```
 
 NLopt 2.7.1 is pinned to keep NumPy 1 compatibility with PDFO 2.2. On Apple Silicon
@@ -128,6 +130,27 @@ This is a restart of an interrupted run, not recovery of its optimizer state.
 A smoke experiment can explicitly use `--repetitions 2 --budget 25` and its own
 output directory. Such overrides label the result **PILOT**, and cannot be
 presented as the paper-budget experiment.
+
+## Reproducibility scope
+
+- The experiment manifest records starts, seeds, budgets, solver settings,
+  exact numerical package versions, and input/engine hashes. Reusing a result
+  directory with changed recorded inputs or software is rejected.
+- [replication-py312.txt](../constraints/replication-py312.txt) constrains the
+  tested numerical and plotting Python versions. It does not install unused
+  optional methods, freeze development tools, or lock native binary contents.
+- An exact optimizer replay also depends on the interpreter, operating system,
+  and native libraries. Source-built NLopt links a separate algorithm library;
+  retain that library's hash together with the Python extension hash and the
+  compiler/build information. Matching only a package version is insufficient
+  for a claim of identical trajectories across machines.
+- The running campaign retains its frozen source and original manifest.
+  Supplementary local environment records capture Python/OS versions, native
+  NLopt library hashes, and complete frozen Python-source hashes without changing
+  the campaign identity.
+- [Objective repeatability checks](validation.md#reproducibility) are complete.
+  The full optimization campaign is still running; exact full-campaign replay
+  and historical-study replication have not been demonstrated.
 
 ## Diagnostics and figures
 

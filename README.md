@@ -133,10 +133,11 @@ record the known rejected designs and the separate numerical-control experiments
 
 ## Default optimizer
 
-Install the optional PDFO BOBYQA adapter in the same environment:
+Install the optional PDFO BOBYQA adapter in the same environment using the tested
+[Python dependency constraints](constraints/replication-py312.txt):
 
 ```sh
-.venv/bin/python -m pip install -e '.[optimize]'
+.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[optimize]'
 ```
 
 ```python

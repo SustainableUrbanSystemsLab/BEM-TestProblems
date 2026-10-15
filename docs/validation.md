@@ -27,6 +27,27 @@
   diagnostics; the larger 8.5 differences for P2 (+2.2398%) and P6 (+1.2056%)
   remain unresolved. See the [empirical checks](published-solutions.md#first-empirical-checks).
 
+## Reproducibility
+
+- **Objective replay:** repeating all ten thesis-design candidates with each
+  engine reproduced all **158 checked objective/component values exactly** across
+  20 fresh simulations. Both comparison tolerances were zero; every objective
+  difference was **0%**. This is same-machine repeatability with fixed inputs and
+  engine builds.
+- **Public CI:** the [seven-job run at fc23f79](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38694858683)
+  passed the three operating-system test jobs, both original-C# comparisons, and
+  both modern-engine checks. Cross-platform canonical references use relative
+  tolerance `1e-6`, with absolute tolerance `1e-7` near zero; this is distinct
+  from demanding identical bits across platforms.
+- **Solver experiments:** starts, seeds, settings, model/weather identities,
+  engine identities, and numerical package versions are recorded. The tested
+  Python package versions are constrained in
+  [replication-py312.txt](../constraints/replication-py312.txt); see the
+  [experiment setup and replay limits](optimization-replication.md#reproducibility-scope).
+- **Historical-study limit:** repeated project results do not establish exact
+  reproduction of the journal study. Its original starts and full-precision
+  winning records remain unavailable, and the P2/P6 thesis gaps remain unresolved.
+
 ## What public CI checks
 
 The [validation workflow](../.github/workflows/validate.yml) has seven jobs:

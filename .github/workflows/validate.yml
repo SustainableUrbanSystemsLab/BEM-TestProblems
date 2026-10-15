@@ -41,11 +41,11 @@ jobs:
       - name: Create project-local environment
         run: |
           python -m venv .venv
-          "$VENV_PY" -m pip install -e '.[dev,optimize,replication]'
+          "$VENV_PY" -m pip install -c constraints/replication-py312.txt -e '.[dev,optimize,replication]'
           "$VENV_PY" tools/fetch_reference.py
       - name: Install optional NLopt adapters for analytic tests
         if: runner.os == 'Linux' || runner.os == 'Windows'
-        run: '"$VENV_PY" -m pip install -e ".[replication-nlopt]"'
+        run: '"$VENV_PY" -m pip install -c constraints/replication-py312.txt -e ".[replication-nlopt]"'
       - name: Lint
         run: '"$VENV_PY" -m ruff check src tests tools'
       - name: Test behavior and measure branch coverage
@@ -105,7 +105,7 @@ jobs:
       - name: Set up local tools
         run: |
           python -m venv .venv
-          .venv/Scripts/python.exe -m pip install -e '.[dev]'
+          .venv/Scripts/python.exe -m pip install -c constraints/replication-py312.txt -e '.[dev]'
           .venv/Scripts/python.exe tools/fetch_reference.py
           .venv/Scripts/python.exe tools/install_reference_engine.py
       - name: Fetch checksum-verified canonical weather temporarily
@@ -165,7 +165,7 @@ jobs:
       - name: Install local environment and pinned EnergyPlus
         run: |
           python -m venv .venv
-          .venv/bin/python -m pip install -e '.[dev]'
+          .venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[dev]'
           .venv/bin/python tools/install_energyplus.py
       - name: Fetch checksum-verified canonical weather temporarily
         if: matrix.weather_kind == 'canonical'
