@@ -150,8 +150,10 @@ print(result.x, result.fun)
 The adapter uses the same local setup defaults as `make_objective` and calls PDFO
 with `method='bobyqa'`, bounded-variable scaling and a midpoint start unless `x0`
 is supplied. Its callback guard propagates simulation errors safely out of PDFO's
-compiled solver. The evaluation budget is explicit. Problems
-9–10 contain discontinuous penalties; BOBYQA's performance is separate from the
+compiled solver. It preserves the supplied initial vector and enforces the
+requested budget, which must be at least `problem.dimension + 3`. Small budgets
+use fewer interpolation points. Problems 9–10 contain discontinuous penalties;
+BOBYQA's performance is separate from the
 correctness of the evaluator. Simulator components and known outer derivatives
 remain available for other optimization methods. None of the ten objectives is
 naturally a least-squares objective.
