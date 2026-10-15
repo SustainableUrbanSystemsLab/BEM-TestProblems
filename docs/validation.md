@@ -20,6 +20,10 @@
 - **Related guides:** [automated testing](testing.md),
   [optimization replication](optimization-replication.md), and
   [problem origins and references](references.md).
+- **Additional published designs:** [Waibel's 2018 thesis Appendix C](published-solutions.md)
+  supplies rounded best-found objectives and vectors for all ten problems.
+  Six vectors use direct physical coordinates; four have a candidate slider
+  conversion. Numerical comparisons with these designs remain pending.
 
 ## What public CI checks
 
@@ -85,7 +89,7 @@ The [validation workflow](../.github/workflows/validate.yml) has seven jobs:
   The paper's aggregate electricity symbol alone does not specify the detailed
   model's individual fan observations.
 
-| Problems | Specification checked | Complete published `x → f(x)` pair available? |
+| Problems | Specification checked | Complete `x → f(x)` pair in the main journal paper? |
 | --- | --- | --- |
 | 1–3 | Table 2: four coordinates; Table 3: order/bounds; §3.3.1: Seattle/Houston/Chicago TMY2 mapping; Eq. (5): efficiencies 0.44/0.77, electricity factor 3, and area normalization | No |
 | 4–6 | Table 2: 13 coordinates; Table 4: order/bounds; §3.3.2: climates; Eq. (6): electricity factor 3 and gas factor 1 | No |
@@ -113,7 +117,13 @@ The [validation workflow](../.github/workflows/validate.yml) has seven jobs:
 
 ## Limits of comparison with the paper's results
 
-**Complete pointwise result coverage for the 2019 study is currently 0/10.**
+- **Rounded thesis references available: 10/10.** Appendix C of
+  [Waibel (2018)](https://doi.org/10.3929/ethz-b-000307674) supplies objectives and
+  final designs. See [published-solutions.md](published-solutions.md) for
+  coordinate interpretation, source terms, and the comparison procedure.
+- **Full-precision pointwise coverage for the 2019 journal study: 0/10.** The
+  thesis tested 20 optimizer configurations, while the journal paper tested 16;
+  its rounded minima are not established as the journal paper's winning runs.
 
 - **Numerical target:** Waibel, Wortmann, Evins, and Carmeliet (2019), using
   EnergyPlus 8.5.0. Earlier studies are cited for problem origins and formulas;
@@ -132,8 +142,10 @@ The [validation workflow](../.github/workflows/validate.yml) has seven jobs:
   for the supplement does not replace the code license or establish licenses
   for external models/weather.
 - **No inferred ground truth:** no exact `f_opt` or `x_opt` is inferred from a
-  plot or supplied by a new optimization run. Missing published vectors also
-  prevent decision-variable difference comparisons against the winning designs.
+  plot or supplied by a new optimization run. The thesis now permits comparisons
+  with rounded final designs, with four coordinate interpretations still needing
+  numerical verification. Exact differences from the journal paper's winning
+  designs remain unavailable.
 
 A usable pointwise publication reference would need:
 
@@ -147,8 +159,9 @@ The optimization protocol is a separate comparison:
 - The paper uses **20 reruns**, random initial solutions except DIRECT's
   domain-centre start, and **`100(n+1)` objective evaluations**.
 - A short solver smoke test does not reproduce that protocol.
-- New midpoint or best-found values do not replace missing published solution
-  records. Qualitative boxplot replication is described in the
+- New midpoint or best-found values cannot recover the publication's missing
+  precision or identify which journal runs won. Qualitative boxplot replication
+  is described in the
   [optimization replication guide](optimization-replication.md).
 - Pointwise numerical validation against the study remains unresolved until the
   required records are available.

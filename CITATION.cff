@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "Please cite Waibel, Wortmann, Evins and Carmeliet (2019) and the originating studies for the problems used; see docs/references.md."
+message: "Please cite Waibel, Wortmann, Evins, and Carmeliet (2019) and the originating studies for the problems used; cite Waibel (2018) when using the Appendix C solution references. See docs/references.md."
 type: software
 title: "BEM-TestProblems"
 authors:
@@ -28,6 +28,16 @@ preferred-citation:
   year: 2019
   doi: "10.1016/j.enbuild.2019.01.048"
 references:
+  - type: thesis
+    title: "Simulation-Based Optimization of Buildings and Multi-Energy Systems"
+    authors:
+      - family-names: Waibel
+        given-names: Christoph
+    institution:
+      name: "ETH Zurich"
+    thesis-type: "Doctoral thesis"
+    year: 2018
+    doi: "10.3929/ethz-b-000307674"
   - type: conference-paper
     title: "Are Genetic Algorithms Really the Best Choice for Building Energy Optimization?"
     authors:
