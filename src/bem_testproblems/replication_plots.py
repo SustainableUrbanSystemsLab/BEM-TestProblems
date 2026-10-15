@@ -17,8 +17,12 @@ ACCEPTED = {"completed", "budget_exhausted"}
 GROUPS = {"figure8": (1, 2, 3, 4, 5, 6, 8), "figure9": (9, 10, 13)}
 
 
-def collect_boxplot_data(root):
-    """Return numerical plot data; incomplete/failed incumbents are never accepted."""
+def collect_boxplot_data(root, *, include_diagnostic_runs=False):
+    """Select strict completed trajectories, or explicitly requested diagnostics.
+
+    A valid winning point does not make a trajectory strict if earlier calls
+    used warmup-error outputs. Missing strictness evidence is excluded too.
+    """
     root = Path(root)
     manifest = json.loads((root / "manifest.json").read_text())
     specs = {row["id"]: row for row in manifest["runs"]}
@@ -46,30 +50,38 @@ def collect_boxplot_data(root):
                             and row["version"] == version and row["solver"] == solver]
                 values, designs, statuses, terminations = [], [], Counter(), Counter()
                 warmup_runs, warmup_evaluations = 0, 0
+                excluded_non_strict, strict_completed = 0, 0
                 for spec in selected:
                     row = records.get(spec["id"])
                     status = row["status"] if row else "pending"
                     statuses[status] += 1
                     if status in ACCEPTED:
+                        used = row.get("warmup_severe_evaluations_used", 0)
+                        strict = row.get("strict_benchmark_evaluation") is True and used == 0
+                        strict_completed += strict
+                        if not strict and not include_diagnostic_runs:
+                            excluded_non_strict += 1
+                            continue
                         if row.get("best_f") is None or not math.isfinite(row["best_f"]):
                             raise ValueError(f"Accepted run has no finite best objective: {spec['id']}")
                         values.append(row["best_f"])
                         designs.append(row["best_x"])
                         terminations[row.get("solver_result", {}).get("status", "unknown")] += 1
-                        used = row.get("warmup_severe_evaluations_used", 0)
                         warmup_evaluations += used
                         warmup_runs += bool(used)
                 groups.append({"problem": int(number), "version": version, "solver": solver,
                                "unit": problem["objective_unit"], "values": values,
                                "best_designs": designs, "accepted": len(values),
                                "requested": len(selected), "statuses": dict(statuses),
+                               "strict_completed_runs": strict_completed,
+                               "excluded_non_strict_completed_runs": excluded_non_strict,
                                "solver_terminations": dict(terminations),
                                "runs_using_warmup_severe_outputs": warmup_runs,
                                "warmup_severe_evaluations_used": warmup_evaluations})
     return manifest, groups
 
 
-def plot_replication(root, *, output_dir=None):
+def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
     """Write four Figure8/9-style views, uncapped, plus numerical summaries.
 
     Quartiles use NumPy's linear interpolation and whiskers1.5IQR. These are
@@ -82,9 +94,10 @@ def plot_replication(root, *, output_dir=None):
     import numpy as np
 
     root = Path(root)
-    destination = Path(output_dir) if output_dir else root / "plots"
+    destination = Path(output_dir) if output_dir else root / (
+        "plots-diagnostic" if include_diagnostic_runs else "plots")
     destination.mkdir(parents=True, exist_ok=True)
-    manifest, groups = collect_boxplot_data(root)
+    manifest, groups = collect_boxplot_data(root, include_diagnostic_runs=include_diagnostic_runs)
     solvers = [name for name in SOLVER_ORDER if name in manifest["solvers"]
                and manifest["solvers"][name]["implemented"]]
     lookup = {(row["problem"], row["version"], row["solver"]): row for row in groups}
@@ -105,6 +118,9 @@ def plot_replication(root, *, output_dir=None):
     if is_partial:
         scope += " / INCOMPLETE"
     policy = manifest.get("diagnostics_policy", "strict")
+    selection = "diagnostic-completed-trajectories" if include_diagnostic_runs else "strict-completed-trajectories"
+    selection_title = ("DIAGNOSTIC VIEW: warmup-error outputs may be used; NOT STRICT"
+                       if include_diagnostic_runs else "STRICT VIEW: no warmup-error outputs used")
     budget_text = (f"{manifest['budget_override']} calls/run" if manifest.get("budget_override")
                    else "100(n+1) calls/run")
     outputs = []
@@ -149,7 +165,9 @@ def plot_replication(root, *, output_dir=None):
                     labels.append(f"{LABELS.get(solver, solver)}\nn={data['accepted']}/{data['requested']}"
                                   + (f"; failed={failed}" if failed else "")
                                   + (f"\nwarmup={data['runs_using_warmup_severe_outputs']} runs"
-                                     if data['runs_using_warmup_severe_outputs'] else ""))
+                                     if data['runs_using_warmup_severe_outputs'] else "")
+                                  + (f"\nnon-strict excluded={data['excluded_non_strict_completed_runs']}"
+                                     if data['excluded_non_strict_completed_runs'] else ""))
                 axis.set_xticks(range(1, len(solvers) + 1), labels, rotation=40, ha="right")
                 axis.set_xlim(0.4, len(solvers) + 0.6)
                 axis.tick_params(axis="x", labelsize=8)
@@ -160,12 +178,13 @@ def plot_replication(root, *, output_dir=None):
                 axis.set_visible(False)
             figure.suptitle(f"EnergyPlus {version}: new seeded rerun (DIRECT uses midpoint)\n"
                             f"{scope} - {manifest['requested_repetitions']} runs/solver; {budget_text}\n"
-                            f"Diagnostics policy: {policy}",
+                            f"{selection_title}\nExperiment policy: {policy}",
                             fontsize=14)
             footer = ("Canonical benchmark weather. Failed/interrupted attempts excluded and counted. "
                       "Blue: study methods; orange: added methods.\n"
-                      "Uncapped axes; boxes Q1-Q3, red median, whiskers 1.5 IQR. "
-                      "Study: Waibel, Wortmann, Evins and Carmeliet (2019).")
+                      "Completed-trajectory selection can bias distributions. "
+                      "Boxes Q1-Q3, red median, whiskers 1.5 IQR.\n"
+                      "Study: Waibel, Wortmann, Evins, and Carmeliet (2019).")
             figure.text(0.5, 0.015, footer, ha="center", fontsize=8)
             figure.tight_layout(rect=(0, 0.055, 1, 0.94))
             for suffix in ("png", "svg"):
@@ -177,6 +196,7 @@ def plot_replication(root, *, output_dir=None):
     report = {"schema_version": 1, "manifest_id": manifest["manifest_id"],
               "protocol": manifest["protocol"], "partial": is_partial,
               "diagnostics_policy": policy,
+              "result_selection": selection,
               "baseline_for_engine_percentage": "8.5.0", "groups": summaries,
               "skipped_original_methods": [metadata for metadata in registry
                                            if not metadata["implemented"]],

@@ -6,11 +6,11 @@ Problem definitions are independent of the execution and optimization backends.
 __version__ = "0.1.0.dev0"
 
 
-def get_problem(problem_id):
+def get_problem(problem_id, *, numerical_variant=None):
     """Return one of problems 1–6, 8–10 or 13; imports require no simulator."""
     from .problems import get_problem as lookup
 
-    return lookup(problem_id)
+    return lookup(problem_id, numerical_variant=numerical_variant)
 
 
 def __getattr__(name):

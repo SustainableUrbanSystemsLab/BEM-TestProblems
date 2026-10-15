@@ -78,6 +78,27 @@ def _data_resource(subdirectory: str, filename: str):
     return files("bem_testproblems").joinpath("data", subdirectory, filename)
 
 
+def _p1_warmup_100(text: str) -> str:
+    """Change one checked Building field while preserving all other IDF bytes."""
+    masked = re.sub(r"![^\r\n]*", lambda match: " " * len(match[0]), text)
+    buildings = []
+    for block in re.finditer(r"[^;]*;", masked):
+        fields = list(re.finditer(r"[^,;]+", block[0]))
+        if fields and fields[0][0].strip().casefold() == "building":
+            buildings.append((block, fields))
+    if len(buildings) != 1:
+        raise ValueError("P1 warmup-100 requires exactly one Building object")
+    block, fields = buildings[0]
+    if (len(fields) != 9 or fields[1][0].strip() != "office zone"
+            or fields[7][0].strip() != "25"):
+        raise ValueError("P1 warmup-100 requires the original Building warmup cap of 25")
+    field = fields[7]
+    value = re.search(r"\S+", field[0])
+    start = block.start() + field.start() + value.start()
+    end = block.start() + field.start() + value.end()
+    return text[:start] + "100" + text[end:]
+
+
 def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
     """Instantiate the original template, reproducing C# input transformations.
 
@@ -99,6 +120,8 @@ def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
         text = text.replace(token, csharp_number(value))
     if TOKEN_PATTERN.search(text):
         raise ValueError("Unresolved placeholders in generated legacy IDF")
+    if problem.numerical_variant == "warmup-100":
+        text = _p1_warmup_100(text)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(("\n".join(text.splitlines()) + "\n").encode("utf-8"))
@@ -138,6 +161,11 @@ def render_modern(problem: "Problem", x: Sequence[float], path) -> Path:
         # Match the value actually emitted by classic C# rather than adding
         # higher precision to the modern model's physical parameters.
         _set_path(model, binding["path"], float(csharp_number(values[binding["token"]])))
+    if problem.numerical_variant == "warmup-100":
+        buildings = model.get("Building", {})
+        if (set(buildings) != {"office zone"}
+                or buildings["office zone"].get("maximum_number_of_warmup_days") != 100):
+            raise ValueError("Modern P1 warmup-100 requires its existing Building cap of 100")
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes((json.dumps(model, indent=2, sort_keys=True) + "\n").encode("utf-8"))

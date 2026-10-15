@@ -78,7 +78,9 @@ def test_annotations_escape_commands_and_limit_failure_payload(tmp_path, capsys)
     assert capsys.readouterr().out == ""
 
 
-def test_replication_cli_dispatches_options_without_running_an_experiment(tmp_path, monkeypatch, capsys):
+@pytest.mark.parametrize("extended_warmup", [False, True])
+def test_replication_cli_dispatches_options_without_running_an_experiment(
+        tmp_path, monkeypatch, capsys, extended_warmup):
     captured = {}
 
     def fake_run(**kwargs):
@@ -86,20 +88,24 @@ def test_replication_cli_dispatches_options_without_running_an_experiment(tmp_pa
         return {"requested_runs": 2}
 
     monkeypatch.setattr(run_replication, "run_replication", fake_run)
-    run_replication.main([
+    arguments = [
         "--problems", "1", "13", "--solvers", "direct", "pybobyqa",
         "--versions", "8.5.0", "--repetitions", "1", "--budget", "20",
         "--seed", "99", "--workers", "2", "--schedule", "problem-first",
         "--output-root", str(tmp_path / "run"), "--weather-dir", str(tmp_path / "weather"),
         "--executable-8-5", str(tmp_path / "engine"), "--retain-success", "diagnostics",
         "--diagnostics-policy", "reference-warmup", "--retry-failed",
-    ])
+    ]
+    if extended_warmup:
+        arguments.append("--p1-warmup-100")
+    run_replication.main(arguments)
     assert captured["problems"] == ["1", "13"]
     assert captured["solvers"] == ["direct", "pybobyqa"]
     assert captured["executables"] == {"8.5.0": tmp_path / "engine"}
     assert captured["budget"] == 20 and captured["seed"] == 99
     assert captured["workers"] == 2 and captured["schedule"] == "problem-first"
     assert captured["diagnostics_policy"] == "reference-warmup"
+    assert captured["p1_warmup_100"] is extended_warmup
     assert captured["retry_failed"] and captured["retain_success"] == "diagnostics"
     assert "executable_8_5" not in captured
     assert json.loads(capsys.readouterr().out) == {"requested_runs": 2}
@@ -113,20 +119,26 @@ def test_replication_cli_rejects_unknown_solver_before_dispatch(monkeypatch):
     assert error.value.code == 2
 
 
-def test_plot_cli_dispatches_paths_and_prints_result(tmp_path, monkeypatch, capsys):
+@pytest.mark.parametrize("diagnostic", [False, True])
+def test_plot_cli_dispatches_paths_and_prints_result(tmp_path, monkeypatch, capsys, diagnostic):
     from bem_testproblems import replication_plots
 
     captured = {}
 
-    def fake_plot(root, *, output_dir):
-        captured.update(root=root, output_dir=output_dir)
+    def fake_plot(root, *, output_dir, include_diagnostic_runs):
+        captured.update(root=root, output_dir=output_dir,
+                        include_diagnostic_runs=include_diagnostic_runs)
         return {"summary": "numeric-summary.json", "plots": []}
 
     monkeypatch.setattr(replication_plots, "plot_replication", fake_plot)
-    monkeypatch.setattr(sys, "argv", ["plot_replication.py", str(tmp_path / "runs"),
-                                      "--output-dir", str(tmp_path / "plots")])
+    arguments = ["plot_replication.py", str(tmp_path / "runs"),
+                 "--output-dir", str(tmp_path / "plots")]
+    if diagnostic:
+        arguments.append("--include-diagnostic-runs")
+    monkeypatch.setattr(sys, "argv", arguments)
     runpy.run_module("tools.plot_replication", run_name="__main__")
-    assert captured == {"root": tmp_path / "runs", "output_dir": tmp_path / "plots"}
+    assert captured == {"root": tmp_path / "runs", "output_dir": tmp_path / "plots",
+                        "include_diagnostic_runs": diagnostic}
     assert json.loads(capsys.readouterr().out)["summary"] == "numeric-summary.json"
 
 

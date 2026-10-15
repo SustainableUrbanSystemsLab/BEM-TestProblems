@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "purpose": "Strict numerical checks for the explicitly separate P1 warmup-100 model; not historical C# parity or a thesis transcription.",
+  "cases": [
+    {
+      "case_id": "p01-midpoint-warmup100",
+      "problem": 1,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "numerical_variant": "warmup-100"
+    },
+    {
+      "case_id": "p01-lower-warmup100",
+      "problem": 1,
+      "x": [
+        -180.0,
+        0.1,
+        0.1,
+        0.2
+      ],
+      "purpose": "representative family bounds",
+      "numerical_variant": "warmup-100"
+    },
+    {
+      "case_id": "p01-upper-warmup100",
+      "problem": 1,
+      "x": [
+        180.0,
+        5.9,
+        5.9,
+        0.8
+      ],
+      "purpose": "representative family bounds",
+      "numerical_variant": "warmup-100"
+    },
+    {
+      "case_id": "p01-orientation90-warmup100",
+      "problem": 1,
+      "x": [
+        90.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "Paired orientation-90 trial with a recorded EnergyPlus8.5 warmup rejection; current26.2 passes.",
+      "numerical_variant": "warmup-100"
+    },
+    {
+      "case_id": "p01-independent-best-warmup100",
+      "problem": 1,
+      "numerical_variant": "warmup-100",
+      "x": [
+        70.87841299355091,
+        5.89862468203601,
+        5.631944132369494,
+        0.28963715516397215
+      ]
+    }
+  ]
+}

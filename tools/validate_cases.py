@@ -257,6 +257,8 @@ def require_native_failure(error, runner, model, weather, expected):
 def _check_baseline_identity(previous, case, model_hash, weather_hash, weather_name):
     if previous["x"] != case["x"] or previous["problem"] != case["problem"]:
         raise AssertionError("Baseline design does not match the case")
+    if previous.get("numerical_variant") != case.get("numerical_variant"):
+        raise AssertionError("Baseline numerical variant does not match the case")
     if previous["weather_sha256"] != weather_hash or previous.get("weather_file") != weather_name:
         raise AssertionError("Baseline weather bytes/selection changed")
     if previous["input_sha256"] != model_hash:
@@ -390,6 +392,8 @@ def validate(args):
     expected = json.loads(args.baseline.read_text()) if args.baseline else None
     if args.oracle and (args.version != "8.5.0" or args.proxy is None):
         raise ValueError("The original C# comparison requires 8.5.0 and --proxy")
+    if args.oracle and any(case.get("numerical_variant") for case in fixtures["cases"]):
+        raise ValueError("Numerical variants cannot be compared with the unchanged C# model")
     if expected is not None:
         if expected["engine_version"] != args.version or expected["weather_kind"] != args.weather_kind:
             raise ValueError("Baseline engine/weather variant does not match this run")
@@ -415,7 +419,10 @@ def validate(args):
             stage = "preparation"
             try:
                 previous = expected.pop(case["case_id"]) if expected is not None else None
-                problem, x = get_problem(case["problem"]), case["x"]
+                variant = case.get("numerical_variant")
+                problem = (get_problem(case["problem"], numerical_variant=variant)
+                           if variant is not None else get_problem(case["problem"]))
+                x = case["x"]
                 problem.validate(x)
                 case_dir = args.work_dir / case["case_id"]
                 case_dir.mkdir(exist_ok=False)

@@ -313,6 +313,31 @@ def test_canonical_ci_fixtures_cover_pinned_inputs_and_explicit_rejections(tmp_p
                     assert values and all(math.isfinite(value) for value in values.values())
 
 
+def test_warmup_variant_reference_has_separate_identity_and_only_strict_values(tmp_path):
+    from bem_testproblems import get_problem
+
+    fixture = ROOT / "reference/warmup-100-cases.json"
+    cases = json.loads(fixture.read_text())["cases"]
+    baseline = json.loads((ROOT / "reference/baselines/8.5.0-warmup-100-canonical.json").read_text())
+    assert baseline["case_fixture"]["sha256"] == hashlib.sha256(fixture.read_bytes()).hexdigest()
+    assert baseline["diagnostics_policy"] == "strict"
+    assert baseline["license"] == "MIT"
+    problem = get_problem(1, numerical_variant="warmup-100")
+    assert baseline["numerical_variant"] == problem.provenance["numerical_variant"]
+    records = {row["case_id"]: row for row in baseline["cases"]}
+    assert len(records) == len(cases) == 5
+    for case in cases:
+        row = records[case["case_id"]]
+        assert row["problem"] == case["problem"] == 1
+        assert row["numerical_variant"] == case["numerical_variant"] == "warmup-100"
+        assert row["x"] == case["x"]
+        model = problem.render_legacy(row["x"], tmp_path / (case["case_id"] + ".idf"))
+        assert hashlib.sha256(model.read_bytes()).hexdigest() == row["input_sha256"]
+        assert row["passed"] is True and row["severe_count"] == row["fatal_count"] == 0
+        assert problem.outer_loss(row["x"], row["components"]) == row["objective"]
+        assert problem.objective_terms(row["x"], row["components"]) == row["terms"]
+
+
 def test_publication_and_license_notices_are_present() -> None:
     assert "MIT License" in (ROOT / "LICENSE").read_text()
     notices = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()

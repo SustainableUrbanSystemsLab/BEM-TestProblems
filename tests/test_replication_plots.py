@@ -21,6 +21,7 @@ def experiment(tmp_path):
     (tmp_path / "runs").mkdir()
     for i, status in enumerate(("budget_exhausted", "failed", "running")):
         record = {**specs[i], "manifest_id": "example", "status": status,
+                  "strict_benchmark_evaluation": True,
                   "best_f": [10, -100, -200][i], "best_x": [i]}
         (tmp_path / "runs" / f"{i}.json").write_text(json.dumps(record))
     return tmp_path
@@ -111,11 +112,12 @@ def test_paired_engine_summary_uses_completed_medians_and_the_old_engine_denomin
             if version != "8.5.0":
                 manifest["runs"].append(spec)
             record = {**spec, "manifest_id": "example", "status": "completed",
+                      "strict_benchmark_evaluation": i != 0,
                       "best_f": value, "best_x": [i], "warmup_severe_evaluations_used": 2 if i == 0 else 0}
             (root / "runs" / f"{spec['id']}.json").write_text(json.dumps(record))
     manifest_path.write_text(json.dumps(manifest))
-    result = plot_replication(root)
-    report = json.loads((root / "plots/boxplot-summary.json").read_text())
+    result = plot_replication(root, include_diagnostic_runs=True)
+    report = json.loads((root / "plots-diagnostic/boxplot-summary.json").read_text())
     assert result["scope"] == "PAPER BUDGET" and not report["partial"]
     assert report["groups"][0]["statistics"] == {
         "minimum": 10, "q1": 17.5, "median": 25, "q3": 32.5, "maximum": 40}
@@ -125,3 +127,37 @@ def test_paired_engine_summary_uses_completed_medians_and_the_old_engine_denomin
     assert comparison["accepted_8.5"] == comparison["accepted_26.2"] == 4
     assert report["groups"][0]["runs_using_warmup_severe_outputs"] == 1
     assert report["groups"][0]["warmup_severe_evaluations_used"] == 2
+    assert report["result_selection"] == "diagnostic-completed-trajectories"
+    assert not (root / "plots").exists()
+
+
+@pytest.mark.parametrize("strict,used", [(False, 2), (True, 2), (None, 0)])
+def test_non_strict_search_is_excluded_even_when_its_winning_value_is_finite(tmp_path, strict, used):
+    root = experiment(tmp_path)
+    path = root / "runs/0.json"
+    record = json.loads(path.read_text())
+    record.update(strict_benchmark_evaluation=strict, warmup_severe_evaluations_used=used)
+    path.write_text(json.dumps(record))
+    _, groups = collect_boxplot_data(root)
+    assert groups[0]["values"] == []
+    assert groups[0]["accepted"] == 0
+    assert groups[0]["requested"] == 4
+    assert groups[0]["excluded_non_strict_completed_runs"] == 1
+    _, diagnostics = collect_boxplot_data(root, include_diagnostic_runs=True)
+    assert diagnostics[0]["values"] == [10]
+
+
+def test_strict_plot_reports_excluded_searches_and_preserves_failure_counts(tmp_path):
+    pytest.importorskip("matplotlib")
+    root = experiment(tmp_path)
+    path = root / "runs/0.json"
+    record = json.loads(path.read_text())
+    record.update(strict_benchmark_evaluation=False, warmup_severe_evaluations_used=1)
+    path.write_text(json.dumps(record))
+    result = plot_replication(root)
+    report = json.loads((tmp_path / "plots/boxplot-summary.json").read_text())
+    assert report["result_selection"] == "strict-completed-trajectories"
+    assert report["groups"][0]["statistics"] is None
+    assert report["groups"][0]["excluded_non_strict_completed_runs"] == 1
+    assert report["groups"][0]["statuses"]["failed"] == 1
+    assert len(result["plots"]) == 2

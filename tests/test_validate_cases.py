@@ -165,6 +165,45 @@ def test_expected_rejection_remains_null_and_later_success_is_compared(audit):
     assert report["accepted_simulations"] == report["reference_checked_rejections"] == 1
 
 
+def test_explicit_numerical_variant_is_forwarded_and_recorded(audit, monkeypatch):
+    chosen = [{**audit.cases[0], "numerical_variant": "warmup-100"}]
+    audit.write(failed=(), selected=chosen)
+    original = validation.get_problem
+    calls = []
+
+    def variant_problem(number, *, numerical_variant=None):
+        if numerical_variant is not None:
+            calls.append((number, numerical_variant))
+        return original(number)
+
+    monkeypatch.setattr(validation, "get_problem", variant_problem)
+    report = validation.validate(audit.args)
+    assert calls == [(1, "warmup-100")]
+    assert report["cases"][0]["numerical_variant"] == "warmup-100"
+    assert report["passed"]
+
+
+def test_same_input_hash_does_not_override_a_different_variant_identity(audit):
+    rows = audit.write(failed=())
+    rows[0]["numerical_variant"] = "warmup-100"
+    baseline = json.loads(audit.args.baseline.read_text())
+    baseline["cases"] = rows
+    audit.args.baseline.write_text(json.dumps(baseline))
+    with pytest.raises(AssertionError, match="Baseline numerical variant"):
+        validation.validate(audit.args)
+    assert [case_id for case_id, _, _ in audit.calls] == ["second"]
+
+
+def test_numerical_variant_cannot_claim_unchanged_csharp_parity(audit):
+    audit.write(failed=(), selected=[{**audit.cases[0], "numerical_variant": "warmup-100"}])
+    audit.args.version = "8.5.0"
+    audit.args.oracle = Path("oracle.exe")
+    audit.args.proxy = Path("proxy.exe")
+    with pytest.raises(ValueError, match="unchanged C# model"):
+        validation.validate(audit.args)
+    assert not audit.calls
+
+
 @pytest.mark.parametrize("mode,match", [("success", "became successful"),
                                        ("fatal", "severe/fatal counts"),
                                        ("other", "not CheckWarmupConvergence"),

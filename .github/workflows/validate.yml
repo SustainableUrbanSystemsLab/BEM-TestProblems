@@ -130,12 +130,24 @@ jobs:
           --oracle .tools/reference-bin/oracle/Oracle.exe
           --proxy .tools/reference-bin/proxy/EngineProxy.exe
           ${{ matrix.baseline && format('--baseline {0}', matrix.baseline) || '' }}
+      - name: Check the separate strict P1 extended-warmup model
+        if: matrix.weather_kind == 'canonical'
+        run: >-
+          .venv/Scripts/python.exe tools/validate_cases.py
+          --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus.exe --version $ENERGYPLUS_VERSION
+          --weather-dir .validation-local/weather --weather-kind canonical
+          --cases reference/warmup-100-cases.json
+          --work-dir .validation-local/warmup-100-comparison
+          --output .validation-local/reports/warmup-100-regression.json
+          --baseline reference/baselines/8.5.0-warmup-100-canonical.json
       - name: Retain numerical comparison report
         if: always() && !cancelled()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: original-csharp-${{ matrix.weather_kind }}
-          path: .validation-local/reports/original-csharp.json
+          path: |
+            .validation-local/reports/original-csharp.json
+            .validation-local/reports/warmup-100-regression.json
           include-hidden-files: true
           if-no-files-found: error
 

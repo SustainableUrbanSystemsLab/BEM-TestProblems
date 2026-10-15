@@ -211,12 +211,11 @@ also reporting severe warmup errors. The original C# caller does not reject
 those diagnostics. The Python evaluator does: rejected results cannot become
 accepted objective values or a passing reference comparison.
 
-There are promising numerical settings for revised variants, but each changes
-the input/model identity and may change objectives at other designs. A proposed
-repair needs canonical-weather comparison across the validation cases, visible
-objective/component changes and separately reviewed references before it becomes
-a benchmark definition. Exact historical compatibility and a revised numerical
-variant must remain distinguishable.
+The P1 extended-warmup repair is now available as a separately identified
+variant, with the validation below. The P4 and P10 probes still require broader
+numerical validation before they can become supported variants. Each numerical
+change may change objectives; exact historical compatibility and a revised
+numerical model retain separate identities and references.
 
 The [recorded code CI](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38674953272)
 passed all five jobs, including both 26-case engine comparisons. Those public
@@ -230,3 +229,36 @@ rejection is checked as a rejected diagnostic outcome with no accepted objective
 Unexpected failures, changed signatures or newly successful previously rejected
 cases require review. Synthetic checks remain supplemental. Only numerical JSON
 reports are uploaded; no raw canonical weather is published.
+
+## P1 extended-warmup variant
+
+- Select `get_problem(1, numerical_variant="warmup-100")` and use the ordinary
+  objective or solver API. The [implementation](../src/bem_testproblems/models.py)
+  changes only the legacy Building maximum warmup field, from 25 to 100 days.
+  It checks the original field before applying the change. The temperature and
+  load tolerances, physical parameters, and objective remain unchanged.
+- The modern P1 input already allows 100 days. The variant checks that setting
+  and renders byte-identical modern input. The named variant remains recorded
+  in provenance, including when no modern input change is needed.
+- A fresh canonical-weather matrix tested 12 designs under each legacy cap:
+  midpoint, lower and upper corners, orientation 90°, the printed thesis design,
+  the independently optimized design, an explicit width-swap hypothesis, and
+  five diverse warmup-rejected points from its optimization trajectory.
+- The original cap accepted **6/12**; the extended cap accepted **12/12**, with
+  **zero Severe/Fatal errors**. The six formerly rejected designs converged in
+  **26–35 days**. All six already accepted designs retained exactly the same
+  objectives and components: **0% difference** for their nonzero values.
+- Diagnostic-only objective changes at formerly rejected points ranged from
+  **−0.00000938% to +0.00149125%**, relative to their rejected-run output. Those
+  comparisons do not make the original rejected values valid.
+- The five public [variant cases](../reference/warmup-100-cases.json) cover the
+  canonical P1 vectors and the independently optimized candidate. Their
+  [reviewed strict baseline](../reference/baselines/8.5.0-warmup-100-canonical.json)
+  records objectives, components, input/weather hashes, and convergence days.
+  The [CI workflow](../.github/workflows/validate.yml) checks them separately from
+  unchanged C# versus Python parity. No thesis table, raw weather, or model is
+  distributed with these numerical fixtures.
+- This demonstrates the repair on the tested points, rather than proving
+  convergence throughout the box. A selected recorded-start CMA-ES rerun uses
+  the same start, seed, and 500-call budget under strict diagnostics to check the
+  full search path. Its result must be assessed separately from the 12-point matrix.
