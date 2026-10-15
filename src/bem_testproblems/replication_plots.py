@@ -17,6 +17,38 @@ ACCEPTED = {"completed", "budget_exhausted"}
 GROUPS = {"figure8": (1, 2, 3, 4, 5, 6, 8), "figure9": (9, 10, 13)}
 
 
+def validate_output_tree(output_dir, *, protected_roots=()):
+    """Reject input overlap and filesystem aliases before refreshing generated files."""
+    requested = Path(output_dir).absolute()
+    if requested.is_symlink():
+        raise ValueError("Output directory must not be a symlink")
+    output = requested.resolve()
+    for protected in protected_roots:
+        source = Path(protected).resolve()
+        if output.is_relative_to(source) or source.is_relative_to(output):
+            raise ValueError("Output directory overlaps a protected source experiment or input")
+    if output.exists():
+        if not output.is_dir():
+            raise ValueError("Output directory is not a directory")
+        for path in output.rglob("*"):
+            if path.is_symlink():
+                raise ValueError(f"Output tree contains a symlink: {path.name}")
+            if path.is_file() and path.stat().st_nlink > 1:
+                raise ValueError(f"Output tree contains a hard-linked file: {path.name}")
+    return output
+
+
+def strict_trajectory(row):
+    """Require explicit trajectory evidence and reject contradictory call diagnostics."""
+    return (row.get("strict_benchmark_evaluation") is True
+            and row.get("warmup_severe_evaluations_used", 0) == 0
+            and not any(item.get("strict_benchmark_evaluation") is False
+                        or item.get("diagnostics", {}).get("accepted_warmup_only", False)
+                        or item.get("diagnostics", {}).get("severe_count", 0)
+                        or item.get("diagnostics", {}).get("fatal_count", 0)
+                        for item in row.get("trace", [])))
+
+
 def collect_boxplot_data(root, *, include_diagnostic_runs=False):
     """Select strict completed trajectories, or explicitly requested diagnostics.
 
@@ -37,9 +69,15 @@ def collect_boxplot_data(root, *, include_diagnostic_runs=False):
         if row["id"] in records or any(row.get(key) != value for key, value in spec.items()):
             raise ValueError(f"Run specification does not match the experiment: {path.name}")
         # Plotting needs completed-run summaries, not millions of call records.
+        row["strict_benchmark_evaluation"] = strict_trajectory(row)
         for key in ("trace", "problem_provenance", "engine_provenance", "solver_metadata"):
             row.pop(key, None)
         records[row["id"]] = row
+    return manifest, group_records(manifest, records, include_diagnostic_runs=include_diagnostic_runs)
+
+
+def group_records(manifest, records, *, include_diagnostic_runs=False):
+    """Group validated records against the complete planned experiment."""
     solvers = [name for name in SOLVER_ORDER if name in manifest["solvers"]
                and manifest["solvers"][name]["implemented"]]
     groups = []
@@ -57,7 +95,7 @@ def collect_boxplot_data(root, *, include_diagnostic_runs=False):
                     statuses[status] += 1
                     if status in ACCEPTED:
                         used = row.get("warmup_severe_evaluations_used", 0)
-                        strict = row.get("strict_benchmark_evaluation") is True and used == 0
+                        strict = strict_trajectory(row)
                         strict_completed += strict
                         if not strict and not include_diagnostic_runs:
                             excluded_non_strict += 1
@@ -79,26 +117,37 @@ def collect_boxplot_data(root, *, include_diagnostic_runs=False):
                                "solver_terminations": dict(terminations),
                                "runs_using_warmup_severe_outputs": warmup_runs,
                                "warmup_severe_evaluations_used": warmup_evaluations})
-    return manifest, groups
+    return groups
 
 
-def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
+def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False, dataset=None):
     """Write four Figure8/9-style views, uncapped, plus numerical summaries.
 
     Quartiles use NumPy's linear interpolation and whiskers1.5IQR. These are
     explicit plotting conventions; the study does not specify those details.
     Matching engine panels use the same objective range for each problem.
     """
+    root = Path(root)
+    destination = Path(output_dir) if output_dir else root / (
+        "plots-diagnostic" if include_diagnostic_runs else "plots")
+    protected = list(dataset["source_roots"].values()) if dataset is not None else [
+        root / "manifest.json", root / "runs"]
+    if dataset is not None:
+        protected.extend(dataset.get("protected_roots", []))
+    destination = validate_output_tree(destination, protected_roots=protected)
+
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import numpy as np
 
-    root = Path(root)
-    destination = Path(output_dir) if output_dir else root / (
-        "plots-diagnostic" if include_diagnostic_runs else "plots")
     destination.mkdir(parents=True, exist_ok=True)
-    manifest, groups = collect_boxplot_data(root, include_diagnostic_runs=include_diagnostic_runs)
+    if dataset is None:
+        manifest, groups = collect_boxplot_data(root, include_diagnostic_runs=include_diagnostic_runs)
+    else:
+        manifest = dataset["origin_manifest"]
+        groups = group_records(manifest, dataset["records"],
+                               include_diagnostic_runs=include_diagnostic_runs)
     solvers = [name for name in SOLVER_ORDER if name in manifest["solvers"]
                and manifest["solvers"][name]["implemented"]]
     lookup = {(row["problem"], row["version"], row["solver"]): row for row in groups}
@@ -118,6 +167,8 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
     scope = "PILOT" if manifest["protocol"] == "pilot-overrides" else "PAPER BUDGET"
     if is_partial:
         scope += " / INCOMPLETE"
+    if dataset is not None and dataset.get("publication_preview"):
+        scope += " / UNVALIDATED PREVIEW"
     policy = manifest.get("diagnostics_policy", "strict")
     selection = "diagnostic-completed-trajectories" if include_diagnostic_runs else "strict-completed-trajectories"
     selection_title = ("DIAGNOSTIC VIEW: warmup-error outputs may be used; NOT STRICT"
@@ -180,7 +231,13 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
                 axis.grid(axis="y", alpha=0.22)
             for axis in list(axes.flat)[len(numbers):]:
                 axis.set_visible(False)
+            lineage = ""
+            if dataset is not None:
+                lineage = "Sources: " + "; ".join(
+                    f"{item.get('platform', 'unknown platform')} [{key[:12]}]"
+                    for key, item in dataset["manifests"].items()) + "\n"
             figure.suptitle(f"EnergyPlus {version}: new seeded rerun (DIRECT uses midpoint)\n"
+                            f"{lineage}"
                             f"{scope} - {manifest['requested_repetitions']} runs/solver; {budget_text}\n"
                             f"{selection_title}\nExperiment policy: {policy}",
                             fontsize=14)
@@ -219,6 +276,9 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False):
                     "percentage_change": 100 * delta / abs(a) if delta is not None and a else None,
                     "accepted_8.5": old["accepted"], "accepted_26.2": new["accepted"],
                     "caution": "Descriptive completed-run medians; failures can cause survivor bias."})
+    if dataset is not None:
+        report["source_manifests"] = {key: {"platform": value.get("platform")}
+                                      for key, value in dataset["manifests"].items()}
     path = destination / "boxplot-summary.json"
     path.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
     return {"plots": outputs, "summary": str(path), "scope": scope}

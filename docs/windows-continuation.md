@@ -10,7 +10,9 @@ It preserves the remaining starts, seeds, solvers, and evaluation budgets.
 Use a local disk with room for simulation outputs, outside a live sync folder.
 Connect through your institution's documented remote-access service with your
 own account. The commands below run **on the Windows workstation**, in PowerShell.
-They assume Git and 64-bit Python 3.12 are installed.
+Install [Git for Windows](https://git-scm.com/install/windows) and 64-bit
+Python 3.12 through the [official Python installation guidance](https://docs.python.org/3/using/windows.html)
+if they are missing. The commands assume `git` and `py -3.12` are available.
 
 ```powershell
 $ErrorActionPreference = 'Stop'
@@ -84,37 +86,21 @@ Do not copy an old experiment lock into the destination output directory.
 
 ```powershell
 Invoke-Checked { & $python -m pytest -q -m 'not integration' }
-$versions = (Get-Content (Join-Path $bundle 'origin\manifest.json') -Raw | ConvertFrom-Json).engines.PSObject.Properties.Name
-foreach ($version in $versions) {
-    $engine = Join-Path $project ".tools\energyplus\$version\energyplus.exe"
-    Invoke-Checked { & $engine --version }
-    Invoke-Checked { & $python tools\validate_cases.py --engine $engine --version $version `
-        --weather-dir .cache\weather --weather-kind canonical `
-        --cases reference\canonical-cases.json `
-        --baseline "reference\baselines\$version-canonical.json" `
-        --work-dir ".validation-local\windows-checks\$version" `
-        --output ".validation-local\windows-checks\$version.json" }
-}
+Invoke-Checked { & $python replication\pipeline.py preflight }
+Invoke-Checked { & $python replication\pipeline.py pilot }
 ```
 
-The checks compare objective/components at relative tolerance `1e-6`, with an
-absolute fallback of `1e-7`, and verify known rejected outcomes separately.
-Inspect the reports before launching. A passing check does not mean every
-design converged; see the [validation record](validation.md).
+Preflight compares objective/components with both installed engines at relative
+tolerance `1e-6`, with an absolute fallback of `1e-7`, and checks known rejected
+outcomes separately. It writes a passing receipt tied to the destination
+manifest. Inspect the reports before launching; a passing check does not mean
+every design converged. See the [validation record](validation.md).
 
-On a dedicated large workstation, measure a short, separate 48-worker pilot
-before choosing the full campaign's worker count:
-
-```powershell
-Invoke-Checked { & $python tools\run_replication.py --project-root $project `
-    --problems 1 4 10 13 --solvers direct crs2 sbplex cma_es bobyqa pybobyqa `
-    --repetitions 1 --budget 25 --workers 48 --diagnostics-policy reference-warmup `
-    --output-root .validation-local\windows-throughput }
-```
-
-This pilot has 48 short runs and is explicitly labelled as a reduced experiment.
-It supplies workstation timings and a chance to inspect CPU, memory, and disk
-use. Its values do not enter the full-budget comparison.
+The separate pilot has 48 short runs over four representative problems, six
+solvers, and both engines, with 25 calls per run. Inspect timings, CPU use,
+memory, and disk activity before selecting the full worker count. Its values
+do not enter the full-budget comparison. The settings and folder layout are in
+[continuation.json](../replication/continuation.json).
 
 The private handoff may also contain a ten-design literature fixture. Its
 separate instructions run the original C# caller at the rounded dissertation
@@ -122,14 +108,11 @@ designs. Keep those inputs and results outside version control.
 
 ## 5. Prepare the continuation
 
-Use the [continuation tool](../tools/continue_replication.py) with the frozen
-source from the handoff:
+Use the [pipeline](../replication/pipeline.py), which invokes the tested
+[continuation tool](../tools/continue_replication.py) in a fresh interpreter:
 
 ```powershell
-$output = Join-Path $project '.validation-local\windows-continuation'
-Invoke-Checked { & $python tools\continue_replication.py --origin (Join-Path $bundle 'origin') `
-    --frozen-source (Join-Path $bundle 'source') --project-root $project `
-    --output-root $output --workers 120 --plan-only }
+Invoke-Checked { & $python replication\pipeline.py plan }
 ```
 
 Planning does not start optimization. Review the parent manifest ID, completed
@@ -160,10 +143,11 @@ Use Windows **Task Scheduler → Create Task** for the long campaign:
 The equivalent command for a first supervised launch is:
 
 ```powershell
-Invoke-Checked { & $python tools\continue_replication.py --origin (Join-Path $bundle 'origin') `
-    --frozen-source (Join-Path $bundle 'source') --project-root $project `
-    --output-root $output --workers 120 --log-file (Join-Path $output 'controller.log') --run }
+Invoke-Checked { & $python replication\pipeline.py run }
 ```
+
+The run stage verifies the current preflight receipt before starting. Append
+`--dry-run` to inspect any stage's command without launching a process.
 
 Use literal absolute paths in the scheduled task; PowerShell variables from this
 terminal are not available there. For the example directory above, the Action
@@ -178,7 +162,7 @@ D:\benchmarks\BEM-TestProblems\.venv\Scripts\python.exe
 **Add arguments** (one line)
 
 ```text
-"D:\benchmarks\BEM-TestProblems\tools\continue_replication.py" --origin "D:\benchmarks\BEM-TestProblems\.validation-local\handoff\origin" --frozen-source "D:\benchmarks\BEM-TestProblems\.validation-local\handoff\source" --project-root "D:\benchmarks\BEM-TestProblems" --output-root "D:\benchmarks\BEM-TestProblems\.validation-local\windows-continuation" --workers 120 --log-file "D:\benchmarks\BEM-TestProblems\.validation-local\windows-continuation\controller.log" --run
+"D:\benchmarks\BEM-TestProblems\replication\pipeline.py" run
 ```
 
 **Start in**
@@ -193,8 +177,9 @@ still apply. Once the scheduled task is running, disconnecting RDP or closing
 the laptop does not end the task.
 
 After the 48-worker pilot, use the measured load to select the final worker
-count. The examples use `--workers 120` for a dedicated 120-core workstation;
-choose less if memory or disk throughput is limiting. The continuation tool
+count. The configuration uses 120 workers for a dedicated 120-core workstation;
+choose less in [continuation.json](../replication/continuation.json) if memory or
+disk throughput is limiting. The continuation tool
 divides work among separate process pools because
 [Python 3.12 limits each Windows pool to 61 workers](https://docs.python.org/3.12/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor).
 The worker count is the total across pools. Numerical-library threads are
@@ -218,21 +203,26 @@ Keep the workstation awake and leave its local input files available. Estimate
 completion from its measured throughput; laptop timings do not establish the
 workstation's runtime.
 
-## 7. Resume and collect results
+## 7. Monitor, review, and publish
 
-- Rerun the same continuation command and output directory after an interruption.
-  Completed destination runs are skipped; interrupted attempts are archived and
-  restarted. Changed inputs or a different continuation identity are rejected.
-- Keep the checkout, frozen source, installed dependencies, and downloaded
-  inputs fixed during the campaign. Update software only in a separate,
-  explicitly recorded experiment.
-- Monitor the controller log and numerical summary in the output directory. An
-  interrupted or missing run means the campaign is incomplete.
+```powershell
+Invoke-Checked { & $python replication\pipeline.py status }
+Invoke-Checked { & $python replication\pipeline.py review }
+```
+
+These commands combine the preserved laptop records with the Windows
+continuation, retaining every run's actual manifest and the complete planned
+repetition counts. The generated tables include every design coordinate, each
+solver's best result, and the best across methods. Partial plots remain labelled
+incomplete; non-strict trajectories are excluded from strict comparisons.
+
+- Restart the same scheduled task to resume; interrupted attempts restart from
+  their original seed, start, and full budget. Completed records are retained.
+- Keep the checkout, frozen source, installed dependencies, engines, and inputs
+  fixed while running. Do not pull software updates during a live campaign.
+- Follow the [replication workflow](../replication/README.md) for native winner
+  replays, safe exports, staged-file review, and pushing a separate results
+  branch to GitHub. The export gates require completion and passing replays.
 - Keep the origin and continuation directories together when copying results
-  back. Their manifests identify which machine produced each result.
-- Strict comparisons exclude whole searches that used warmup-error outputs.
-  Compatibility results remain separately labelled. See the
-  [experiment guide](optimization-replication.md#diagnostics-and-figures).
-- Finish the native replay checks, full-vector comparisons, and boxplots before
-  treating the experiment as validated. Website work still requires separate
-  approval.
+  back. Raw simulation files and private literature comparisons remain private.
+- Website work still requires separate approval.

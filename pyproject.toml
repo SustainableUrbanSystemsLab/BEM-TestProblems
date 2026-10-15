@@ -35,7 +35,7 @@ markers = ["integration: invokes an externally installed EnergyPlus executable"]
 
 [tool.coverage.run]
 branch = true
-source = ["src/bem_testproblems", "tools"]
+source = ["src/bem_testproblems", "tools", "replication"]
 data_file = ".validation-local/.coverage"
 
 [tool.coverage.report]
