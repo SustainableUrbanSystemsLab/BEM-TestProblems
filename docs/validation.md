@@ -5,6 +5,10 @@ specification, the executable C#/EnergyPlus-8.5 implementation and the modern
 EnergyPlus-26.2 model. Agreement with one does not establish agreement with all
 three.
 
+See the [complete canonical-case table and warmup failure analysis](warmup-diagnostics.md)
+for all 26 audited designs, the additional P1 trial and the separate diagnostic
+experiments investigating the rejected evaluations.
+
 ## Published specification
 
 The independent assertions in `tests/test_paper_specification.py` use
