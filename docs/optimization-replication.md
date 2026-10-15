@@ -144,13 +144,15 @@ presented as the paper-budget experiment.
   retain that library's hash together with the Python extension hash and the
   compiler/build information. Matching only a package version is insufficient
   for a claim of identical trajectories across machines.
-- The running campaign retains its frozen source and original manifest.
+- The original campaign retains its frozen source and original manifest.
   Supplementary local environment records capture Python/OS versions, native
   NLopt library hashes, and complete frozen Python-source hashes without changing
   the campaign identity.
 - [Objective repeatability checks](validation.md#reproducibility) are complete.
-  The full optimization campaign is still running; exact full-campaign replay
-  and historical-study replication have not been demonstrated.
+  The laptop campaign was interrupted and its checkpoints were preserved.
+  [Windows continuation](windows-continuation.md) uses a separately linked
+  destination manifest while keeping original results unchanged. Exact
+  full-campaign replay and historical-study replication have not been demonstrated.
 
 ## Diagnostics and figures
 

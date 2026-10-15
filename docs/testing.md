@@ -13,6 +13,7 @@ value with the function under test would not provide an independent check.
 | EnergyPlus runner and objective factory | Isolated subprocesses, timeout and child-process cleanup, severe/fatal rejection, cache identity, retained provenance, invalid configuration and scalar objective use |
 | Solver adapters | Real bounded analytic problems, hard budgets, preserved supplied starts, seeded trajectories, observed incumbents, and unchanged propagation of simulator failures |
 | Replication orchestration and diagnostics | Paired starts, paper budgets, spawned workers, checkpoint/resume rules, coordinator locks and narrow warmup recovery with explicit diagnostics |
+| Cross-platform continuation | Immutable origin records, exact remaining starts/seeds/budgets, destination provenance, changed-input rejection, interruption history, and disjoint Windows worker pools |
 | Plotting | Failed/incomplete results excluded and counted, provenance checks, independently calculated quartiles, engine differences and percentage denominators |
 | Download, transition and maintenance tools | Offline fixtures exercise acquisition checksums, safe extraction, model conversion and repair invariants, source preservation and CLI dispatch |
 | C# oracle, compilation shims and engine proxy | Windows CI compiles the unchanged upstream components, checks component construction, and runs the original caller against Python on canonical and supplemental fixtures |
