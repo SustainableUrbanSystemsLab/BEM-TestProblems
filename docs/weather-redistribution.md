@@ -5,6 +5,12 @@ The project can retrieve its four frozen US EPWs with
 directory. The audit below concerns publishing those exact files on GitHub or
 inside a package; local acquisition and distribution have separate evidence.
 
+Canonical CI also acquires these checksum-verified files in temporary runner
+storage and uploads only numerical JSON reports. Synthetic weather remains a
+supplemental check. The audit below does not establish that temporary simulation
+use in CI is prohibited; the unresolved conclusion concerns redistribution of
+the exact files. Applicable use terms still apply to temporary evaluation.
+
 ## Evidence found
 
 The EnergyPlus Team's [2002 LBNL publication](https://simulationresearch.lbl.gov/dirpubs/un_articleEP02.pdf#page=7),

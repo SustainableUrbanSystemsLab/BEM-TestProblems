@@ -21,8 +21,10 @@ point. `EngineProxy.exe` is staged at its hard-coded engine path, invokes the
 genuine pinned 8.5 executable, and copies the input and outputs before the original
 component deletes them. No source algorithm is replaced by a Python oracle.
 The validator also requires the captured engine exit status, successful completion
-marker and absence of severe/fatal diagnostics; the original caller alone does
-not check the engine status.
+marker and absence of severe/fatal diagnostics for accepted objectives; the
+original caller alone does not check the engine status. Known canonical warmup
+rejections are separate null-objective outcomes whose signatures must match the
+reviewed baseline. Unexpected errors or changed outcomes fail validation.
 
 From the repository root on a Windows runner with the official Visual C++ 2013
 x64 runtime already installed:
@@ -30,10 +32,19 @@ x64 runtime already installed:
 ```sh
 python tools/fetch_reference.py
 python tools/install_reference_engine.py
-python tools/synthetic_weather.py --output-dir .validation-local/weather
+python tools/fetch_weather.py --directory .validation-local/weather
 dotnet build reference/Oracle/Oracle.csproj -c Release -o .tools/reference-bin/oracle
 dotnet build reference/EngineProxy/EngineProxy.csproj -c Release -o .tools/reference-bin/proxy
-python tools/validate_cases.py --engine .tools/energyplus/8.5.0/energyplus.exe --version 8.5.0 --weather-dir .validation-local/weather --weather-kind synthetic-ci --work-dir .validation-local/original-comparison --output .validation-local/reports/original-csharp.json --oracle .tools/reference-bin/oracle/Oracle.exe --proxy .tools/reference-bin/proxy/EngineProxy.exe
+engine_version='8.5.0'
+python tools/validate_cases.py \
+  --engine ".tools/energyplus/$engine_version/energyplus.exe" --version "$engine_version" \
+  --weather-dir .validation-local/weather --weather-kind canonical \
+  --cases reference/canonical-cases.json \
+  --baseline "reference/baselines/$engine_version-canonical.json" \
+  --work-dir .validation-local/original-comparison \
+  --output .validation-local/reports/original-csharp.json \
+  --oracle .tools/reference-bin/oracle/Oracle.exe \
+  --proxy .tools/reference-bin/proxy/EngineProxy.exe
 ```
 
 Use the project's `.venv` Python interpreter for these commands. The oracle uses
@@ -57,8 +68,9 @@ retains those original conditions; the current acceptance policy is a later chan
 
 ## Modern regressions
 
-Run the same explicit designs with the pinned 26.2 executable and compare with
-`baselines/26.2.0-synthetic.json` using `--baseline`. The validator never changes
+Run the 27 canonical designs with the pinned 26.2 executable and compare with
+`baselines/26.2.0-canonical.json` using `--baseline`, `--weather-kind canonical`
+and `--cases reference/canonical-cases.json`. The validator never changes
 that file. Baseline changes must identify their input/model/weather provenance
 and explain material differences. Modern-versus-legacy physics drift is a separate
 comparison and is not tested as exact equality.
@@ -75,7 +87,14 @@ checks. Complete published input/objective pairs are tested only with reproducib
 simulation conditions. Missing numerical coverage is documented in
 [the validation ledger](../docs/validation.md), not filled with invented values.
 
-Synthetic test weather is independently generated and labelled. It is never
+The canonical baseline provenance retains its measured inputs and source records.
+Legacy CRLF input hashes are normalized to the renderer's portable LF bytes with
+an explicit derivation; object fields and the measured numerical values are
+unchanged. P13 has no EPW in Python: lower, midpoint and upper design-day results
+were measured without weather. Its unchanged C# caller receives Seattle only as
+an unused CLI argument, with the actual filename/hash/role recorded separately.
+
+Synthetic test weather is supplemental, independently generated and labelled. It is never
 renamed to impersonate an original EPW. Canonical weather remains externally
 provided under its own terms. Public CI uploads numerical reports only, not
 weather records, source models, simulator binaries or publication files.
