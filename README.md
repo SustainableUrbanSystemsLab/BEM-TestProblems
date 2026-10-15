@@ -1,23 +1,13 @@
 # BEM-TestProblems
 
-Continuous building energy optimization benchmarks with separate problem
-definitions, EnergyPlus models, objective terms and optimization adapters.
+Building energy optimization problems for testing your solver in Python. Choose
+a problem, get its objective and bounds, and let the package handle EnergyPlus.
 
-This implementation follows [Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
-and the original problem literature listed in [references](docs/references.md).
-Historical calculation behavior is the default. See the
-[validation record](docs/validation.md) for the evidence, known discrepancies,
-published solution references, and remaining limitations.
+The ten continuous problems come from
+[Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
+and the earlier studies listed in the [references](docs/references.md).
 
-| Problems | Variables | Building and climate | Objective |
-|---|---:|---|---|
-| 1, 2, 3 | 4 | Simple office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
-| 4, 5, 6 | 13 | Detailed office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
-| 8 | 11 | Detailed office: Chicago, two fixed parameters | Primary energy, kWh/(m² year) |
-| 9, 10 | 13 | Small and large offices: San Francisco | Penalized source energy, MJ/m² |
-| 13 | 10 | School: Belgrade winter design day | Energy, insulation and radiator cost, EUR |
-
-## Local installation
+## Set up locally
 
 Use Python 3.12. From the repository root on macOS or Linux:
 
@@ -28,119 +18,47 @@ python3.12 -m venv .venv
 .venv/bin/python tools/fetch_weather.py
 ```
 
-On Windows, use `py -3.12 -m venv .venv` and replace `.venv/bin/python` with
-`.venv\Scripts\python.exe` in subsequent commands. Activation is optional.
+On Windows, create the environment with `py -3.12 -m venv .venv` and use
+`.venv\Scripts\python.exe` in place of `.venv/bin/python` in subsequent commands.
 
-The installer reads its pinned version, build and archive checksums from
-[`assets/energyplus-downloads.json`](assets/energyplus-downloads.json), verifies
-the archive's SHA-256 and extracts it into `.tools/energyplus/<version>`.
-It does not change the system PATH. Downloaded tools and raw simulation
-directories stay local; fixed numerical test fixtures
-and their provenance are versioned.
+These commands install EnergyPlus and download the benchmark weather into this
+project, with checksum verification. They leave the system PATH unchanged.
+Once set up, evaluations run offline. The default engine is EnergyPlus 26.2;
+the [engine guide](docs/engine-versions.md) explains how to use historical 8.5
+models and a compatible local engine.
 
-The [model transition guide](docs/model-transition.md) documents the official
-21-step IDF transition chain, the separate epJSON converter, and a scratch-only
-reproduction workflow with provenance and compatibility adjustments.
-
-The [engine version guide](docs/engine-versions.md) shows how to choose EnergyPlus
-8.5 or 26.2 through the same evaluation interface and compare their results.
-
-The weather command retrieves the four exact annual benchmark EPWs from the
-pinned fork into `.cache/weather` and verifies their SHA-256 hashes. This covers
-problems 1–6 and 8–10; problem 13 contains its design-day conditions and needs no
-EPW. See [licensing](docs/licensing.md) for weather provenance and applicable
-terms; the software license does not grant weather redistribution rights.
-
-## Use your own solver
-
-After the local setup above, select a problem and bind its objective once:
+## Evaluate a problem with your own solver
 
 ```python
 from bem_testproblems import get_problem, make_objective
 
 problem = get_problem(1)
-n = problem.dimension             # Number of free variables: 4
-bounds = problem.bounds            # ((lower_1, upper_1), ..., (lower_n, upper_n))
-lower, upper = zip(*bounds)         # For solvers that take separate bound vectors
-x0 = problem.midpoint              # A feasible starting point in physical units
+n = problem.dimension              # Number of free variables
+bounds = problem.bounds             # (lower, upper) pairs in parameter order
+x0 = problem.midpoint               # A feasible starting point
 objective = make_objective(problem)
 
-f0 = objective(x0)                 # One scalar objective evaluation
+f0 = objective(x0)                  # Runs EnergyPlus and returns a float
 print(n, bounds, x0, f0, problem.objective_unit)
 ```
 
-Pass `objective`, `x0` and `bounds` to your solver. Each `objective(x)` call accepts
-a one-dimensional sequence of `n` physical parameter values and returns a Python
-`float` to minimize. The helper selects the problem's model and canonical weather,
-runs EnergyPlus and extracts the objective. Your solver does not create input
-files, launch EnergyPlus or parse its output. Reuse the callable throughout a run;
-its shared runner caches successful evaluations at identical inputs.
+Pass `objective`, `x0`, and `bounds` to your solver. It should minimize
+`objective(x)`, where `x` contains the physical parameter values. Reuse the
+callable throughout the run; repeated successful evaluations are cached.
+For separate bound vectors, use `lower, upper = zip(*bounds)`.
 
-| Problem information | Interface |
-| --- | --- |
-| Number of free variables | `problem.dimension` |
-| Box constraints, in parameter order | `problem.bounds` |
-| Feasible midpoint | `problem.midpoint` |
-| Names, paper symbols, units and bounds | `problem.parameters` |
-| Objective units | `problem.objective_unit` |
-| Scalar function for a solver | `make_objective(problem)` |
+Parameter names, paper symbols, units, and bounds are available through
+`problem.parameters`. The midpoint is a convenient start; the study's original
+starting vectors are unavailable. Use `problem.validate(your_start)` to check a
+different start. Inspecting problem metadata does not require EnergyPlus.
 
-The midpoint is a convenient default, not a recovered starting point from
-the study's runs. To choose another start, use `x0 = problem.validate(your_start)`;
-this checks its dimension, finiteness and bounds. Metadata inspection with
-`get_problem` requires no EnergyPlus installation or optional solver packages.
+Failed simulations raise errors and retain their diagnostics. Some designs
+within the bounds fail warmup convergence; the [warmup guide](docs/warmup-diagnostics.md)
+explains these cases and the separately validated P1 extended-warmup option.
 
-For example, a solver using SciPy's
-[`minimize` interface](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-powell.html)
-can be called as follows. Install SciPy in the same virtual environment first
-(`.venv/bin/python -m pip install scipy`), or use the optional optimizer setup below.
+## Solve with BOBYQA
 
-```python
-from scipy.optimize import minimize
-
-result = minimize(
-    objective,
-    x0,
-    bounds=bounds,
-    method='Powell',
-    options={'maxfev': 100},
-)
-print(result.x, result.fun, result.success, result.message)
-```
-
-Decision vectors use physical coordinates and units. Problem 8 keeps the original
-parameter numbering: `x11=25 °C` and `x13=12 °C` are fixed, with eleven free entries.
-Problem 13 runs a winter design day; `make_objective(get_problem(13))` needs no EPW.
-
-By default, the helper uses the local EnergyPlus 26.2 installation and verified
-weather from the setup commands, with diagnostics under `.runs/26.2.0`. It finds
-an editable checkout from the package location, so a notebook may run from another
-directory. For a wheel installation or another local setup, pass
-`project_root=...`, or supply `executable=...` and `weather_dir=...` explicitly.
-`energyplus_version='8.5.0'` selects the historical engine after the
-[legacy setup](docs/engine-versions.md). An existing `runner` can also be supplied.
-Preparation checks the local inputs and never downloads or installs anything.
-Canonical weather checksums are checked again before each objective evaluation.
-
-An explicit `weather=...` overrides canonical weather for a separate experiment.
-Input vectors outside the box, timeouts, failed simulations, missing outputs and
-severe/fatal diagnostics raise errors. Custom solvers must handle those failures
-according to their own documented policy; no objective penalty is invented.
-The runner retains the generated input, engine/weather hashes and diagnostics.
-
-The [complete canonical-case table and warmup analysis](docs/warmup-diagnostics.md)
-record the known rejected designs and the separate numerical-control experiments.
-
-For P1, `get_problem(1, numerical_variant="warmup-100")` selects a tested numerical
-variant with a longer warmup allowance and unchanged convergence tolerances.
-Use it with the same objective and solver API. Its separate identity distinguishes
-the repaired legacy model from exact historical reproduction; see the
-[variant validation](docs/warmup-diagnostics.md#p1-extended-warmup-variant).
-
-## Default optimizer
-
-Install the optional PDFO BOBYQA adapter in the same environment using the tested
-[Python dependency constraints](constraints/replication-py312.txt):
+The optional default solver is PDFO BOBYQA. Install it in the same environment:
 
 ```sh
 .venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[optimize]'
@@ -154,116 +72,56 @@ result = solve(problem, x0=problem.midpoint, max_evaluations=100)
 print(result.x, result.fun)
 ```
 
-The adapter uses the same local setup defaults as `make_objective` and calls PDFO
-with `method='bobyqa'`, bounded-variable scaling and a midpoint start unless `x0`
-is supplied. Its callback guard propagates simulation errors safely out of PDFO's
-compiled solver. It preserves the supplied initial vector and enforces the
-requested budget, which must be at least `problem.dimension + 3`. Small budgets
-use fewer interpolation points. Problems 9–10 contain discontinuous penalties;
-BOBYQA's performance is separate from the
-correctness of the evaluator. Simulator components and known outer derivatives
-remain available for other optimization methods. None of the ten objectives is
-naturally a least-squares objective.
+The budget counts objective calls and must be at least `problem.dimension + 3`.
+For solvers that exploit objective structure, see the
+[simulator outputs, additive terms, and known derivatives](docs/objective-structure.md).
 
-The [objective structure and derivative interface](docs/objective-structure.md)
-documents all four outer functions, named simulator outputs, additive terms and
-known partial derivatives for structured optimization methods.
+## Available problems
 
-## Inspect simulator outputs and objective terms
+| Problems | Free variables | Building and climate | Objective |
+|---|---:|---|---|
+| 1, 2, 3 | 4 | Simple office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
+| 4, 5, 6 | 13 | Detailed office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
+| 8 | 11 | Detailed office: Chicago, two fixed parameters | Primary energy, kWh/(m² year) |
+| 9, 10 | 13 | Small and large offices: San Francisco | Penalized source energy, MJ/m² |
+| 13 | 10 | School: Belgrade winter design day | Energy, insulation, and radiator cost, EUR |
 
-For methods that use the objective's structure, the explicit runner interface
-also exposes the simulator outputs and known outer function:
+Problem 8 fixes the paper's `x11 = 25 °C` and `x13 = 12 °C`; its input vector
+contains the eleven free parameters in their original order. Problem 13 includes
+its design-day conditions and needs no weather file.
 
-```python
-import os
-from pathlib import Path
-from bem_testproblems import EnergyPlusRunner, get_problem
-
-problem = get_problem(1)
-energyplus_version = '26.2.0'
-engine_name = 'energyplus.exe' if os.name == 'nt' else 'energyplus'
-runner = EnergyPlusRunner(
-    Path('.tools/energyplus') / energyplus_version / engine_name,
-    expected_version=energyplus_version,
-    output_root=Path('.runs') / energyplus_version,
-)
-weather = None if problem.design_day else Path('.cache/weather') / problem.weather_filename
-x = problem.midpoint
-
-for parameter, value in zip(problem.parameters, x):
-    print(parameter.paper_symbol, parameter.name, value, parameter.unit)
-
-outputs = problem.simulate_outputs(x, runner=runner, weather=weather)
-print(problem.objective_terms(x, outputs))
-print(problem.outer_loss(x, outputs), problem.objective_unit)
-```
-
-## Random-start optimization experiments
-
-The [optimization experiment guide](docs/optimization-replication.md) runs the
-continuous problems with the 2019 study's 20 random-start runs and `100(n+1)`
-evaluation budgets using EnergyPlus 8.5 and 26.2. It includes DIRECT, CRS2,
-Sbplex and CMA-ES, followed by added PDFO BOBYQA and Py-BOBYQA comparisons.
-Experiments use canonical weather, save starts/seeds and per-run checkpoints,
-and generate Figure 8/9-style boxplots with visible sample/failure counts.
-Reduced-budget smoke runs and incomplete campaigns are explicitly labeled.
-
-## Tests and numerical comparisons
+## Tests and validation
 
 ```sh
-.venv/bin/python -m pip install -e '.[dev,optimize,replication]'
+.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[dev,optimize,replication]'
 .venv/bin/python tools/fetch_reference.py
-.venv/bin/python -m coverage run -m pytest -q
-.venv/bin/python -m coverage report
+.venv/bin/python -m pytest -q -m 'not integration'
 .venv/bin/python -m ruff check src tests tools
 ```
 
-GitHub Actions checks Python on Linux, Windows and macOS; compares unchanged
-original C# components with Python using the same EnergyPlus 8.5 engine; and
-checks modern results against separately reviewed EnergyPlus 26.2 references.
-The [reference harness](reference/README.md) documents the numerical comparisons.
-CI publishes coverage for every Python module and tool, including branches, and
-requires every nonempty file to be exercised and at least 85% combined coverage.
-Coverage identifies gaps; correctness
-comes from independent formula checks, failure tests and native reference
-comparisons. The [testing guide](docs/testing.md) maps the code to those checks.
+GitHub Actions runs tests on Linux, Windows, and macOS. It also compares Python
+with the original C# implementation using EnergyPlus 8.5 and checks EnergyPlus
+26.2 against measured references, using the benchmark weather. See the
+[testing guide](docs/testing.md) and [reference checks](reference/README.md).
 
-| Check | Comparison | Purpose |
-| --- | --- | --- |
-| Canonical C# versus Python, EnergyPlus 8.5 | Successful objectives/components and explicit rejected outcomes on 27 designs | Check translation against the original caller with the benchmark climate inputs |
-| Canonical EnergyPlus 26.2 checks | Successful values versus measured references; known warmup rejections versus diagnostic signatures | Detect numerical or simulation-outcome changes under benchmark climate inputs |
-| Supplemental synthetic weather | Separate controlled-weather checks of both implementations and modern repeatability | Broaden software checks with independent deterministic weather fixtures |
-| Published specification | Bounds and formulas versus Waibel, Wortmann, Evins, and Carmeliet (2019) and the original problem sources | Check mathematical definitions; exact winning records from the journal study remain unavailable |
-| Rounded published designs | [Waibel's 2018 thesis Appendix C](docs/published-solutions.md), covering all ten continuous problems | 20 Python simulations across both engines passed strict diagnostics; two larger 8.5 discrepancies remain unresolved; rounded coordinates/objectives and four inferred mappings prevent full-precision publication claims |
+Agreement with the original code and agreement with published results are
+checked separately. Some published-result discrepancies remain unresolved;
+the [validation record](docs/validation.md) and
+[published-design comparison](docs/published-solutions.md) explain the evidence
+and its limits.
 
-Public CI downloads the four checksum-verified **canonical benchmark weather
-files** into temporary runner storage. It publishes numerical JSON reports, with
-no raw EPWs, weather caches or simulation directories uploaded. Independently
-generated synthetic weather remains a separate supplemental test.
+For repeated optimization runs and Figure 8/9-style boxplots, follow the
+[experiment guide](docs/optimization-replication.md). It records seeds, starts,
+budgets, engine versions, and failures, and distinguishes partial runs from
+completed experiments. The [model transition guide](docs/model-transition.md)
+documents the EnergyPlus upgrade.
 
-The canonical fixture includes 27 designs. Known warmup failures stay rejected:
-8.5 rejects P10 at its lower bounds and the P1 orientation-90 trial; 26.2 rejects
-P4 at its lower bounds. CI checks those diagnostic outcomes explicitly and shows
-them in its summary. A newly failing case, a changed diagnostic signature or a
-previously rejected case becoming successful requires review. Reference updates
-are reviewed changes, never an automatic response to a failed test.
+## License and credit
 
-Problem 13 uses its embedded design day. Python supplies no EPW; the unchanged
-C# caller receives a verified US file only to satisfy its weather-path argument.
-That auxiliary argument is recorded separately and its output is checked against
-the no-EPW design-day reference. No Belgrade IWEC download is required.
-
-Original C# files and historical IDFs are fetched from the fork at a fixed commit,
-verified by SHA-256, and kept in `.reference-cache/beobenchmark`. They are excluded
-from the repository and Python distributions. Normal modern-model evaluations
-do not require this reference cache or a network connection.
-
-## Attribution and development
-
-New independent code is MIT licensed. Upstream source, translated benchmark logic
-and model assets retain BSD-3-Clause coverage and applicable model acknowledgments.
-Read [third-party notices](THIRD_PARTY_NOTICES.md) and the
-[asset manifest](assets/manifest.json) before redistributing assets.
-
-Development takes place on `codex/beobenchmark-python-continuous`. Webpage design
-and development require separate explicit approval after empirical validation.
+New independent code is MIT licensed. Upstream code, translated benchmark logic,
+and model assets retain BSD-3-Clause coverage and applicable acknowledgments.
+See the [third-party notices](THIRD_PARTY_NOTICES.md) and
+[licensing guide](docs/licensing.md). The software licenses do not grant
+redistribution rights for weather files. Weather files and original reference
+files are downloaded into local caches; they are excluded from this repository
+and package distributions.
