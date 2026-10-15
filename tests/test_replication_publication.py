@@ -14,6 +14,8 @@ from types import SimpleNamespace
 import pytest
 
 from bem_testproblems import get_problem
+from bem_testproblems.replication import _seed, paired_start
+from bem_testproblems.replication_solvers import solver_metadata
 from tools import export_replication as export
 from tools import replay_replication as replay
 from tools.review_replication import load_review
@@ -41,8 +43,8 @@ def campaign(tmp_path):
             "version": version,
             "solver": "bobyqa",
             "repetition": 0,
-            "seed": 2019,
-            "x0": list(problem.midpoint),
+            "seed": _seed(2019, "solver", 13, 0, "bobyqa"),
+            "x0": list(paired_start(problem, 0, 2019)),
             "budget": 1100,
         }
         for version in ("8.5.0", "26.2.0")
@@ -78,7 +80,8 @@ def campaign(tmp_path):
         "budget_override": 1100,
         "master_seed": 2019,
         "diagnostics_policy": "strict",
-        "solvers": {"bobyqa": {"implemented": True}},
+        "solvers": {"bobyqa": solver_metadata("bobyqa")},
+        "schedule": "balanced",
         "problem_definitions": {"13": definition},
         "engines": engines,
         "code_sha256": {"replication.py": replay._hash(package / "replication.py")},
@@ -274,7 +277,7 @@ def test_plan_checks_precise_incumbents_without_import_or_native_execution(campa
     result = plan(campaign)
     assert len(result["incumbents"]) == 2 and not result["simulation_started"]
     assert result["incumbents"][0]["components"] == {"heating": 2.0, "cooling": 8.0}
-    assert result["incumbents"][0]["x"] == list(get_problem(13).midpoint)
+    assert result["incumbents"][0]["x"] == campaign.manifest["runs"][0]["x0"]
     assert result["source_manifest_ids"] == [campaign.manifest["manifest_id"]]
     assert not Path(result["output_directory"]).exists()
     assert before == {path: replay._hash(path) for path in campaign.origin.rglob("*.json")}
@@ -486,7 +489,18 @@ def test_validated_export_is_allowlisted_and_hashed(campaign):
     assert not result["partial_preview"]
     saved = json.loads((output / "results.json").read_text())
     assert saved["campaign_complete"] and saved["replay"]["passed"]
-    assert saved["best_across_methods"][0]["winner"]["x"] == list(get_problem(13).midpoint)
+    experiment = saved["experiment"]
+    assert experiment["runs"] == campaign.manifest["runs"]
+    assert experiment["master_seed"] == 2019 and experiment["requested_repetitions"] == 1
+    assert experiment["budget_override"] == 1100 and experiment["numerical_variants"] == {
+        "13": None
+    }
+    assert experiment["solvers"]["bobyqa"]["settings"] == solver_metadata("bobyqa")["settings"]
+    winner = saved["best_across_methods"][0]["winner"]
+    specification = next(spec for spec in experiment["runs"] if spec["id"] == winner["run_id"])
+    assert all(winner[key] == specification[key] for key in ("seed", "budget", "x0", "repetition"))
+    assert winner["evaluation_count"] == 1
+    assert saved["best_across_methods"][0]["winner"]["x"] == campaign.manifest["runs"][0]["x0"]
     assert (output / "plots/figure9-energyplus-8.5.0.svg").is_file()
     assert not list(output.rglob("*.idf")) and not list(output.rglob("*.epw"))
     for path in output.rglob("*"):
@@ -756,6 +770,80 @@ def test_sanitized_python_provenance_omits_private_runtime_strings(campaign):
         "executable_sha256": "e" * 64,
     }
     assert "PRIVATE" not in json.dumps(source)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "master-seed",
+        "run-seed",
+        "start",
+        "budget",
+        "solver-settings",
+        "variant",
+        "repetitions",
+        "winner-seed",
+        "winner-calls",
+        "extra-spec-field",
+        "duplicate-spec",
+        "schedule",
+    ],
+)
+def test_exported_experiment_recipe_rejects_inconsistent_protocol(campaign, mutation):
+    pytest.importorskip("matplotlib")
+    configured = plan(campaign)
+    replay.run_replay(configured, execute=fake_native)
+    output = campaign.tmp / "public"
+    export.export_results(
+        campaign.dataset,
+        origin=campaign.origin,
+        output_dir=output,
+        replay_dir=configured["output_directory"],
+    )
+    result = json.loads((output / "results.json").read_text())
+    experiment = result["experiment"]
+    if mutation == "master-seed":
+        experiment["master_seed"] += 1
+    elif mutation == "run-seed":
+        experiment["runs"][0]["seed"] += 1
+    elif mutation == "start":
+        experiment["runs"][0]["x0"][0] = 1e100
+    elif mutation == "budget":
+        experiment["runs"][0]["budget"] += 1
+    elif mutation == "solver-settings":
+        experiment["solvers"]["bobyqa"]["settings"]["quiet"] = False
+    elif mutation == "variant":
+        experiment["numerical_variants"]["13"] = "warmup-100"
+    elif mutation == "repetitions":
+        experiment["requested_repetitions"] += 1
+    elif mutation == "winner-seed":
+        result["best_across_methods"][0]["winner"]["seed"] += 1
+    elif mutation == "winner-calls":
+        result["best_across_methods"][0]["winner"]["evaluation_count"] = 1101
+    elif mutation == "extra-spec-field":
+        experiment["runs"][0]["private_path"] = "/Users/private"
+    elif mutation == "duplicate-spec":
+        experiment["runs"][1]["id"] = experiment["runs"][0]["id"]
+    else:
+        experiment["schedule"] = "unknown-policy"
+    write(output / "results.json", result)
+    inventory = json.loads((output / "inventory.json").read_text())
+    inventory["files"]["results.json"] = replay._hash(output / "results.json")
+    write(output / "inventory.json", inventory)
+    with pytest.raises(ValueError):
+        export.verify_export(output)
+
+
+def test_export_refuses_changed_frozen_solver_settings(campaign):
+    campaign.dataset["origin_manifest"]["solvers"]["bobyqa"]["settings"]["quiet"] = False
+    with pytest.raises(ValueError, match="authoritative adapter"):
+        export.export_results(
+            campaign.dataset,
+            origin=campaign.origin,
+            output_dir=campaign.tmp / "public",
+            partial_preview=True,
+        )
+    assert not (campaign.tmp / "public").exists()
 
 
 @pytest.mark.parametrize("value", ["/private/path", "user@host", "bad value", None])
