@@ -1,0 +1,122 @@
+name: Validate continuous benchmarks
+
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: benchmark-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_CACHE_DIR: ${{ github.workspace }}/.cache/pip
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: 'false'
+  DOTNET_CLI_HOME: ${{ github.workspace }}/.tools/dotnet
+  NUGET_PACKAGES: ${{ github.workspace }}/.cache/nuget
+
+jobs:
+  unit:
+    name: Unit tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022, macos-14]
+    runs-on: ${{ matrix.os }}
+    env:
+      VENV_PY: ${{ matrix.os == 'windows-2022' && '.venv/Scripts/python.exe' || '.venv/bin/python' }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Create project-local environment
+        run: |
+          python -m venv .venv
+          "$VENV_PY" -m pip install -e '.[dev,optimize]'
+      - name: Lint and test
+        run: |
+          "$VENV_PY" -m ruff check src tests tools
+          "$VENV_PY" -m pytest -m 'not integration' -q
+      - name: Build distribution
+        if: runner.os == 'Linux'
+        run: "$VENV_PY" -m build
+
+  original-csharp:
+    name: Original C# versus Python (EnergyPlus 8.5)
+    runs-on: windows-2022
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Set up local tools and analytic test weather
+        run: |
+          python -m venv .venv
+          .venv/Scripts/python.exe -m pip install -e '.[dev]'
+          .venv/Scripts/python.exe tools/install_reference_engine.py
+          .venv/Scripts/python.exe tools/synthetic_weather.py --output-dir .validation-local/weather
+      - name: Compile unchanged original components and evidence launcher
+        run: |
+          dotnet build reference/Oracle/Oracle.csproj -c Release -o .tools/reference-bin/oracle --nologo
+          dotnet build reference/EngineProxy/EngineProxy.csproj -c Release -o .tools/reference-bin/proxy --nologo
+          .tools/reference-bin/oracle/Oracle.exe --check-stubs
+      - name: Compare all explicit designs with the original implementation
+        run: >-
+          .venv/Scripts/python.exe tools/validate_cases.py
+          --engine .tools/energyplus/8.5.0/energyplus.exe --version 8.5.0
+          --weather-dir .validation-local/weather --weather-kind synthetic-ci
+          --work-dir .validation-local/original-comparison
+          --output .validation-local/reports/original-csharp.json
+          --oracle .tools/reference-bin/oracle/Oracle.exe
+          --proxy .tools/reference-bin/proxy/EngineProxy.exe
+      - name: Retain numerical comparison report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: original-csharp-comparison
+          path: .validation-local/reports/original-csharp.json
+          if-no-files-found: error
+
+  modern-regression:
+    name: Reviewed EnergyPlus 26.2 regression
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Install local environment and pinned EnergyPlus
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -e '.[dev]'
+          .venv/bin/python tools/install_energyplus.py
+          .venv/bin/python tools/synthetic_weather.py --output-dir .validation-local/weather
+      - name: Compare explicit designs with reviewed 26.2 references
+        run: >-
+          .venv/bin/python tools/validate_cases.py
+          --engine .tools/energyplus/26.2.0/energyplus --version 26.2.0
+          --weather-dir .validation-local/weather --weather-kind synthetic-ci
+          --work-dir .validation-local/modern-comparison
+          --output .validation-local/reports/modern-regression.json
+          --baseline reference/baselines/26.2.0-synthetic.json
+      - name: Retain numerical regression report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: modern-regression
+          path: .validation-local/reports/modern-regression.json
+          if-no-files-found: error

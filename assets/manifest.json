@@ -339,7 +339,18 @@
       "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
-      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons."
+      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
+      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "use_evidence": [
+        {
+          "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
+          "scope": "Official documentation describes TMY2 building-system simulation/comparison use and download availability; not an exact converted-file license."
+        },
+        {
+          "url": "https://www.nlr.gov/disclaimer",
+          "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
+        }
+      ]
     },
     {
       "kind": "weather",
@@ -355,7 +366,18 @@
       "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
-      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons."
+      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
+      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "use_evidence": [
+        {
+          "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
+          "scope": "Official documentation describes TMY2 building-system simulation/comparison use and download availability; not an exact converted-file license."
+        },
+        {
+          "url": "https://www.nlr.gov/disclaimer",
+          "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
+        }
+      ]
     },
     {
       "kind": "weather",
@@ -372,7 +394,18 @@
       "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
-      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons."
+      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
+      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "use_evidence": [
+        {
+          "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
+          "scope": "Official documentation describes TMY2 building-system simulation/comparison use and download availability; not an exact converted-file license."
+        },
+        {
+          "url": "https://www.nlr.gov/disclaimer",
+          "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
+        }
+      ]
     },
     {
       "kind": "weather",
@@ -388,7 +421,18 @@
       "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
       "additional_notices": "Historical file identifies TMY2/TMY3; exact converted package and design-condition terms have not been independently cleared.",
       "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
-      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons."
+      "simulation_role": "Historical annual weather input; preserve the data hash for legacy comparisons.",
+      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths.",
+      "use_evidence": [
+        {
+          "url": "https://energyplus.readthedocs.io/en/stable/auxiliary-programs/auxiliary-programs.html#tmy2-data-set-format",
+          "scope": "Official documentation describes TMY2 building-system simulation/comparison use and download availability; not an exact converted-file license."
+        },
+        {
+          "url": "https://www.nlr.gov/disclaimer",
+          "scope": "Current NLR server data use/copy terms require entire notice and publication credit; applicability to exact converted EPWs hosted elsewhere is not established."
+        }
+      ]
     },
     {
       "kind": "weather",
@@ -403,7 +447,8 @@
       "rights_status": "External only; exact data-package use and redistribution terms require verification. Upstream BSD/MIT is not asserted as a weather license.",
       "additional_notices": "ASHRAE IWEC copyright 2001; original source notice references License Agreement and Additional Conditions.",
       "distribution_policy": "not bundled; use an authorized external path; do not publish in CI artifacts/caches without established redistribution rights.",
-      "simulation_role": "Legacy command-line binding. Embedded design-day benchmark; effect of EPW headers requires a separate invariance check."
+      "simulation_role": "Legacy command-line binding. Embedded design-day benchmark; effect of EPW headers requires a separate invariance check.",
+      "public_ci_policy": "No automatic canonical-weather acquisition is enabled by the license inventory. Independent SYNTHETIC-CI files exercise code parity; canonical runs use authorized external paths."
     },
     {
       "kind": "engine",
@@ -456,7 +501,294 @@
     "modern_regression": "Separate EnergyPlus 26.2 regression/drift record.",
     "known_paper_code_discrepancies": [
       "Waibel Eq. (7): minimum window height 0.55 m; reference C# problems 9/10: 0.5488 m.",
-      "Detailed-office fan/electricity accounting is recorded separately in implementation validation notes."
+      "Waibel Eq. (6) aggregates fan/lighting electricity; original detailed-office C# duplicates the same supply-fan ESO row instead of combining separate supply/return observations. No published per-fan numerical fixture is inferred."
     ]
-  }
+  },
+  "bundled_external_notices": [
+    {
+      "path": "reference/licenses/EnergyPlus-8.5-LICENSE.txt",
+      "sha256": "65b4b8b08c7311c671f197e322af112b68761b7cb9ffed7b9eab2d695d9b7e2c",
+      "source_url": "https://raw.githubusercontent.com/NREL/EnergyPlus/v8.5.0/LICENSE.txt",
+      "source_artifact": "EnergyPlus-8.5.0-c87e61b44b-Darwin-x86_64.dmg package Resources/License.txt",
+      "license_expression": "LicenseRef-EnergyPlus-8.5.0",
+      "modifications": "none; full exact release agreement copied verbatim",
+      "scope": "Accompanies external acquisition of original8.5 core for CI; no engine binaries distributed in this repository."
+    }
+  ],
+  "derived_asset_patterns": [
+    {
+      "path_glob": "src/bem_testproblems/data/modern/**",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source": "Selected pinned legacy IDFs and source parameter mappings",
+      "notice_policy": "Preserved original IDFs and full BSD text accompany commentless epJSON; per-model provenance sidecars retain source hashes and attribution."
+    }
+  ],
+  "synthetic_ci_weather": {
+    "generator": "tools/synthetic_weather.py",
+    "license_expression": "MIT",
+    "generated_names": [
+      "synthetic_seattle.epw",
+      "synthetic_houston.epw",
+      "synthetic_chicago.epw",
+      "synthetic_san_francisco.epw"
+    ],
+    "adjacent_license": "SYNTHETIC-CI-LICENSE.txt",
+    "records_per_file": 8760,
+    "source_data": "none; independently prescribed analytic climate test inputs",
+    "canonical_benchmark_weather": false,
+    "use": "Same-input public-CI source-code parity and execution smoke tests only; never substitute for canonical or published weather in reported benchmark results."
+  },
+  "derived_assets": [
+    {
+      "path": "src/bem_testproblems/data/modern/parameter_bindings.json",
+      "kind": "modern_derived_metadata",
+      "sha256": "b407b84038344e83641120f6644dad255b8bcb5ee139200c65ea9ebbd12c35a6",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source": "Selected pinned legacy IDFs and source parameter mappings, with adjacent per-model provenance"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_1.epJSON",
+      "kind": "modern_model",
+      "sha256": "3b87cf11743f1388d75c4efe415aca891371e3e024f3a880627670971109eaa9",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "simple_seattle_template.idf",
+      "source_template_sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
+      "provenance": "src/bem_testproblems/data/modern/problem_1.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_1.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "f192462d46e6813f3dbfcd6458429a4e31d730e0347c76f033fd8572c8bcf507",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "simple_seattle_template.idf",
+      "source_template_sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_10.epJSON",
+      "kind": "modern_model",
+      "sha256": "64458b358cefc0e215cf8d9b106d2d3bb7d260b39332199fd94b0aafd1d56fd6",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "problem_10_template.idf",
+      "source_template_sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0",
+      "provenance": "src/bem_testproblems/data/modern/problem_10.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_10.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "99e2323e176dabc149cb6b0550799ea347eb0cb0e9e430a7e7c9437692a13bbc",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "problem_10_template.idf",
+      "source_template_sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_13.epJSON",
+      "kind": "modern_model",
+      "sha256": "483cc0d46da16526e41547a7c7dccd34d7afd7ffd30979a4ec48a1d3479aaea2",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "Problem13_template.idf",
+      "source_template_sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
+      "provenance": "src/bem_testproblems/data/modern/problem_13.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_13.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "6e69721c7216fdf096b7e35548f7f3730e15288e858f2fef8e265ec65e8978da",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "Problem13_template.idf",
+      "source_template_sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_2.epJSON",
+      "kind": "modern_model",
+      "sha256": "1eb47bbf2182d094bab44eeed68ad01dfe4319ba3b94dd58640dd37c776fd027",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "simple_houston_template.idf",
+      "source_template_sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885",
+      "provenance": "src/bem_testproblems/data/modern/problem_2.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_2.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "7b09939787f937563735941773721c4c554ba5f611e82b206060e475e4e19a79",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "simple_houston_template.idf",
+      "source_template_sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_3.epJSON",
+      "kind": "modern_model",
+      "sha256": "ff2ffc7dfe8c322e07fc98c4434a7dd279183aac5a18f307ab2a8ff9b8434ea8",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "simple_chicago_template.idf",
+      "source_template_sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77",
+      "provenance": "src/bem_testproblems/data/modern/problem_3.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_3.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "5fa00530659b764a9dabe3f075af5f6ab5178a274d1f325734a150634bd462b8",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "simple_chicago_template.idf",
+      "source_template_sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_4.epJSON",
+      "kind": "modern_model",
+      "sha256": "bfa4d2ab4c23003b3a53a38f84072fed1ffcd1e3478ee0129827b9d9212d0f29",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "detailed_seattle_template.idf",
+      "source_template_sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a",
+      "provenance": "src/bem_testproblems/data/modern/problem_4.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_4.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "7bcd419d14e371fead82dbb64f7685f0bd575083232cdc0dab4a36e51a525dde",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "detailed_seattle_template.idf",
+      "source_template_sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_5.epJSON",
+      "kind": "modern_model",
+      "sha256": "2d8c1ab5640f97b5a934f1dbc7922aeb6b85d49311c6d1b136cdacae37ddf321",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "detailed_houston_template.idf",
+      "source_template_sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612",
+      "provenance": "src/bem_testproblems/data/modern/problem_5.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_5.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "b924eaaa5bd7ce4fbb343b92769dfea719c3ec75ca82195f57383901d1ebd0cf",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "detailed_houston_template.idf",
+      "source_template_sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_6.epJSON",
+      "kind": "modern_model",
+      "sha256": "0f3c571e35a2ba28a5f0fbef06df643bb84e15c416251c6d1d98dd9911ae1731",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "detailed_chicago_template.idf",
+      "source_template_sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
+      "provenance": "src/bem_testproblems/data/modern/problem_6.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_6.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "78c7ee6bd2a1a8ae3eafbc04d9b1062144c0fa5dee313145deed6f5efcdc4f2f",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "detailed_chicago_template.idf",
+      "source_template_sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_9.epJSON",
+      "kind": "modern_model",
+      "sha256": "368598897fd8d1645d297444905dd9f0effa22a3213de69e4f8d473f1010a7ae",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "problem_9_template.idf",
+      "source_template_sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780",
+      "provenance": "src/bem_testproblems/data/modern/problem_9.provenance.json"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/problem_9.provenance.json",
+      "kind": "modern_model_provenance",
+      "sha256": "4ddf58a9d27b4c186971e43797ab4b0a308efcfad79f3dff88f7e2e409b6d562",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source_template": "problem_9_template.idf",
+      "source_template_sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780"
+    },
+    {
+      "path": "src/bem_testproblems/data/modern/transition_manifest.json",
+      "kind": "modern_derived_metadata",
+      "sha256": "aa11baaa88851f28481ed6f65e6941f58447641de8d31075ca8b0c432951495e",
+      "license_expression": "BSD-3-Clause",
+      "license_file": "src/bem_testproblems/data/licenses/BEOBenchmark-LICENSE.txt",
+      "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+      "notice_policy": "Preserved source model, full upstream BSD notice and THIRD_PARTY_NOTICES.md accompany this derived asset.",
+      "source": "Selected pinned legacy IDFs and source parameter mappings, with adjacent per-model provenance"
+    }
+  ],
+  "generated_validation_evidence": [
+    {
+      "path": "docs/validation-results/26.2.0-canonical-audit.json",
+      "sha256": "b616624a8bd25729331981f8fca9208b7437d631a0ca3578b77d8f8c62179783",
+      "license_expression": "MIT",
+      "source": "New simulation measurements made by this project; no published numerical solution or raw external dataset is copied.",
+      "scope": "Evidence for the recorded vectors, engine builds and model/weather identities only; not complete-domain or paper-pointwise validation."
+    },
+    {
+      "path": "docs/validation-results/8.5.0-canonical-audit.json",
+      "sha256": "4185f65364293a17747f02ac189b58733e294209b9c18e5b59363f6c9034e7cf",
+      "license_expression": "MIT",
+      "source": "New simulation measurements made by this project; no published numerical solution or raw external dataset is copied.",
+      "scope": "Evidence for the recorded vectors, engine builds and model/weather identities only; not complete-domain or paper-pointwise validation."
+    },
+    {
+      "path": "docs/validation-results/problem-13-weather-invariance.json",
+      "sha256": "b83a48969f9d6bfcbcd8c4886593559c30ef84692d9ead454fde515be8cfd487",
+      "license_expression": "MIT",
+      "source": "New simulation measurements made by this project; no published numerical solution or raw external dataset is copied.",
+      "scope": "Evidence for the recorded vectors, engine builds and model/weather identities only; not complete-domain or paper-pointwise validation."
+    }
+  ]
 }

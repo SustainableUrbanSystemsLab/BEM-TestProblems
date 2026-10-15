@@ -1,0 +1,277 @@
+{
+  "additional_notices": {
+    "original_notice": "Full original IDF header retained in ../legacy/detailed_chicago_template.idf",
+    "path": "../../../../THIRD_PARTY_NOTICES.md"
+  },
+  "baseline_parameters": {
+    "cooling_supply_temperature": 15.0,
+    "east_overhang_depth": 0.55,
+    "east_shading_setpoint": 350.0,
+    "east_window_width": 16.506,
+    "north_window_width": 3.528,
+    "south_overhang_depth": 0.55,
+    "south_shading_setpoint": 350.0,
+    "south_window_width": 3.528,
+    "summer_night_cooling_setpoint": 22.5,
+    "west_overhang_depth": 0.55,
+    "west_shading_setpoint": 350.0,
+    "west_window_width": 16.506,
+    "winter_night_cooling_setpoint": 22.5
+  },
+  "compatibility_adjustments": [
+    {
+      "after": "ZONE NORTH SURFACE SOUTH",
+      "before": "ZONE NORTH",
+      "evidence": {
+        "construction": "PARWALL",
+        "geometry_caveat": "Original zone-relative surfaces are not coincident. This repair preserves their geometry and the historical solver relationship; it does not reconstruct the building.",
+        "geometry_preserved": true,
+        "interior_surface_area_m2": 81.0,
+        "north_surface_area_m2": 16.200000000000003,
+        "north_zone_multiplier": 5
+      },
+      "path": [
+        "BuildingSurface:Detailed",
+        "ZONE INTERIOR SURFACE NORTH",
+        "outside_boundary_condition_object"
+      ],
+      "reason": "Make the effective EnergyPlus 8.5 reciprocal surface relationship explicit before 26.2 validates raw surface names. The 8.5 resolver sets the opposing surface pointer while processing the existing NorthSouth-to-InteriorNorth reference.",
+      "source": "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/SurfaceGeometry.cc#L1330-L1505"
+    }
+  ],
+  "copyright": "Copyright (c) 2018, Christoph Waibel. All rights reserved.",
+  "format_converter": "ConvertInputFormat",
+  "format_converter_sha256": "b4e12f8081f63398d6c2d3937e96a4d9928358b474799b4b8eff797eb5c460c9",
+  "license": "BSD-3-Clause",
+  "license_notice": "../licenses/BEOBenchmark-LICENSE.txt",
+  "normalized_idf_sha256": "b14c82e09177de035270fcb0a5465c1a26ff558350eaf07d889f46b177464520",
+  "official_engine_release": "https://github.com/NatLabRockies/EnergyPlus/releases/tag/v26.2.0",
+  "official_transition_archive": "https://energyplushelp.freshdesk.com/helpdesk/attachments/67089987420",
+  "output_epjson": "problem_6.epJSON",
+  "output_sha256": "0f3c571e35a2ba28a5f0fbef06df643bb84e15c416251c6d1d98dd9911ae1731",
+  "removed_obsolete_section_markers": [
+    "End Lead Input",
+    "Simulation Data",
+    "End Simulation Data"
+  ],
+  "rendered_source_sha256": "62a9abb3c05dec05027c26305f951690c28c91f4a3e5a8c5f977848ae8e5cc6c",
+  "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "source_repository": "https://github.com/milzj/BEOBenchmark",
+  "source_template": "detailed_chicago_template.idf",
+  "source_template_sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
+  "source_version": "8.5.0",
+  "target_version": "26.2.0",
+  "transition_steps": [
+    {
+      "elapsed_seconds": 4.725329,
+      "from": "8.5.0",
+      "new_idd_sha256": "df785a81f09a0afd490023cdc81ca421d80b693b1e1d1dbf24a789f00c696843",
+      "old_idd_sha256": "c55ec6cd15221540a821c4b6697bfade5e30800e5e6d24adbd9e1473c4963ed4",
+      "output_idf_sha256": "295dac04b05e7d9c76161ccb674002c8cafddac053da6291a346fd1dc2670600",
+      "to": "8.6.0",
+      "tool": "Transition-V8-5-0-to-V8-6-0",
+      "tool_sha256": "5e3aa6937cd75332c5fda305f80a4ddce82ab206b65e649658505812a1bc23d3"
+    },
+    {
+      "elapsed_seconds": 4.569301,
+      "from": "8.6.0",
+      "new_idd_sha256": "25a44d4e602e1eb3451a1400b55aaa7e0b9fdcf6ef4c5ce0f7252a75ca3adde4",
+      "old_idd_sha256": "df785a81f09a0afd490023cdc81ca421d80b693b1e1d1dbf24a789f00c696843",
+      "output_idf_sha256": "98c0c98aba9abac2b510221694821cf10cccee75b30ac300971705203a158f79",
+      "to": "8.7.0",
+      "tool": "Transition-V8-6-0-to-V8-7-0",
+      "tool_sha256": "064c32d2c0191e350cd5b23c8ec6ff9d634b5daae8f06c29b8208f380f90a681"
+    },
+    {
+      "elapsed_seconds": 4.660426,
+      "from": "8.7.0",
+      "new_idd_sha256": "010a457d392f666bd1ba9be26c50cacdd12eada9d690e57d1e556a54c9fe2d89",
+      "old_idd_sha256": "25a44d4e602e1eb3451a1400b55aaa7e0b9fdcf6ef4c5ce0f7252a75ca3adde4",
+      "output_idf_sha256": "dc20a03a10633946016b48d9ff5ecb1633508cb250895ac3cf404331e93e3686",
+      "to": "8.8.0",
+      "tool": "Transition-V8-7-0-to-V8-8-0",
+      "tool_sha256": "41899807dabd4c545a4e5cc10728aa305ea10719484241a020b03439e506cf56"
+    },
+    {
+      "elapsed_seconds": 4.938289,
+      "from": "8.8.0",
+      "new_idd_sha256": "30816c9ff732021ebd805aa3e62aa6a7060bbd8a6c30c390fbfafe9f6bac63a6",
+      "old_idd_sha256": "010a457d392f666bd1ba9be26c50cacdd12eada9d690e57d1e556a54c9fe2d89",
+      "output_idf_sha256": "b223b73b93a0b5ade12b8315d6214f1498c2c8fd60974d2661c31f186e4a1f8e",
+      "to": "8.9.0",
+      "tool": "Transition-V8-8-0-to-V8-9-0",
+      "tool_sha256": "1b311ea7cb9226f7aea060be6b219b2ebb0290f5d489a5ddcb72f4ca5b034b86"
+    },
+    {
+      "elapsed_seconds": 5.170159,
+      "from": "8.9.0",
+      "new_idd_sha256": "ca8fa293d24ac2d735972811f8a6b0969c8d655ed905c6c1bdc464bba2360f6e",
+      "old_idd_sha256": "30816c9ff732021ebd805aa3e62aa6a7060bbd8a6c30c390fbfafe9f6bac63a6",
+      "output_idf_sha256": "0112b7fd517ddbb9913d8e3b15932e0f9fc4f8b0e1c66656d5fb1f4f594e402b",
+      "to": "9.0.0",
+      "tool": "Transition-V8-9-0-to-V9-0-0",
+      "tool_sha256": "3981082bc640641e530971273fb14f76429fc334fe58371b095019c2413f6e82"
+    },
+    {
+      "elapsed_seconds": 4.874794,
+      "from": "9.0.0",
+      "new_idd_sha256": "54f477d58fa642084bb90cd0613d587abcfd8ba2c3b2310aee06383f3f842d97",
+      "old_idd_sha256": "504ac0bf83a0e4f33b1fb9254359300c046367624ab82b4af219b973674cc3d8",
+      "output_idf_sha256": "5edfc0898c441782d500158a55ae79485288f6bcc87013d6174f3c1374ed145d",
+      "to": "9.1.0",
+      "tool": "Transition-V9-0-0-to-V9-1-0",
+      "tool_sha256": "c61c02608fa4844605123bda09a71e33e3e32d06024ab96a5ea33946df8edfb2"
+    },
+    {
+      "elapsed_seconds": 6.480157,
+      "from": "9.1.0",
+      "new_idd_sha256": "1fafba2766070fac10023f93e92336706d7cd01720f7c7060922db1d22cf4b6f",
+      "old_idd_sha256": "54f477d58fa642084bb90cd0613d587abcfd8ba2c3b2310aee06383f3f842d97",
+      "output_idf_sha256": "e3eb95c5234fa11bfdd2540c926f48ea235581d6d9d88a28e33771fe68af7928",
+      "to": "9.2.0",
+      "tool": "Transition-V9-1-0-to-V9-2-0",
+      "tool_sha256": "99f48f5e96bca8038d9ce9f052942d97a06bff1553c8a4a1ddbcdcac1d998514"
+    },
+    {
+      "elapsed_seconds": 5.961688,
+      "from": "9.2.0",
+      "new_idd_sha256": "5e35e71ad13bc8a8228f0f2dc3bf745b2dcdb7aebefaed6246e6e7a09a01b3ce",
+      "old_idd_sha256": "1fafba2766070fac10023f93e92336706d7cd01720f7c7060922db1d22cf4b6f",
+      "output_idf_sha256": "4eadf966ef7371a93db0cf5782eb008260e437f2c1cafdb543ed3649efd5ed01",
+      "to": "9.3.0",
+      "tool": "Transition-V9-2-0-to-V9-3-0",
+      "tool_sha256": "8c772e3dbf87a42a5d8b9d79cdc922ae6ee029ca0ce08ede043930b664432abf"
+    },
+    {
+      "elapsed_seconds": 6.321469,
+      "from": "9.3.0",
+      "new_idd_sha256": "1e884d276ebfe66747fbe6f8dff2eafc3fffe37fe2aa2e409ba96e387420f700",
+      "old_idd_sha256": "5e35e71ad13bc8a8228f0f2dc3bf745b2dcdb7aebefaed6246e6e7a09a01b3ce",
+      "output_idf_sha256": "9e0024e40e7e8d8c25deb4fa22b3664e313e8841b90e2dfca21ee39c7b14e6f4",
+      "to": "9.4.0",
+      "tool": "Transition-V9-3-0-to-V9-4-0",
+      "tool_sha256": "d624db61b9446f8c749b770a24e89bc46952e24d59632a348fbf08bc72488400"
+    },
+    {
+      "elapsed_seconds": 6.087368,
+      "from": "9.4.0",
+      "new_idd_sha256": "24be213115e6242f636cc50a2332f0ae9069aacb05334e032178ec149e277f30",
+      "old_idd_sha256": "1e884d276ebfe66747fbe6f8dff2eafc3fffe37fe2aa2e409ba96e387420f700",
+      "output_idf_sha256": "1baede88788ba236c69c8b96b68481c8ea4b7ebb52860aed27ead937e837f351",
+      "to": "9.5.0",
+      "tool": "Transition-V9-4-0-to-V9-5-0",
+      "tool_sha256": "98ee28e88ffd11b02d8d1755aa6ef6b070d6d6760baff8ffd631b78a15389f06"
+    },
+    {
+      "elapsed_seconds": 5.975536,
+      "from": "9.5.0",
+      "new_idd_sha256": "599dd36490d2bed6df90e6a801d27084b266f517f74f9e545dd5902156806e5c",
+      "old_idd_sha256": "24be213115e6242f636cc50a2332f0ae9069aacb05334e032178ec149e277f30",
+      "output_idf_sha256": "bd4a60b45b847898e3ce0262afdf0aeb02486a2a3607e250a97ac02736165b16",
+      "to": "9.6.0",
+      "tool": "Transition-V9-5-0-to-V9-6-0",
+      "tool_sha256": "129a0da65c3fed5e9522524b98ab52b9ab56ccd8044ca24609be4ae384b51d3a"
+    },
+    {
+      "elapsed_seconds": 6.562176,
+      "from": "9.6.0",
+      "new_idd_sha256": "87497f859a1bc0e05a6143cd0ad5b3fccd4b2557dfe9233a5dda3ed59ce2bdb0",
+      "old_idd_sha256": "599dd36490d2bed6df90e6a801d27084b266f517f74f9e545dd5902156806e5c",
+      "output_idf_sha256": "8f605c06c34dcbdd922f6d78fc5a75e19b4b8144fd5a1f4de31cefd682680043",
+      "to": "22.1.0",
+      "tool": "Transition-V9-6-0-to-V22-1-0",
+      "tool_sha256": "7f67632f4d025ebe6f811912e13c5e09805628e3fe23a4766468ef003dc14aa5"
+    },
+    {
+      "elapsed_seconds": 4.795465,
+      "from": "22.1.0",
+      "new_idd_sha256": "ca537c4dde2c45d82ae0fad286f8cff037034a6b50968cdb1f28643cc25fb2f2",
+      "old_idd_sha256": "87497f859a1bc0e05a6143cd0ad5b3fccd4b2557dfe9233a5dda3ed59ce2bdb0",
+      "output_idf_sha256": "1c74392c60e69fb3eb86055f647be05d72a3710a76a0c1713b46bc16d40b5ffb",
+      "to": "22.2.0",
+      "tool": "Transition-V22-1-0-to-V22-2-0",
+      "tool_sha256": "1bb5706f2feb04f3f3f93c4ee25a78e0c023809c4acaed640ad48c4632bfa4c2"
+    },
+    {
+      "elapsed_seconds": 4.442137,
+      "from": "22.2.0",
+      "new_idd_sha256": "7ce43cf32c95f42d79acec3cf47f8d3e81d9cdc403cec875705261643a7c48d3",
+      "old_idd_sha256": "ca537c4dde2c45d82ae0fad286f8cff037034a6b50968cdb1f28643cc25fb2f2",
+      "output_idf_sha256": "d5609f8232510eb290343cdd958c52d9b2d795e4a14f982a7b65968b2a297c0b",
+      "to": "23.1.0",
+      "tool": "Transition-V22-2-0-to-V23-1-0",
+      "tool_sha256": "7c6aecf7016f9ab3cec9bfe918297c0e4d67aec5f536346141d5d232a96be5c2"
+    },
+    {
+      "elapsed_seconds": 4.910938,
+      "from": "23.1.0",
+      "new_idd_sha256": "0582fd8a0fbfc53b55b614b22927ab3e7ecff999b9639c3ca8bcc070ea0435ae",
+      "old_idd_sha256": "7ce43cf32c95f42d79acec3cf47f8d3e81d9cdc403cec875705261643a7c48d3",
+      "output_idf_sha256": "9c5f4e5369d7efd8ee2a76500de7287100b76d764df211659fcaef8fae30cdd3",
+      "to": "23.2.0",
+      "tool": "Transition-V23-1-0-to-V23-2-0",
+      "tool_sha256": "4977845f77cf0f66dd16adde9c28925f530da3fdb389de1dd62c624ad4341100"
+    },
+    {
+      "elapsed_seconds": 4.354154,
+      "from": "23.2.0",
+      "new_idd_sha256": "b8a6025bee4f33cb1d97055c642e149e38f4a233504f3b065f544331ac320a8c",
+      "old_idd_sha256": "0582fd8a0fbfc53b55b614b22927ab3e7ecff999b9639c3ca8bcc070ea0435ae",
+      "output_idf_sha256": "eb564bcb454ee8ea8bcdfe8b7a600df83169bb22d061cf38469cc3435b078bea",
+      "to": "24.1.0",
+      "tool": "Transition-V23-2-0-to-V24-1-0",
+      "tool_sha256": "839a07efda23a7d6f8d43d66c54fbadfc6dd9738e00c0ceec0164d1529c5d863"
+    },
+    {
+      "elapsed_seconds": 5.108479,
+      "from": "24.1.0",
+      "new_idd_sha256": "7cdf1bb0a2c5084c5c54dba79bf0d806285d4e9f39836d7164e1de3ac289977e",
+      "old_idd_sha256": "b8a6025bee4f33cb1d97055c642e149e38f4a233504f3b065f544331ac320a8c",
+      "output_idf_sha256": "6fe4af399fa7389aee14c88b29b30a2f420478a1bb72f57111998263df17ea79",
+      "to": "24.2.0",
+      "tool": "Transition-V24-1-0-to-V24-2-0",
+      "tool_sha256": "959a450edd884115ad3397b957b747f733a10d3b8c5e1527f33b115cf3088e4c"
+    },
+    {
+      "elapsed_seconds": 4.803183,
+      "from": "24.2.0",
+      "new_idd_sha256": "1d49c707beb99230c6552536007138a4b91e0be5012b6fc0c169ab0062c04878",
+      "old_idd_sha256": "7cdf1bb0a2c5084c5c54dba79bf0d806285d4e9f39836d7164e1de3ac289977e",
+      "output_idf_sha256": "66a649694fddbbbe864351810fb7564717f5245ff1c05e90b7852488023a38de",
+      "to": "25.1.0",
+      "tool": "Transition-V24-2-0-to-V25-1-0",
+      "tool_sha256": "c4b130bb4e03f4755e1d4ab5524f09179bab617a890667994c86910c58c95739"
+    },
+    {
+      "elapsed_seconds": 4.851714,
+      "from": "25.1.0",
+      "new_idd_sha256": "fe5b5e8f1086945e525963a1d2e8f29e9f2c3ea60f04b0297ad924fe701c6861",
+      "old_idd_sha256": "1d49c707beb99230c6552536007138a4b91e0be5012b6fc0c169ab0062c04878",
+      "output_idf_sha256": "4633a4e7594742658b7b870561ab2cd5a08842ac3f3c97698b52005cfc30c5bb",
+      "to": "25.2.0",
+      "tool": "Transition-V25-1-0-to-V25-2-0",
+      "tool_sha256": "ed31c273d5c402830532e4f5c3e5488d79627ca18fb70ce5ff51fdb104b0d74d"
+    },
+    {
+      "elapsed_seconds": 4.97623,
+      "from": "25.2.0",
+      "new_idd_sha256": "0bc882a38e9229c28289615ac6469a990f9050a4f95b071ac89584ffaac58e59",
+      "old_idd_sha256": "fe5b5e8f1086945e525963a1d2e8f29e9f2c3ea60f04b0297ad924fe701c6861",
+      "output_idf_sha256": "1b19a5fe7122cde0c94316f67a0d64214888f5cc48300e207929210cf296fc53",
+      "to": "26.1.0",
+      "tool": "Transition-V25-2-0-to-V26-1-0",
+      "tool_sha256": "e81578de5c6b69971b763e67dab853f1e0ca3a390bad6f01d050c013cc81aa6b"
+    },
+    {
+      "elapsed_seconds": 4.512864,
+      "from": "26.1.0",
+      "new_idd_sha256": "9d622d72ce2375e3bc5ac14b9e129479b003bf8a59d4838c83a2c4989f1f74f3",
+      "old_idd_sha256": "0bc882a38e9229c28289615ac6469a990f9050a4f95b071ac89584ffaac58e59",
+      "output_idf_sha256": "6dce4a26851a2c4e3bc8730d46ad4083dac5f1c5626589579115988d01b51876",
+      "to": "26.2.0",
+      "tool": "Transition-V26-1-0-to-V26-2-0",
+      "tool_sha256": "0fd3db8780d4943c23b9aac2cf4bd29f80c0663dfa6bcdab0003ddf193421c69"
+    }
+  ],
+  "transitioned_epjson_sha256": "cbccc1ffec3d85dde7055babdc60f7e640115f602cb755afe2b0ec68e4caddfd"
+}

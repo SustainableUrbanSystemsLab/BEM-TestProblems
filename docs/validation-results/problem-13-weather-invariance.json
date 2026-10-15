@@ -1,0 +1,157 @@
+{
+  "evidence_scope": "Physical midpoint only; within each engine the three invocation variants produce identical Q/P. This is not a claim of every-vector invariance or cross-version equality.",
+  "recorded_on": "2026-10-14",
+  "observables": {
+    "Q": "heating energy, kWh",
+    "P": "heating rate, kW"
+  },
+  "version_8_5_records": [
+    {
+      "case": "original_mode_no_weather",
+      "version": "8.5.0",
+      "outputs": {
+        "Q": 441.7973106070278,
+        "P": 18.4082212752928
+      },
+      "elapsed": 2.754656750243157,
+      "parameters": {
+        "insulation_thickness": 0.175,
+        "radiator_ua_class_zone_2": 600.0,
+        "radiator_ua_work_zone": 90.0,
+        "radiator_ua_kitchen_zone": 80.0,
+        "radiator_ua_music_zone": 120.0,
+        "radiator_ua_service_zone": 35.0,
+        "radiator_ua_washing_zone": 130.0,
+        "radiator_ua_big_zone": 210.0,
+        "radiator_ua_class_zone_1": 570.0,
+        "radiator_ua_office_zone": 525.0
+      },
+      "rendered_input_sha256": "fdfb0e1c7268f235fc51356b71d6d4a8c7fa2823ac847e0b8c6d6826b6b6af5b",
+      "weather_file": null,
+      "weather_sha256": null,
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17"
+    },
+    {
+      "case": "original_mode_US_weather",
+      "version": "8.5.0",
+      "outputs": {
+        "Q": 441.7973106070278,
+        "P": 18.4082212752928
+      },
+      "elapsed": 2.7294072080403566,
+      "parameters": {
+        "insulation_thickness": 0.175,
+        "radiator_ua_class_zone_2": 600.0,
+        "radiator_ua_work_zone": 90.0,
+        "radiator_ua_kitchen_zone": 80.0,
+        "radiator_ua_music_zone": 120.0,
+        "radiator_ua_service_zone": 35.0,
+        "radiator_ua_washing_zone": 130.0,
+        "radiator_ua_big_zone": 210.0,
+        "radiator_ua_class_zone_1": 570.0,
+        "radiator_ua_office_zone": 525.0
+      },
+      "rendered_input_sha256": "fdfb0e1c7268f235fc51356b71d6d4a8c7fa2823ac847e0b8c6d6826b6b6af5b",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17"
+    },
+    {
+      "case": "forced_design_day_no_weather",
+      "version": "8.5.0",
+      "outputs": {
+        "Q": 441.7973106070278,
+        "P": 18.4082212752928
+      },
+      "elapsed": 2.7389331669546664,
+      "parameters": {
+        "insulation_thickness": 0.175,
+        "radiator_ua_class_zone_2": 600.0,
+        "radiator_ua_work_zone": 90.0,
+        "radiator_ua_kitchen_zone": 80.0,
+        "radiator_ua_music_zone": 120.0,
+        "radiator_ua_service_zone": 35.0,
+        "radiator_ua_washing_zone": 130.0,
+        "radiator_ua_big_zone": 210.0,
+        "radiator_ua_class_zone_1": 570.0,
+        "radiator_ua_office_zone": 525.0
+      },
+      "rendered_input_sha256": "fdfb0e1c7268f235fc51356b71d6d4a8c7fa2823ac847e0b8c6d6826b6b6af5b",
+      "weather_file": null,
+      "weather_sha256": null,
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17"
+    }
+  ],
+  "version_26_2_records": [
+    {
+      "mode": "original-no-D-no-EPW",
+      "outputs": {
+        "Q": 439.1196017522009,
+        "P": 18.296650073008365
+      },
+      "physical_parameters": {
+        "insulation_thickness": 0.175,
+        "radiator_ua_class_zone_2": 600.0,
+        "radiator_ua_work_zone": 90.0,
+        "radiator_ua_kitchen_zone": 80.0,
+        "radiator_ua_music_zone": 120.0,
+        "radiator_ua_service_zone": 35.0,
+        "radiator_ua_washing_zone": 130.0,
+        "radiator_ua_big_zone": 210.0,
+        "radiator_ua_class_zone_1": 570.0,
+        "radiator_ua_office_zone": 525.0
+      },
+      "input_sha256": "bc306e7700ddb3a9ba025afcacbb7b4b03b225bc20cd8121dd2c9248b85c804d",
+      "weather_file": null,
+      "weather_sha256": null,
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8"
+    },
+    {
+      "mode": "original-no-D-Seattle-EPW",
+      "outputs": {
+        "Q": 439.1196017522009,
+        "P": 18.296650073008365
+      },
+      "physical_parameters": {
+        "insulation_thickness": 0.175,
+        "radiator_ua_class_zone_2": 600.0,
+        "radiator_ua_work_zone": 90.0,
+        "radiator_ua_kitchen_zone": 80.0,
+        "radiator_ua_music_zone": 120.0,
+        "radiator_ua_service_zone": 35.0,
+        "radiator_ua_washing_zone": 130.0,
+        "radiator_ua_big_zone": 210.0,
+        "radiator_ua_class_zone_1": 570.0,
+        "radiator_ua_office_zone": 525.0
+      },
+      "input_sha256": "bc306e7700ddb3a9ba025afcacbb7b4b03b225bc20cd8121dd2c9248b85c804d",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8"
+    },
+    {
+      "mode": "forced-D-no-EPW",
+      "outputs": {
+        "Q": 439.1196017522009,
+        "P": 18.296650073008365
+      },
+      "physical_parameters": {
+        "insulation_thickness": 0.175,
+        "radiator_ua_class_zone_2": 600.0,
+        "radiator_ua_work_zone": 90.0,
+        "radiator_ua_kitchen_zone": 80.0,
+        "radiator_ua_music_zone": 120.0,
+        "radiator_ua_service_zone": 35.0,
+        "radiator_ua_washing_zone": 130.0,
+        "radiator_ua_big_zone": 210.0,
+        "radiator_ua_class_zone_1": 570.0,
+        "radiator_ua_office_zone": 525.0
+      },
+      "input_sha256": "bc306e7700ddb3a9ba025afcacbb7b4b03b225bc20cd8121dd2c9248b85c804d",
+      "weather_file": null,
+      "weather_sha256": null,
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8"
+    }
+  ],
+  "upstream_commit": "54736a6b899a488222ad3184f306c1f401daf4f9"
+}
