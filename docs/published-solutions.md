@@ -59,8 +59,43 @@ physical parameter in [parameters.py](../src/bem_testproblems/parameters.py).
   `x13 = 12°C` remain fixed.
 - **Evidence limit:** the Grasshopper wiring is verified; Appendix C's use of
   that slider order is inferred. These four designs remain candidate mappings
-  until numerical comparison supports the interpretation. Do not clamp invalid
+  despite the initial numerical comparisons below. Do not clamp invalid
   printed coordinates or silently treat the entire vector as normalized.
+
+## First empirical checks
+
+- All ten rounded candidate designs were measured with Python on both engines:
+  **20 of 20 simulations completed with no Severe or Fatal diagnostics**.
+  Canonical weather and the recorded model/engine identities were retained.
+- For eight problems, the 8.5 objective differs from the rounded thesis value
+  by less than **0.12%**. P2 and P6 have larger unresolved differences, shown below.
+  These percentages describe the observations; they are not new acceptance
+  tolerances or a claim of full-precision publication agreement.
+- Additional 8.5 checks evaluated all 16 corners of P2's printed-coordinate
+  rounding box and 23 one-coordinate perturbations for P6. All 39 simulations
+  passed strict diagnostics. None explained the two gaps.
+
+| Problem | 8.5 difference from rounded thesis objective | Differences across rounding samples |
+| --- | ---: | ---: |
+| 2 | +2.2398% | +2.2250% to +2.2571% |
+| 6 | +1.2056% | +1.1287% to +1.2478% |
+
+- Differences use the rounded thesis objective as the denominator. The rounding
+  samples do not rigorously enclose every possible interior response, especially
+  for a nonsmooth simulator. The results do not establish a complete explanation.
+- Direct slider-to-component wiring was checked for P1–3, P9–10, and P13;
+  P2 has no hidden coordinate scaling or east/west swap in the pinned definition.
+- Public source history shows no later changes to the relevant P2/P6 assets after
+  the [source/component addition on 15 August 2018](https://github.com/christophwaibel/BEOBenchmark/commit/dc1688024aa68e040ed3192ff46c8e3f41300ac5)
+  and [model/weather addition on 29 August 2018](https://github.com/christophwaibel/BEOBenchmark/commit/ae75e3473f517108e77faa032c5b21d4bc24a36f).
+  This does not prove that the public files identify the exact unpublished
+  winning-run inputs.
+- The existing Windows C# checks cover their canonical fixtures. The C# caller
+  has not been executed at these ten additional thesis designs; the local
+  measurements above are Python runs.
+- Full numerical research records remain local. Physical models, strict
+  acceptance tolerances, and canonical CI baselines were not changed to fit
+  the thesis values.
 
 ## How to compare the results
 
@@ -78,9 +113,9 @@ physical parameter in [parameters.py](../src/bem_testproblems/parameters.py).
 - Preserve rejected outcomes explicitly. The separate
   [reference-warmup policy](optimization-replication.md#diagnostics-and-figures)
   does not turn those values into strict accepted evaluations.
-- Keep this literature comparison separate from the frozen CI baselines. No
-  objective has yet been empirically validated against these newly identified
-  thesis designs.
+- Keep this literature comparison separate from the frozen CI baselines. The
+  initial measurements above do not supply missing full-precision references
+  or resolve the two larger historical discrepancies.
 
 ## Precision and reuse limits
 

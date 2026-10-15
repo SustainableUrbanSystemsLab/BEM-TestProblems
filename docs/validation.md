@@ -23,7 +23,9 @@
 - **Additional published designs:** [Waibel's 2018 thesis Appendix C](published-solutions.md)
   supplies rounded best-found objectives and vectors for all ten problems.
   Six vectors use direct physical coordinates; four have a candidate slider
-  conversion. Numerical comparisons with these designs remain pending.
+  conversion. All 20 Python measurements across both engines pass strict
+  diagnostics; the larger 8.5 differences for P2 (+2.2398%) and P6 (+1.2056%)
+  remain unresolved. See the [empirical checks](published-solutions.md#first-empirical-checks).
 
 ## What public CI checks
 

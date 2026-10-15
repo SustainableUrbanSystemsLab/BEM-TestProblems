@@ -11,7 +11,7 @@ value with the function under test would not provide an independent check.
 | Model rendering and reference lookup | Parameter effects in both formats, unchanged source files, deterministic rendering, checksum and binding failures |
 | Output parsing | Named variables, units and reporting frequencies; missing, ambiguous, truncated and nonfinite outputs; independent fixed-row selections for the C# comparison |
 | EnergyPlus runner and objective factory | Isolated subprocesses, timeout and child-process cleanup, severe/fatal rejection, cache identity, retained provenance, invalid configuration and scalar objective use |
-| Solver adapters | Real bounded analytic problems, hard budgets, seeded trajectories, observed incumbents and unchanged propagation of simulator failures |
+| Solver adapters | Real bounded analytic problems, hard budgets, preserved supplied starts, seeded trajectories, observed incumbents, and unchanged propagation of simulator failures |
 | Replication orchestration and diagnostics | Paired starts, paper budgets, spawned workers, checkpoint/resume rules, coordinator locks and narrow warmup recovery with explicit diagnostics |
 | Plotting | Failed/incomplete results excluded and counted, provenance checks, independently calculated quartiles, engine differences and percentage denominators |
 | Download, transition and maintenance tools | Offline fixtures exercise acquisition checksums, safe extraction, model conversion and repair invariants, source preservation and CLI dispatch |
@@ -24,6 +24,11 @@ Platform-specific process handling and the
 native C# caller also have Windows CI evidence. No Python file is omitted to
 inflate coverage. The report lists remaining lines so gaps can be reviewed.
 Coverage alone cannot establish numerical correctness or the absence of bugs.
+
+[test_optimize.py](../tests/test_optimize.py) checks the default BOBYQA adapter at
+its minimum legal budgets in dimensions 2, 4, and 13 and verifies that a supplied
+start near a bound is the first point evaluated. A separate guard test checks
+that even an overrequesting solver cannot launch extra objective evaluations.
 
 Keep tests short and focused on one behavior. Parameterize genuinely parallel
 cases and share setup fixtures when that makes the scenario easier to read.
