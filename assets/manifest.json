@@ -642,10 +642,17 @@
     },
     {
       "path": "docs/validation-results/original-csharp-ci.json",
-      "sha256": "d916fba563203b8599d5fb48857d180f5cc14e7a2055fd1ec0fdc98e8f3abc94",
+      "sha256": "e06c0de3f332d6d663d1e9cfb83a6e0376e4cf631c654a008c1d9b64a1ab4e8c",
       "license_expression": "MIT",
       "source": "New project GitHub Actions job metadata and project-owned comparison conditions; links retained numerical artifact.",
-      "scope": "Successful cache-based Windows C# reference comparison at the recorded commit, with prior job history; no complete-workflow or subsequent-policy status claim."
+      "scope": "Successful cache-based Windows C# reference comparison at the recorded commit and configured 1e-6/1e-7 objective/component tolerances, with prior stricter job history; no paper-value, cross-engine equality or complete-workflow claim."
+    },
+    {
+      "path": "docs/validation-results/p1-bobyqa-smoke.json",
+      "sha256": "470ba55679a5323447d027ff4727f2ca109be857adeded0bfaa8f3e9164f229f",
+      "license_expression": "MIT",
+      "source": "New solver integration and scratch diagnostic measurements made by this project; no published winning vector/objective, raw weather, external XML or model body is copied.",
+      "scope": "Problem 1 midpoint-start BOBYQA integration only: EnergyPlus 26.2 succeeded, while EnergyPlus 8.5 stopped at a strict warmup diagnostic failure. Scratch warmup-cap measurements are excluded from historical optimizer results. No Waibel 2019 published-ground-truth or certified-optimum claim."
     }
   ],
   "external_reference_assets": [
