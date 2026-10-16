@@ -201,6 +201,33 @@ def test_default_plan_is_read_only_and_has_exact_remaining_specs(setup):
     assert "origin" not in manifest["engines"]["26.2.0"]["executable"]
 
 
+def test_extended_budget_handoff_preserves_multiplier_and_every_original_cap(setup, monkeypatch):
+    for manifest in (setup.original, setup.target):
+        manifest.update(protocol="extended-budget-experiment", budget_override=None,
+                        budget_multiplier=100,
+                        effective_budget_rule="100*(dimension+1)*budget_multiplier")
+        for spec in manifest["runs"]:
+            spec["budget"] = 50000
+    setup.original.pop("manifest_id")
+    setup.original["manifest_id"] = continuation._digest(setup.original)
+    write(setup.origin / "manifest.json", setup.original)
+    for index, status in ((0, "completed"), (1, "running")):
+        write(setup.origin / "runs" / (setup.specs[index]["id"] + ".json"),
+              record(setup.specs[index], setup.original, status))
+
+    def resolve(**kwargs):
+        assert kwargs["budget"] is None
+        assert kwargs["budget_multiplier"] == 100
+        return copy.deepcopy(setup.target)
+
+    monkeypatch.setattr(setup.runtime, "prepare_manifest", resolve)
+    _, manifest, _, _ = continuation.prepare_continuation(
+        setup.origin, setup.project, setup.output)
+    assert manifest["budget_multiplier"] == 100
+    assert len(manifest["runs"]) == 3
+    assert all(spec["budget"] == 50000 for spec in manifest["runs"])
+
+
 def test_120_workers_use_two_safe_pools_and_submit_union_once(setup):
     result = execute(setup, run=True, workers=120)
     assert [p.size for p in setup.pools] == [60, 60]

@@ -21,7 +21,7 @@ import socket
 import time
 import uuid
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from datetime import datetime, timezone
 from importlib import import_module, util
 from importlib.metadata import PackageNotFoundError
@@ -34,10 +34,15 @@ from .evaluation import _default_project_root, make_objective
 from .outputs import extract_outputs
 from .problems import PROBLEM_IDS, get_problem
 from .reference import legacy_template_path
+from .replication_journal import TraceJournal, read_checkpoint
 from .replication_solvers import SOLVER_ORDER, solve_solver, solver_metadata
 
 TERMINAL_STATUSES = frozenset({"completed", "budget_exhausted", "failed", "skipped"})
 PAPER_REPETITIONS = 20
+WORKER_THREAD_VARIABLES = (
+    "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS",
+    "VECLIB_MAXIMUM_THREADS", "NUMEXPR_NUM_THREADS",
+)
 
 
 class EvaluationBudgetExceeded(RuntimeError):
@@ -171,13 +176,16 @@ def _dependency_identity(name):
 
 
 def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "26.2.0"),
-                     repetitions=20, budget=None, seed=2019, project_root=None,
+                     repetitions=20, budget=None, budget_multiplier=1, seed=2019, project_root=None,
                      executables=None, weather_dir=None, diagnostics_policy="strict",
                      schedule="balanced", p1_warmup_100=False):
     """Resolve all inputs and fixed random starts without running simulations."""
     repetitions = _positive_integer(repetitions, "repetitions")
     if budget is not None:
         _positive_integer(budget, "budget")
+    _positive_integer(budget_multiplier, "budget_multiplier")
+    if budget is not None and budget_multiplier != 1:
+        raise ValueError("budget and budget_multiplier cannot both override the paper budget")
     if isinstance(seed, bool) or not isinstance(seed, int):
         raise ValueError("seed must be an integer")
     if diagnostics_policy not in {"strict", "reference-warmup"}:
@@ -227,7 +235,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
     source = Path(__file__).parent
     code_hashes = {name: sha256_file(source / name) for name in (
         "problems.py", "losses.py", "models.py", "outputs.py", "energyplus.py",
-        "evaluation.py", "replication.py", "replication_solvers.py", "replication_diagnostics.py")}
+        "evaluation.py", "replication.py", "replication_solvers.py", "replication_diagnostics.py",
+        "replication_journal.py")}
     specifications = []
     for repetition in range(repetitions):
         for p in definitions:
@@ -238,7 +247,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
                     specifications.append({"id": f"p{p.id:02}-{version}-{solver}-r{repetition:03}",
                         "problem": p.id, "version": version, "solver": solver,
                         "repetition": repetition, "seed": _seed(seed, "solver", p.id, repetition, solver),
-                        "x0": start, "budget": budget if budget is not None else 100 * (p.dimension + 1)})
+                        "x0": start, "budget": budget if budget is not None else
+                        100 * (p.dimension + 1) * budget_multiplier})
     if schedule == "problem-first":
         problem_order = {problem.id: index for index, problem in enumerate(definitions)}
         solver_order = {name: index for index, name in enumerate(selected_solvers)}
@@ -274,6 +284,10 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         "runs": specifications}
     if p1_warmup_100:
         configuration["p1_warmup_100"] = True
+    if budget_multiplier != 1:
+        configuration.update(protocol="extended-budget-experiment",
+                             budget_multiplier=budget_multiplier,
+                             effective_budget_rule="100*(dimension+1)*budget_multiplier")
     configuration = _json_value(configuration)
     configuration["manifest_id"] = _digest(configuration)
     return configuration
@@ -370,7 +384,7 @@ def _compact_success(result, attempt_root, policy):
 def _run_one(spec, manifest, root, retain_success):
     root = Path(root)
     checkpoint = root / "runs" / (spec["id"] + ".json")
-    previous = json.loads(checkpoint.read_text()) if checkpoint.is_file() else None
+    previous = read_checkpoint(checkpoint) if checkpoint.is_file() else None
     attempt = previous.get("attempt", 0) + 1 if previous else 1
     if previous:
         _atomic_json(root / "history" / f"{spec['id']}-attempt{attempt-1}.json", previous)
@@ -385,10 +399,13 @@ def _run_one(spec, manifest, root, retain_success):
               "diagnostics_policy": manifest["diagnostics_policy"],
               "strict_benchmark_evaluation": True, "warmup_severe_evaluations_used": 0}
     started = time.monotonic()
+    journal = TraceJournal(checkpoint, attempt) if manifest.get("budget_multiplier", 1) > 1 else None
+    if journal is not None:
+        record["measured_objective_seconds"] = 0.0
 
-    def save():
+    def save(*, final=False):
         record["elapsed_seconds"] = time.monotonic() - started
-        _atomic_json(checkpoint, record)
+        _atomic_json(checkpoint, journal.snapshot(record) if journal is not None and not final else record)
 
     save()
     observed = None
@@ -453,6 +470,8 @@ def _run_one(spec, manifest, root, retain_success):
             finally:
                 item["evaluation_elapsed_seconds"] = time.monotonic() - evaluation_started
                 record["trace"].append(item)
+                if journal is not None:
+                    record["measured_objective_seconds"] += item["evaluation_elapsed_seconds"]
                 save()
             # Persist the value, components and hashes before removing large
             # outputs. The runner cache is disabled; no deleted output is reused.
@@ -461,6 +480,8 @@ def _run_one(spec, manifest, root, retain_success):
                     "strict_benchmark_evaluation", True) and retain_success == "none" else retain_success)
             except OSError as error:
                 item["cleanup_warning"] = str(error)
+                if journal is not None:
+                    journal.cleanup_warning(record["evaluation_count"], str(error))
                 save()
             return value
 
@@ -496,30 +517,58 @@ def _run_one(spec, manifest, root, retain_success):
                       error=_error_record(error))
     finally:
         record["completed_at_utc"] = datetime.now(timezone.utc).isoformat()
-        save()
+        save(final=True)
     return record
 
 
-def _summary(root, manifest, workers):
-    records = [json.loads(path.read_text()) for path in (root / "runs").glob("*.json")]
-    totals = {status: sum(row["status"] == status for row in records)
-              for status in (*sorted(TERMINAL_STATUSES), "running", "interrupted")}
-    evaluated = sum(row["evaluation_count"] for row in records)
-    measured = sum(item["evaluation_elapsed_seconds"] for row in records for item in row["trace"])
-    terminal_ids = {row["id"] for row in records if row["status"] in TERMINAL_STATUSES}
+def _run_one_checkpointed(*args):
+    """Keep large traces on disk rather than pickling them into coordinator futures."""
+    _run_one(*args)
+
+
+def _summary(root, manifest, workers, *, cache=None):
+    # This optional cache contains progress counters only. Scientific review
+    # still validates every original checkpoint and its complete observations.
+    cache = {} if cache is None else cache
+    totals = dict.fromkeys((*sorted(TERMINAL_STATUSES), "running", "interrupted"), 0)
+    evaluated = measured = elapsed = warmup = warnings = 0
+    terminal_ids = set()
+    for path in (root / "runs").glob("*.json"):
+        stat = path.stat()
+        identity = stat.st_mtime_ns, stat.st_size
+        cached = cache.get(path)
+        if cached is None or cached[0] != identity:
+            row = json.loads(path.read_text())
+            measured_seconds = row.get("measured_objective_seconds")
+            if measured_seconds is None:
+                row = read_checkpoint(path, row)
+                measured_seconds = sum(item["evaluation_elapsed_seconds"] for item in row["trace"])
+            stats = {key: row[key] for key in ("id", "status", "evaluation_count", "elapsed_seconds")}
+            stats.update(measured=measured_seconds,
+                         warmup=row.get("warmup_severe_evaluations_used", 0),
+                         warnings=row.get("optimizer_termination_warning", False))
+            cache[path] = identity, stats
+        else:
+            stats = cached[1]
+        totals[stats["status"]] += 1
+        evaluated += stats["evaluation_count"]
+        measured += stats["measured"]
+        elapsed += stats["elapsed_seconds"]
+        warmup += stats["warmup"]
+        warnings += stats["warnings"]
+        if stats["status"] in TERMINAL_STATUSES:
+            terminal_ids.add(stats["id"])
     remaining_budget = sum(row["budget"] for row in manifest["runs"] if row["id"] not in terminal_ids)
     seconds_per_call = measured / evaluated if evaluated else None
     value = {"manifest_id": manifest["manifest_id"], "protocol": manifest["protocol"],
              "requested_runs": len(manifest["runs"]), "statuses": totals,
-             "evaluation_count": evaluated, "worker_elapsed_seconds": sum(
-                 row["elapsed_seconds"] for row in records), "measured_objective_seconds": measured,
+             "evaluation_count": evaluated, "worker_elapsed_seconds": elapsed,
+             "measured_objective_seconds": measured,
              "mean_seconds_per_attempted_evaluation": seconds_per_call,
              "remaining_full_budget_ceiling": remaining_budget, "workers": workers,
              "diagnostics_policy": manifest["diagnostics_policy"],
-             "warmup_severe_evaluations_used": sum(row.get("warmup_severe_evaluations_used", 0)
-                                                  for row in records),
-             "optimizer_termination_warning_runs": sum(row.get("optimizer_termination_warning", False)
-                                                        for row in records),
+             "warmup_severe_evaluations_used": warmup,
+             "optimizer_termination_warning_runs": warnings,
              "requested_implemented_runs": sum(manifest["solvers"][row["solver"]].get(
                  "implemented", False) for row in manifest["runs"]),
              "estimated_remaining_seconds": remaining_budget * seconds_per_call / workers
@@ -530,13 +579,49 @@ def _summary(root, manifest, workers):
     return value
 
 
+def worker_pool_partition(specifications, workers):
+    """Partition a large worker allocation into Windows-safe spawn pools.
+
+    Each pool has at most 60 workers. For multiple pools, assign expensive
+    budgets first to balance estimated work per worker without duplicating runs.
+    A single pool retains the manifest's requested scheduling order.
+    """
+    _positive_integer(workers, "workers")
+    count = (workers + 59) // 60
+    sizes = [workers // count + (index < workers % count) for index in range(count)]
+    if count == 1:
+        return [(workers, list(specifications))]
+    groups = [[] for _ in sizes]
+    loads = [0] * count
+    for spec in sorted(specifications, key=lambda row: (-row["budget"], row["id"])):
+        index = min(range(count), key=lambda item: (loads[item] / sizes[item], item))
+        groups[index].append(spec)
+        loads[index] += spec["budget"]
+    return list(zip(sizes, groups))
+
+
+@contextmanager
+def _worker_thread_environment():
+    """Spawn one native numerical thread per worker, restoring the caller's env."""
+    previous = {name: os.environ.get(name) for name in WORKER_THREAD_VARIABLES}
+    try:
+        os.environ.update(dict.fromkeys(WORKER_THREAD_VARIABLES, "1"))
+        yield
+    finally:
+        for name, value in previous.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+
+
 def run_replication(*, output_root=None, workers=8, retain_success="none", retry_failed=False,
-                    **configuration):
+                    budget_multiplier=1, **configuration):
     """Run isolated solver processes; checkpoint every successful or failed call."""
     _positive_integer(workers, "workers")
     if retain_success not in {"none", "diagnostics", "all"}:
         raise ValueError("retain_success must be none, diagnostics or all")
-    manifest = prepare_manifest(**configuration)
+    manifest = prepare_manifest(budget_multiplier=budget_multiplier, **configuration)
     root = Path(output_root or Path(manifest["project_root"]) / ".validation-local/replication").expanduser().resolve()
     root.mkdir(parents=True, exist_ok=True)
     with _experiment_lock(root):
@@ -548,11 +633,12 @@ def run_replication(*, output_root=None, workers=8, retain_success="none", retry
         else:
             _atomic_json(prior_path, manifest)
         (root / "runs").mkdir(exist_ok=True)
+        summary_cache = {}
         pending = []
         for spec in manifest["runs"]:
             path = root / "runs" / (spec["id"] + ".json")
             if path.is_file():
-                prior = json.loads(path.read_text())
+                prior = read_checkpoint(path)
                 if prior["manifest_id"] != manifest["manifest_id"]:
                     raise ValueError(f"Run checkpoint provenance does not match: {path}")
                 if prior["status"] in TERMINAL_STATUSES and not (
@@ -562,22 +648,34 @@ def run_replication(*, output_root=None, workers=8, retain_success="none", retry
         if workers == 1:
             for spec in pending:
                 _run_one(spec, manifest, root, retain_success)
-                _summary(root, manifest, workers)
-        else:
-            with ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context("spawn")) as pool:
-                jobs = {pool.submit(_run_one, spec, manifest, str(root), retain_success): spec
-                        for spec in pending}
+                _summary(root, manifest, workers, cache=summary_cache)
+        elif pending:
+            with _worker_thread_environment(), ExitStack() as stack:
+                jobs = {}
+                for size, specs in worker_pool_partition(pending, workers):
+                    if not specs:
+                        continue
+                    pool = stack.enter_context(ProcessPoolExecutor(
+                        max_workers=size, mp_context=multiprocessing.get_context("spawn")))
+                    for spec in specs:
+                        jobs[pool.submit(_run_one_checkpointed, spec, manifest, str(root), retain_success)] = spec
                 for future in as_completed(jobs):
                     try:
                         future.result()
                     except Exception as error:
                         spec = jobs[future]
                         path = root / "runs" / (spec["id"] + ".json")
-                        row = json.loads(path.read_text()) if path.is_file() else {
+                        row = read_checkpoint(path) if path.is_file() else {
                             **spec, "manifest_id": manifest["manifest_id"], "evaluation_count": 0,
-                            "best_x": None, "best_f": None, "trace": [], "elapsed_seconds": 0}
+                            "best_x": None, "best_f": None, "trace": [], "elapsed_seconds": 0,
+                            "attempt": 0,
+                            "problem_provenance": manifest["problem_definitions"][str(spec["problem"])],
+                            "engine_provenance": manifest["engines"][spec["version"]],
+                            "solver_metadata": manifest["solvers"][spec["solver"]],
+                            "diagnostics_policy": manifest["diagnostics_policy"],
+                            "strict_benchmark_evaluation": True, "warmup_severe_evaluations_used": 0}
                         row.update(status="interrupted", error={"type": type(error).__name__,
                                    "message": str(error), "reason": "worker-process-failure"})
                         _atomic_json(path, row)
-                    _summary(root, manifest, workers)
-        return _summary(root, manifest, workers)
+                    _summary(root, manifest, workers, cache=summary_cache)
+        return _summary(root, manifest, workers, cache=summary_cache)

@@ -79,6 +79,24 @@ def test_partial_plot_is_labeled_and_numerical_summary_is_preserved(tmp_path):
     assert "n=1/4" not in svg
 
 
+def test_extended_budget_plot_records_the_actual_multiplier(tmp_path):
+    pytest.importorskip("matplotlib")
+    root = experiment(tmp_path)
+    path = root / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest.update(protocol="extended-budget-experiment", budget_multiplier=100,
+                    effective_budget_rule="100*(dimension+1)*budget_multiplier")
+    path.write_text(json.dumps(manifest))
+    result = plot_replication(root)
+    assert result["scope"] == "EXTENDED BUDGET / INCOMPLETE"
+    report = json.loads((root / "plots/boxplot-summary.json").read_text())
+    assert report["budget_multiplier"] == 100
+    assert report["effective_budget_rule"] == manifest["effective_budget_rule"]
+    svg = (root / "plots/figure8-energyplus-8.5.0.svg").read_text()
+    assert "100 × 100(n+1) calls/run (maximum)" in svg
+    assert "PAPER BUDGET" not in svg and "PILOT" not in svg
+
+
 @pytest.mark.parametrize("value", [None, float("nan"), float("inf")])
 def test_completed_records_need_a_finite_best_objective(tmp_path, value):
     root = experiment(tmp_path)

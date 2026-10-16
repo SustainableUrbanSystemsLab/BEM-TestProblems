@@ -27,6 +27,12 @@ before simulations begin. Canonical benchmark weather is checksum-verified.
 | 8 | 11 | 1200 |
 | 13 | 10 | 1100 |
 
+The separate [extended-budget workflow](../replication/README.md#extended-budget-experiment)
+raises each full-budget limit by 100 times, to 50,000–140,000 calls per run.
+It uses its own configuration, frozen source, checkpoints, and reports. The
+original experiment stays unchanged. These are maximum counts: BOBYQA can
+terminate earlier when its stopping criteria are met.
+
 Available study methods retain their Figure 8/9 order; additions follow them:
 
 | Display order | Implementation | Setting differences and limitations |

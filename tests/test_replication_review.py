@@ -9,7 +9,7 @@ import pytest
 
 from bem_testproblems import get_problem
 from tools.continue_replication import _digest, read_origin
-from tools.review_replication import build_review, load_review, main, write_review
+from tools.review_replication import build_review, load_review, main, review_markdown, write_review
 
 
 def write(path, value):
@@ -94,6 +94,106 @@ def test_origin_only_and_not_started_continuation_are_reviewable(campaign, tmp_p
     assert report["status_counts"]["interrupted"] == 1
     assert report["status_counts"]["pending"] == 5
     assert report["best_across_methods"][1]["winner"] is None
+
+
+def test_review_distinguishes_call_cap_from_early_solver_termination(campaign):
+    origin, _, _, _ = campaign
+    dataset = load_review(origin)
+    winner = next(row for row in dataset["records"].values()
+                  if row["status"] == "completed" and row["strict_benchmark_evaluation"])
+    winner.update(solver_termination="terminated", solver_success=True)
+    report = build_review(dataset)
+    assert report["evaluation_budgets"] == {"1": [500]}
+    selected = next(row["winner"] for row in report["per_solver_best"] if row["winner"])
+    assert selected["solver_success"] is True
+    text = review_markdown(report)
+    assert "maximum call counts; solvers can terminate earlier" in text
+    assert "| 1 | 500 |" in text and "1/500 | terminated" in text
+
+
+def long_trace(campaign):
+    origin, _, manifest, _ = campaign
+    spec = manifest["runs"][0]
+    path = origin / "runs" / (spec["id"] + ".json")
+    row = json.loads(path.read_text())
+    row["trace"] = [
+        {"evaluation": index, "status": "success", "x": spec["x0"],
+         "f": 10 if index == 321 else 11,
+         "components": {"heating": 10 if index == 321 else 11},
+         "strict_benchmark_evaluation": True,
+         "input_sha256": "f" * 64,
+         "diagnostics": {"severe_count": 0, "fatal_count": 0}}
+        for index in range(1, 501)
+    ]
+    row["evaluation_count"] = 500
+    write(path, row)
+    return origin, path, row
+
+
+def test_review_retains_only_validated_winning_observations_and_original_identity(campaign):
+    from tools.replay_replication import strict_incumbents
+
+    origin, path, row = long_trace(campaign)
+    original = path.read_bytes()
+    _, full, identity = read_origin(origin)
+    _, compact, compact_identity = read_origin(origin, retain_traces=False)
+    assert identity == compact_identity and path.read_bytes() == original
+    assert len(full[row["id"]]["trace"]) == 500
+    summarized = compact[row["id"]]
+    assert summarized["evaluation_count"] == 500
+    assert summarized["trace"] == [row["trace"][320]]
+    assert summarized["trace_summary"] == {
+        "validated_observations": 500, "retained_observations": 1,
+        "strict_whole_trajectory": True,
+    }
+    dataset = load_review(origin)
+    assert all(len(record["trace"]) <= 1 for record in dataset["records"].values())
+    incumbent = strict_incumbents(dataset)[0]
+    assert incumbent["f"] == 10 and incumbent["components"] == {"heating": 10}
+    assert incumbent["input_sha256"] == "f" * 64
+
+
+@pytest.mark.parametrize("contradiction", [
+    {"strict_benchmark_evaluation": False},
+    {"diagnostics": {"severe_count": 1, "fatal_count": 0}},
+    {"diagnostics": {"severe_count": 0, "fatal_count": 1}},
+    {"diagnostics": {"accepted_warmup_only": True}},
+])
+def test_trace_reduction_preserves_earlier_diagnostic_contradictions(campaign, contradiction):
+    origin, path, row = long_trace(campaign)
+    row["trace"][0].update(contradiction)
+    # The aggregate flag and winning call look strict; the earlier call does not.
+    assert row["strict_benchmark_evaluation"] and row["warmup_severe_evaluations_used"] == 0
+    write(path, row)
+    dataset = load_review(origin)
+    summarized = dataset["records"][row["id"]]
+    assert summarized["trace"][0]["strict_benchmark_evaluation"] is True
+    assert summarized["strict_benchmark_evaluation"] is False
+    assert summarized["trace_summary"]["strict_whole_trajectory"] is False
+    assert all(group["winner"] is None for group in build_review(dataset)["per_solver_best"])
+
+
+def test_trace_reduction_validates_observations_after_the_winner(campaign):
+    origin, path, row = long_trace(campaign)
+    row["trace"][-1]["evaluation"] = 999
+    write(path, row)
+    with pytest.raises(ValueError, match="Invalid checkpoint trace"):
+        read_origin(origin, retain_traces=False)
+
+
+@pytest.mark.parametrize("field,value", [
+    ("budget_multiplier", 100),
+    ("effective_budget_rule", "100*(dimension+1)*budget_multiplier"),
+    ("paper_budget_rule", "1000*(dimension+1)"),
+])
+def test_continuation_cannot_change_budget_definition_metadata(campaign, field, value):
+    origin, target, _, new = campaign
+    new[field] = value
+    for path in (target / "runs").glob("*.json"):
+        path.unlink()
+    write(target / "manifest.json", seal(new))
+    with pytest.raises(ValueError, match="scientific definition differs"):
+        load_review(origin, target)
 
 
 @pytest.mark.parametrize("mutation", ["link", "source", "definitions", "schedule", "overlap", "counts"])

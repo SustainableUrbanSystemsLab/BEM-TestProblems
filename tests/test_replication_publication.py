@@ -521,6 +521,72 @@ def test_validated_export_is_allowlisted_and_hashed(campaign):
     assert verification["integrity_passed"] and verification["validated_result_stamp"]
 
 
+def extend_campaign(campaign):
+    manifest = campaign.manifest
+    manifest.update(protocol="extended-budget-experiment", budget_override=None,
+                    budget_multiplier=100,
+                    effective_budget_rule="100*(dimension+1)*budget_multiplier")
+    for spec in manifest["runs"]:
+        spec["budget"] = 110_000
+    del manifest["manifest_id"]
+    manifest["manifest_id"] = replay.continuation._digest(manifest)
+    write(campaign.origin / "manifest.json", manifest)
+    for path in (campaign.origin / "runs").glob("*.json"):
+        record = json.loads(path.read_text())
+        record.update(manifest_id=manifest["manifest_id"], budget=110_000)
+        write(path, record)
+    campaign.dataset = load_review(campaign.origin)
+
+
+def test_extended_budget_export_replays_and_verifies_the_full_recipe(campaign):
+    pytest.importorskip("matplotlib")
+    extend_campaign(campaign)
+    configured = plan(campaign)
+    replay.run_replay(configured, execute=fake_native)
+    output = campaign.tmp / "public-extended"
+    export.export_results(campaign.dataset, origin=campaign.origin, output_dir=output,
+                          replay_dir=configured["output_directory"])
+    result = json.loads((output / "results.json").read_text())
+    experiment = result["experiment"]
+    assert experiment["protocol"] == "extended-budget-experiment"
+    assert experiment["budget_multiplier"] == 100 and experiment["budget_override"] is None
+    assert experiment["budget_rule"] == "100*(dimension+1)*budget_multiplier"
+    assert all(spec["budget"] == 110_000 for spec in experiment["runs"])
+    svg = (output / "plots/figure9-energyplus-8.5.0.svg").read_text()
+    assert "EXTENDED BUDGET" in svg and "100 × 100(n+1)" in svg
+    assert export.verify_export(output)["validated_result_stamp"]
+
+
+@pytest.mark.parametrize("mutation", [
+    "missing-multiplier", "bool-multiplier", "unit-multiplier", "changed-multiplier",
+    "override", "rule", "budget", "paper-label",
+])
+def test_extended_budget_recipe_rejects_inconsistent_caps_and_labels(campaign, mutation):
+    extend_campaign(campaign)
+    experiment = export._public_experiment(campaign.dataset)
+    result = {"experiment": experiment, "planned_runs": 2,
+              "provenance": [{"engines": {"8.5.0": {}, "26.2.0": {}}}]}
+    export._verify_experiment(result)
+    if mutation == "missing-multiplier":
+        del experiment["budget_multiplier"]
+    elif mutation == "bool-multiplier":
+        experiment["budget_multiplier"] = True
+    elif mutation == "unit-multiplier":
+        experiment["budget_multiplier"] = 1
+    elif mutation == "changed-multiplier":
+        experiment["budget_multiplier"] = 101
+    elif mutation == "override":
+        experiment["budget_override"] = 110_000
+    elif mutation == "rule":
+        experiment["budget_rule"] = "100*(dimension+1)"
+    elif mutation == "budget":
+        experiment["runs"][0]["budget"] -= 1
+    else:
+        experiment["protocol"] = "paper-start-and-budget-protocol"
+    with pytest.raises(ValueError):
+        export._verify_experiment(result)
+
+
 def test_public_plots_use_canonical_labels_and_record_cross_build_scope(campaign):
     pytest.importorskip("matplotlib")
     original = campaign.dataset["origin_manifest"]

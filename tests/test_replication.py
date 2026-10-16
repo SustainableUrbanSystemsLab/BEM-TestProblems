@@ -3,6 +3,7 @@
 
 import copy
 import json
+import os
 import tempfile
 from concurrent.futures import Future
 from concurrent.futures.process import BrokenProcessPool
@@ -94,6 +95,53 @@ def test_paper_budget_paired_uniform_starts_and_balanced_schedule(local_setup):
         assert all(run["budget"] == 100 * (problem.dimension + 1) for run in paired)
     assert "pso" in manifest["omitted_solvers"]
     assert manifest["manifest_id"] == replication.prepare_manifest(**configuration)["manifest_id"]
+
+
+def test_hundredfold_budget_for_every_problem_and_engine_preserves_paired_designs(local_setup):
+    configuration, _ = local_setup
+    configuration.update(problems=replication.PROBLEM_IDS, versions=["8.5.0", "26.2.0"],
+                         solvers=["bobyqa", "pybobyqa"], repetitions=20, budget=None)
+    original = replication.prepare_manifest(**configuration)
+    assert original == replication.prepare_manifest(**configuration, budget_multiplier=1)
+    assert "budget_multiplier" not in original
+    extended = replication.prepare_manifest(**configuration, budget_multiplier=100)
+    assert extended["protocol"] == "extended-budget-experiment"
+    assert extended["budget_multiplier"] == 100
+    assert extended["effective_budget_rule"] == "100*(dimension+1)*budget_multiplier"
+    assert extended["budget_override"] is None
+    assert extended["manifest_id"] != original["manifest_id"]
+    assert len(extended["runs"]) == 10 * 2 * 2 * 20
+    starts = {}
+    for previous, current in zip(original["runs"], extended["runs"]):
+        assert current["budget"] == previous["budget"] * 100
+        assert current["budget"] == 10000 * (get_problem(current["problem"]).dimension + 1)
+        assert {key: value for key, value in current.items() if key != "budget"} == {
+            key: value for key, value in previous.items() if key != "budget"}
+        key = current["problem"], current["repetition"]
+        assert starts.setdefault(key, current["x0"]) == current["x0"]
+
+
+@pytest.mark.parametrize("multiplier", [0, -1, 1.5, "100", True, None])
+def test_budget_multiplier_requires_a_positive_integer(local_setup, multiplier):
+    configuration, _ = local_setup
+    with pytest.raises(ValueError, match="budget_multiplier must be a positive integer"):
+        replication.prepare_manifest(**{**configuration, "budget": None},
+                                     budget_multiplier=multiplier)
+
+
+def test_explicit_pilot_budget_cannot_be_combined_with_a_budget_multiplier(local_setup):
+    configuration, _ = local_setup
+    with pytest.raises(ValueError, match="cannot both override"):
+        replication.prepare_manifest(**configuration, budget_multiplier=100)
+    assert replication.prepare_manifest(**configuration, budget_multiplier=1)[
+        "protocol"] == "pilot-overrides"
+
+
+def test_extended_experiment_with_fewer_repetitions_is_never_labelled_paper_replication(local_setup):
+    configuration, _ = local_setup
+    manifest = replication.prepare_manifest(**{**configuration, "budget": None}, budget_multiplier=100)
+    assert manifest["protocol"] == "extended-budget-experiment"
+    assert manifest["requested_repetitions"] == 1
 
 
 def test_solver_alias_is_canonical_before_direct_initialization(local_setup):
@@ -435,3 +483,235 @@ def test_worker_exit_is_checkpointed_as_interrupted_without_fabricating_an_objec
     assert record["error"]["message"] == "worker exited"
     assert record["evaluation_count"] == 0 and calls == []
     assert not (root / "experiment.lock").exists()
+    from tools import continue_replication
+    _, records, _ = continue_replication.read_origin(root)
+    assert records[record["id"]] == record
+
+
+@pytest.mark.parametrize("workers,expected", [(1, [1]), (60, [60]), (61, [31, 30]),
+                                             (120, [60, 60]), (121, [41, 40, 40])])
+def test_worker_pools_cover_the_requested_allocation_and_each_run_once(workers, expected):
+    specs = [{"id": f"r{index:03}", "budget": 100 + index % 10}
+             for index in range(200)]
+    pools = replication.worker_pool_partition(specs, workers)
+    assert [size for size, _ in pools] == expected
+    assert sorted(row["id"] for _, group in pools for row in group) == sorted(
+        row["id"] for row in specs)
+    if len(pools) == 1:
+        assert pools[0][1] == specs
+    else:
+        normalized_loads = [sum(row["budget"] for row in group) / size for size, group in pools]
+        assert max(normalized_loads) - min(normalized_loads) <= max(
+            row["budget"] for row in specs) / min(expected)
+
+
+def test_two_spawn_pools_share_one_lock_and_resume_without_duplicate_work(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, calls = local_setup
+    configuration.update(repetitions=4, versions=["8.5.0", "26.2.0"], budget=None)
+    root = tmp_path / "experiment"
+    allocations, submitted = [], []
+    original_environment = {name: os.environ.get(name) for name in replication.WORKER_THREAD_VARIABLES}
+    monkeypatch.setattr(replication, "solve_solver", lambda name, objective, start, *args: {
+        "status": "terminated", "fun": objective(start)})
+
+    class ImmediatePool:
+        def __init__(self, max_workers, mp_context):
+            assert (root / "experiment.lock").is_file()
+            assert mp_context.get_start_method() == "spawn"
+            assert all(os.environ[name] == "1" for name in replication.WORKER_THREAD_VARIABLES)
+            allocations.append(max_workers)
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            pass
+
+        def submit(self, function, spec, *args):
+            submitted.append(spec["id"])
+            future = Future()
+            result = function(spec, *args)
+            assert result is None  # Full traces must stay out of retained futures.
+            future.set_result(result)
+            return future
+
+    monkeypatch.setattr(replication, "ProcessPoolExecutor", ImmediatePool)
+    summary = replication.run_replication(output_root=root, workers=120,
+                                          budget_multiplier=100, **configuration)
+    assert allocations == [60, 60]
+    assert len(submitted) == len(set(submitted)) == len(calls) == 8
+    assert summary["statuses"]["completed"] == 8
+    assert summary["protocol"] == "extended-budget-experiment"
+    assert {name: os.environ.get(name) for name in replication.WORKER_THREAD_VARIABLES} == original_environment
+    assert not (root / "experiment.lock").exists()
+    replication.run_replication(output_root=root, workers=120,
+                               budget_multiplier=100, **configuration)
+    assert allocations == [60, 60] and len(calls) == 8
+    checkpoint = next((root / "runs").glob("*.json"))
+    previous = json.loads(checkpoint.read_text())
+    checkpoint.write_text(json.dumps({**previous, "status": "running"}))
+    replication.run_replication(output_root=root, workers=120,
+                               budget_multiplier=100, **configuration)
+    assert len(calls) == 9 and submitted.count(previous["id"]) == 2
+    resumed = json.loads(checkpoint.read_text())
+    assert resumed["attempt"] == 2
+    assert resumed["budget"] == previous["budget"]
+    assert resumed["x0"] == previous["x0"] and resumed["seed"] == previous["seed"]
+    assert not (root / "experiment.lock").exists()
+
+
+def test_native_thread_environment_is_restored_when_pool_startup_fails(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, _ = local_setup
+    monkeypatch.setenv("OMP_NUM_THREADS", "17")
+    monkeypatch.delenv("MKL_NUM_THREADS", raising=False)
+
+    def failed_start(**kwargs):
+        raise RuntimeError("simulated process startup failure")
+
+    monkeypatch.setattr(replication, "ProcessPoolExecutor", failed_start)
+    root = tmp_path / "experiment"
+    with pytest.raises(RuntimeError, match="startup failure"):
+        replication.run_replication(output_root=root, workers=120, **configuration)
+    assert os.environ["OMP_NUM_THREADS"] == "17"
+    assert "MKL_NUM_THREADS" not in os.environ
+    assert not (root / "experiment.lock").exists()
+
+
+def test_cli_accepts_extended_budget_and_rejects_ambiguous_budget_options(monkeypatch, capsys):
+    from tools import run_replication
+
+    options = []
+    monkeypatch.setattr(run_replication, "run_replication", lambda **kwargs: options.append(kwargs) or {})
+    run_replication.main(["--budget-multiplier", "100", "--workers", "120"])
+    assert options[0]["budget_multiplier"] == 100 and options[0]["workers"] == 120
+    assert options[0]["budget"] is None
+    with pytest.raises(SystemExit):
+        run_replication.main(["--budget", "25", "--budget-multiplier", "100"])
+    assert len(options) == 1
+    assert "not allowed with argument" in capsys.readouterr().err
+
+
+def test_long_search_uses_linear_durable_writes_and_a_self_contained_terminal_checkpoint(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, calls = local_setup
+    configuration.update(budget=None)
+    manifest = replication.prepare_manifest(**configuration, budget_multiplier=100)
+    root = tmp_path / "experiment"
+    checkpoint = root / "runs" / (manifest["runs"][0]["id"] + ".json")
+    sizes = []
+    original_write = replication._atomic_json
+
+    def inspect_write(path, value):
+        if path == checkpoint:
+            sizes.append(len(json.dumps(value)))
+            if value["status"] == "running":
+                assert value["trace"] == []
+                assert value["trace_storage"]["events"] == value["evaluation_count"]
+        original_write(path, value)
+
+    def solver(name, objective, start, bounds, budget, seed):
+        assert budget == 110000
+        for count in range(1, 161):
+            objective(start)
+            recovered = replication.read_checkpoint(checkpoint)
+            assert len(recovered["trace"]) == recovered["evaluation_count"] == count
+        return {"status": "terminated", "success": True}
+
+    monkeypatch.setattr(replication, "_atomic_json", inspect_write)
+    monkeypatch.setattr(replication, "solve_solver", solver)
+    result = replication._run_one(manifest["runs"][0], manifest, root, "none")
+    final = json.loads(checkpoint.read_text())
+    assert result == final and len(result["trace"]) == len(calls) == 160
+    assert "trace_storage" not in final and final["status"] == "completed"
+    assert max(sizes[:-1]) < sizes[1] + 100
+    assert sum(sizes) < 165 * sizes[1] + sizes[-1]
+    journal = next((checkpoint.parent / "traces").glob("*.jsonl"))
+    assert len(journal.read_text().splitlines()) == 160
+
+
+def test_restarting_a_killed_long_run_archives_the_exact_materialized_prefix(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, _ = local_setup
+    configuration.update(budget=None)
+    manifest = replication.prepare_manifest(**configuration, budget_multiplier=100)
+    spec = manifest["runs"][0]
+    root = tmp_path / "experiment"
+    checkpoint = root / "runs" / (spec["id"] + ".json")
+    previous = {**spec, "manifest_id": manifest["manifest_id"], "attempt": 1,
+                "status": "running", "evaluation_count": 1,
+                "trace": [{"evaluation": 1, "status": "success", "f": 17.0}]}
+    writer = replication.TraceJournal(checkpoint, 1)
+    replication._atomic_json(checkpoint, writer.snapshot(previous))
+    with writer.path.open("a") as stream:
+        stream.write('{"evaluation":2')
+    monkeypatch.setattr(replication, "solve_solver", lambda name, objective, start, *args: {
+        "status": "terminated", "fun": objective(start)})
+    restarted = replication._run_one(spec, manifest, root, "none")
+    archived = json.loads((root / "history" / f"{spec['id']}-attempt1.json").read_text())
+    assert archived == previous
+    assert archived["status"] == "running"
+    assert restarted["attempt"] == 2
+    assert restarted["x0"] == previous["x0"] and restarted["seed"] == previous["seed"]
+    assert writer.path.read_text().endswith('{"evaluation":2')
+
+
+def test_progress_summaries_cache_only_counters_and_observe_new_checkpoint_versions(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, _ = local_setup
+    manifest = replication.prepare_manifest(**{**configuration, "budget": None}, budget_multiplier=100)
+    root = tmp_path / "experiment"
+    spec = manifest["runs"][0]
+    checkpoint = root / "runs" / (spec["id"] + ".json")
+    row = {**spec, "status": "running", "evaluation_count": 1, "elapsed_seconds": 4.0,
+           "measured_objective_seconds": 3.0,
+           "trace": [{"evaluation": 1, "status": "success", "f": 12.0}]}
+    writer = replication.TraceJournal(checkpoint, 1)
+    replication._atomic_json(checkpoint, writer.snapshot(row))
+    reads = []
+    original_read = Path.read_text
+
+    def count_read(path, *args, **kwargs):
+        reads.append(path)
+        return original_read(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", count_read)
+    monkeypatch.setattr(replication, "read_checkpoint", lambda *args:
+                        pytest.fail("Live progress counters must not load the growing trace"))
+    cache = {}
+    first = replication._summary(root, manifest, 120, cache=cache)
+    repeated = replication._summary(root, manifest, 120, cache=cache)
+    assert first == repeated and reads.count(checkpoint) == 1
+    assert first["measured_objective_seconds"] == 3.0 and first["evaluation_count"] == 1
+    row["trace"].append({"evaluation": 2, "status": "success", "f": 11.0})
+    row.update(evaluation_count=2, measured_objective_seconds=6.5, elapsed_seconds=7.0)
+    replication._atomic_json(checkpoint, writer.snapshot(row))
+    updated = replication._summary(root, manifest, 120, cache=cache)
+    assert reads.count(checkpoint) == 2
+    assert updated["measured_objective_seconds"] == 6.5 and updated["evaluation_count"] == 2
+    assert "trace" not in cache[checkpoint][1]
+
+
+def test_journal_creation_before_a_killed_initial_checkpoint_does_not_block_restart(
+    local_setup, tmp_path, monkeypatch
+):
+    configuration, _ = local_setup
+    manifest = replication.prepare_manifest(**{**configuration, "budget": None}, budget_multiplier=100)
+    spec = manifest["runs"][0]
+    root = tmp_path / "experiment"
+    checkpoint = root / "runs" / (spec["id"] + ".json")
+    orphan = replication.TraceJournal(checkpoint, 1)
+    orphan_bytes = orphan.path.read_bytes()
+    assert not checkpoint.exists()
+    monkeypatch.setattr(replication, "solve_solver", lambda name, objective, start, *args: {
+        "status": "terminated", "fun": objective(start)})
+    result = replication._run_one(spec, manifest, root, "none")
+    assert result["status"] == "completed" and result["evaluation_count"] == 1
+    assert orphan.path.read_bytes() == orphan_bytes
+    assert len(list(orphan.path.parent.glob("*.jsonl"))) == 2

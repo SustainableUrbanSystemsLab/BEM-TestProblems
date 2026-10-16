@@ -164,7 +164,9 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False, da
         summaries.append(stats)
     is_partial = any(row["statuses"].get(status, 0) for row in groups
                      for status in ("pending", "running", "interrupted"))
-    scope = "PILOT" if manifest["protocol"] == "pilot-overrides" else "PAPER BUDGET"
+    scope = {"pilot-overrides": "PILOT",
+             "paper-start-and-budget-protocol": "PAPER BUDGET",
+             "extended-budget-experiment": "EXTENDED BUDGET"}[manifest["protocol"]]
     if is_partial:
         scope += " / INCOMPLETE"
     if dataset is not None and dataset.get("publication_preview"):
@@ -175,6 +177,8 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False, da
                        if include_diagnostic_runs else "STRICT VIEW: no warmup-error outputs used")
     budget_text = (f"{manifest['budget_override']} calls/run" if manifest.get("budget_override")
                    else "100(n+1) calls/run")
+    if manifest["protocol"] == "extended-budget-experiment":
+        budget_text = f"{manifest['budget_multiplier']} × 100(n+1) calls/run (maximum)"
     outputs = []
     for group_name, numbers in GROUPS.items():
         numbers = [number for number in numbers if str(number) in manifest["problem_definitions"]]
@@ -262,6 +266,9 @@ def plot_replication(root, *, output_dir=None, include_diagnostic_runs=False, da
               "skipped_original_methods": [metadata for metadata in registry
                                            if not metadata["implemented"]],
               "engine_median_comparisons": []}
+    if "budget_multiplier" in manifest:
+        report["budget_multiplier"] = manifest["budget_multiplier"]
+        report["effective_budget_rule"] = manifest["effective_budget_rule"]
     summary_lookup = {(row["problem"], row["version"], row["solver"]): row for row in summaries}
     if {"8.5.0", "26.2.0"} <= set(manifest["engines"]):
         for number in map(int, manifest["problem_definitions"]):
