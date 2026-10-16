@@ -477,14 +477,18 @@ def run_stage(stage, config, paths, project, *, dry_run=False):
             raise ValueError("The timing pilot is incomplete; inspect its checkpoints")
         records = [read(path) for path in (paths["pilot"] / "runs").glob("*.json")]
         for version in config["versions"]:
-            if not any(
-                row["version"] == version
-                and row["status"] in {"completed", "budget_exhausted"}
-                and row.get("strict_benchmark_evaluation") is True
-                and row.get("warmup_severe_evaluations_used", 0) == 0
-                for row in records
-            ):
-                raise ValueError(f"No strict timing-pilot trajectory succeeded for {version}")
+            for solver in config["solvers"]:
+                if not any(
+                    row["version"] == version
+                    and row["solver"] == solver
+                    and row["status"] in {"completed", "budget_exhausted"}
+                    and row.get("strict_benchmark_evaluation") is True
+                    and row.get("warmup_severe_evaluations_used", 0) == 0
+                    for row in records
+                ):
+                    raise ValueError(
+                        f"No strict timing-pilot trajectory succeeded for {solver} / {version}"
+                    )
         receipt(
             pilot_receipt,
             binding,

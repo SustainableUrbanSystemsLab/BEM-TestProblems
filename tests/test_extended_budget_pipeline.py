@@ -44,11 +44,12 @@ def planned(setup, monkeypatch):
     return setup
 
 
-def test_default_plan_has_400_separate_runs_and_43_million_call_ceiling(planned):
+def test_default_plan_has_800_separate_runs_and_86_million_call_ceiling(planned):
     config, paths, project = planned
     result = workflow.run_stage("plan", config, paths, project)
-    assert result["planned_runs"] == 400
-    assert result["evaluation_ceiling"] == 43_200_000
+    assert config["solvers"] == ["bobyqa", "pybobyqa"]
+    assert result["planned_runs"] == 800
+    assert result["evaluation_ceiling"] == 86_400_000
     assert (paths["source"] / "src/bem_testproblems/replication.py").is_file()
     assert not paths["campaign"].exists()
     original = workflow.read(workflow.ROOT / "replication/continuation.json")
@@ -206,6 +207,7 @@ def install_fake_process(
     preflight_passed=True,
     pilot_complete=True,
     successful_versions=("8.5.0", "26.2.0"),
+    successful_solvers=("bobyqa", "pybobyqa"),
     full_complete=True,
 ):
     config, paths, _ = setup
@@ -220,19 +222,21 @@ def install_fake_process(
         elif name == "run_replication.py" and "--budget" in command:
             workflow.write(paths["pilot"] / "manifest.json", {"id": "pilot"})
             workflow.write(paths["pilot"] / "summary.json", {"evaluations": 50})
-            for index, version in enumerate(config["versions"]):
-                workflow.write(
-                    paths["pilot"] / "runs" / f"{index}.json",
-                    {
-                        "version": version,
-                        "status": "budget_exhausted",
-                        "strict_benchmark_evaluation": version in successful_versions,
-                    },
-                )
+            for version in config["versions"]:
+                for solver in config["solvers"]:
+                    workflow.write(
+                        paths["pilot"] / "runs" / f"{version}-{solver}.json",
+                        {
+                            "version": version,
+                            "solver": solver,
+                            "status": "budget_exhausted" if solver in successful_solvers else "skipped",
+                            "strict_benchmark_evaluation": version in successful_versions,
+                        },
+                    )
         elif name == "review_replication.py" and capture:
             if command[command.index("--origin") + 1] == str(paths["pilot"]):
                 return {"planned": 48, "terminal": 48 if pilot_complete else 47}
-            return {"planned": 400, "terminal": 400 if full_complete else 399}
+            return {"planned": 800, "terminal": 800 if full_complete else 799}
         elif name == "run_replication.py":
             workflow.write(
                 paths["campaign"] / "manifest.json", fake_manifest(config, paths, project)
@@ -292,6 +296,7 @@ def test_failed_preflight_invalidates_receipt_and_preserves_previous_attempt(pla
     [
         ({"pilot_complete": False}, "pilot is incomplete"),
         ({"successful_versions": ("8.5.0",)}, "26.2.0"),
+        ({"successful_solvers": ("bobyqa",)}, "pybobyqa"),
     ],
 )
 def test_incomplete_or_entirely_failed_engine_pilot_cannot_authorize_run(
