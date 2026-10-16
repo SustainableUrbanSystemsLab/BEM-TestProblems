@@ -226,10 +226,12 @@ def test_public_solve_replays_saved_failures_through_the_feasible_endpoint(case,
         calls.append(tuple(x))
         if index < len(case["observations"]):
             observation = case["observations"][index]
-            assert tuple(x) == pytest.approx(observation["x"], rel=1e-14, abs=1e-14)
+            # Match the compiler-roundoff tolerance of the adapter replay;
+            # the rejected endpoint still requires exact equality below.
+            assert tuple(x) == pytest.approx(observation["x"], rel=1e-12, abs=1e-12)
             return observation["f"]
         assert index == len(case["observations"])
-        assert tuple(x) == pytest.approx(case["expected_evaluated_x"], rel=1e-14, abs=1e-14)
+        assert tuple(x) == pytest.approx(case["expected_evaluated_x"], rel=1e-12, abs=1e-12)
         for entry in case["roundoff"]:
             assert x[entry["index"]] == entry["endpoint"]
         raise end
