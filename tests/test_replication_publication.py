@@ -552,7 +552,7 @@ def test_extended_budget_export_replays_and_verifies_the_full_recipe(campaign):
     assert experiment["budget_multiplier"] == 100 and experiment["budget_override"] is None
     assert experiment["budget_rule"] == "100*(dimension+1)*budget_multiplier"
     assert all(spec["budget"] == 110_000 for spec in experiment["runs"])
-    svg = (output / "plots/figure9-energyplus-8.5.0.svg").read_text()
+    svg = (output / "plots/figure9-energyplus-8.5.0.svg").read_text(encoding="utf-8")
     assert "EXTENDED BUDGET" in svg and "100 × 100(n+1)" in svg
     assert export.verify_export(output)["validated_result_stamp"]
 

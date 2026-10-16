@@ -8,6 +8,7 @@ import tempfile
 from concurrent.futures import Future
 from concurrent.futures.process import BrokenProcessPool
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -661,8 +662,9 @@ def test_restarting_a_killed_long_run_archives_the_exact_materialized_prefix(
     assert writer.path.read_text().endswith('{"evaluation":2')
 
 
+@pytest.mark.parametrize("file_id_available", [True, False])
 def test_progress_summaries_cache_only_counters_and_observe_new_checkpoint_versions(
-    local_setup, tmp_path, monkeypatch
+    local_setup, tmp_path, monkeypatch, file_id_available
 ):
     configuration, _ = local_setup
     manifest = replication.prepare_manifest(**{**configuration, "budget": None}, budget_multiplier=100)
@@ -674,6 +676,16 @@ def test_progress_summaries_cache_only_counters_and_observe_new_checkpoint_versi
            "trace": [{"evaluation": 1, "status": "success", "f": 12.0}]}
     writer = replication.TraceJournal(checkpoint, 1)
     replication._atomic_json(checkpoint, writer.snapshot(row))
+    previous_stat = checkpoint.stat()
+    original_stat = Path.stat
+    if not file_id_available:
+        def stat_without_file_id(path, *args, **kwargs):
+            result = original_stat(path, *args, **kwargs)
+            if path != checkpoint:
+                return result
+            return SimpleNamespace(st_dev=result.st_dev, st_ino=0,
+                                   st_mtime_ns=result.st_mtime_ns, st_size=result.st_size)
+        monkeypatch.setattr(Path, "stat", stat_without_file_id)
     reads = []
     original_read = Path.read_text
 
@@ -687,13 +699,18 @@ def test_progress_summaries_cache_only_counters_and_observe_new_checkpoint_versi
     cache = {}
     first = replication._summary(root, manifest, 120, cache=cache)
     repeated = replication._summary(root, manifest, 120, cache=cache)
-    assert first == repeated and reads.count(checkpoint) == 1
+    initial_reads = 1 if file_id_available else 2
+    assert first == repeated and reads.count(checkpoint) == initial_reads
     assert first["measured_objective_seconds"] == 3.0 and first["evaluation_count"] == 1
     row["trace"].append({"evaluation": 2, "status": "success", "f": 11.0})
     row.update(evaluation_count=2, measured_objective_seconds=6.5, elapsed_seconds=7.0)
     replication._atomic_json(checkpoint, writer.snapshot(row))
+    os.utime(checkpoint, ns=(previous_stat.st_atime_ns, previous_stat.st_mtime_ns))
+    updated_stat = original_stat(checkpoint)
+    assert (updated_stat.st_mtime_ns, updated_stat.st_size) == (
+        previous_stat.st_mtime_ns, previous_stat.st_size)
     updated = replication._summary(root, manifest, 120, cache=cache)
-    assert reads.count(checkpoint) == 2
+    assert reads.count(checkpoint) == initial_reads + 1
     assert updated["measured_objective_seconds"] == 6.5 and updated["evaluation_count"] == 2
     assert "trace" not in cache[checkpoint][1]
 
