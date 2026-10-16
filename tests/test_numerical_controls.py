@@ -78,8 +78,8 @@ def test_legacy_profile_keeps_every_unlisted_object_and_field(number, design_kin
         expected.append(("ConvergenceLimits", "1", "100", "2", "8"))
     if number in (5, 10):
         expected.append(("ZoneAirHeatBalanceAlgorithm", "AnalyticalSolution"))
-    if number in (4, 10):
-        original_steps = "4" if number == 4 else "6"
+    if number in (4, 5, 10):
+        original_steps = "4" if number in (4, 5) else "6"
         for i, row in enumerate(expected):
             if row[0].casefold() == "timestep":
                 assert row[1] == original_steps
@@ -89,11 +89,11 @@ def test_legacy_profile_keeps_every_unlisted_object_and_field(number, design_kin
                 expected[i] = (*row[:3], "12")
     assert after == expected
     assert base.render_legacy(design, tmp_path / "again.idf").read_bytes() == original.read_bytes()
-    if number in (4, 10):
+    if number in (4, 5, 10):
         controls = _objects(changed)
         assert float(controls["sizing:parameters"][3]) / float(controls["timestep"][1]) == 1
         assert controls["convergencelimits"][1:] == (
-            ("1", "100", "2", "8") if number == 4 else ("1", "20"))
+            ("1", "100", "2", "8") if number in (4, 5) else ("1", "20"))
 
 
 @pytest.mark.parametrize("number", IDS)
@@ -115,7 +115,7 @@ def test_modern_profile_keeps_every_unlisted_object_and_field(number, design_kin
     if number in (5, 10):
         expected["ZoneAirHeatBalanceAlgorithm"] = {"BEM convergence-refined": {
             "algorithm": "AnalyticalSolution"}}
-    if number in (4, 10):
+    if number in (4, 5, 10):
         next(iter(expected["Timestep"].values()))["number_of_timesteps_per_hour"] = 12
         next(iter(expected["Sizing:Parameters"].values()))["timesteps_in_averaging_window"] = 12
     assert json.loads(changed.read_text()) == expected
@@ -180,7 +180,7 @@ def test_refinement_refuses_existing_objects_instead_of_overwriting_them(number,
         refine_modern(model, number)
 
 
-@pytest.mark.parametrize("number", (4, 10))
+@pytest.mark.parametrize("number", (4, 5, 10))
 @pytest.mark.parametrize("kind,field,index", [
     ("Timestep", "number_of_timesteps_per_hour", 1),
     ("Sizing:Parameters", "timesteps_in_averaging_window", 3),
