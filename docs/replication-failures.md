@@ -98,6 +98,19 @@ The largest control change here is **+5.271172%**. The numerical variants
 therefore require their own reference values and experiment labels; they are
 not evidence that these objectives equal the historical C# benchmark.
 
+### Cross-platform precision
+
+- The same P4 start-0 model and weather produced **170.826614330621** on macOS
+  and **170.827190446342** on Linux: **+0.000576115721 kWh/(m² year)**,
+  or **+0.000337251735%**. Both simulations passed strict diagnostics.
+- The largest measured component difference in the two affected P4 designs was
+  **0.0012808956%**. These differences are below the native comparison target of
+  **0.01%** (`rtol=1e-4`). Every actual value and signed difference remains in
+  the CI report. Model and weather checksums must still match exactly.
+- This tolerance concerns numerical comparisons between native builds. It does
+  not change EnergyPlus's warmup tolerances, permit Severe/Fatal errors, or
+  identify a numerical variant with the canonical benchmark.
+
 ## What the tests require
 
 - These errors also occur through the original C# caller. The
@@ -119,7 +132,9 @@ not evidence that these objectives equal the historical C# benchmark.
   [its tests](../tests/test_replication_failure_validation.py), requires canonical
   failures to retain their reviewed diagnostic signatures. Separately, each
   numerical variant must pass strict diagnostics and match reviewed objective,
-  component, and additive-term values at `rtol=1e-6`, with `atol=1e-7` near zero.
+  component, and additive-term values across native builds at `rtol=1e-4`
+  (0.01%), with `atol=1e-7` near zero. Same-engine C#/Python parity in the
+  [original-code checks](../tools/validate_cases.py) remains at `rtol=1e-6`.
 - [GitHub Actions](../.github/workflows/validate.yml) performs these native checks
   with both EnergyPlus versions and canonical weather. The validator requires an
   existing reviewed baseline and cannot create or update it. An unexpected

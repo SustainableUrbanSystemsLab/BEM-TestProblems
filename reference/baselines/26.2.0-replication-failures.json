@@ -8,7 +8,7 @@
   "weather_kind": "canonical",
   "diagnostics_policy": "strict",
   "numerical_variant": "convergence-refined",
-  "rtol": 1e-06,
+  "rtol": 0.0001,
   "atol": 1e-07,
   "case_fixture": {
     "path": "reference/replication-failure-cases.json",

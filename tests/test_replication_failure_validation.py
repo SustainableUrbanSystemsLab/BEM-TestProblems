@@ -567,3 +567,124 @@ def test_csharp_changed_signature_annotation_includes_actual_and_reviewed_diagno
     assert context["archive_available"] and context["diagnostics"]["severe_count"] == 1
     assert context["diagnostics"]["signatures"][0]["zone"] == "OTHER ZONE"
     assert "EnergyPlus Completed Successfully" in context["completion"]
+
+
+def _measurement_notices(output):
+    prefix = "::notice title=Strict repaired measurement::"
+    return [json.loads(line[len(prefix):].replace("%0D", "\r").replace("%0A", "\n").replace("%25", "%"))
+            for line in output.splitlines() if line.startswith(prefix)]
+
+
+def test_public_strict_measurement_notice_is_complete_and_allowlisted(native_audit, monkeypatch, capsys):
+    audit = native_audit
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    assert validation.validate(audit.args)["passed"]
+    measurements = _measurement_notices(capsys.readouterr().out)
+    assert len(measurements) == 2
+    for case, measured in zip(audit.cases, measurements, strict=True):
+        assert set(measured) == {"case_id", "engine_version", "engine_sha256", "platform",
+                                 "case_fixture_sha256", "identity", "objective", "components", "terms",
+                                 "severe_count", "fatal_count"}
+        assert measured["case_id"] == case["case_id"] and measured["engine_version"] == audit.args.version
+        assert measured["engine_sha256"] == sha256_file(audit.args.engine)
+        assert measured["case_fixture_sha256"] == sha256_file(audit.args.cases)
+        assert measured["platform"]
+        assert set(measured["identity"]) == {"problem", "x", "canonical_input_sha256", "input_sha256",
+                                             "weather_file", "weather_sha256", "numerical_recipe"}
+        assert measured["identity"]["canonical_input_sha256"] == case["input_sha256"]
+        assert measured["identity"]["weather_sha256"] == case["weather_sha256"]
+        assert measured["objective"] == 10 and measured["components"] == {"Q_h": 5}
+        assert measured["terms"] == {"heat": 10}
+        assert measured["severe_count"] == measured["fatal_count"] == 0
+        assert str(audit.args.work_dir.parent) not in json.dumps(measured)
+
+
+@pytest.mark.parametrize("change", ["numeric", "schema"])
+def test_strict_actual_measurements_remain_visible_when_baseline_comparison_fails(
+        native_audit, monkeypatch, capsys, change):
+    audit = native_audit
+    if change == "numeric":
+        audit.rows[0]["objective"] = 9.0
+    else:
+        audit.rows[0]["components"] = {"renamed": 5.0}
+    audit.write()
+    original_baseline = audit.args.baseline.read_bytes()
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(audit.args)
+    measured = _measurement_notices(capsys.readouterr().out)
+    assert len(measured) == 2
+    assert measured[0]["case_id"] == "case-1" and measured[0]["objective"] == 10
+    assert measured[0]["components"] == {"Q_h": 5.0}
+    assert audit.args.baseline.read_bytes() == original_baseline
+
+
+@pytest.mark.parametrize("failure", ["native", "canonical", "nonfinite", "missing-outputs"])
+def test_no_measurement_notice_is_emitted_without_a_strict_finite_repaired_measurement(
+        native_audit, monkeypatch, capsys, failure):
+    audit = native_audit
+    if failure in {"native", "canonical"}:
+        for case in audit.cases:
+            audit.modes[(case["case_id"], "repaired" if failure == "native" else "canonical")] = (
+                "fatal" if failure == "native" else "success")
+    elif failure == "nonfinite":
+        monkeypatch.setattr(validation, "extract_outputs", lambda *args: {"Q_h": float("nan")})
+    else:
+        def missing_outputs(*args):
+            raise ValueError("Missing simulator outputs")
+        monkeypatch.setattr(validation, "extract_outputs", missing_outputs)
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(audit.args)
+    assert not _measurement_notices(capsys.readouterr().out)
+
+
+def test_measurement_notice_drops_unallowlisted_fields_and_escapes_workflow_data(
+        native_audit, monkeypatch, capsys):
+    audit = native_audit
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    runner = SimpleNamespace(version=audit.args.version, executable_sha256=sha256_file(audit.args.engine))
+    row = audit.rows[0]
+    identity = {**row, "machine_path": str(audit.args.work_dir)}
+    identity["numerical_recipe"] = {"name": "convergence-refined", "note": "50%\r\nfixed recipe"}
+    actual = {"objective": 10., "components": {"Q_h": 5.}, "terms": {"heat": 10.},
+              "private_path": str(audit.args.work_dir)}
+    validation._publish_measurement(audit.args, runner, audit.cases[0], identity, actual,
+                                    {"severe_count": 0, "fatal_count": 0})
+    output = capsys.readouterr().out
+    assert "50%25" in output and len(output.splitlines()) == 1
+    measured = _measurement_notices(output)[0]
+    assert measured["identity"]["numerical_recipe"]["note"] == "50%\r\nfixed recipe"
+    assert str(audit.args.work_dir) not in output
+    assert "machine_path" not in measured["identity"] and "private_path" not in measured
+    monkeypatch.delenv("GITHUB_ACTIONS")
+    validation._publish_measurement(audit.args, runner, audit.cases[0], identity, actual,
+                                    {"severe_count": 0, "fatal_count": 0})
+    assert not capsys.readouterr().out
+
+
+@pytest.mark.parametrize("expected,actual,passes", [
+    (100., 100.009, True), (100., 100.011, False),
+    (0., 9e-8, True), (0., 1.1e-7, False),
+])
+def test_reviewed_cross_platform_tolerance_has_real_relative_and_absolute_boundaries(
+        native_audit, monkeypatch, expected, actual, passes):
+    audit = native_audit
+    for row in audit.rows:
+        row.update(objective=expected, components={"Q_h": expected / 2}, terms={"heat": expected})
+    audit.write()
+    monkeypatch.setattr(validation, "extract_outputs", lambda *args: {"Q_h": actual / 2})
+    if passes:
+        validation.validate(audit.args)
+    else:
+        with pytest.raises(AssertionError):
+            validation.validate(audit.args)
+    report = json.loads(audit.args.output.read_text())
+    assert report["passed"] is passes
+    assert (report["rtol"], report["atol"]) == (1e-4, 1e-7)
+    difference = report["cases"][0]["refined"]["comparison"]["objective.objective"]
+    assert difference["passed"] is passes
+    assert difference["allowed_difference"] == pytest.approx(max(1e-7, 1e-4 * abs(expected)))
+    assert difference["signed_difference"] == pytest.approx(actual - expected)
+    assert difference["percentage_difference"] == (
+        pytest.approx(100 * (actual - expected) / abs(expected)) if expected else None)
