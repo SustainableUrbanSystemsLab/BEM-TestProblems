@@ -14,6 +14,10 @@ from the [8.5 audit](validation-results/8.5.0-canonical-audit.json) and
 [26.2 audit](validation-results/26.2.0-canonical-audit.json).
 These are new project measurements; no numerical paper result is substituted.
 
+This report preserves the original measurements and exploratory numerical probes.
+For the current supported opt-in profiles and their bounded validation, see
+[Failed replication runs](replication-failures.md).
+
 ## Complete canonical case table
 
 An objective below means the engine run passed strict diagnostics. **Rejected**
@@ -106,8 +110,9 @@ relative daily-peak differences. The version-specific source determines the
 [8.5 implementation](https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/HeatBalanceManager.cc),
 [26.2 implementation](https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc).
 
-These warmup thresholds are separate from the project's relative `1e-6`
-objective-comparison tolerance. Passing a numerical comparison of a reported
+These warmup thresholds are separate from objective-comparison tolerances.
+Same-engine C#/Python parity uses `rtol=1e-6`; repaired-model comparisons across
+native builds use `rtol=1e-4` (0.01%). Passing a numerical comparison of a reported
 objective does not override a failed simulation diagnostic.
 
 ### P1: insufficient warmup allowance at this design
@@ -163,9 +168,11 @@ Sensitivity tests support an interaction with the coupled numerical solution:
 | Valid 12 timesteps/hour; 12-step sizing window preserves 60 minutes; cap 100 | 14 | 0 / 0 | 238.772703 |
 
 All convergence tolerances and physical decision coordinates were preserved in
-these probes. The changes are numerical-control variants, not established
-benchmark repairs. Annual HVAC iteration warnings still occur in some passing
-variants; passing warmup alone does not establish their overall physical accuracy.
+these exploratory probes. The later supported fixed profiles have their own
+[bounded validation](replication-failures.md); their settings differ from some
+of the individual probes above. Annual HVAC iteration warnings still occur in
+some passing probes; passing warmup alone does not establish their overall
+physical accuracy.
 
 An earlier timestep request of 8/hour was invalid. EnergyPlus normalized it to
 10/hour and the unchanged four-step sizing window became 24 minutes. Its pass
@@ -211,11 +218,14 @@ also reporting severe warmup errors. The original C# caller does not reject
 those diagnostics. The Python evaluator does: rejected results cannot become
 accepted objective values or a passing reference comparison.
 
-The P1 extended-warmup repair is now available as a separately identified
-variant, with the validation below. The P4 and P10 probes still require broader
-numerical validation before they can become supported variants. Each numerical
-change may change objectives; exact historical compatibility and a revised
-numerical model retain separate identities and references.
+The P1 extended-warmup variant is described below. The P4 and P10 results above
+record the earlier exploratory probes. The later
+[failed-run validation](replication-failures.md) documents the supported fixed
+`convergence-refined` profiles for P1, P4, P5, P6, and P10, tested at 24 recorded
+failed inputs and nine midpoint controls. That bounded validation does not
+establish convergence throughout each problem's box. Each numerical change may
+change objectives; exact historical compatibility and a revised numerical model
+retain separate identities and references.
 
 The [recorded code CI](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38674953272)
 passed all five jobs, including both 26-case engine comparisons. Those public
