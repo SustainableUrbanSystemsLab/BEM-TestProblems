@@ -535,9 +535,11 @@ def _summary(root, manifest, workers, *, cache=None):
     terminal_ids = set()
     for path in (root / "runs").glob("*.json"):
         stat = path.stat()
-        identity = stat.st_mtime_ns, stat.st_size
+        # Atomic replacement can preserve both size and timestamp on Windows.
+        # Its file ID still changes; without one, reread instead of caching.
+        identity = stat.st_dev, stat.st_ino, stat.st_mtime_ns, stat.st_size
         cached = cache.get(path)
-        if cached is None or cached[0] != identity:
+        if not stat.st_ino or cached is None or cached[0] != identity:
             row = json.loads(path.read_text())
             measured_seconds = row.get("measured_objective_seconds")
             if measured_seconds is None:

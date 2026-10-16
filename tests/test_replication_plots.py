@@ -73,7 +73,7 @@ def test_partial_plot_is_labeled_and_numerical_summary_is_preserved(tmp_path):
     assert report["skipped_original_methods"][0]["name"] == "galapagos_ga"
     assert len(result["plots"]) == 2
     assert (tmp_path / "plots/figure8-energyplus-8.5.0.png").stat().st_size > 0
-    svg = (tmp_path / "plots/figure8-energyplus-8.5.0.svg").read_text()
+    svg = (tmp_path / "plots/figure8-energyplus-8.5.0.svg").read_text(encoding="utf-8")
     assert "Example (n=1)" in svg
     assert "runs: 1/4; failed runs: 1" in svg
     assert "n=1/4" not in svg
@@ -92,7 +92,7 @@ def test_extended_budget_plot_records_the_actual_multiplier(tmp_path):
     report = json.loads((root / "plots/boxplot-summary.json").read_text())
     assert report["budget_multiplier"] == 100
     assert report["effective_budget_rule"] == manifest["effective_budget_rule"]
-    svg = (root / "plots/figure8-energyplus-8.5.0.svg").read_text()
+    svg = (root / "plots/figure8-energyplus-8.5.0.svg").read_text(encoding="utf-8")
     assert "100 × 100(n+1) calls/run (maximum)" in svg
     assert "PAPER BUDGET" not in svg and "PILOT" not in svg
 
@@ -185,7 +185,7 @@ def test_strict_plot_reports_excluded_searches_and_preserves_failure_counts(tmp_
     assert report["groups"][0]["excluded_non_strict_completed_runs"] == 1
     assert report["groups"][0]["statuses"]["failed"] == 1
     assert len(result["plots"]) == 2
-    svg = (root / "plots/figure8-energyplus-8.5.0.svg").read_text()
+    svg = (root / "plots/figure8-energyplus-8.5.0.svg").read_text(encoding="utf-8")
     assert "runs: 0/4; failed runs: 1" in svg
     assert "excluded non-strict runs: 1" in svg
 
@@ -201,7 +201,7 @@ def test_numerical_variant_is_visible_in_figures_and_numerical_groups(tmp_path):
     report = json.loads((root / "plots/boxplot-summary.json").read_text())
     assert report["groups"][0]["numerical_variant"] == "warmup-100"
     assert "Numerical variant: warmup-100" in (
-        root / "plots/figure8-energyplus-8.5.0.svg").read_text()
+        root / "plots/figure8-energyplus-8.5.0.svg").read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize("call", [
@@ -275,4 +275,4 @@ def test_publication_preview_marker_is_visible_in_exported_figures(tmp_path):
                               dataset=dataset)
     assert "UNVALIDATED PREVIEW" in result["scope"]
     svg = next(path for path in result["plots"] if path.endswith(".svg"))
-    assert "UNVALIDATED PREVIEW" in Path(svg).read_text()
+    assert "UNVALIDATED PREVIEW" in Path(svg).read_text(encoding="utf-8")
