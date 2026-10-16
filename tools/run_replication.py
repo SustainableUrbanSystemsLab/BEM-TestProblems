@@ -18,7 +18,11 @@ def main(argv=None):
     parser.add_argument("--versions", nargs="+", choices=("8.5.0", "26.2.0"),
                         default=["8.5.0", "26.2.0"])
     parser.add_argument("--repetitions", type=int, default=20)
-    parser.add_argument("--budget", type=int, help="Override100*(n+1); labels the experiment as a pilot")
+    budgets = parser.add_mutually_exclusive_group()
+    budgets.add_argument("--budget", type=int,
+                         help="Override 100*(n+1); labels the experiment as a pilot")
+    budgets.add_argument("--budget-multiplier", type=int, default=1,
+                         help="Multiply 100*(n+1); values above 1 label an extended-budget experiment")
     parser.add_argument("--seed", type=int, default=2019)
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--schedule", choices=("balanced", "problem-first"), default="balanced")

@@ -24,19 +24,20 @@ else:
 
 def load_review(origin, continuation=None):
     """Validate linked evidence; retain actual manifests and full origin denominators."""
-    original, records, identity = read_origin(origin)
+    original, records, identity = read_origin(origin, retain_traces=False)
     manifests = {original["manifest_id"]: original}
     roots = {original["manifest_id"]: str(Path(origin).resolve())}
     if continuation is not None:
         path = Path(continuation)
         if (path / "manifest.json").is_file():
-            target, newer, _ = read_origin(path)
+            target, newer, _ = read_origin(path, retain_traces=False)
             link = target.get("continuation", {})
             if (link.get("origin_manifest_id") != original["manifest_id"]
                     or any(link.get(key) != value for key, value in identity.items())):
                 raise ValueError("Continuation origin linkage or checkpoint hashes differ")
             for key in ("problem_definitions", "solvers", "code_sha256", "diagnostics_policy",
-                        "protocol", "requested_repetitions", "budget_override", "master_seed"):
+                        "protocol", "requested_repetitions", "budget_override", "master_seed",
+                        "budget_multiplier", "effective_budget_rule", "paper_budget_rule"):
                 if target.get(key) != original.get(key):
                     raise ValueError(f"Continuation scientific definition differs: {key}")
             terminal = {key for key, row in records.items() if row["status"] in TERMINAL}
@@ -96,6 +97,8 @@ def _winner(record, manifest):
         "problem", "version", "solver", "manifest_id", "seed", "budget", "evaluation_count",
         "best_x", "best_f", "status", "repetition", "x0")}
     result["run_id"] = record["id"]
+    result["solver_termination"] = record.get("solver_termination", record["status"])
+    result["solver_success"] = record.get("solver_success")
     result["objective_unit"] = definition["objective_unit"]
     result["dimension"] = problem.dimension
     result["strict_benchmark_evaluation"] = strict_trajectory(record)
@@ -173,6 +176,10 @@ def build_review(dataset, *, include_diagnostic_runs=False):
                                              for version, engine in value["engines"].items()}}
                                  for key, value in dataset["manifests"].items()},
             "protocol": manifest["protocol"], "diagnostics_policy": manifest["diagnostics_policy"],
+            "budget_multiplier": manifest.get("budget_multiplier", 1),
+            "evaluation_budgets": {number: sorted({spec["budget"] for spec in dataset["specs"]
+                                                   if spec["problem"] == int(number)})
+                                   for number in manifest["problem_definitions"]},
             "selection": "diagnostic-completed-trajectories" if include_diagnostic_runs
                          else "strict-completed-trajectories",
             "partial": partial, "requested_runs": len(dataset["specs"]),
@@ -188,13 +195,21 @@ def review_markdown(report):
     lines = ["# Replication review", "", f"**{'INCOMPLETE' if report['partial'] else 'ALL RUNS TERMINAL'}**; "
              f"{report['selection']}; {report['protocol']}.", "", report["caution"], "",
              f"Planned runs: {report['requested_runs']}. Statuses: `{json.dumps(report['status_counts'])}`.", "",
+             "Evaluation budgets are maximum call counts; solvers can terminate earlier.", "",
+             "| Problem | Maximum evaluations per run |", "|---|---:|"]
+    for number, budgets in report["evaluation_budgets"].items():
+        lines.append(f"| {number} | {', '.join(f'{budget:,}' for budget in budgets)} |")
+    lines.extend(["",
              "Severe means EnergyPlus reported a serious simulation problem; Fatal means it stopped.", "",
-             "| Problem | EnergyPlus | Solver | Included/planned | Best objective |", "|---|---|---|---:|---:|"]
+             "| Problem | EnergyPlus | Solver | Included/planned | Best objective | Calls/cap | Termination |",
+             "|---|---|---|---:|---:|---:|---|"])
     for row in report["per_solver_best"]:
         winner = row["winner"]
         value = f"{winner['best_f']:.12g}" if winner else "—"
+        calls = f"{winner['evaluation_count']}/{winner['budget']}" if winner else "—"
+        termination = winner["solver_termination"] if winner else "—"
         lines.append(f"| {row['problem']} | {row['version']} | {row['solver']} | "
-                     f"{row['included']}/{row['requested']} | {value} |")
+                     f"{row['included']}/{row['requested']} | {value} | {calls} | {termination} |")
     lines.extend(["", "## Runs requiring attention", "",
                   "Interrupted runs remain unfinished. Warmup-error trajectories are excluded from strict results.", "",
                   "| Run | Actual manifest | Status | Calls | Warmup-error calls | Error type |",

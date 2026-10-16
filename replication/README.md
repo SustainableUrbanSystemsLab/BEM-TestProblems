@@ -81,6 +81,110 @@ the campaign. Pull updates before setup or after stopping the scheduled task,
 never during a live campaign. Changes that alter its identity require a new
 recorded experiment.
 
+## Extended-budget experiment
+
+[extended-budget.json](extended-budget.json) defines a separate PDFO BOBYQA
+experiment for all ten continuous problems and both EnergyPlus versions. Each
+of its 20 paired starts receives 100 times the full paper-budget allowance:
+
+| Problems | Variables | Paper-budget calls | Extended maximum calls per run |
+|---|---:|---:|---:|
+| 1, 2, and 3 | 4 | 500 | 50,000 |
+| 4, 5, 6, 9, and 10 | 13 | 1,400 | 140,000 |
+| 8 | 11 | 1,200 | 120,000 |
+| 13 | 10 | 1,100 | 110,000 |
+
+These are maximum allowances. BOBYQA can stop earlier when its termination
+criteria are satisfied; increasing the cap alone does not force extra calls.
+The small 25-call timing pilots have a different purpose and never contribute
+to either full experiment's results. The extended experiment has 400 runs and
+a ceiling of 43.2 million objective calls. Actual throughput must be measured
+on the workstation before estimating its duration.
+
+Use [extended_budget.py](extended_budget.py) on FOAM after the
+[Windows setup](../docs/windows-continuation.md) has installed the virtual
+environment, both engines, canonical weather, and reference assets. This fresh
+experiment does **not** require the original campaign's private handoff.
+If the original experiment is already running, use a separate checkout and
+virtual environment. Do not pull updates into a live campaign's checkout.
+
+Choose the permanent checkout path **before** planning. If `R:` is a mapped
+network drive, use its UNC path for setup, planning, and Task Scheduler;
+mapped drive letters may be unavailable to a background task. The plan binds
+the actual path, so switching from `R:` to UNC after planning requires a new
+experiment. For an idle checkout on a local `R:` drive, run in PowerShell:
+
+```powershell
+Set-Location R:\BEM-TestProblems
+$python = (Resolve-Path .\.venv\Scripts\python.exe).Path
+function Invoke-Checked {
+    param([scriptblock] $Command)
+    & $Command
+    if ($LASTEXITCODE -ne 0) { throw "Command failed with exit code $LASTEXITCODE" }
+}
+Invoke-Checked { & $python replication\extended_budget.py plan }
+Invoke-Checked { & $python replication\extended_budget.py preflight }
+Invoke-Checked { & $python replication\extended_budget.py pilot }
+```
+
+- **Plan** freezes the complete Python package in a private source snapshot,
+  records the exact starts, seeds, budgets, solver settings, and native input
+  hashes, and binds the plan to this workstation and interpreter.
+- **Preflight** validates both installed engines against the canonical cases
+  and reviewed baselines. Each attempt keeps its own reports.
+- **Pilot** runs 48 separate searches with 48 workers and 25-call budgets.
+  Inspect its printed timing and failure summary. All scheduled pilot runs
+  must terminate, and at least one strict trajectory must succeed per engine.
+  Known strict simulation rejections remain visible in the pilot's results.
+- **Run** requires unchanged, passing preflight and completed pilot evidence.
+  Its 120 workers use two 60-worker pools with one numerical thread per worker.
+
+Launch `run` with Task Scheduler, using the
+[persistent task settings](../docs/windows-continuation.md#6-run-independently-of-the-remote-desktop-window):
+
+| Task Scheduler field | Value for this checkout |
+|---|---|
+| Program | `R:\BEM-TestProblems\.venv\Scripts\python.exe` |
+| Arguments | `"R:\BEM-TestProblems\replication\extended_budget.py" run` |
+| Start in | `R:\BEM-TestProblems` |
+| Stop task after a time limit | Disabled |
+| If the task is already running | Do not start another instance |
+
+Use the same permanent path chosen before planning in all three fields.
+Use the user's own account and the option to run whether or not the user is
+logged on.
+
+The full experiment writes its controller log, checkpoints, and append-only
+evaluation journals under `.validation-local/extended-budget/campaign/`.
+The original continuation and private handoff remain separate. Restarting the
+same task preserves finished runs and records interrupted attempts before
+restarting them from the planned start, seed, and full allowance.
+
+```powershell
+Invoke-Checked { & $python replication\extended_budget.py status }
+Invoke-Checked { & $python replication\extended_budget.py review }
+# After every run has terminated:
+Invoke-Checked { & $python replication\extended_budget.py replay-plan }
+Invoke-Checked { & $python replication\extended_budget.py replay }
+Invoke-Checked { & $python replication\extended_budget.py export }
+Invoke-Checked { & $python replication\extended_budget.py check-export }
+```
+
+The review supplies objective values, complete design vectors, and plots.
+It labels this as an extended-budget experiment, because its allowance differs
+from the paper's protocol. Final export requires passing independent strict
+winner replays. Publish only its reviewed, allowlisted package on a results
+branch; source snapshots, checkpoints, weather, models, and literature
+transcriptions stay private.
+
+Edit solver selections or worker counts in
+[extended-budget.json](extended-budget.json) **before** planning. Supported
+solvers are `direct`, `crs2`, `sbplex`, `cma_es`, `bobyqa`, and `pybobyqa`.
+Adding solvers increases the pilot and full run counts. After planning, changed
+configuration, source snapshots, native inputs, or runtime identities require
+new experiment folders. Append `--dry-run` to inspect any stage without
+probing engines, writing a snapshot, or launching a process.
+
 ## Review simulations and solutions
 
 ```powershell

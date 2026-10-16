@@ -166,12 +166,12 @@ def _public_experiment(dataset):
         if any(recorded.get(key) != value for key, value in expected.items()):
             raise ValueError("Frozen solver settings differ from the authoritative adapter")
         solvers[name] = expected
-    return {
+    result = {
         "protocol": manifest["protocol"],
         "master_seed": manifest["master_seed"],
         "requested_repetitions": manifest["requested_repetitions"],
         "budget_override": manifest["budget_override"],
-        "budget_rule": "100*(dimension+1)",
+        "budget_rule": manifest.get("effective_budget_rule", "100*(dimension+1)"),
         "diagnostics_policy": manifest["diagnostics_policy"],
         "schedule": manifest["schedule"],
         "start_policy": "paired-uniform-physical-box-direct-midpoint",
@@ -184,6 +184,9 @@ def _public_experiment(dataset):
             {key: spec[key] for key in replay.continuation.SPEC_FIELDS} for spec in dataset["specs"]
         ],
     }
+    if "budget_multiplier" in manifest:
+        result["budget_multiplier"] = manifest["budget_multiplier"]
+    return result
 
 
 def _public_group(row):
@@ -218,7 +221,9 @@ def _plot_dataset(dataset, provenance):
         }
         if problem.numerical_variant:
             definitions[number]["numerical_variant"] = problem.numerical_variant
-    if original["protocol"] not in {"pilot-overrides", "paper-start-and-budget-protocol"}:
+    if original["protocol"] not in {
+        "pilot-overrides", "paper-start-and-budget-protocol", "extended-budget-experiment"
+    }:
         raise ValueError("Unknown public experiment protocol")
     if original["diagnostics_policy"] not in {"strict", "reference-warmup"}:
         raise ValueError("Unknown public diagnostic policy")
@@ -241,6 +246,9 @@ def _plot_dataset(dataset, provenance):
             for name, value in original["solvers"].items()
         },
     )
+    for key in ("budget_multiplier", "effective_budget_rule"):
+        if key in original:
+            manifest[key] = original[key]
     return {
         **dataset,
         "origin_manifest": manifest,
@@ -515,6 +523,7 @@ def _verify_experiment(result):
     from bem_testproblems.replication import _seed, paired_start
 
     experiment = result["experiment"]
+    extended = experiment.get("protocol") == "extended-budget-experiment"
     _keys(
         experiment,
         (
@@ -529,26 +538,29 @@ def _verify_experiment(result):
             "numerical_variants",
             "solvers",
             "runs",
-        ),
+        ) + (("budget_multiplier",) if extended else ()),
     )
     repetitions, budget = experiment["requested_repetitions"], experiment["budget_override"]
+    multiplier = experiment.get("budget_multiplier", 1)
+    expected_protocol = ("extended-budget-experiment" if extended else
+                         "paper-start-and-budget-protocol" if repetitions == 20 and budget is None
+                         else "pilot-overrides")
+    expected_rule = ("100*(dimension+1)*budget_multiplier" if extended
+                     else "100*(dimension+1)")
     if (
-        experiment["protocol"] not in {"pilot-overrides", "paper-start-and-budget-protocol"}
+        experiment["protocol"] != expected_protocol
         or type(experiment["master_seed"]) is not int
         or type(repetitions) is not int
         or repetitions < 1
         or budget is not None
         and (type(budget) is not int or budget < 1)
-        or experiment["budget_rule"] != "100*(dimension+1)"
+        or type(multiplier) is not int
+        or multiplier < 1
+        or extended and (multiplier <= 1 or budget is not None)
+        or experiment["budget_rule"] != expected_rule
         or experiment["diagnostics_policy"] not in {"strict", "reference-warmup"}
         or experiment["schedule"] not in {"balanced", "problem-first"}
         or experiment["start_policy"] != "paired-uniform-physical-box-direct-midpoint"
-        or experiment["protocol"]
-        != (
-            "paper-start-and-budget-protocol"
-            if repetitions == 20 and budget is None
-            else "pilot-overrides"
-        )
     ):
         raise ValueError("Invalid public experiment protocol")
     for name, metadata in experiment["solvers"].items():
@@ -591,7 +603,8 @@ def _verify_experiment(result):
             != _seed(
                 experiment["master_seed"], "solver", problem.id, spec["repetition"], spec["solver"]
             )
-            or spec["budget"] != (budget if budget is not None else 100 * (problem.dimension + 1))
+            or spec["budget"] != (budget if budget is not None
+                                  else 100 * (problem.dimension + 1) * multiplier)
         ):
             raise ValueError("Scheduled seeds, starts, or budgets differ from the public protocol")
         key = (spec["problem"], spec["version"], spec["solver"], spec["repetition"])

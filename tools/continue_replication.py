@@ -66,6 +66,13 @@ def _read(path):
         raise ValueError(f"Nonfinite JSON number in {path}: {value}")
 
     value = json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid)
+    digest = hashlib.sha256(raw)
+    if isinstance(value, dict) and "trace_storage" in value:
+        from bem_testproblems.replication_journal import read_checkpoint
+        value = read_checkpoint(path, value)
+        # Compact-file bytes alone do not identify the committed observations.
+        # Include their materialized meaning; uncommitted tails remain excluded.
+        digest.update(b"\0" + json.dumps(value, sort_keys=True, allow_nan=False).encode())
 
     # Exponents such as 1e999 also decode to infinity without parse_constant.
     def finite(item):
@@ -79,7 +86,7 @@ def _read(path):
                 finite(child)
 
     finite(value)
-    return value, hashlib.sha256(raw).hexdigest()
+    return value, digest.hexdigest()
 
 
 def _specs(manifest):
@@ -170,8 +177,13 @@ def _check_record(record, spec, manifest, path):
         raise ValueError(f"Checkpoint incumbent has no observation: {path}")
 
 
-def read_origin(directory):
-    """Validate immutable source records and return their exact byte identities."""
+def read_origin(directory, *, retain_traces=True):
+    """Validate source records and return their exact byte identities.
+
+    Reviews can discard all but the winning observation after validating each
+    complete trace. These in-memory summaries retain whole-trajectory strictness
+    and the original evaluation count; they are not replacement checkpoints.
+    """
     directory = Path(directory).resolve()
     manifest, manifest_hash = _read(directory / "manifest.json")
     if manifest.get("manifest_id") != _digest(
@@ -186,6 +198,21 @@ def read_origin(directory):
         if identifier not in specs or path.stem != identifier or identifier in records:
             raise ValueError(f"Unknown, duplicate, or misnamed checkpoint: {path}")
         _check_record(record, specs[identifier], manifest, path)
+        if not retain_traces:
+            from bem_testproblems.replication_plots import strict_trajectory
+
+            trace = record["trace"]
+            record["strict_benchmark_evaluation"] = strict_trajectory(record)
+            winner = next((item for item in trace
+                           if item["status"] == "success" and item["f"] == record["best_f"]
+                           and item["x"] == record["best_x"]), None)
+            record["trace"] = [winner] if winner is not None else []
+            record["trace_summary"] = {
+                "validated_observations": len(trace),
+                "retained_observations": len(record["trace"]),
+                "strict_whole_trajectory": record["strict_benchmark_evaluation"],
+            }
+            del trace
         records[identifier], hashes[path.name] = record, digest
     return (
         manifest,
@@ -327,6 +354,8 @@ def prepare_continuation(origin, project_root, output_root, *, workers=48, froze
         project_root=project_root,
         diagnostics_policy=original["diagnostics_policy"],
         schedule=original["schedule"],
+        **({"budget_multiplier": original["budget_multiplier"]}
+           if "budget_multiplier" in original else {}),
     )
     for key in ("problem_definitions", "solvers", "runs", "diagnostics_policy"):
         if target[key] != original[key]:
@@ -381,6 +410,7 @@ def continue_replication(
         return report
     root = Path(output_root).resolve()
     root.mkdir(parents=True, exist_ok=True)
+    summary_options = {"cache": {}} if hasattr(runtime, "_run_one_checkpointed") else {}
     with runtime._experiment_lock(root):
         # Recheck after acquiring the lock: another controller may have initialized it.
         path = root / "manifest.json"
@@ -411,7 +441,8 @@ def continue_replication(
                         )
                     )
                     for spec in specs:
-                        future = pool.submit(runtime._run_one, spec, manifest, str(root), "none")
+                        worker = getattr(runtime, "_run_one_checkpointed", runtime._run_one)
+                        future = pool.submit(worker, spec, manifest, str(root), "none")
                         futures[future] = spec
                 for future in as_completed(futures):
                     try:
@@ -447,11 +478,11 @@ def continue_replication(
                             },
                         )
                         runtime._atomic_json(checkpoint, row)
-                    summary = runtime._summary(root, manifest, workers)
+                    summary = runtime._summary(root, manifest, workers, **summary_options)
                     _log(
                         log_file, {"run_id": futures[future]["id"], "statuses": summary["statuses"]}
                     )
-            summary = runtime._summary(root, manifest, workers)
+            summary = runtime._summary(root, manifest, workers, **summary_options)
             counts = summary["statuses"]
             state["status"] = (
                 "interrupted"
@@ -469,7 +500,7 @@ def continue_replication(
             state["status"] = "interrupted"
             raise
         finally:
-            runtime._summary(root, manifest, workers)
+            runtime._summary(root, manifest, workers, **summary_options)
             runtime._atomic_json(state_path, state)
             _log(log_file, state)
 
