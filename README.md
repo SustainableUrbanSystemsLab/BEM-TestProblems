@@ -60,6 +60,8 @@ different start. Inspecting problem metadata does not require EnergyPlus.
 Failed simulations raise errors and retain their diagnostics. Some designs
 within the bounds fail warmup convergence; the [warmup guide](docs/warmup-diagnostics.md)
 explains these cases and the separately validated P1 extended-warmup option.
+The [replication failure tests](docs/replication-failures.md) cover failures found
+during optimization and the separately validated numerical variants.
 
 ## Solve with SciPy
 
