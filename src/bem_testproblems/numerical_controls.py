@@ -53,8 +53,8 @@ def refined_provenance(problem_id):
             },
             "value": "AnalyticalSolution",
         })
-    if problem_id in (4, 5, 10):
-        original_steps = 4 if problem_id in (4, 5) else 6
+    if problem_id in (4, 5, 6, 10):
+        original_steps = 4 if problem_id in (4, 5, 6) else 6
         controls.extend([
             {"object_type": "Timestep", "field": "number_of_timesteps_per_hour",
              "canonical_by_engine": {"8.5.0": original_steps, "26.2.0": original_steps},
@@ -114,8 +114,8 @@ def refine_legacy(text, problem_id):
         if _idf_objects(text, "ZoneAirHeatBalanceAlgorithm"):
             raise ValueError("convergence-refined requires absent canonical ZoneAirHeatBalanceAlgorithm")
         text = text.rstrip() + "\n\nZoneAirHeatBalanceAlgorithm,AnalyticalSolution;\n"
-    if problem_id in (4, 5, 10):
-        original_steps = "4" if problem_id in (4, 5) else "6"
+    if problem_id in (4, 5, 6, 10):
+        original_steps = "4" if problem_id in (4, 5, 6) else "6"
         text = _idf_replace(text, "Timestep", 1, original_steps, 12)
         text = _idf_replace(text, "Sizing:Parameters", 3, original_steps, 12)
     return text
@@ -152,8 +152,8 @@ def refine_modern(model, problem_id):
         model["ZoneAirHeatBalanceAlgorithm"] = {"BEM convergence-refined": {
             "algorithm": "AnalyticalSolution",
         }}
-    if problem_id in (4, 5, 10):
-        original_steps = 4 if problem_id in (4, 5) else 6
+    if problem_id in (4, 5, 6, 10):
+        original_steps = 4 if problem_id in (4, 5, 6) else 6
         for kind, field in (("Timestep", "number_of_timesteps_per_hour"),
                             ("Sizing:Parameters", "timesteps_in_averaging_window")):
             _, record = _modern_object(model, kind)

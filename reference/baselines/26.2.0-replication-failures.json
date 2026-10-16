@@ -12,7 +12,7 @@
   "atol": 1e-07,
   "case_fixture": {
     "path": "reference/replication-failure-cases.json",
-    "sha256": "13ef9dbc10e9bab78e5311eff04605346112f25ad3da760f79b2d1524020ab56"
+    "sha256": "d89c3eb7c4e9df83c2bdf56f2d856a30a5f021063cb89c9f9c98110e9edd25ed"
   },
   "scope": "New project measurements at recorded failed replication designs only. Explicit numerical variant; historical equivalence and full-domain convergence are not claimed.",
   "provenance": {
@@ -1004,6 +1004,95 @@
         14
       ],
       "warning_count": 8
+    },
+    {
+      "case_id": "p06-26.2.0-bobyqa-r006-e0025",
+      "problem": 6,
+      "x": [
+        4.2754111585929815,
+        18.229596344224113,
+        14.631028848312337,
+        5.0352314209957,
+        1.038226778002087,
+        0.32104493913329607,
+        0.7994484053663131,
+        585.5643878025721,
+        480.5433553640417,
+        102.0736914373785,
+        22.652658955559485,
+        22.936169617219303,
+        12.757652691942578
+      ],
+      "canonical_input_sha256": "ac3107e9a0a7d5d112dca5f8aea1e9c62d1cc3e13531f7652ab5305905d86f2e",
+      "input_sha256": "cee6b0ab905c270e31a3f09b41d021a24a69725ffd7afc296604e41f4c7b39d9",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "passed": true,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "objective": 200.67542960383756,
+      "components": {
+        "H_1": 2491.2004577024977,
+        "H_2": 2775.063773705888,
+        "H_3": 2466.269460068895,
+        "H_4": 1574.8316006601535,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 5916.349231269799,
+        "L_N": 1716.1561258401782,
+        "L_W": 4777.655997728602,
+        "L_E": 4786.656105612235,
+        "L_S": 1434.2871082492577,
+        "L_I": 6345.6,
+        "V_legacy": 16583.81274588763,
+        "V_return": 16583.81274588763
+      },
+      "terms": {
+        "heating": 8.430584503747676,
+        "cooling": 16.077035954537497,
+        "lighting": 86.038392048337,
+        "fans": 90.12941709721538
+      },
+      "actual_warmup_days": [
+        16
+      ],
+      "warning_count": 22
     }
   ],
   "valid_controls": [
@@ -1235,6 +1324,101 @@
       "warning_count": 23
     },
     {
+      "problem": 6,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "case_id": "p06-midpoint",
+      "canonical_input_sha256": "f564b6451bdec8df3bb9821da856b1142a004d98fce5a58a90b7b2c64edc62dc",
+      "input_sha256": "f1c4a2e7ece2f819bf7e5c566167021775e69a0a1a53de8f439fd8e16e7bad9f",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "canonical_baseline": {
+        "path": "reference/baselines/26.2.0-canonical.json",
+        "sha256": "383055079a573cdd296f75112fa9f3d07eca92fbc28fdc7043caf5903482e56b"
+      },
+      "canonical_objective": 201.96071376725243,
+      "objective": 204.32086955244878,
+      "components": {
+        "H_1": 2218.7576351077755,
+        "H_2": 2543.7853481893785,
+        "H_3": 2557.0482013216897,
+        "H_4": 1441.393853524921,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 5634.895450915816,
+        "L_N": 1878.3488149544028,
+        "L_W": 4755.239122212301,
+        "L_E": 4682.892697981098,
+        "L_S": 1369.4570004118943,
+        "L_I": 6345.6,
+        "V_legacy": 17306.047650656266,
+        "V_return": 17306.047650656266
+      },
+      "terms": {
+        "heating": 7.935674853391091,
+        "cooling": 15.31221589922776,
+        "lighting": 87.01837200278501,
+        "fans": 94.05460679704493
+      },
+      "delta_objective": 2.360155785196355,
+      "delta_percent": 1.1686212338882365,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "actual_warmup_days": [
+        16
+      ],
+      "warning_count": 22
+    },
+    {
       "problem": 10,
       "x": [
         1.025,
@@ -1363,6 +1547,29 @@
       "p5_native_started_at_utc": "2026-10-16T07:02:05.349858+00:00",
       "p5_reused_candidate": "Previously measured P5 r002 native candidate; byte-identical production API input verified before reuse.",
       "strict_native_measurements": true
+    },
+    {
+      "added_at_utc": "2026-10-16T07:40:39.116092+00:00",
+      "p6_case_action": "added",
+      "case_id": "p06-26.2.0-bobyqa-r006-e0025",
+      "control_case_id": "p06-midpoint",
+      "prior_p6_baseline": {
+        "git_commit": "6adc1dbd273120370fcbe3e737ac1d1036cf0335",
+        "path": "reference/baselines/26.2.0-replication-failures.json"
+      },
+      "scope": "Fixed P6 W100/T12/S12 recipe repairs summer-sizing load nonconvergence and slow annual initialization. HVAC20, original integration, physical inputs, convergence tolerances, and 60-minute sizing are preserved. Non-P6 prior values are unchanged.",
+      "measurement_source_sha256": {
+        "models.py": "998311e8f3e8a1e62f91904b0d533bba28785ea94ff563197fe8e2614350fd61",
+        "numerical_controls.py": "5a407b167c4e028f1aef4ec90a280cd9a5f3fdd9ac444e1b9f884b3af6649d04",
+        "problems.py": "5ef783ee83942a24c54c49c9d015cd31982daf253c36959863a2fe373537628d",
+        "energyplus.py": "f4698606e569ee35baadb482f7ce75e5fdd474fed0d69e5886106da11fd15c29",
+        "outputs.py": "57adfe69dab45bc19246506334e84c7e30d7e39fa6efdf20db6b8b67f782dac5",
+        "losses.py": "80daa3c93328d220771892f69fa29739196602de0d9534922e97c58fe9e141f9"
+      },
+      "native_started_at_utc": "2026-10-16T07:38:38.591566+00:00",
+      "candidate_reuse": "Late modern sizing-failure candidate reused only after byte-identical production API input hash verification.",
+      "strict_native_measurements": true
     }
-  ]
+  ],
+  "warmup_day_scope": "actual_warmup_days records the annual RunPeriod EIO summary, not sizing-period day counts. Failed sizing environments and their caps are recorded separately."
 }

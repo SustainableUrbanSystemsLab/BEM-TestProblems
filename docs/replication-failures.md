@@ -1,10 +1,11 @@
 # Failed replication runs
 
 - **Coverage:** [replication-failure-cases.json](../reference/replication-failure-cases.json)
-  freezes **23 distinct engine/design combinations from 33 failed run records**:
-  16 pilot records and 17 extended-campaign records. The initial snapshot was
-  captured on October 16, 2026, at 05:47 UTC, and extended through a bounded audit
-  at 06:53 UTC. Later failures are outside this cohort.
+  freezes **24 distinct engine/design combinations from 34 failed run records**:
+  16 pilot records and 18 extended-campaign records. The initial snapshot was
+  captured on October 16, 2026, at 05:47 UTC, and extended through a bounded
+  06:53 UTC audit and one later P6 sizing-period failure. Other later records
+  are outside this cohort.
 - **Observed outcome:** every recorded failure is a warmup-convergence **Severe**
   diagnostic after 25 days, with **zero Fatal errors**. Each process exited with
   code zero and wrote “Completed Successfully.” Those signals alone do not make
@@ -20,7 +21,7 @@
 | P1, EnergyPlus 8.5 | Temperature history has not converged at the 25-day cap | Allow 100 warmup days, preserving both convergence tolerances |
 | P4, both engines | Temperature differences, and sometimes peak-load differences, remain above tolerance | Warmup cap 100; HVAC iteration cap 100; 12 timesteps/hour and 12 sizing-average steps |
 | P5, EnergyPlus 26.2 | Temperature differences remain above tolerance | Warmup cap 100; HVAC iteration cap 100; analytical zone-air integration; 12 timesteps/hour and 12 sizing-average steps |
-| P6, EnergyPlus 8.5 | All five zones exceed the temperature-convergence tolerance at day 25 | Allow 100 warmup days; no other numerical change |
+| P6, both engines | Slow annual temperature convergence in 8.5; summer-sizing cooling-load nonconvergence in 26.2 | Warmup cap 100; 12 timesteps/hour and 12 sizing-average steps; original HVAC iteration cap and integration |
 | P10, both engines | Daily peak heating or cooling loads fail convergence, while temperature checks pass | Warmup cap 100; 12 timesteps/hour; 12 sizing-average steps; analytical zone-air integration; original HVAC iteration cap 20 |
 
 - The earlier [warmup analysis](warmup-diagnostics.md) distinguishes slow P1
@@ -66,7 +67,7 @@ canonical experiment is not silently switched to a numerical variant.
 
 ## Measured results
 
-All 23 repaired inputs and eight midpoint controls completed with **zero Severe
+All 24 repaired inputs and nine midpoint controls completed with **zero Severe
 or Fatal errors**, using the recorded canonical weather. These are evaluations
 of fixed designs, not restarted optimization runs or claims of convergence
 throughout the box. Full-precision vectors, components, terms, model identities,
@@ -74,7 +75,7 @@ and settings are in the reviewed
 [8.5 baseline](../reference/baselines/8.5.0-replication-failures.json) and
 [26.2 baseline](../reference/baselines/26.2.0-replication-failures.json).
 
-| Recorded failed case | Repaired warmup days | Repaired objective |
+| Recorded failed case | Repaired annual warmup days | Repaired objective |
 | --- | ---: | ---: |
 | `p01-8.5.0-bobyqa-r000-e0001` | 27 | 204.528660 |
 | `p04-26.2.0-bobyqa-r000-e0001` | 23 | 170.826614 |
@@ -89,7 +90,7 @@ and settings are in the reviewed
 | `p10-8.5.0-bobyqa-r002-e0003` | 19 | 1636.800000 |
 | `p10-8.5.0-pybobyqa-r000-e0012` | 11 | 2386.420000 |
 | `p10-8.5.0-pybobyqa-r002-e0015` | 19 | 1637.610000 |
-| `p06-8.5.0-bobyqa-r001-e0001` | 30 | 309.557639 |
+| `p06-8.5.0-bobyqa-r001-e0001` | 23 | 338.310089 |
 | `p01-8.5.0-bobyqa-r003-e0001` | 32 | 174.051459 |
 | `p01-8.5.0-bobyqa-r004-e0002` | 28 | 158.663445 |
 | `p04-26.2.0-bobyqa-r004-e0033` | 15 | 151.378973 |
@@ -99,6 +100,7 @@ and settings are in the reviewed
 | `p10-26.2.0-bobyqa-r003-e0003` | 14 | 1867.365000 |
 | `p10-8.5.0-bobyqa-r000-e0089` | 13 | 2138.940000 |
 | `p10-8.5.0-bobyqa-r003-e0033` | 14 | 1821.045000 |
+| `p06-26.2.0-bobyqa-r006-e0025` | 16 | 200.675430 |
 
 Objectives for P1, P4, P5, and P6 are in kWh/(m² year); P10 uses MJ/m².
 Canonical failed evaluations have **no accepted objective**.
@@ -110,10 +112,11 @@ The midpoint controls quantify changes to previously valid evaluations:
 | P1 | 8.5.0 | 153.181082 | 153.181082 | +0.000000 | +0.000000% |
 | P4 | 8.5.0 | 147.638635 | 152.865617 | +5.226982 | +3.540389% |
 | P5 | 8.5.0 | 214.609328 | 213.627610 | -0.981718 | -0.457444% |
-| P6 | 8.5.0 | 179.577025 | 179.577025 | +0.000000 | +0.000000% |
+| P6 | 8.5.0 | 179.577025 | 180.067794 | +0.490769 | +0.273292% |
 | P10 | 8.5.0 | 1198.570000 | 1260.450000 | +61.880000 | +5.162819% |
 | P4 | 26.2.0 | 172.688497 | 180.567867 | +7.879370 | +4.562765% |
 | P5 | 26.2.0 | 241.746830 | 248.638758 | +6.891927 | +2.850886% |
+| P6 | 26.2.0 | 201.960714 | 204.320870 | +2.360156 | +1.168621% |
 | P10 | 26.2.0 | 1201.820000 | 1265.170000 | +63.350000 | +5.271172% |
 
 Percentage differences use `100 × (refined − canonical) / |canonical|`.
@@ -121,8 +124,17 @@ The largest control change here is **+5.271172%**. The numerical variants
 therefore require their own reference values and experiment labels; they are
 not evidence that these objectives equal the historical C# benchmark.
 
-The same P6 failure design also passed with the refined EnergyPlus 26.2 model
-after nine warmup days. Its 26.2 midpoint control remained exactly unchanged.
+The earlier P6 failure design also passed with the final EnergyPlus 26.2
+profile after eight annual warmup days. The later P6 design exposes a separate
+**summer-sizing** failure: its interior-zone cooling-load difference remained
+**6.98086%** after 100 sizing warmup days, above the unchanged **4%** limit.
+The annual run converged in 16 days even while sizing failed. The final timestep
+recipe removed the sizing Severe error. Its annual warmup count remains 16;
+the successful sizing-period day count is not reported.
+
+`actual_warmup_days` in the measurements records the annual RunPeriod summary.
+Failed sizing environments and their warmup caps are recorded separately.
+Strict validation checks Severe/Fatal diagnostics from **every phase**.
 
 ## PDFO endpoint roundoff
 
