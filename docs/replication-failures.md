@@ -126,7 +126,8 @@ after nine warmup days. Its 26.2 midpoint control remained exactly unchanged.
 
 ## PDFO endpoint roundoff
 
-- Three further searches failed before EnergyPlus was called. PDFO's scaling
+- Three searches stopped when the adapter rejected a proposed point before
+  submitting that point to EnergyPlus. PDFO's scaling
   mapped a lower-bound endpoint of `1.224` to `1.2239999999999998`, one adjacent
   binary64 float outside the box. This is a Python solver-adapter issue, separate
   from the warmup errors also seen through C#.
