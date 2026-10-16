@@ -229,6 +229,6 @@ P13, CRS2 has a larger spread than DIRECT/CMA-ES/Sbplex. These are descriptive
 patterns reported in the study, not acceptance thresholds or predicted results
 for the newer engine or a different diagnostic policy.
 
-Please also cite [Ragonneau and Zhang (2023)](https://doi.org/10.48550/arXiv.2302.13246)
-for PDFO and [Cartis, Fiala, Marteau and Roberts (2019)](https://doi.org/10.1145/3338517)
+Please also cite [Ragonneau and Zhang (2024)](https://doi.org/10.1007/s12532-024-00257-9)
+for PDFO and [Cartis, Fiala, Marteau, and Roberts (2019)](https://doi.org/10.1145/3338517)
 for Py-BOBYQA. Full bibliography entries are in [references.bib](../references.bib).
