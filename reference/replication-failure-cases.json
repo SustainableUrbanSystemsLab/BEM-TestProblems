@@ -1,0 +1,2971 @@
+{
+  "schema_version": 1,
+  "license": "MIT",
+  "purpose": "New project measurements of thirteen unique failed replication designs. These preserve canonical rejection evidence, not numerical repairs or literature transcriptions. Diagnostic excerpts omit unrelated output and elapsed times; source runs remain private. Preceding observations exercise checkpoint behavior and are not accepted final solutions.",
+  "cases": [
+    {
+      "case_id": "p01-8.5.0-bobyqa-r000-e0001",
+      "problem": 1,
+      "version": "8.5.0",
+      "x": [
+        166.79455267282515,
+        2.494156631518082,
+        0.3772642695445807,
+        0.45518030856559843
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "109cedd2426904ebdb7459532484cc7c48b46ac1fbb6f3362c441cb83a277737",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 1,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE ONE",
+            "environment": "SEATTLE WA USA TMY2-24233 WMO#=727930"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 3 Warning; 1 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE ONE\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"SEATTLE WA USA TMY2-24233 WMO#=727930\"\n**   ~~~   ** ..Max Temp Comparison = 3.55E-015 vs Temperature Convergence Tolerance=4.00E-003 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.16E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.8065E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [],
+      "source_runs": [
+        {
+          "experiment": "campaign",
+          "id": "p01-8.5.0-bobyqa-r000",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 1904385709,
+          "evaluation": 1
+        },
+        {
+          "experiment": "campaign",
+          "id": "p01-8.5.0-pybobyqa-r000",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 122438129,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p01-8.5.0-bobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1904385709,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p01-8.5.0-pybobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 122438129,
+          "evaluation": 1
+        }
+      ],
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw"
+    },
+    {
+      "case_id": "p04-26.2.0-bobyqa-r000-e0001",
+      "problem": 4,
+      "version": "26.2.0",
+      "x": [
+        3.2234260844430143,
+        7.377072501575224,
+        21.419140233704205,
+        3.1155450333944135,
+        0.4409347852790972,
+        0.12222546482196855,
+        0.18793629538489848,
+        281.94900339879746,
+        508.8362128059049,
+        479.1294776988839,
+        24.042948100143438,
+        22.910622621390054,
+        17.635646122729028
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "615e3278816a590242781d7fb9f123cd7e23fab8b3fd75e3d1c6b6642627482a",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 5,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE EAST",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE INTERIOR",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE NORTH",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE SOUTH",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE WEST",
+            "environment": "RUNPERIOD 1"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 20 Warning; 5 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE EAST\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0211141 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0116043 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00370415 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00367902 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE INTERIOR\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00478405 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0188475 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00000 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00032198 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE NORTH\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0238302 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00811982 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00344386 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00199842 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE SOUTH\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.000332485 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0241887 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00000 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0626859 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE WEST\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0134384 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00944756 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00371504 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00234774 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n",
+      "preceding_observations": [],
+      "source_runs": [
+        {
+          "experiment": "campaign",
+          "id": "p04-26.2.0-bobyqa-r000",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 818350960,
+          "evaluation": 1
+        },
+        {
+          "experiment": "campaign",
+          "id": "p04-26.2.0-pybobyqa-r000",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 203066898,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p04-26.2.0-bobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 818350960,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p04-26.2.0-pybobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 203066898,
+          "evaluation": 1
+        }
+      ],
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw"
+    },
+    {
+      "case_id": "p04-8.5.0-pybobyqa-r000-e0005",
+      "problem": 4,
+      "version": "8.5.0",
+      "x": [
+        3.2234260844430143,
+        7.377072501575223,
+        21.419140233704205,
+        3.5763450333944133,
+        0.4409347852790972,
+        0.12222546482196857,
+        0.18793629538489848,
+        281.94900339879746,
+        508.8362128059049,
+        479.1294776988839,
+        24.042948100143438,
+        22.910622621390054,
+        17.635646122729028
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "a71cebde016518e47aaca3665a814ec074e559661176a57989982ec0566c1214",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 1,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE WEST",
+            "environment": "SEATTLE WA USA TMY2-24233 WMO#=727930"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 15 Warning; 1 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE WEST\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"SEATTLE WA USA TMY2-24233 WMO#=727930\"\n**   ~~~   ** ..Max Temp Comparison = 4.29E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 3.45E-003 vs Temperature Convergence Tolerance=4.00E-003 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 5.7329E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 3.1748E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            3.2234260844430143,
+            7.377072501575223,
+            21.419140233704205,
+            3.1155450333944135,
+            0.4409347852790972,
+            0.12222546482196857,
+            0.18793629538489848,
+            281.94900339879746,
+            508.8362128059049,
+            479.1294776988839,
+            24.042948100143438,
+            22.910622621390054,
+            17.635646122729028
+          ],
+          "f": 152.02272603970488
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            3.684226084443014,
+            7.377072501575223,
+            21.419140233704205,
+            3.1155450333944135,
+            0.4409347852790972,
+            0.12222546482196857,
+            0.18793629538489848,
+            281.94900339879746,
+            508.8362128059049,
+            479.1294776988839,
+            24.042948100143438,
+            22.910622621390054,
+            17.635646122729028
+          ],
+          "f": 150.7915041290288
+        },
+        {
+          "evaluation": 3,
+          "x": [
+            3.2234260844430143,
+            9.209472501575224,
+            21.419140233704205,
+            3.1155450333944135,
+            0.4409347852790972,
+            0.12222546482196857,
+            0.18793629538489848,
+            281.94900339879746,
+            508.8362128059049,
+            479.1294776988839,
+            24.042948100143438,
+            22.910622621390054,
+            17.635646122729028
+          ],
+          "f": 149.4055286211802
+        },
+        {
+          "evaluation": 4,
+          "x": [
+            3.2234260844430143,
+            7.377072501575223,
+            23.251540233704205,
+            3.1155450333944135,
+            0.4409347852790972,
+            0.12222546482196857,
+            0.18793629538489848,
+            281.94900339879746,
+            508.8362128059049,
+            479.1294776988839,
+            24.042948100143438,
+            22.910622621390054,
+            17.635646122729028
+          ],
+          "f": 152.38329494526675
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "campaign",
+          "id": "p04-8.5.0-pybobyqa-r000",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 203066898,
+          "evaluation": 5
+        },
+        {
+          "experiment": "pilot",
+          "id": "p04-8.5.0-pybobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 203066898,
+          "evaluation": 5
+        }
+      ],
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw"
+    },
+    {
+      "case_id": "p05-26.2.0-pybobyqa-r000-e0033",
+      "problem": 5,
+      "version": "26.2.0",
+      "x": [
+        3.4471853943456656,
+        19.305303951738892,
+        14.537742741203624,
+        3.1201289411375397,
+        0.45492715021809477,
+        0.8404681750798678,
+        0.8104788655381207,
+        149.14585811476707,
+        519.5167855958225,
+        244.48883917221838,
+        25.0,
+        23.534842579785117,
+        16.67844887706451
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "6b8388406d0d13bcffd5c9cf26962a9b405dd1b66f98d5d0c0495a21ed7ffe8b",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 3,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE EAST",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE SOUTH",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE WEST",
+            "environment": "RUNPERIOD 1"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 15 Warning; 3 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE EAST\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00403925 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00594089 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.000840877 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.000739005 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE SOUTH\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00337837 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0051499 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00000 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.000542357 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE WEST\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00470669 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00681103 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00113229 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.000863617 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.2335732329707
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            2.991462131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 296.58069074693384
+        },
+        {
+          "evaluation": 3,
+          "x": [
+            2.530662131725256,
+            21.397461685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.5798631840793
+        },
+        {
+          "evaluation": 4,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            16.39237687385794,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.2923278483607
+        },
+        {
+          "evaluation": 5,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.59516829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 296.918415813847
+        },
+        {
+          "evaluation": 6,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.5513994277584191,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.08650930175855
+        },
+        {
+          "evaluation": 7,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.9534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.2108827722344
+        },
+        {
+          "evaluation": 8,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.8920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 299.10042015619047
+        },
+        {
+          "evaluation": 9,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            212.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.3029620313937
+        },
+        {
+          "evaluation": 10,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            578.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.91587329160683
+        },
+        {
+          "evaluation": 11,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            293.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.15509385436735
+        },
+        {
+          "evaluation": 12,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.63512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 268.10216170025836
+        },
+        {
+          "evaluation": 13,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.776942161703886,
+            16.23026509529273
+          ],
+          "f": 299.53357622447993
+        },
+        {
+          "evaluation": 14,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.83026509529273
+          ],
+          "f": 319.2162346612306
+        },
+        {
+          "evaluation": 15,
+          "x": [
+            2.069862131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 299.4421106892518
+        },
+        {
+          "evaluation": 16,
+          "x": [
+            2.530662131725256,
+            17.732661685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 297.8291068733407
+        },
+        {
+          "evaluation": 17,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            12.727576873857942,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.4856331931596
+        },
+        {
+          "evaluation": 18,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            2.67356829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 299.7703389085317
+        },
+        {
+          "evaluation": 19,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.3513994277584191,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.41872223411747
+        },
+        {
+          "evaluation": 20,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.7534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 297.9409894482107
+        },
+        {
+          "evaluation": 21,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.6920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.158669953696
+        },
+        {
+          "evaluation": 22,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            112.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 299.6363577947841
+        },
+        {
+          "evaluation": 23,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            478.61806365724465,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 297.55709974781655
+        },
+        {
+          "evaluation": 24,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            193.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 298.402858097596
+        },
+        {
+          "evaluation": 25,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            21.63512533427809,
+            24.276942161703886,
+            16.23026509529273
+          ],
+          "f": 331.90395910016684
+        },
+        {
+          "evaluation": 26,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            23.776942161703886,
+            16.23026509529273
+          ],
+          "f": 296.0385013524673
+        },
+        {
+          "evaluation": 27,
+          "x": [
+            2.530662131725256,
+            19.565061685084533,
+            14.559976873857941,
+            3.13436829563227,
+            0.45139942775841907,
+            0.8534011389524119,
+            0.7920030813847665,
+            162.11780186459265,
+            528.6180636572446,
+            243.6635384232734,
+            22.13512533427809,
+            24.276942161703886,
+            15.63026509529273
+          ],
+          "f": 279.47102014320035
+        },
+        {
+          "evaluation": 28,
+          "x": [
+            2.5496321559855257,
+            19.545269529744274,
+            14.56507297409398,
+            3.153275359742114,
+            0.4518773864360739,
+            0.8530128402328458,
+            0.7906481742224555,
+            163.07698799761786,
+            527.6406218677107,
+            243.8417690978333,
+            23.043171696868853,
+            24.25180013378417,
+            15.88717363212918
+          ],
+          "f": 243.8113398708814
+        },
+        {
+          "evaluation": 29,
+          "x": [
+            2.5273188116636165,
+            19.572262140818275,
+            14.557258141659748,
+            3.1251409617337895,
+            0.4512040605004591,
+            0.8534955513245306,
+            0.7930142644629097,
+            161.12696830358925,
+            529.0019434627443,
+            243.58634644799167,
+            25.0,
+            24.275766537445325,
+            16.378943008505956
+          ],
+          "f": 217.52206062876004
+        },
+        {
+          "evaluation": 30,
+          "x": [
+            2.4415234207105505,
+            19.608918802946455,
+            14.5556372088088,
+            3.1124093120511236,
+            0.4505411089812307,
+            0.8548189139126532,
+            0.7916590599063137,
+            163.24730841490322,
+            530.513150736551,
+            243.38047522512588,
+            24.929529273080867,
+            24.558576284343523,
+            16.61460854346403
+          ],
+          "f": 219.6501984725929
+        },
+        {
+          "evaluation": 31,
+          "x": [
+            2.581447732245203,
+            19.553870092708316,
+            14.557291393493095,
+            3.1289668861877615,
+            0.4515052974086818,
+            0.8527125865257602,
+            0.7938072248410426,
+            160.313338307062,
+            528.2876945748001,
+            243.67310664210427,
+            24.890062818295476,
+            24.063720361746253,
+            16.327933921570413
+          ],
+          "f": 215.70202581254046
+        },
+        {
+          "evaluation": 32,
+          "x": [
+            2.739411035122552,
+            19.52253518031471,
+            14.555533097962105,
+            3.1281373790756932,
+            0.4519019700027895,
+            0.8507461234957123,
+            0.794797395953842,
+            159.89957970322064,
+            527.241294930839,
+            243.76365302448713,
+            24.85657844674528,
+            23.082242109669,
+            16.419905772442306
+          ],
+          "f": 214.02568484653202
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "campaign",
+          "id": "p05-26.2.0-pybobyqa-r000",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 1271489714,
+          "evaluation": 33
+        }
+      ],
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw"
+    },
+    {
+      "case_id": "p04-26.2.0-bobyqa-r001-e0031",
+      "problem": 4,
+      "version": "26.2.0",
+      "x": [
+        3.6135636791435566,
+        8.464889647808201,
+        23.203906854779845,
+        4.413266819752387,
+        0.4752415719087444,
+        0.6153848505477697,
+        0.24713398655728774,
+        506.58382486014784,
+        600.0,
+        415.5690737785526,
+        25.0,
+        20.509768325042984,
+        15.879014344575577
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "62d17944da73919fa997f9ae830b625a4444c4b50a8618ec6d15bb45f3dbfbaf",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 5,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE EAST",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE INTERIOR",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE NORTH",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE SOUTH",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE WEST",
+            "environment": "RUNPERIOD 1"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 12 Warning; 5 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE EAST\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00192864 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0713271 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.122617 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00248179 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE INTERIOR\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 2.62786E-05 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0585417 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00000 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0140192 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE NORTH\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.000461087 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0496818 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.116718 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00131031 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE SOUTH\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00112473 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.505332 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00000 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0207262 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE WEST\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.000752462 vs Temperature Convergence Tolerance=0.00400 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0537909 vs Temperature Convergence Tolerance=0.00400 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.159681 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.00123625 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.40235623439602
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            3.958078005719995,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 218.82070330529316
+        },
+        {
+          "evaluation": 3,
+          "x": [
+            3.714522196560975,
+            9.594905918652461,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 218.8685018834114
+        },
+        {
+          "evaluation": 4,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            23.89041251330837,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.615938790159
+        },
+        {
+          "evaluation": 5,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.640126079162128,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.60367510044125
+        },
+        {
+          "evaluation": 6,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.5306350951858403,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.32589824801482
+        },
+        {
+          "evaluation": 7,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.6663099221504359,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.1174754397413
+        },
+        {
+          "evaluation": 8,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.3027586115204573,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 220.00826190309195
+        },
+        {
+          "evaluation": 9,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            532.4547358332131,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.4212487117122
+        },
+        {
+          "evaluation": 10,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            600.0,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.37769539127328
+        },
+        {
+          "evaluation": 11,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            445.4578715874525,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 220.54770982101329
+        },
+        {
+          "evaluation": 12,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            22.049580630873567,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 208.45264452690253
+        },
+        {
+          "evaluation": 13,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.788078518410725,
+            15.948389222956287
+          ],
+          "f": 218.97215089429977
+        },
+        {
+          "evaluation": 14,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            16.265519182798762
+          ],
+          "f": 227.16474807452272
+        },
+        {
+          "evaluation": 15,
+          "x": [
+            3.470966387401955,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.97777794676813
+        },
+        {
+          "evaluation": 16,
+          "x": [
+            3.714522196560975,
+            7.657876123934631,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 220.04842038479708
+        },
+        {
+          "evaluation": 17,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            21.95338271859054,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.10384482952708
+        },
+        {
+          "evaluation": 18,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.153014460844089,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.26997451867643
+        },
+        {
+          "evaluation": 19,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.42492510857168225,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.42994821176444
+        },
+        {
+          "evaluation": 20,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.560599935536278,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.10940929167822
+        },
+        {
+          "evaluation": 21,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.19704862490629932,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.28764870232246
+        },
+        {
+          "evaluation": 22,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            479.5997425261341,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 219.36595248576492
+        },
+        {
+          "evaluation": 23,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            547.145006692921,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 218.89034584559957
+        },
+        {
+          "evaluation": 24,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            392.6028782803735,
+            21.78530566433817,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 218.7073582663323
+        },
+        {
+          "evaluation": 25,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.521030697802775,
+            20.52380355187533,
+            15.948389222956287
+          ],
+          "f": 230.60122671580206
+        },
+        {
+          "evaluation": 26,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.259528585339933,
+            15.948389222956287
+          ],
+          "f": 220.02155728600394
+        },
+        {
+          "evaluation": 27,
+          "x": [
+            3.714522196560975,
+            8.626391021293546,
+            22.921897615949455,
+            4.396570270003108,
+            0.47778010187876124,
+            0.613454928843357,
+            0.2499036182133783,
+            506.0272391796736,
+            573.5725033464605,
+            419.030374933913,
+            21.78530566433817,
+            20.52380355187533,
+            15.631259263113813
+          ],
+          "f": 212.35859370556472
+        },
+        {
+          "evaluation": 28,
+          "x": [
+            3.7252018099918747,
+            8.6696976105518,
+            22.90310221373424,
+            4.39349026713452,
+            0.47798851431006023,
+            0.6134387723213509,
+            0.24846022752119218,
+            505.97185991534695,
+            573.0844219476494,
+            417.18725972207653,
+            22.266408399452633,
+            20.534313374735145,
+            15.770448557586256
+          ],
+          "f": 196.61947866105822
+        },
+        {
+          "evaluation": 29,
+          "x": [
+            3.7410468014626783,
+            8.730850329934963,
+            22.87432558567154,
+            4.389063764606456,
+            0.4783029492113833,
+            0.6134089847126103,
+            0.24674302308509088,
+            505.8893702047494,
+            572.1975640917665,
+            414.94772293238054,
+            22.76184120417539,
+            20.548670130782735,
+            15.554483923644764
+          ],
+          "f": 178.19436840556386
+        },
+        {
+          "evaluation": 30,
+          "x": [
+            3.7307528244398056,
+            8.680294134655508,
+            22.889763603194748,
+            4.392449381554053,
+            0.4781173952953819,
+            0.6134038064128625,
+            0.24919936222416983,
+            505.94186771965644,
+            572.0951722416642,
+            417.9815265935009,
+            23.7946153597905,
+            20.53511054610434,
+            15.820748969211989
+          ],
+          "f": 157.3381515993113
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "campaign",
+          "id": "p04-26.2.0-bobyqa-r001",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 1168930216,
+          "evaluation": 31
+        }
+      ],
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw"
+    },
+    {
+      "case_id": "p01-8.5.0-bobyqa-r002-e0001",
+      "problem": 1,
+      "version": "8.5.0",
+      "x": [
+        105.3801179682511,
+        5.086525089425632,
+        0.5413381661495542,
+        0.5863322749684249
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "4b082a6007b54865688882333bfec986b5d04821fe5ff517d2ad7a80e42f4ea2",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 1,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE ONE",
+            "environment": "SEATTLE WA USA TMY2-24233 WMO#=727930"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 3 Warning; 1 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE ONE\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"SEATTLE WA USA TMY2-24233 WMO#=727930\"\n**   ~~~   ** ..Max Temp Comparison = 5.01E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 5.68E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p01-8.5.0-bobyqa-r002",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 2069392601,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p01-8.5.0-pybobyqa-r002",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1694479482,
+          "evaluation": 1
+        }
+      ],
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw"
+    },
+    {
+      "case_id": "p01-8.5.0-pybobyqa-r001-e0002",
+      "problem": 1,
+      "version": "8.5.0",
+      "x": [
+        -32.73093065915086,
+        5.8798906515386715,
+        1.3780046944200515,
+        0.44307097332704654
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "187ab212c3226e2503a1342097624a3bf24d8ba548f447f4e3377901034d2a76",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 1,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE ONE",
+            "environment": "SEATTLE WA USA TMY2-24233 WMO#=727930"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 3 Warning; 1 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE ONE\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"SEATTLE WA USA TMY2-24233 WMO#=727930\"\n**   ~~~   ** ..Max Temp Comparison = 5.02E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 5.60E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            -68.73093065915084,
+            5.8798906515386715,
+            1.3780046944200515,
+            0.44307097332704654
+          ],
+          "f": 152.3726491661523
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p01-8.5.0-pybobyqa-r001",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1239053597,
+          "evaluation": 2
+        }
+      ],
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw"
+    },
+    {
+      "case_id": "p10-26.2.0-bobyqa-r002-e0001",
+      "problem": 10,
+      "version": "26.2.0",
+      "x": [
+        1.1271289785752232,
+        1.5339069854208274,
+        1.0740128209472073,
+        1.6723212367925977,
+        1.1951170960302882,
+        2.0933079519926574,
+        1.1337643084968627,
+        2.130660092018886,
+        13.76187509190379,
+        16.818018969488428,
+        14.259442469722385,
+        24.568532062248757,
+        27.723699084854363
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "ec330f00e8e270ca2636bf44b083a2360fb95b1c6e1d2fb4f252f3f034f38e6b",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 6,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_4",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_1",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_1",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_2",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_3",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_4",
+            "environment": "RUNPERIOD 1"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 141 Warning; 6 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0023749 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.02708 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.000531019 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0541083 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0136524 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00684686 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.000269399 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0561243 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00949767 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0299335 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00825099 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.138017 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.000237766 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00814699 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.228601 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.000117892 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00528646 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0302154 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.0749628 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 5.86203E-05 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.00342867 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.014168 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.118278 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.14692E-05 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n",
+      "preceding_observations": [],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p10-26.2.0-bobyqa-r002",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1750162298,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p10-26.2.0-pybobyqa-r002",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1081651438,
+          "evaluation": 1
+        }
+      ],
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    },
+    {
+      "case_id": "p10-26.2.0-pybobyqa-r000-e0010",
+      "problem": 10,
+      "version": "26.2.0",
+      "x": [
+        0.867444259282059,
+        1.9326862740017874,
+        1.1139528380766048,
+        1.5712576443627542,
+        1.055696886860133,
+        2.1945044469468153,
+        1.00686611829148,
+        1.4877584706651186,
+        13.053797995209877,
+        14.612191063589695,
+        17.886965758046074,
+        29.3526325800251,
+        35.0438474437221
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "7aeadb46ec5231ae6c8fa31f9cacbe15d0e067bcafe072cb659bafc3f57d6d15",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 4,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_1",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_1",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_1",
+            "environment": "RUNPERIOD 1"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_2",
+            "environment": "RUNPERIOD 1"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 147 Warning; 4 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0567908 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.00216753 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.000601191 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0569946 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.071714 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.0011898 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.0098072 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.062208 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.042225 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.002375 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.00534833 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.055793 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"RUNPERIOD 1\"\n**   ~~~   ** ..Max Temp Comparison = 0.0280042 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 0.000485417 vs Temperature Convergence Tolerance=0.20000 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 1.98434E-05 vs Loads Convergence Tolerance=0.04000 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0493422 vs Loads Convergence Tolerance=0.04000 - Fail Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2369.88
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            0.9124442592820591,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2368.28
+        },
+        {
+          "evaluation": 3,
+          "x": [
+            0.867444259282059,
+            2.0176862740017873,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2372.62
+        },
+        {
+          "evaluation": 4,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1589528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2371.24
+        },
+        {
+          "evaluation": 5,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.6562576443627541,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2367.3
+        },
+        {
+          "evaluation": 6,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.100696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2366.68
+        },
+        {
+          "evaluation": 7,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.2,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2370.26
+        },
+        {
+          "evaluation": 8,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.05186611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2370.94
+        },
+        {
+          "evaluation": 9,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.5727584706651185,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 1775.52
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p10-26.2.0-pybobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1061903705,
+          "evaluation": 10
+        }
+      ],
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    },
+    {
+      "case_id": "p10-8.5.0-bobyqa-r001-e0001",
+      "problem": 10,
+      "version": "8.5.0",
+      "x": [
+        1.0320411041831339,
+        1.7687704698940223,
+        0.8860799044471832,
+        2.0245478084624793,
+        1.1370398855084216,
+        1.70879245006153,
+        1.1038445467697104,
+        1.904693025044103,
+        16.86245474345514,
+        14.192791124702122,
+        17.696070158792914,
+        24.4332397328286,
+        32.54975362174068
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "1d17c8c2ecb6a94d527fcc022e70a07efbe62f2a1e521497800d5c53997d2fd4",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 12,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "CORE_TOP",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_4",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_4",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_4",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 53 Warning; 12 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"CORE_TOP\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 3.78E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 5.54E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.3074 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 2.5329E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 2.86E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.79E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.3236 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.1072E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 4.33E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 2.14E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.6200 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.2365E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 0.11 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 9.66E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.5159 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 2.0583E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.04E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 4.87E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 8.8774E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 3.0783E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.86E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.97E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.6237 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 9.8020E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 0.15 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.21E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 5.9420E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.8225E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 6.87E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 6.72E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.6234 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 2.7102E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 3.24E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.10E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 4.0631E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.1794E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 8.47E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.45E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.4142 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.1137E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 8.19E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.15E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.6565 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.5993E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 3.99E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.45E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.3918 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 5.7259E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n",
+      "preceding_observations": [],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p10-8.5.0-bobyqa-r001",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 151142119,
+          "evaluation": 1
+        },
+        {
+          "experiment": "pilot",
+          "id": "p10-8.5.0-pybobyqa-r001",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1662000892,
+          "evaluation": 1
+        }
+      ],
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    },
+    {
+      "case_id": "p10-8.5.0-bobyqa-r002-e0003",
+      "problem": 10,
+      "version": "8.5.0",
+      "x": [
+        1.1271289785752232,
+        1.574178006496781,
+        1.0740128209472073,
+        1.6723212367925977,
+        1.1951170960302882,
+        2.0933079519926574,
+        1.1337643084968627,
+        2.130660092018886,
+        13.76187509190379,
+        16.818018969488428,
+        14.259442469722385,
+        24.568532062248757,
+        27.723699084854363
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "e881626c8177e30f140745ba80761a8ee2f92ff4d18ba50008119c2bb0a6de58",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 6,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_4",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 19 Warning; 6 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 5.77E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.02E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 2.9854E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.0376E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 3.13E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 8.15E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 7.6687E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 6.0920E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.56E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 9.73E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 8.3936E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 5.3699E-005 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 2.98E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.87E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.2759 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.1798E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.94E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 2.79E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 2.1211E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.1968 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.81E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.67E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 8.8279E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.1516E-005 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1616.13
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            1.1484489309095516,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1617.5099999999998
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p10-8.5.0-bobyqa-r002",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1750162298,
+          "evaluation": 3
+        }
+      ],
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    },
+    {
+      "case_id": "p10-8.5.0-pybobyqa-r000-e0012",
+      "problem": 10,
+      "version": "8.5.0",
+      "x": [
+        0.867444259282059,
+        1.9326862740017874,
+        1.1139528380766048,
+        1.5712576443627542,
+        1.055696886860133,
+        2.1945044469468153,
+        1.00686611829148,
+        1.4877584706651186,
+        12.453797995209877,
+        14.612191063589695,
+        18.686965758046075,
+        29.3526325800251,
+        35.0438474437221
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "608144d2eca662794f2057d5c3dd7a7af9407a761beeca06c4df0e0587342872",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 8,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "CORE_MID",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_4",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 73 Warning; 8 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"CORE_MID\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.77E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.21E-005 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 8.7293E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 7.1786E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.40E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 9.44E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 1.2750E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.1005 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 4.48E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.22E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 5.5683E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 2.0632E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 2.84E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.23E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.1456 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.9850E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.47E-004 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.34E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 1.0230E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.5926E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 2.86E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 5.24E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 9.0008E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 7.3002E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 4.83E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 6.27E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 6.7245E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.2488 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 0.13 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 5.80E-004 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 6.4398E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 5.0453E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2365.12
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            0.9124442592820591,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2364.88
+        },
+        {
+          "evaluation": 3,
+          "x": [
+            0.867444259282059,
+            2.0176862740017873,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2366.08
+        },
+        {
+          "evaluation": 4,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1589528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2366.7
+        },
+        {
+          "evaluation": 5,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.6562576443627541,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2362.38
+        },
+        {
+          "evaluation": 6,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.100696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2361.9
+        },
+        {
+          "evaluation": 7,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.2,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2365.48
+        },
+        {
+          "evaluation": 8,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.05186611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2366.32
+        },
+        {
+          "evaluation": 9,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.5727584706651185,
+            12.453797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 1772.0549999999998
+        },
+        {
+          "evaluation": 10,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            13.053797995209877,
+            14.612191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2391.2
+        },
+        {
+          "evaluation": 11,
+          "x": [
+            0.867444259282059,
+            1.9326862740017874,
+            1.1139528380766048,
+            1.5712576443627542,
+            1.055696886860133,
+            2.1945044469468153,
+            1.00686611829148,
+            1.4877584706651186,
+            12.453797995209877,
+            15.412191063589695,
+            17.886965758046074,
+            29.3526325800251,
+            35.0438474437221
+          ],
+          "f": 2364.76
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p10-8.5.0-pybobyqa-r000",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1061903705,
+          "evaluation": 12
+        }
+      ],
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    },
+    {
+      "case_id": "p10-8.5.0-pybobyqa-r002-e0015",
+      "problem": 10,
+      "version": "8.5.0",
+      "x": [
+        1.0821289785752233,
+        1.5339069854208274,
+        1.0740128209472073,
+        1.6723212367925977,
+        1.1951170960302882,
+        2.0933079519926574,
+        1.1337643084968627,
+        2.130660092018886,
+        13.76187509190379,
+        16.818018969488428,
+        14.259442469722385,
+        24.568532062248757,
+        27.723699084854363
+      ],
+      "purpose": "Actual in-box replication failure; strict rejection is required, not an accepted objective.",
+      "input_sha256": "882429e8357a8c1280cbadeecd7b11e21b1beb67bcdbcb3cd2e51d02b6115c8f",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 6,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_BOT_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_MID_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_3",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_2",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_1",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "PERIMETER_TOP_ZN_4",
+            "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 19 Warning; 6 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_BOT_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 5.34E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.07E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 2.9677E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.2787E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_MID_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.96E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 2.11E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 7.6659E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 6.7506E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_3\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.55E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 9.66E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 9.2834E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 5.6870E-005 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_2\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 2.96E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 1.87E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 0.3810 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.1797E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_1\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.94E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 2.79E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 2.0774E-002 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.2450 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"PERIMETER_TOP_ZN_4\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"San Francisco Intl AP CA USA TMY3 WMO#=724940\"\n**   ~~~   ** ..Max Temp Comparison = 1.81E-002 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.68E-003 vs Temperature Convergence Tolerance=0.20 - Pass Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 9.6828E-002 vs Loads Convergence Tolerance=4.00E-002 - Fail Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 4.1514E-005 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [
+        {
+          "evaluation": 1,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1616.13
+        },
+        {
+          "evaluation": 2,
+          "x": [
+            1.1721289785752231,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1619.25
+        },
+        {
+          "evaluation": 3,
+          "x": [
+            1.1271289785752232,
+            1.6189069854208273,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1611.09
+        },
+        {
+          "evaluation": 4,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.1190128209472072,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1615.815
+        },
+        {
+          "evaluation": 5,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.7573212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1616.955
+        },
+        {
+          "evaluation": 6,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.240117096030288,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1613.835
+        },
+        {
+          "evaluation": 7,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.1783079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1620.87
+        },
+        {
+          "evaluation": 8,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1787643084968626,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1614.42
+        },
+        {
+          "evaluation": 9,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.2,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1619.4750000000001
+        },
+        {
+          "evaluation": 10,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            14.361875091903789,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1630.065
+        },
+        {
+          "evaluation": 11,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            17.61801896948843,
+            14.259442469722385,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1619.625
+        },
+        {
+          "evaluation": 12,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            15.059442469722384,
+            24.568532062248757,
+            27.723699084854363
+          ],
+          "f": 1616.565
+        },
+        {
+          "evaluation": 13,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            25.768532062248756,
+            27.723699084854363
+          ],
+          "f": 1646.655
+        },
+        {
+          "evaluation": 14,
+          "x": [
+            1.1271289785752232,
+            1.5339069854208274,
+            1.0740128209472073,
+            1.6723212367925977,
+            1.1951170960302882,
+            2.0933079519926574,
+            1.1337643084968627,
+            2.130660092018886,
+            13.76187509190379,
+            16.818018969488428,
+            14.259442469722385,
+            24.568532062248757,
+            28.923699084854363
+          ],
+          "f": 1615.17
+        }
+      ],
+      "source_runs": [
+        {
+          "experiment": "pilot",
+          "id": "p10-8.5.0-pybobyqa-r002",
+          "manifest_id": "11c122ef24eecd5a4f12432f316097bb67cda4607facd58c07d1de841861a631",
+          "seed": 1081651438,
+          "evaluation": 15
+        }
+      ],
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    }
+  ],
+  "source_record_count": 23,
+  "audit_snapshot": {
+    "captured_at_utc": "2026-10-16T05:47:19.689398+00:00",
+    "last_added_run": "p04-26.2.0-bobyqa-r001",
+    "last_added_failure_completed_at_utc": "2026-10-16T05:43:48.615711+00:00",
+    "scope": "Frozen selection of 23 failed records from the pilot and extended campaign. Later campaign failures are outside this fixture snapshot."
+  }
+}

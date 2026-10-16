@@ -98,6 +98,19 @@ def test_paper_budget_paired_uniform_starts_and_balanced_schedule(local_setup):
     assert manifest["manifest_id"] == replication.prepare_manifest(**configuration)["manifest_id"]
 
 
+def test_numerical_control_changes_invalidate_campaign_identity(local_setup, monkeypatch):
+    configuration, _ = local_setup
+    original = replication.prepare_manifest(**configuration)
+    module = Path(replication.__file__).with_name("numerical_controls.py")
+    assert original["code_sha256"][module.name] == sha256_file(module)
+    actual_hash = replication.sha256_file
+    monkeypatch.setattr(replication, "sha256_file", lambda path:
+                        "changed-numerical-controls" if Path(path) == module else actual_hash(path))
+    changed = replication.prepare_manifest(**configuration)
+    assert changed["manifest_id"] != original["manifest_id"]
+    assert changed["runs"] == original["runs"]
+
+
 def test_hundredfold_budget_for_every_problem_and_engine_preserves_paired_designs(local_setup):
     configuration, _ = local_setup
     configuration.update(problems=replication.PROBLEM_IDS, versions=["8.5.0", "26.2.0"],

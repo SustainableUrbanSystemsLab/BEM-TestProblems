@@ -10,6 +10,7 @@ from importlib.resources import files
 from pathlib import Path
 from typing import TYPE_CHECKING, Sequence
 
+from .numerical_controls import refine_legacy, refine_modern
 from .reference import legacy_template_path
 
 if TYPE_CHECKING:
@@ -122,6 +123,8 @@ def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
         raise ValueError("Unresolved placeholders in generated legacy IDF")
     if problem.numerical_variant == "warmup-100":
         text = _p1_warmup_100(text)
+    elif problem.numerical_variant == "convergence-refined":
+        text = refine_legacy(text, problem.id)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(("\n".join(text.splitlines()) + "\n").encode("utf-8"))
@@ -166,6 +169,8 @@ def render_modern(problem: "Problem", x: Sequence[float], path) -> Path:
         if (set(buildings) != {"office zone"}
                 or buildings["office zone"].get("maximum_number_of_warmup_days") != 100):
             raise ValueError("Modern P1 warmup-100 requires its existing Building cap of 100")
+    elif problem.numerical_variant == "convergence-refined":
+        refine_modern(model, problem.id)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes((json.dumps(model, indent=2, sort_keys=True) + "\n").encode("utf-8"))

@@ -122,6 +122,7 @@ jobs:
           dotnet build reference/EngineProxy/EngineProxy.csproj -c Release -o .tools/reference-bin/proxy --nologo
           .tools/reference-bin/oracle/Oracle.exe --check-stubs
       - name: Compare successful values and rejected outcomes with the original implementation
+        id: original_compare
         run: >-
           .venv/Scripts/python.exe tools/validate_cases.py
           --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus.exe --version $ENERGYPLUS_VERSION
@@ -142,6 +143,17 @@ jobs:
           --work-dir .validation-local/warmup-100-comparison
           --output .validation-local/reports/warmup-100-regression.json
           --baseline reference/baselines/8.5.0-warmup-100-canonical.json
+      - name: Reproduce actual failed searches and verify strict numerical repairs
+        if: always() && !cancelled() && matrix.weather_kind == 'canonical' && (steps.original_compare.outcome == 'success' || steps.original_compare.outcome == 'failure')
+        run: >-
+          .venv/Scripts/python.exe tools/validate_replication_failures.py
+          --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus.exe --version $ENERGYPLUS_VERSION
+          --weather-dir .validation-local/weather
+          --work-dir .validation-local/replication-failures
+          --output .validation-local/reports/replication-failures.json
+          --baseline reference/baselines/8.5.0-replication-failures.json
+          --oracle .tools/reference-bin/oracle/Oracle.exe
+          --proxy .tools/reference-bin/proxy/EngineProxy.exe
       - name: Retain numerical comparison report
         if: always() && !cancelled()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -150,6 +162,7 @@ jobs:
           path: |
             .validation-local/reports/original-csharp.json
             .validation-local/reports/warmup-100-regression.json
+            .validation-local/reports/replication-failures.json
           include-hidden-files: true
           if-no-files-found: error
 
@@ -209,6 +222,15 @@ jobs:
           --baseline .validation-local/reports/modern-regression.json
           --case-id p01-midpoint --case-id p04-midpoint --case-id p06-midpoint
           --case-id p09-midpoint --case-id p13-midpoint --rtol 0 --atol 0
+      - name: Reproduce actual failed searches and verify strict numerical repairs
+        if: always() && !cancelled() && matrix.weather_kind == 'canonical' && (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
+        run: >-
+          .venv/bin/python tools/validate_replication_failures.py
+          --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus --version $ENERGYPLUS_VERSION
+          --weather-dir .validation-local/weather
+          --work-dir .validation-local/replication-failures
+          --output .validation-local/reports/replication-failures.json
+          --baseline reference/baselines/26.2.0-replication-failures.json
       - name: Retain numerical regression report
         if: always() && !cancelled()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -217,5 +239,6 @@ jobs:
           path: |
             .validation-local/reports/modern-regression.json
             .validation-local/reports/modern-repeatability.json
+            .validation-local/reports/replication-failures.json
           include-hidden-files: true
           if-no-files-found: error

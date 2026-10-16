@@ -11,6 +11,7 @@ from tempfile import TemporaryDirectory
 from types import MappingProxyType
 from typing import Mapping, Sequence
 
+from .numerical_controls import REFINED_PROBLEM_IDS, refined_provenance
 from .parameters import (
     DETAILED_PARAMETERS,
     OFFICE_PARAMETERS,
@@ -42,10 +43,11 @@ class Problem:
     numerical_variant: str | None = None
 
     def __post_init__(self):
-        if self.numerical_variant is not None and (
-            self.id != 1 or self.numerical_variant != "warmup-100"
-        ):
-            raise ValueError("The warmup-100 numerical variant is available only for problem 1")
+        supported = ((self.id == 1 and self.numerical_variant == "warmup-100")
+                     or (self.id in REFINED_PROBLEM_IDS
+                         and self.numerical_variant == "convergence-refined"))
+        if self.numerical_variant is not None and not supported:
+            raise ValueError("Unsupported numerical variant for this problem")
         object.__setattr__(self, "constants", MappingProxyType(dict(self.constants)))
         object.__setattr__(self, "fixed_parameters", MappingProxyType(dict(self.fixed_parameters)))
 
@@ -75,7 +77,9 @@ class Problem:
             "source_references": self.source_references,
             "definition": self.definition,
         }
-        if self.numerical_variant is not None:
+        if self.numerical_variant == "convergence-refined":
+            provenance["numerical_variant"] = refined_provenance(self.id)
+        elif self.numerical_variant == "warmup-100":
             provenance["numerical_variant"] = {
                 "name": self.numerical_variant,
                 "object_type": "Building",
@@ -297,9 +301,15 @@ _P1_WARMUP_100 = replace(
     _PROBLEMS[1], definition="numerical-variant", numerical_variant="warmup-100"
 )
 
+_REFINED_PROBLEMS = {
+    number: replace(_PROBLEMS[number], definition="numerical-variant",
+                    numerical_variant="convergence-refined")
+    for number in REFINED_PROBLEM_IDS
+}
+
 
 def get_problem(problem_id, *, numerical_variant=None) -> Problem:
-    """Select a canonical problem or the explicit P1 warmup-100 variant."""
+    """Select a canonical problem or an explicitly supported numerical variant."""
     if isinstance(problem_id, bool):
         raise ValueError(f"Expected one of {PROBLEM_IDS}")
     if isinstance(problem_id, str):
@@ -315,7 +325,9 @@ def get_problem(problem_id, *, numerical_variant=None) -> Problem:
         return _PROBLEMS[problem_id]
     if problem_id == 1 and numerical_variant == "warmup-100":
         return _P1_WARMUP_100
-    raise ValueError("The warmup-100 numerical variant is available only for problem 1")
+    if numerical_variant == "convergence-refined" and problem_id in _REFINED_PROBLEMS:
+        return _REFINED_PROBLEMS[problem_id]
+    raise ValueError("Unsupported numerical variant for this problem")
 
 
 def list_problems() -> tuple[Problem, ...]:

@@ -234,7 +234,7 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
             identities[str(problem.id)]["numerical_variant"] = problem.numerical_variant
     source = Path(__file__).parent
     code_hashes = {name: sha256_file(source / name) for name in (
-        "problems.py", "losses.py", "models.py", "outputs.py", "energyplus.py",
+        "problems.py", "losses.py", "models.py", "numerical_controls.py", "outputs.py", "energyplus.py",
         "evaluation.py", "replication.py", "replication_solvers.py", "replication_diagnostics.py",
         "replication_journal.py")}
     specifications = []

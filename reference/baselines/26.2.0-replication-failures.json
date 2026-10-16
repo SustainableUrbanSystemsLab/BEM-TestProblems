@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "license": "MIT",
+  "engine_version": "26.2.0",
+  "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+  "platform": "Darwin-arm64",
+  "measured_at_utc": "2026-10-16T05:56:26.482296+00:00",
+  "weather_kind": "canonical",
+  "diagnostics_policy": "strict",
+  "numerical_variant": "convergence-refined",
+  "rtol": 1e-06,
+  "atol": 1e-07,
+  "case_fixture": {
+    "path": "reference/replication-failure-cases.json",
+    "sha256": "7eb96379cd2694fabcabe1bd3f2af32387aeb5f62b255a776261a95be9477e23"
+  },
+  "scope": "New project measurements at recorded failed replication designs only. Explicit numerical variant; historical equivalence and full-domain convergence are not claimed.",
+  "provenance": {
+    "kind": "Strict native observations; no published optimum or raw external asset is copied.",
+    "source_sha256": {
+      "models.py": "998311e8f3e8a1e62f91904b0d533bba28785ea94ff563197fe8e2614350fd61",
+      "numerical_controls.py": "f1ecaecabdc62aed384cd30478e14bb7358578c704773a9aa8760ff179cae241",
+      "problems.py": "5ef783ee83942a24c54c49c9d015cd31982daf253c36959863a2fe373537628d",
+      "energyplus.py": "6f857c7684adb8c781b7bbe7bc05715e0aa2d6d62dd9ac6a99f300cc6934d245",
+      "outputs.py": "57adfe69dab45bc19246506334e84c7e30d7e39fa6efdf20db6b8b67f782dac5",
+      "losses.py": "80daa3c93328d220771892f69fa29739196602de0d9534922e97c58fe9e141f9"
+    },
+    "engine_hash_scope": "Measured build identity only; cross-platform builds must record their actual hash."
+  },
+  "cases": [
+    {
+      "case_id": "p04-26.2.0-bobyqa-r000-e0001",
+      "problem": 4,
+      "x": [
+        3.2234260844430143,
+        7.377072501575224,
+        21.419140233704205,
+        3.1155450333944135,
+        0.4409347852790972,
+        0.12222546482196855,
+        0.18793629538489848,
+        281.94900339879746,
+        508.8362128059049,
+        479.1294776988839,
+        24.042948100143438,
+        22.910622621390054,
+        17.635646122729028
+      ],
+      "canonical_input_sha256": "615e3278816a590242781d7fb9f123cd7e23fab8b3fd75e3d1c6b6642627482a",
+      "input_sha256": "11dc208eb7a08d32a51c6af169f61676d1406a8cc2db523bbde5455dfad20736",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ConvergenceLimits",
+            "field": "maximum_hvac_iterations",
+            "canonical_by_engine": {
+              "8.5.0": 20,
+              "26.2.0": 20
+            },
+            "value": 100,
+            "preserved_effective_defaults": {
+              "minimum_system_timestep": 1,
+              "minimum_plant_iterations": 2,
+              "maximum_plant_iterations": 8
+            }
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "passed": true,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "objective": 170.82661433062094,
+      "components": {
+        "H_1": 5.0265572843880095,
+        "H_2": 8.843595208318721,
+        "H_3": 92.88002728116396,
+        "H_4": 0.2131418959904825,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 2267.877274553407,
+        "L_N": 2051.173325178224,
+        "L_W": 7314.633809848942,
+        "L_E": 4952.454417829086,
+        "L_S": 1541.0367497365112,
+        "L_I": 6345.6,
+        "V_legacy": 11993.46187815339,
+        "V_return": 11993.46187815339
+      },
+      "terms": {
+        "heating": 0.09688706672994671,
+        "cooling": 6.162709985199475,
+        "lighting": 99.38515924524918,
+        "fans": 65.18185803344232
+      },
+      "actual_warmup_days": [
+        23
+      ],
+      "warning_count": 20
+    },
+    {
+      "case_id": "p05-26.2.0-pybobyqa-r000-e0033",
+      "problem": 5,
+      "x": [
+        3.4471853943456656,
+        19.305303951738892,
+        14.537742741203624,
+        3.1201289411375397,
+        0.45492715021809477,
+        0.8404681750798678,
+        0.8104788655381207,
+        149.14585811476707,
+        519.5167855958225,
+        244.48883917221838,
+        25.0,
+        23.534842579785117,
+        16.67844887706451
+      ],
+      "canonical_input_sha256": "6b8388406d0d13bcffd5c9cf26962a9b405dd1b66f98d5d0c0495a21ed7ffe8b",
+      "input_sha256": "e98f22501a42d69c1e27035d814ce396961cf1f370bdae8ce56cf52616e828de",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ConvergenceLimits",
+            "field": "maximum_hvac_iterations",
+            "canonical_by_engine": {
+              "8.5.0": 20,
+              "26.2.0": 20
+            },
+            "value": 100,
+            "preserved_effective_defaults": {
+              "minimum_system_timestep": 1,
+              "minimum_plant_iterations": 2,
+              "maximum_plant_iterations": 8
+            }
+          },
+          {
+            "object_type": "ZoneAirHeatBalanceAlgorithm",
+            "field": "algorithm",
+            "canonical_by_engine": {
+              "8.5.0": "ThirdOrderBackwardDifference",
+              "26.2.0": "ThirdOrderBackwardDifference"
+            },
+            "value": "AnalyticalSolution"
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "passed": true,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "objective": 214.7079955970114,
+      "components": {
+        "H_1": 8.833284208477622,
+        "H_2": 30.443590079633296,
+        "H_3": 27.810151838119058,
+        "H_4": 1.7544880815970774,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 24219.57493144476,
+        "L_N": 1770.24984236142,
+        "L_W": 4488.754719139885,
+        "L_E": 4541.7287442178795,
+        "L_S": 1452.4999918874298,
+        "L_I": 6345.6,
+        "V_legacy": 11640.093821125407,
+        "V_return": 11640.093821125407
+      },
+      "terms": {
+        "heating": 0.062356444028828846,
+        "cooling": 65.81406231370859,
+        "lighting": 85.5701973766359,
+        "fans": 63.261379462638075
+      },
+      "actual_warmup_days": [
+        13
+      ],
+      "warning_count": 15
+    },
+    {
+      "case_id": "p04-26.2.0-bobyqa-r001-e0031",
+      "problem": 4,
+      "x": [
+        3.6135636791435566,
+        8.464889647808201,
+        23.203906854779845,
+        4.413266819752387,
+        0.4752415719087444,
+        0.6153848505477697,
+        0.24713398655728774,
+        506.58382486014784,
+        600.0,
+        415.5690737785526,
+        25.0,
+        20.509768325042984,
+        15.879014344575577
+      ],
+      "canonical_input_sha256": "62d17944da73919fa997f9ae830b625a4444c4b50a8618ec6d15bb45f3dbfbaf",
+      "input_sha256": "b2bcb7344bec622a001203b52db3e9965d798bba783e72eabc8e1ac9c4c5e984",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ConvergenceLimits",
+            "field": "maximum_hvac_iterations",
+            "canonical_by_engine": {
+              "8.5.0": 20,
+              "26.2.0": 20
+            },
+            "value": 100,
+            "preserved_effective_defaults": {
+              "minimum_system_timestep": 1,
+              "minimum_plant_iterations": 2,
+              "maximum_plant_iterations": 8
+            }
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "passed": true,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "objective": 157.01297252290198,
+      "components": {
+        "H_1": 253.8788840738506,
+        "H_2": 253.27756314132012,
+        "H_3": 925.2791725621673,
+        "H_4": 147.0388370167064,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 2969.8424452035206,
+        "L_N": 1978.5497891175587,
+        "L_W": 6890.799968722063,
+        "L_E": 4960.598352161001,
+        "L_S": 1396.2793924205482,
+        "L_I": 6345.6,
+        "V_legacy": 9606.6478645264,
+        "V_return": 9606.6478645264
+      },
+      "terms": {
+        "heating": 1.4306833847772142,
+        "cooling": 8.07022403587913,
+        "lighting": 95.30202236025434,
+        "fans": 52.2100427419913
+      },
+      "actual_warmup_days": [
+        13
+      ],
+      "warning_count": 10
+    },
+    {
+      "case_id": "p10-26.2.0-bobyqa-r002-e0001",
+      "problem": 10,
+      "x": [
+        1.1271289785752232,
+        1.5339069854208274,
+        1.0740128209472073,
+        1.6723212367925977,
+        1.1951170960302882,
+        2.0933079519926574,
+        1.1337643084968627,
+        2.130660092018886,
+        13.76187509190379,
+        16.818018969488428,
+        14.259442469722385,
+        24.568532062248757,
+        27.723699084854363
+      ],
+      "canonical_input_sha256": "ec330f00e8e270ca2636bf44b083a2360fb95b1c6e1d2fb4f252f3f034f38e6b",
+      "input_sha256": "5a1ba2f317535ff5346d8778cabe51d33624c9c24402474dcdca338096085cf2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Benchmark Large Office New",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ZoneAirHeatBalanceAlgorithm",
+            "field": "algorithm",
+            "canonical_by_engine": {
+              "8.5.0": "ThirdOrderBackwardDifference",
+              "26.2.0": "ThirdOrderBackwardDifference"
+            },
+            "value": "AnalyticalSolution"
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 6,
+              "26.2.0": 6
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 6,
+              "26.2.0": 6
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "passed": true,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "objective": 1641.855,
+      "components": {
+        "Y": 1094.57
+      },
+      "terms": {
+        "source_energy": 1094.57,
+        "window_penalty": 547.285
+      },
+      "actual_warmup_days": [
+        20
+      ],
+      "warning_count": 9
+    },
+    {
+      "case_id": "p10-26.2.0-pybobyqa-r000-e0010",
+      "problem": 10,
+      "x": [
+        0.867444259282059,
+        1.9326862740017874,
+        1.1139528380766048,
+        1.5712576443627542,
+        1.055696886860133,
+        2.1945044469468153,
+        1.00686611829148,
+        1.4877584706651186,
+        13.053797995209877,
+        14.612191063589695,
+        17.886965758046074,
+        29.3526325800251,
+        35.0438474437221
+      ],
+      "canonical_input_sha256": "7aeadb46ec5231ae6c8fa31f9cacbe15d0e067bcafe072cb659bafc3f57d6d15",
+      "input_sha256": "97689b656fa14b897d2705bc0f69324ad4e22214381d1e949458ec72b6d9bba6",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Benchmark Large Office New",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ZoneAirHeatBalanceAlgorithm",
+            "field": "algorithm",
+            "canonical_by_engine": {
+              "8.5.0": "ThirdOrderBackwardDifference",
+              "26.2.0": "ThirdOrderBackwardDifference"
+            },
+            "value": "AnalyticalSolution"
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 6,
+              "26.2.0": 6
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 6,
+              "26.2.0": 6
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "passed": true,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "objective": 2412.64,
+      "components": {
+        "Y": 1206.32
+      },
+      "terms": {
+        "source_energy": 1206.32,
+        "window_penalty": 1206.32
+      },
+      "actual_warmup_days": [
+        13
+      ],
+      "warning_count": 8
+    }
+  ],
+  "valid_controls": [
+    {
+      "problem": 4,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "case_id": "p04-midpoint",
+      "canonical_input_sha256": "8075d1f91e7c7960a16ba1013b2053f971ccb0c2523906a988e4a05cc6a143b4",
+      "input_sha256": "844e1aaaf171756b963c334da085ed246bb798b76ff7e1cbc9f29cd989637852",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ConvergenceLimits",
+            "field": "maximum_hvac_iterations",
+            "canonical_by_engine": {
+              "8.5.0": 20,
+              "26.2.0": 20
+            },
+            "value": 100,
+            "preserved_effective_defaults": {
+              "minimum_system_timestep": 1,
+              "minimum_plant_iterations": 2,
+              "maximum_plant_iterations": 8
+            }
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 4,
+              "26.2.0": 4
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "canonical_baseline": {
+        "path": "reference/baselines/26.2.0-canonical.json",
+        "sha256": "383055079a573cdd296f75112fa9f3d07eca92fbc28fdc7043caf5903482e56b"
+      },
+      "canonical_objective": 172.68849670335467,
+      "objective": 180.56786701122218,
+      "components": {
+        "H_1": 1.1857480545633483,
+        "H_2": 21.76610557731027,
+        "H_3": 31.13108508566833,
+        "H_4": 0.0,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 980.0967483591662,
+        "L_N": 1993.7832940694916,
+        "L_W": 5508.087875743882,
+        "L_E": 5295.988293563958,
+        "L_S": 1521.1350624421257,
+        "L_I": 6345.6,
+        "V_legacy": 15363.291356832744,
+        "V_return": 15363.291356832744
+      },
+      "terms": {
+        "heating": 0.04898816912820829,
+        "cooling": 2.6633063814107776,
+        "lighting": 94.35942378224436,
+        "fans": 83.49614867843883
+      },
+      "delta_objective": 7.879370307867504,
+      "delta_percent": 4.56276501231158,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "actual_warmup_days": [
+        17
+      ],
+      "warning_count": 23
+    },
+    {
+      "problem": 5,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "case_id": "p05-midpoint",
+      "canonical_input_sha256": "45b5eac6dde311e9271b5c71b888675619dfdab1673d46e8947161ffd876aced",
+      "input_sha256": "f64c3164d6327ca88fc8bf4f23dab9768d7c09e3af93dc01a997be6cf149b666",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Office Building",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ConvergenceLimits",
+            "field": "maximum_hvac_iterations",
+            "canonical_by_engine": {
+              "8.5.0": 20,
+              "26.2.0": 20
+            },
+            "value": 100,
+            "preserved_effective_defaults": {
+              "minimum_system_timestep": 1,
+              "minimum_plant_iterations": 2,
+              "maximum_plant_iterations": 8
+            }
+          },
+          {
+            "object_type": "ZoneAirHeatBalanceAlgorithm",
+            "field": "algorithm",
+            "canonical_by_engine": {
+              "8.5.0": "ThirdOrderBackwardDifference",
+              "26.2.0": "ThirdOrderBackwardDifference"
+            },
+            "value": "AnalyticalSolution"
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "canonical_baseline": {
+        "path": "reference/baselines/26.2.0-canonical.json",
+        "sha256": "383055079a573cdd296f75112fa9f3d07eca92fbc28fdc7043caf5903482e56b"
+      },
+      "canonical_objective": 241.74683046205237,
+      "objective": 242.2911745654425,
+      "components": {
+        "H_1": 0.0,
+        "H_2": 9.933609276429282,
+        "H_3": 7.52127885448328,
+        "H_4": 0.0,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 22368.39223531619,
+        "L_N": 1749.6114351689273,
+        "L_W": 4547.885490886263,
+        "L_E": 4326.668686388444,
+        "L_S": 1319.792412784961,
+        "L_I": 6345.6,
+        "V_legacy": 18110.88414583943,
+        "V_return": 18110.88414583943
+      },
+      "terms": {
+        "heating": 0.015810587075101957,
+        "cooling": 60.78367455248965,
+        "lighting": 83.0629712419678,
+        "fans": 98.42871818390995
+      },
+      "delta_objective": 0.5443441033901308,
+      "delta_percent": 0.22517114385728335,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "actual_warmup_days": [
+        7
+      ],
+      "warning_count": 23
+    },
+    {
+      "problem": 10,
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "case_id": "p10-midpoint",
+      "canonical_input_sha256": "fb0b0b21abee9bbc3025d5f475a8d8f06a0aab84ccc8f6168bcde96b278bb768",
+      "input_sha256": "e97df42864394eaceb652e94d3119a06462cdc7559a82cb8f0ca9873d3451b4b",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "numerical_recipe": {
+        "name": "convergence-refined",
+        "controls": [
+          {
+            "object_type": "Building",
+            "object_name": "Benchmark Large Office New",
+            "field": "maximum_number_of_warmup_days",
+            "canonical_by_engine": {
+              "8.5.0": 25,
+              "26.2.0": 25
+            },
+            "value": 100
+          },
+          {
+            "object_type": "ZoneAirHeatBalanceAlgorithm",
+            "field": "algorithm",
+            "canonical_by_engine": {
+              "8.5.0": "ThirdOrderBackwardDifference",
+              "26.2.0": "ThirdOrderBackwardDifference"
+            },
+            "value": "AnalyticalSolution"
+          },
+          {
+            "object_type": "Timestep",
+            "field": "number_of_timesteps_per_hour",
+            "canonical_by_engine": {
+              "8.5.0": 6,
+              "26.2.0": 6
+            },
+            "value": 12
+          },
+          {
+            "object_type": "Sizing:Parameters",
+            "field": "timesteps_in_averaging_window",
+            "canonical_by_engine": {
+              "8.5.0": 6,
+              "26.2.0": 6
+            },
+            "value": 12
+          }
+        ],
+        "other_fields": "unchanged, including physical inputs and convergence tolerances",
+        "selection": "fixed per problem; no design-dependent fallback",
+        "historical_equivalence": "not claimed"
+      },
+      "canonical_baseline": {
+        "path": "reference/baselines/26.2.0-canonical.json",
+        "sha256": "383055079a573cdd296f75112fa9f3d07eca92fbc28fdc7043caf5903482e56b"
+      },
+      "canonical_objective": 1201.82,
+      "objective": 1265.17,
+      "components": {
+        "Y": 1265.17
+      },
+      "terms": {
+        "source_energy": 1265.17,
+        "window_penalty": 0.0
+      },
+      "delta_objective": 63.350000000000136,
+      "delta_percent": 5.2711720557155095,
+      "severe_count": 0,
+      "fatal_count": 0,
+      "actual_warmup_days": [
+        12
+      ],
+      "warning_count": 8
+    }
+  ]
+}
