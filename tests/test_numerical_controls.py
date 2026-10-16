@@ -11,7 +11,7 @@ from bem_testproblems.models import _data_resource, legacy_token_values
 from bem_testproblems.numerical_controls import refine_legacy, refine_modern
 from tests.test_models import idf_objects
 
-IDS = (1, 4, 5, 10)
+IDS = (1, 4, 5, 6, 10)
 
 
 def _objects(path):
@@ -50,7 +50,7 @@ def test_profile_is_explicit_frozen_and_preserves_physical_problem(number):
         refined.definition = "historical-implementation"
 
 
-@pytest.mark.parametrize("number", (2, 3, 6, 8, 9, 13))
+@pytest.mark.parametrize("number", (2, 3, 8, 9, 13))
 def test_profile_cannot_silently_apply_to_unreviewed_problem(number):
     with pytest.raises(ValueError, match="numerical variant"):
         get_problem(number, numerical_variant="convergence-refined")
@@ -201,3 +201,13 @@ def test_refinement_requires_original_time_resolution(number, kind, field, index
     next(iter(model[kind].values()))[field] = 5
     with pytest.raises(ValueError, match=kind):
         refine_modern(model, number)
+
+
+def test_p6_recipe_uses_only_additional_initialization_days():
+    problem = get_problem(6, numerical_variant="convergence-refined")
+    controls = problem.provenance["numerical_variant"]["controls"]
+    assert len(controls) == 1
+    assert controls[0]["object_type"] == "Building"
+    assert controls[0]["field"] == "maximum_number_of_warmup_days"
+    assert controls[0]["canonical_by_engine"] == {"8.5.0": 25, "26.2.0": 25}
+    assert controls[0]["value"] == 100

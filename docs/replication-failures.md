@@ -1,9 +1,10 @@
 # Failed replication runs
 
 - **Coverage:** [replication-failure-cases.json](../reference/replication-failure-cases.json)
-  freezes **13 distinct engine/design combinations from 23 failed run records**:
-  16 pilot records and seven extended-campaign records. The snapshot was captured
-  on October 16, 2026, at 05:47 UTC. Later failures are outside this snapshot.
+  freezes **14 distinct engine/design combinations from 24 failed run records**:
+  16 pilot records and eight extended-campaign records. The initial snapshot was
+  captured on October 16, 2026, at 05:47 UTC, and extended with a P6 failure.
+  These cases cover observed failure modes; the running campaign may find others.
 - **Observed outcome:** every recorded failure is a warmup-convergence **Severe**
   diagnostic after 25 days, with **zero Fatal errors**. Each process exited with
   code zero and wrote “Completed Successfully.” Those signals alone do not make
@@ -19,6 +20,7 @@
 | P1, EnergyPlus 8.5 | Temperature history has not converged at the 25-day cap | Allow 100 warmup days, preserving both convergence tolerances |
 | P4, both engines | Temperature differences, and sometimes peak-load differences, remain above tolerance | Warmup cap 100; HVAC iteration cap 100; 12 timesteps/hour and 12 sizing-average steps |
 | P5, EnergyPlus 26.2 | Temperature differences remain above tolerance | Warmup cap 100; HVAC iteration cap 100; analytical zone-air integration |
+| P6, EnergyPlus 8.5 | All five zones exceed the temperature-convergence tolerance at day 25 | Allow 100 warmup days; no other numerical change |
 | P10, both engines | Daily peak heating or cooling loads fail convergence, while temperature checks pass | Warmup cap 100; 12 timesteps/hour; 12 sizing-average steps; analytical zone-air integration; original HVAC iteration cap 20 |
 
 - The earlier [warmup analysis](warmup-diagnostics.md) distinguishes slow P1
@@ -49,13 +51,13 @@ objective = make_objective(problem)
 ```
 
 The ordinary `get_problem(4)` keeps the canonical definition. The variant is
-available for P1, P4, P5, and P10. A failed evaluation
+available for P1, P4, P5, P6, and P10. A failed evaluation
 raises an error; it does not receive a substitute objective or penalty. A running
 canonical experiment is not silently switched to a numerical variant.
 
 ## Measured results
 
-All 13 repaired inputs and six midpoint controls completed with **zero Severe
+All 14 repaired inputs and seven midpoint controls completed with **zero Severe
 or Fatal errors**, using the recorded canonical weather. These are evaluations
 of fixed designs, not restarted optimization runs or claims of convergence
 throughout the box. Full-precision vectors, components, terms, model identities,
@@ -78,8 +80,9 @@ and settings are in the reviewed
 | `p04-26.2.0-bobyqa-r001-e0031` | 13 | 157.012973 |
 | `p10-26.2.0-bobyqa-r002-e0001` | 20 | 1641.855000 |
 | `p10-26.2.0-pybobyqa-r000-e0010` | 13 | 2412.640000 |
+| `p06-8.5.0-bobyqa-r001-e0001` | 30 | 309.557639 |
 
-Objectives for P1, P4, and P5 are in kWh/(m² year); P10 uses MJ/m².
+Objectives for P1, P4, P5, and P6 are in kWh/(m² year); P10 uses MJ/m².
 Canonical failed evaluations have **no accepted objective**.
 
 The midpoint controls quantify changes to previously valid evaluations:
@@ -88,6 +91,7 @@ The midpoint controls quantify changes to previously valid evaluations:
 | --- | --- | ---: | ---: | ---: | ---: |
 | P1 | 8.5.0 | 153.181082 | 153.181082 | +0.000000 | +0.000000% |
 | P4 | 8.5.0 | 147.638635 | 152.865617 | +5.226982 | +3.540389% |
+| P6 | 8.5.0 | 179.577025 | 179.577025 | +0.000000 | +0.000000% |
 | P10 | 8.5.0 | 1198.570000 | 1260.450000 | +61.880000 | +5.162819% |
 | P4 | 26.2.0 | 172.688497 | 180.567867 | +7.879370 | +4.562765% |
 | P5 | 26.2.0 | 241.746830 | 242.291175 | +0.544344 | +0.225171% |
@@ -97,6 +101,28 @@ Percentage differences use `100 × (refined − canonical) / |canonical|`.
 The largest control change here is **+5.271172%**. The numerical variants
 therefore require their own reference values and experiment labels; they are
 not evidence that these objectives equal the historical C# benchmark.
+
+The same P6 failure design also passed with the refined EnergyPlus 26.2 model
+after nine warmup days. Its 26.2 midpoint control remained exactly unchanged.
+
+## PDFO endpoint roundoff
+
+- Three further searches failed before EnergyPlus was called. PDFO's scaling
+  mapped a lower-bound endpoint of `1.224` to `1.2239999999999998`, one adjacent
+  binary64 float outside the box. This is a Python solver-adapter issue, separate
+  from the warmup errors also seen through C#.
+- Both PDFO entry points normalize only that immediately adjacent outside float to
+  its endpoint. Larger violations, nonfinite values, and invalid dimensions still
+  fail. Direct problem calls and other solver adapters retain strict bounds.
+- [The recorded traces](../reference/pdfo-endpoint-cases.json) reproduce all three
+  failures using existing objective values and the real PDFO solver. The
+  [replication-adapter tests](../tests/test_replication_solvers.py) stop at the first unsaved
+  evaluation, without inventing an objective or running EnergyPlus. They verify
+  feasible recorded coordinates, rejection boundaries, and the evaluation budget.
+  The [public solver tests](../tests/test_optimize.py) also cover its callback and
+  the returned design vector.
+- These fixes do not alter the source of an experiment already running. Its
+  failed records remain failed, with their original diagnostic evidence.
 
 ### Cross-platform precision
 

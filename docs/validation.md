@@ -18,7 +18,7 @@
   cover the 26 original audit designs, the additional P1 orientation-90 trial,
   and the diagnostic experiments for rejected evaluations.
 - **Failures found during optimization:** the [replication failure review](replication-failures.md)
-  covers 13 distinct cases from 23 failed records, strict rejection tests, and
+  covers 14 distinct cases from 24 failed records, strict rejection tests, and
   separately identified numerical variants.
 - **Related guides:** [automated testing](testing.md),
   [optimization replication](optimization-replication.md), and

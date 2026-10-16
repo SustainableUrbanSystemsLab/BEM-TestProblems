@@ -3,10 +3,13 @@
 
 import importlib
 import json
+import math
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
+from bem_testproblems import get_problem
 from bem_testproblems import replication_solvers as adapters
 
 METHODS = ("direct", "crs2", "sbplex", "cma_es", "bobyqa", "pybobyqa")
@@ -260,3 +263,129 @@ def test_pybobyqa_restores_the_callers_rng_after_objective_failure():
     assert caught.value is failure
     assert before[0] == after[0] and before[2:] == after[2:]
     np.testing.assert_array_equal(before[1], after[1])
+
+
+ENDPOINT_CASES = json.loads((Path(__file__).parents[1] / "reference" /
+                            "pdfo-endpoint-cases.json").read_text(encoding="utf-8"))["cases"]
+
+
+@pytest.mark.parametrize("case", ENDPOINT_CASES, ids=lambda case: case["case_id"])
+def test_saved_pdfos_reach_the_previously_rejected_endpoint_without_a_new_simulation(case):
+    """Reproduce real native optimizer proposals using only existing measured values."""
+    pytest.importorskip("pdfo")
+    problem = get_problem(case["problem"])
+    assert tuple(map(tuple, case["bounds"])) == problem.bounds
+    for entry in case["roundoff"]:
+        assert entry["overshoot_ulps"] == 1
+        assert abs(entry["overshoot"]) == math.ulp(entry["endpoint"])
+    with pytest.raises(ValueError):
+        problem.validate(case["rejected_proposal"])
+    problem.validate(case["expected_evaluated_x"])
+    calls = []
+
+    class EndOfSavedTrace(Exception):
+        pass
+
+    end = EndOfSavedTrace("The endpoint has no saved objective; do not invent one")
+
+    def objective(x):
+        index = len(calls)
+        calls.append(tuple(x))
+        problem.validate(x)
+        if index < len(case["observations"]):
+            recorded = case["observations"][index]
+            assert tuple(x) == pytest.approx(recorded["x"], rel=1e-14, abs=1e-14)
+            return recorded["f"]
+        assert index == len(case["observations"])
+        assert tuple(x) == pytest.approx(case["expected_evaluated_x"], rel=1e-14, abs=1e-14)
+        for entry in case["roundoff"]:
+            assert x[entry["index"]] == entry["endpoint"]
+        raise end
+
+    with pytest.raises(EndOfSavedTrace) as caught:
+        adapters.solve_solver("bobyqa", objective, case["x0"], problem.bounds,
+                              case["budget"], case["seed"])
+    assert caught.value is end
+    assert len(calls) == len(case["observations"]) + 1
+    assert calls[0] == pytest.approx(case["x0"], rel=1e-14, abs=1e-14)
+
+
+def _fake_pdfo_proposals(monkeypatch, proposals):
+    def pdfo(callback, start, *, bounds, method, options):
+        for point in proposals:
+            callback(point)
+        return SimpleNamespace(status=0, success=True, message="fixture termination")
+
+    module = SimpleNamespace(pdfo=pdfo, __version__="fixture")
+    real_import = adapters.import_module
+    monkeypatch.setattr(adapters, "import_module", lambda name:
+                        module if name == "pdfo" else real_import(name))
+
+
+ENDPOINT_BOX = ((1.224, 5.832), (0.05, 1.05))
+ENDPOINT_START = tuple((a + b) / 2 for a, b in ENDPOINT_BOX)
+
+
+@pytest.mark.parametrize("raw,expected", [
+    ((math.nextafter(1.224, -math.inf), 0.5), (1.224, 0.5)),
+    ((math.nextafter(5.832, math.inf), 0.5), (5.832, 0.5)),
+    ((2.0, math.nextafter(0.05, -math.inf)), (2.0, 0.05)),
+    ((2.0, math.nextafter(1.05, math.inf)), (2.0, 1.05)),
+    ((math.nextafter(1.224, math.inf), 0.5), (math.nextafter(1.224, math.inf), 0.5)),
+])
+def test_pdfo_normalizes_only_the_adjacent_outside_float_and_records_feasible_values(
+    monkeypatch, raw, expected
+):
+    _fake_pdfo_proposals(monkeypatch, [raw])
+    calls = []
+
+    def objective(x):
+        calls.append(tuple(x))
+        assert all(a <= v <= b for v, (a, b) in zip(x, ENDPOINT_BOX))
+        return 17.0
+
+    result = adapters.solve_solver("bobyqa", objective, ENDPOINT_START, ENDPOINT_BOX, 20, 0)
+    assert calls == [expected]
+    assert result["x"] == list(expected)
+    assert result["fun"] == 17.0
+    assert result["nfev"] == 1
+    assert "one binary64 ULP" in result["settings"]["endpoint_roundoff"]
+
+
+@pytest.mark.parametrize("bad", [
+    (math.nextafter(math.nextafter(1.224, -math.inf), -math.inf), 0.5),
+    (math.nextafter(math.nextafter(5.832, math.inf), math.inf), 0.5),
+    (1.223, 0.5), (5.833, 0.5),
+    (float("nan"), 0.5), (float("inf"), 0.5), (-float("inf"), 0.5),
+    (2.0,), (2.0, 0.5, 0.5),
+])
+def test_pdfo_rejects_more_than_one_ulp_nonfinite_and_wrong_dimensions_before_the_caller(
+    monkeypatch, bad
+):
+    _fake_pdfo_proposals(monkeypatch, [bad, ENDPOINT_START])
+
+    def objective(x):
+        pytest.fail("An invalid proposal or a latched failure must not reach the caller")
+
+    with pytest.raises(ValueError, match="nonfinite or out-of-bounds"):
+        adapters.solve_solver("bobyqa", objective, ENDPOINT_START, ENDPOINT_BOX, 20, 0)
+
+
+def test_pdfo_endpoint_normalization_does_not_change_the_hard_call_budget(monkeypatch):
+    raw = (math.nextafter(1.224, -math.inf), 0.5)
+    _fake_pdfo_proposals(monkeypatch, [raw] * 6)
+    calls = []
+    result = adapters.solve_solver("bobyqa", lambda x: calls.append(tuple(x)) or 17.,
+                                   ENDPOINT_START, ENDPOINT_BOX, 4, 0)
+    assert calls == [(1.224, 0.5)] * 4
+    assert result["nfev"] == 4 and result["status"] == "budget"
+
+
+def test_one_ulp_outside_remains_invalid_for_direct_users_and_other_solver_callbacks():
+    raw = (math.nextafter(1.224, -math.inf), 0.5)
+    with pytest.raises(ValueError, match="inside the box"):
+        adapters._inputs(raw, ENDPOINT_BOX, 20, 0)
+    observed = adapters._ObservedObjective(lambda x: pytest.fail("Invalid point"), ENDPOINT_BOX, 20)
+    with pytest.raises(ValueError, match="nonfinite or out-of-bounds"):
+        observed(raw)
+    assert observed.nfev == 0

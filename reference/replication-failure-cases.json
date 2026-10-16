@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "license": "MIT",
-  "purpose": "New project measurements of thirteen unique failed replication designs. These preserve canonical rejection evidence, not numerical repairs or literature transcriptions. Diagnostic excerpts omit unrelated output and elapsed times; source runs remain private. Preceding observations exercise checkpoint behavior and are not accepted final solutions.",
+  "purpose": "New project measurements of fourteen unique failed replication designs. These preserve canonical rejection evidence, not numerical repairs or literature transcriptions. Diagnostic excerpts omit unrelated output and elapsed times; source runs remain private. Preceding observations exercise checkpoint behavior and are not accepted final solutions.",
   "cases": [
     {
       "case_id": "p01-8.5.0-bobyqa-r000-e0001",
@@ -2959,13 +2959,101 @@
         }
       ],
       "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw"
+    },
+    {
+      "case_id": "p06-8.5.0-bobyqa-r001-e0001",
+      "problem": 6,
+      "version": "8.5.0",
+      "x": [
+        3.1288296191960194,
+        20.45986642802301,
+        9.336747147684191,
+        3.557196088399486,
+        0.9422734771213518,
+        0.1806372458954852,
+        0.7777891813215462,
+        591.3974062324273,
+        548.4924943647343,
+        116.3628636838558,
+        20.290154309019645,
+        21.295461388541007,
+        17.423537939634098
+      ],
+      "purpose": "Actual in-box replication failure observed after the original fixture snapshot; strict rejection remains required.",
+      "input_sha256": "5ee07fd16d966d7f03a0ab5378e7abd5967cfd8f475e8c0bcb7264389d6c7b1f",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 5,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE NORTH",
+            "environment": "CHICAGO IL USA TMY2-94846 WMO#=725300"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE WEST",
+            "environment": "CHICAGO IL USA TMY2-94846 WMO#=725300"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE EAST",
+            "environment": "CHICAGO IL USA TMY2-94846 WMO#=725300"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE SOUTH",
+            "environment": "CHICAGO IL USA TMY2-94846 WMO#=725300"
+          },
+          {
+            "kind": "CheckWarmupConvergence",
+            "zone": "ZONE INTERIOR",
+            "environment": "CHICAGO IL USA TMY2-94846 WMO#=725300"
+          }
+        ]
+      },
+      "native_observation": {
+        "returncode": 0,
+        "completion_marker": "EnergyPlus Completed Successfully-- 41 Warning; 5 Severe Errors",
+        "actual_warmup_days": [
+          25
+        ]
+      },
+      "diagnostic_excerpt": "** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE NORTH\" did not converge after 25 warmup days.\n**   ~~~   ** See Warmup Convergence Information in .eio file for details.\n**   ~~~   ** ...Environment(RunPeriod)=\"CHICAGO IL USA TMY2-94846 WMO#=725300\"\n**   ~~~   ** ..Max Temp Comparison = 6.76E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.55E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 7.9784E-006 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 0.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE WEST\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"CHICAGO IL USA TMY2-94846 WMO#=725300\"\n**   ~~~   ** ..Max Temp Comparison = 5.46E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 6.43E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 3.6395E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.0000 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE EAST\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"CHICAGO IL USA TMY2-94846 WMO#=725300\"\n**   ~~~   ** ..Max Temp Comparison = 6.57E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.36E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 5.6704E-005 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 2.0754E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE SOUTH\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"CHICAGO IL USA TMY2-94846 WMO#=725300\"\n**   ~~~   ** ..Max Temp Comparison = 6.72E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.51E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 3.9853E-006 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 1.0482E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n** Severe  ** CheckWarmupConvergence: Loads Initialization, Zone=\"ZONE INTERIOR\" did not converge after 25 warmup days.\n**   ~~~   ** ...Environment(RunPeriod)=\"CHICAGO IL USA TMY2-94846 WMO#=725300\"\n**   ~~~   ** ..Max Temp Comparison = 7.38E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Min Temp Comparison = 7.47E-003 vs Temperature Convergence Tolerance=4.00E-003 - Fail Convergence\n**   ~~~   ** ..Max Heat Load Comparison = 3.3335E-003 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n**   ~~~   ** ..Max Cool Load Comparison = 5.1651E-004 vs Loads Convergence Tolerance=4.00E-002 - Pass Convergence\n",
+      "preceding_observations": [],
+      "source_runs": [
+        {
+          "experiment": "campaign",
+          "id": "p06-8.5.0-bobyqa-r001",
+          "manifest_id": "85430e92b9bc18ee92979811dd0369d2338e7f303d177d0ff98b53c676b643d5",
+          "seed": 971556158,
+          "evaluation": 1
+        }
+      ],
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw"
     }
   ],
-  "source_record_count": 23,
+  "source_record_count": 24,
   "audit_snapshot": {
     "captured_at_utc": "2026-10-16T05:47:19.689398+00:00",
     "last_added_run": "p04-26.2.0-bobyqa-r001",
     "last_added_failure_completed_at_utc": "2026-10-16T05:43:48.615711+00:00",
-    "scope": "Frozen selection of 23 failed records from the pilot and extended campaign. Later campaign failures are outside this fixture snapshot."
-  }
+    "scope": "Original frozen selection of 23 failed records from the pilot and extended campaign. Later additions are identified separately in coverage_extensions; this is not an exhaustive ongoing audit."
+  },
+  "coverage_extensions": [
+    {
+      "captured_at_utc": "2026-10-16T06:45:34.206255+00:00",
+      "added_case_ids": [
+        "p06-8.5.0-bobyqa-r001-e0001"
+      ],
+      "added_source_record_count": 1,
+      "added_run": "p06-8.5.0-bobyqa-r001",
+      "failure_completed_at_utc": "2026-10-16T05:47:27.216315+00:00",
+      "scope": "One subsequently observed P6 failure; all original thirteen designs and their source records are preserved."
+    }
+  ]
 }

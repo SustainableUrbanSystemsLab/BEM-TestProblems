@@ -26,9 +26,9 @@ CASE_IDS = [case["case_id"] for case in CASES]
 
 
 def test_fixture_covers_every_distinct_audited_failure_without_machine_paths():
-    assert len(CASES) == len(set(CASE_IDS)) == 13
-    assert sum(len(case["source_runs"]) for case in CASES) == FIXTURES["source_record_count"] == 23
-    assert len({(case["version"], case["input_sha256"]) for case in CASES}) == 13
+    assert len(CASES) == len(set(CASE_IDS)) == 14
+    assert sum(len(case["source_runs"]) for case in CASES) == FIXTURES["source_record_count"] == 24
+    assert len({(case["version"], case["input_sha256"]) for case in CASES}) == 14
     for case in CASES:
         assert all(source["evaluation"] == len(case["preceding_observations"]) + 1
                    for source in case["source_runs"])

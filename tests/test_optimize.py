@@ -1,6 +1,9 @@
 """Exercise the public optimizer against a bounded analytic objective."""
 
+import json
+import math
 import sys
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -200,3 +203,98 @@ def test_solver_cannot_evaluate_beyond_the_public_budget(monkeypatch):
     with pytest.raises(RuntimeError, match="evaluation budget"):
         solve(problem, max_evaluations=budget)
     assert problem.calls == budget
+
+
+ENDPOINT_CASES = json.loads((Path(__file__).parents[1] / "reference" /
+                            "pdfo-endpoint-cases.json").read_text(encoding="utf-8"))["cases"]
+
+
+@pytest.mark.parametrize("case", ENDPOINT_CASES, ids=lambda case: case["case_id"])
+def test_public_solve_replays_saved_failures_through_the_feasible_endpoint(case, monkeypatch):
+    pytest.importorskip("pdfo")
+    problem = get_problem(case["problem"])
+    calls = []
+
+    class EndOfSavedTrace(Exception):
+        pass
+
+    end = EndOfSavedTrace("No objective was measured beyond this saved prefix")
+
+    def objective(x):
+        problem.validate(x)
+        index = len(calls)
+        calls.append(tuple(x))
+        if index < len(case["observations"]):
+            observation = case["observations"][index]
+            assert tuple(x) == pytest.approx(observation["x"], rel=1e-14, abs=1e-14)
+            return observation["f"]
+        assert index == len(case["observations"])
+        assert tuple(x) == pytest.approx(case["expected_evaluated_x"], rel=1e-14, abs=1e-14)
+        for entry in case["roundoff"]:
+            assert x[entry["index"]] == entry["endpoint"]
+        raise end
+
+    monkeypatch.setattr(optimize, "make_objective", lambda *args, **kwargs: objective)
+    with pytest.raises(EndOfSavedTrace) as caught:
+        solve(problem, x0=case["x0"], max_evaluations=case["budget"])
+    assert caught.value is end
+    assert len(calls) == len(case["observations"]) + 1
+    assert calls[0] == pytest.approx(case["x0"], rel=1e-14, abs=1e-14)
+    with pytest.raises(ValueError):
+        problem.validate(case["rejected_proposal"])
+
+
+@pytest.mark.parametrize("bound,direction", [(1.224, -math.inf), (5.832, math.inf)])
+def test_public_solve_returns_the_feasible_evaluated_endpoint_and_optimize_result_type(
+    monkeypatch, bound, direction
+):
+    np = pytest.importorskip("numpy")
+    scipy = pytest.importorskip("scipy.optimize")
+    calls = []
+
+    class Box(Quadratic):
+        bounds = ((1.224, 5.832), (0.05, 1.05))
+        midpoint = (3., 0.5)
+
+        def evaluate(self, x, **kwargs):
+            calls.append(tuple(x))
+            return super().evaluate(x, **kwargs)
+
+    raw = np.array([math.nextafter(bound, direction), 0.5])
+    native = scipy.OptimizeResult()
+
+    def pdfo(objective, *args, **kwargs):
+        native.update(x=raw.copy(), fun=objective(raw), nfev=1)
+        return native
+
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(pdfo=pdfo))
+    result = solve(Box(), max_evaluations=8)
+    assert result is native and isinstance(result, scipy.OptimizeResult)
+    assert isinstance(result.x, np.ndarray)
+    assert calls == [(bound, 0.5)]
+    assert tuple(result.x) == calls[0]
+    assert result.nfev == 1
+
+
+@pytest.mark.parametrize("bad", [
+    (math.nextafter(math.nextafter(1.224, -math.inf), -math.inf), 0.5),
+    (math.nextafter(math.nextafter(5.832, math.inf), math.inf), 0.5),
+    (float("nan"), 0.5), (float("inf"), 0.5), (-float("inf"), 0.5),
+    (1.223, 0.5), (5.833, 0.5), (2.,), (2., 0.5, 0.5),
+])
+def test_public_solver_rejects_invalid_proposals_before_any_objective_call(monkeypatch, bad):
+    class Box(Quadratic):
+        bounds = ((1.224, 5.832), (0.05, 1.05))
+        midpoint = (3., 0.5)
+
+        def evaluate(self, *args, **kwargs):
+            pytest.fail("Invalid solver proposals must not reach the objective")
+
+    def pdfo(objective, start, **kwargs):
+        assert math.isnan(objective(bad))
+        assert math.isnan(objective(start))  # The original failure remains latched.
+        return object()
+
+    monkeypatch.setitem(sys.modules, "pdfo", SimpleNamespace(pdfo=pdfo))
+    with pytest.raises(ValueError, match="nonfinite or out-of-bounds"):
+        solve(Box(), max_evaluations=8)
