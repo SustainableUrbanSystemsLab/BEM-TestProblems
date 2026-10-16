@@ -37,8 +37,39 @@ def _version(value: str) -> str:
     return value
 
 
+def _group_has_no_live_members(group_id: int) -> bool:
+    """Verify a completed group after macOS rejects signalling only zombies.
+
+    XNU excludes zombies from killpg and can report EPERM when none remain
+    eligible: https://github.com/apple-oss-distributions/xnu/blob/main/bsd/kern/kern_sig.c
+    Query failure or malformed output cannot establish successful cleanup.
+    """
+    try:
+        observed = subprocess.run(["ps", "-e", "-o", "pgid=", "-o", "stat="],
+                                  capture_output=True, text=True, timeout=5, check=False)
+        if observed.returncode or observed.stderr.strip() or not observed.stdout.strip():
+            return False
+        for line in observed.stdout.splitlines():
+            fields = line.split()
+            if len(fields) != 2:
+                return False
+            member_group, state = fields
+            if int(member_group) == group_id and not state.startswith("Z"):
+                return False
+    except (OSError, subprocess.TimeoutExpired, ValueError):
+        return False
+    return True
+
+
 def _terminate_tree(process: subprocess.Popen) -> None:
-    """Reap the process and its preprocessing/postprocessing children."""
+    """Terminate the owned process group before reaping its leader.
+
+    On POSIX, waiting or polling between group signals can release the leader's
+    PID and let an unrelated process group reuse it. Keep that PID reserved
+    through the bounded grace period and final group signal.
+    """
+    if process.returncode is not None:
+        return  # An already reaped PID no longer identifies an owned group.
     if os.name == "nt":
         try:
             subprocess.run(
@@ -53,15 +84,23 @@ def _terminate_tree(process: subprocess.Popen) -> None:
             os.killpg(process.pid, signal.SIGTERM)
         except ProcessLookupError:
             pass
-        try:
-            process.wait(timeout=1)
-        except subprocess.TimeoutExpired:
-            pass
-        # The leader may already have exited while a child ignored SIGTERM.
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
+        except PermissionError:
+            if not _group_has_no_live_members(process.pid):
+                raise
+        else:
+            # Do not use process.wait/poll here: a child can ignore SIGTERM
+            # after its leader exits, and still needs the final group signal.
+            time.sleep(1)
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            except PermissionError:
+                # The leader is still unreaped, so its PGID cannot be reused.
+                # Suppress only the verified all-exited macOS case; a live
+                # member or an unavailable process query remains an error.
+                if not _group_has_no_live_members(process.pid):
+                    raise
     try:
         process.wait(timeout=5)
     except subprocess.TimeoutExpired:

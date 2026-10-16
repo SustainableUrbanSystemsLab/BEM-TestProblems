@@ -1,12 +1,18 @@
 """Process-boundary tests use a tiny executable, never an EnergyPlus installation."""
 
 import json
+import os
+import signal
+import subprocess
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
+from bem_testproblems import energyplus
 from bem_testproblems.energyplus import EnergyPlusError, EnergyPlusRunner, sha256_file
 
 
@@ -237,3 +243,195 @@ def test_idf_version_parser_distinguishes_comments_case_and_actual_version(
         with pytest.raises(EnergyPlusError) as error:
             runner.run(source)
         assert error.value.reason == "input_version"
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+def test_process_group_is_signalled_before_its_leader_can_be_reaped(monkeypatch):
+    events = []
+    process = SimpleNamespace(pid=43210, returncode=None)
+
+    def wait(*, timeout):
+        events.append("wait")
+        process.returncode = -signal.SIGTERM
+
+    def kill_group(pid, sig):
+        # Reproduce the old race: after wait(), this PID could identify a group
+        # owned by somebody else, making the final killpg fail with EPERM.
+        if process.returncode is not None:
+            raise PermissionError("The old process-group ID was reused")
+        assert pid == process.pid
+        events.append(sig)
+
+    process.wait = wait
+    monkeypatch.setattr(energyplus.os, "killpg", kill_group)
+    monkeypatch.setattr(energyplus.time, "sleep", lambda delay: events.append(("grace", delay)))
+    energyplus._terminate_tree(process)
+    assert events == [signal.SIGTERM, ("grace", 1), signal.SIGKILL, "wait"]
+    assert process.returncode is not None
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+def test_cleanup_never_signals_a_process_group_after_the_leader_was_reaped(monkeypatch):
+    process = SimpleNamespace(pid=43210, returncode=0)
+    monkeypatch.setattr(energyplus.os, "killpg", lambda *args:
+                        pytest.fail("An already reaped PID must not be signalled"))
+    energyplus._terminate_tree(process)
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+def test_owned_group_permission_errors_are_not_hidden(monkeypatch):
+    process = SimpleNamespace(pid=43210, returncode=None)
+
+    def denied(*args):
+        raise PermissionError("Owned process-group signalling was denied")
+
+    monkeypatch.setattr(energyplus.os, "killpg", denied)
+    monkeypatch.setattr(energyplus, "_group_has_no_live_members", lambda group: False)
+    with pytest.raises(PermissionError, match="signalling was denied"):
+        energyplus._terminate_tree(process)
+
+
+def _process_identity(pid):
+    """Read identity and state; a denied query must fail instead of implying exit."""
+    observed = subprocess.run(["ps", "-ww", "-p", str(pid), "-o", "pid=,stat=,command="],
+                              capture_output=True, text=True, check=False)
+    assert observed.returncode in (0, 1), observed.stderr
+    assert not observed.stderr.strip(), observed.stderr
+    if not observed.stdout.strip():
+        assert observed.returncode == 1, observed.stderr
+        return None
+    assert observed.returncode == 0, observed.stderr
+    identifier, state, command = observed.stdout.strip().split(None, 2)
+    assert int(identifier) == pid
+    return state, command
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+def test_cleanup_kills_a_real_child_that_ignores_term_after_its_leader_exits(tmp_path):
+    child = tmp_path / "term-resistant-child.py"
+    ready = tmp_path / "child-ready"
+    child.write_text(
+        "import os, pathlib, signal, sys, time\n"
+        "signal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
+        "pathlib.Path(sys.argv[1]).write_text(str(os.getpid()))\n"
+        "time.sleep(30)\n", encoding="utf-8")
+    # The leader terminates normally on SIGTERM, while its child ignores it.
+    leader = subprocess.Popen([sys.executable, "-c",
+        "import subprocess, sys, time; "
+        "subprocess.Popen([sys.executable, sys.argv[1], sys.argv[2]]); time.sleep(30)",
+        str(child), str(ready)], **energyplus._process_options())
+    try:
+        deadline = time.monotonic() + 5
+        while not ready.exists() and time.monotonic() < deadline:
+            time.sleep(0.02)
+        assert ready.exists(), "The child never installed its SIGTERM handler"
+        child_pid = int(ready.read_text(encoding="utf-8"))
+        identity = _process_identity(child_pid)
+        assert identity is not None and str(child) in identity[1]
+        assert not identity[0].startswith("Z")
+        energyplus._terminate_tree(leader)
+        assert leader.returncode is not None
+        deadline = time.monotonic() + 3
+        while time.monotonic() < deadline:
+            current = _process_identity(child_pid)
+            if current is None or current[0].startswith("Z") or str(child) not in current[1]:
+                break
+            time.sleep(0.02)
+        else:
+            pytest.fail("The same child is still alive after process-group cleanup")
+    finally:
+        if leader.returncode is None:
+            energyplus._terminate_tree(leader)
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+@pytest.mark.parametrize("group_listing,stderr,returncode,accepted", [
+    ("43210 Z\n43210 Z+\n123 S\n", "", 0, True),
+    ("123 S\n", "", 0, True),
+    ("43210 S\n", "", 0, False),
+    ("43210 Z\n43210 R\n", "", 0, False),
+    ("", "Operation not permitted", 1, False),
+    ("43210 Z\n", "Permission denied", 0, False),
+    ("malformed process listing\n", "", 0, False),
+    ("not-a-group Z\n", "", 0, False),
+    ("", "", 0, False),
+])
+def test_final_permission_error_requires_verified_termination_of_every_group_member(
+    monkeypatch, group_listing, stderr, returncode, accepted
+):
+    process = SimpleNamespace(pid=43210, returncode=None)
+    denied = PermissionError("Final group signal was denied")
+
+    def kill_group(pid, sig):
+        assert process.returncode is None
+        if sig == signal.SIGKILL:
+            raise denied
+
+    def wait(*, timeout):
+        process.returncode = -signal.SIGTERM
+
+    def query(command, **kwargs):
+        assert command == ["ps", "-e", "-o", "pgid=", "-o", "stat="]
+        assert process.returncode is None  # Identity stays reserved during verification.
+        return SimpleNamespace(stdout=group_listing, stderr=stderr, returncode=returncode)
+
+    process.wait = wait
+    monkeypatch.setattr(energyplus.os, "killpg", kill_group)
+    monkeypatch.setattr(energyplus.time, "sleep", lambda delay: None)
+    monkeypatch.setattr(energyplus.subprocess, "run", query)
+    if accepted:
+        energyplus._terminate_tree(process)
+        assert process.returncode is not None
+    else:
+        with pytest.raises(PermissionError) as error:
+            energyplus._terminate_tree(process)
+        assert error.value is denied
+        assert process.returncode is None
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+@pytest.mark.parametrize("query_error", [PermissionError("query denied"),
+                                       subprocess.TimeoutExpired("ps", 5)])
+def test_group_verification_failure_preserves_the_original_permission_error(monkeypatch, query_error):
+    process = SimpleNamespace(pid=43210, returncode=None)
+    denied = PermissionError("Final group signal was denied")
+
+    def kill_group(pid, sig):
+        if sig == signal.SIGKILL:
+            raise denied
+
+    def query(*args, **kwargs):
+        raise query_error
+
+    monkeypatch.setattr(energyplus.os, "killpg", kill_group)
+    monkeypatch.setattr(energyplus.time, "sleep", lambda delay: None)
+    monkeypatch.setattr(energyplus.subprocess, "run", query)
+    with pytest.raises(PermissionError) as error:
+        energyplus._terminate_tree(process)
+    assert error.value is denied
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX process-group ownership")
+def test_leader_exiting_just_before_first_signal_is_verified_before_reaping(monkeypatch):
+    process = SimpleNamespace(pid=43210, returncode=None)
+    events = []
+
+    def kill_group(pid, sig):
+        assert sig == signal.SIGTERM
+        events.append("term")
+        raise PermissionError("The process group already contains only zombies")
+
+    def query(*args, **kwargs):
+        assert process.returncode is None
+        events.append("verify")
+        return SimpleNamespace(returncode=0, stdout="43210 Z\n123 S\n", stderr="")
+
+    def wait(*, timeout):
+        events.append("reap")
+        process.returncode = 0
+
+    process.wait = wait
+    monkeypatch.setattr(energyplus.os, "killpg", kill_group)
+    monkeypatch.setattr(energyplus.subprocess, "run", query)
+    energyplus._terminate_tree(process)
+    assert events == ["term", "verify", "reap"]
