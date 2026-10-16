@@ -44,12 +44,27 @@ def planned(setup, monkeypatch):
     return setup
 
 
-def test_default_plan_has_800_separate_runs_and_86_million_call_ceiling(planned):
+@pytest.fixture
+def multi_solver_planned(setup, monkeypatch):
+    config, _, _ = setup
+    config["solvers"] = ["bobyqa", "pybobyqa"]
+    monkeypatch.setattr(workflow, "manifest", fake_manifest)
+    workflow.plan(*setup)
+    return setup
+
+
+def test_default_plan_has_400_separate_runs_and_43_million_call_ceiling(planned):
     config, paths, project = planned
     result = workflow.run_stage("plan", config, paths, project)
-    assert config["solvers"] == ["bobyqa", "pybobyqa"]
-    assert result["planned_runs"] == 800
-    assert result["evaluation_ceiling"] == 86_400_000
+    assert config["solvers"] == ["bobyqa"]
+    assert result["planned_runs"] == 400
+    assert result["evaluation_ceiling"] == 43_200_000
+    assert (
+        len(config["pilot"]["problems"])
+        * len(config["versions"])
+        * len(config["solvers"])
+        * config["pilot"]["repetitions"]
+    ) == 48
     assert (paths["source"] / "src/bem_testproblems/replication.py").is_file()
     assert not paths["campaign"].exists()
     original = workflow.read(workflow.ROOT / "replication/continuation.json")
@@ -235,8 +250,15 @@ def install_fake_process(
                     )
         elif name == "review_replication.py" and capture:
             if command[command.index("--origin") + 1] == str(paths["pilot"]):
-                return {"planned": 48, "terminal": 48 if pilot_complete else 47}
-            return {"planned": 800, "terminal": 800 if full_complete else 799}
+                planned = (
+                    len(config["pilot"]["problems"])
+                    * len(config["solvers"])
+                    * len(config["versions"])
+                    * config["pilot"]["repetitions"]
+                )
+                return {"planned": planned, "terminal": planned if pilot_complete else planned - 1}
+            planned = len(fake_manifest(config, paths, project)["runs"])
+            return {"planned": planned, "terminal": planned if full_complete else planned - 1}
         elif name == "run_replication.py":
             workflow.write(
                 paths["campaign"] / "manifest.json", fake_manifest(config, paths, project)
@@ -300,10 +322,10 @@ def test_failed_preflight_invalidates_receipt_and_preserves_previous_attempt(pla
     ],
 )
 def test_incomplete_or_entirely_failed_engine_pilot_cannot_authorize_run(
-    planned, monkeypatch, options, match
+    multi_solver_planned, monkeypatch, options, match
 ):
-    config, paths, project = planned
-    install_fake_process(monkeypatch, planned, **options)
+    config, paths, project = multi_solver_planned
+    install_fake_process(monkeypatch, multi_solver_planned, **options)
     workflow.run_stage("preflight", config, paths, project)
     with pytest.raises(ValueError, match=match):
         workflow.run_stage("pilot", config, paths, project)

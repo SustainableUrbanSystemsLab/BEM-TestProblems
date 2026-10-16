@@ -3,7 +3,7 @@
   "workers": 120,
   "problems": [1, 2, 3, 4, 5, 6, 8, 9, 10, 13],
   "versions": ["8.5.0", "26.2.0"],
-  "solvers": ["bobyqa", "pybobyqa"],
+  "solvers": ["bobyqa"],
   "repetitions": 20,
   "budget_multiplier": 100,
   "seed": 2019,
@@ -21,7 +21,7 @@
   "pilot": {
     "workers": 48,
     "problems": [1, 4, 10, 13],
-    "repetitions": 3,
+    "repetitions": 6,
     "budget": 25
   }
 }
