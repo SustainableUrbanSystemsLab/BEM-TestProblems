@@ -12,7 +12,7 @@
   "atol": 1e-07,
   "case_fixture": {
     "path": "reference/replication-failure-cases.json",
-    "sha256": "7eb96379cd2694fabcabe1bd3f2af32387aeb5f62b255a776261a95be9477e23"
+    "sha256": "836448cd62e1cc2b362c8ee39cd1486d09707c67e859a273e91baa4933708be9"
   },
   "scope": "New project measurements at recorded failed replication designs only. Explicit numerical variant; historical equivalence and full-domain convergence are not claimed.",
   "provenance": {

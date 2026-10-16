@@ -9,7 +9,7 @@ are reported explicitly; this module never substitutes another named algorithm.
 from copy import deepcopy
 from importlib import import_module, util
 from importlib.metadata import PackageNotFoundError, version
-from math import isfinite
+from math import inf, isfinite, nextafter
 from threading import RLock
 
 _RANDOM_LOCK = RLock()
@@ -85,7 +85,8 @@ _DEFINITIONS["cma_es"].update({
 _DEFINITIONS["bobyqa"].update({
     "implemented": True, "dependency": "pdfo", "source": "https://www.pdfo.net/",
     "skip_reason": None,
-    "settings": {"method": "bobyqa", "scale": True, "quiet": True, "honour_x0": True},
+    "settings": {"method": "bobyqa", "scale": True, "quiet": True, "honour_x0": True,
+                 "endpoint_roundoff": "normalize at most one binary64 ULP outside finite bounds"},
     "fidelity": "Added PDFO BOBYQA comparison; not one of the paper's 16 methods.",
 })
 _DEFINITIONS["pybobyqa"].update({
@@ -250,6 +251,28 @@ def _cma(module, np, observed, start, bounds, budget, seed):
     return status, status != "budget", f"pycma stopped: {stop}", stop
 
 
+def _pdfo_physical_point(x, bounds):
+    """Remove only one-ULP endpoint overshoot from PDFO's affine unscaling.
+
+    PDFO 2.2.0 can map a feasible scaled endpoint to the adjacent float outside
+    its physical bound. Normalize that neighbor before validation/recording;
+    all larger violations, nonfinite values, and wrong dimensions stay invalid.
+    """
+    physical = tuple(float(value) for value in x)
+    if len(physical) != len(bounds):
+        raise ValueError("The solver requested a nonfinite or out-of-bounds design")
+    corrected = []
+    for value, (lower, upper) in zip(physical, bounds, strict=True):
+        if isfinite(value) and value == nextafter(lower, -inf):
+            value = lower
+        elif isfinite(value) and value == nextafter(upper, inf):
+            value = upper
+        if not isfinite(value) or not lower <= value <= upper:
+            raise ValueError("The solver requested a nonfinite or out-of-bounds design")
+        corrected.append(value)
+    return tuple(corrected)
+
+
 def _pdfo(module, observed, start, bounds, budget):
     if budget < len(start) + 2:
         raise ValueError("PDFO BOBYQA needs at least dimension + 2 evaluations")
@@ -260,7 +283,7 @@ def _pdfo(module, observed, start, bounds, budget):
         if failure is not None:
             return float("nan")
         try:
-            return observed(x)
+            return observed(_pdfo_physical_point(x, bounds))
         except BaseException as exc:
             # Python exceptions must not cross PDFO's compiled Fortran callback.
             failure = exc

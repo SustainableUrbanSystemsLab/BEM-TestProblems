@@ -10,11 +10,12 @@ performed during evaluation.
 
 import re
 
-REFINED_PROBLEM_IDS = (1, 4, 5, 10)
+REFINED_PROBLEM_IDS = (1, 4, 5, 6, 10)
 _BUILDINGS = {
     1: ("office zone", 0.0040000002),
     4: ("Office Building", 0.004),
     5: ("Office Building", 0.004),
+    6: ("Office Building", 0.004),
     10: ("Benchmark Large Office New", 0.2),
 }
 

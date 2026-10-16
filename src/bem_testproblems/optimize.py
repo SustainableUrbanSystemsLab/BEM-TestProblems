@@ -5,6 +5,7 @@ from math import isfinite
 
 from .evaluation import make_objective
 from .problems import Problem
+from .replication_solvers import _pdfo_physical_point
 
 
 def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
@@ -29,6 +30,7 @@ def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
         if not isfinite(value) or not lower <= value <= upper:
             raise ValueError("Initial parameters must be finite and within their bounds")
     try:
+        from numpy import asarray
         from pdfo import pdfo
     except ImportError as exc:
         raise ImportError("Install bem-testproblems[optimize] to use PDFO BOBYQA") from exc
@@ -51,9 +53,10 @@ def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
         if evaluations >= max_evaluations:
             failure = RuntimeError("PDFO attempted to exceed the requested evaluation budget")
             return float("nan")
-        evaluations += 1
         try:
-            value = float(evaluate(x))
+            physical = _pdfo_physical_point(x, problem.bounds)
+            evaluations += 1
+            value = float(evaluate(physical))
             if not isfinite(value):
                 raise ValueError("The simulator returned a nonfinite objective")
             return value
@@ -76,4 +79,8 @@ def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
     )
     if failure is not None:
         raise failure
+    # PDFO applies the same affine mapping to its returned point. Keep the
+    # documented OptimizeResult and array type while returning the physical
+    # endpoint that was actually evaluated by the callback.
+    result.x = asarray(_pdfo_physical_point(result.x, problem.bounds))
     return result
