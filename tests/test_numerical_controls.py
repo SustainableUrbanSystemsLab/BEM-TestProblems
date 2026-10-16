@@ -78,8 +78,8 @@ def test_legacy_profile_keeps_every_unlisted_object_and_field(number, design_kin
         expected.append(("ConvergenceLimits", "1", "100", "2", "8"))
     if number in (5, 10):
         expected.append(("ZoneAirHeatBalanceAlgorithm", "AnalyticalSolution"))
-    if number in (4, 5, 10):
-        original_steps = "4" if number in (4, 5) else "6"
+    if number in (4, 5, 6, 10):
+        original_steps = "4" if number in (4, 5, 6) else "6"
         for i, row in enumerate(expected):
             if row[0].casefold() == "timestep":
                 assert row[1] == original_steps
@@ -89,11 +89,15 @@ def test_legacy_profile_keeps_every_unlisted_object_and_field(number, design_kin
                 expected[i] = (*row[:3], "12")
     assert after == expected
     assert base.render_legacy(design, tmp_path / "again.idf").read_bytes() == original.read_bytes()
-    if number in (4, 5, 10):
+    if number in (4, 5, 6, 10):
         controls = _objects(changed)
         assert float(controls["sizing:parameters"][3]) / float(controls["timestep"][1]) == 1
-        assert controls["convergencelimits"][1:] == (
-            ("1", "100", "2", "8") if number in (4, 5) else ("1", "20"))
+        if number == 6:
+            assert "convergencelimits" not in controls
+            assert "zoneairheatbalancealgorithm" not in controls
+        else:
+            assert controls["convergencelimits"][1:] == (
+                ("1", "100", "2", "8") if number in (4, 5) else ("1", "20"))
 
 
 @pytest.mark.parametrize("number", IDS)
@@ -115,7 +119,7 @@ def test_modern_profile_keeps_every_unlisted_object_and_field(number, design_kin
     if number in (5, 10):
         expected["ZoneAirHeatBalanceAlgorithm"] = {"BEM convergence-refined": {
             "algorithm": "AnalyticalSolution"}}
-    if number in (4, 5, 10):
+    if number in (4, 5, 6, 10):
         next(iter(expected["Timestep"].values()))["number_of_timesteps_per_hour"] = 12
         next(iter(expected["Sizing:Parameters"].values()))["timesteps_in_averaging_window"] = 12
     assert json.loads(changed.read_text()) == expected
@@ -180,7 +184,7 @@ def test_refinement_refuses_existing_objects_instead_of_overwriting_them(number,
         refine_modern(model, number)
 
 
-@pytest.mark.parametrize("number", (4, 5, 10))
+@pytest.mark.parametrize("number", (4, 5, 6, 10))
 @pytest.mark.parametrize("kind,field,index", [
     ("Timestep", "number_of_timesteps_per_hour", 1),
     ("Sizing:Parameters", "timesteps_in_averaging_window", 3),
@@ -203,11 +207,15 @@ def test_refinement_requires_original_time_resolution(number, kind, field, index
         refine_modern(model, number)
 
 
-def test_p6_recipe_uses_only_additional_initialization_days():
+def test_p6_recipe_preserves_hvac_and_integration_while_refining_initialization_and_resolution():
     problem = get_problem(6, numerical_variant="convergence-refined")
     controls = problem.provenance["numerical_variant"]["controls"]
-    assert len(controls) == 1
+    assert [control["object_type"] for control in controls] == [
+        "Building", "Timestep", "Sizing:Parameters"]
     assert controls[0]["object_type"] == "Building"
     assert controls[0]["field"] == "maximum_number_of_warmup_days"
     assert controls[0]["canonical_by_engine"] == {"8.5.0": 25, "26.2.0": 25}
     assert controls[0]["value"] == 100
+    for control in controls[1:]:
+        assert control["canonical_by_engine"] == {"8.5.0": 4, "26.2.0": 4}
+        assert control["value"] == 12

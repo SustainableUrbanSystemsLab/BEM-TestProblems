@@ -404,7 +404,7 @@ def _check_measured_values(problem, row):
     assert type(row["fatal_count"]) is int and row["fatal_count"] == 0
 
 
-@pytest.mark.parametrize("version,count", [("8.5.0", 13), ("26.2.0", 10)])
+@pytest.mark.parametrize("version,count", [("8.5.0", 13), ("26.2.0", 11)])
 def test_committed_native_repair_baselines_match_all_recorded_cases_and_actual_renderers(
         version, count, tmp_path):
     root = Path(__file__).resolve().parents[1]
@@ -433,7 +433,7 @@ def test_committed_native_repair_baselines_match_all_recorded_cases_and_actual_r
         _check_measured_values(repaired, row)
 
 
-@pytest.mark.parametrize("version,numbers", [("8.5.0", {1, 4, 5, 6, 10}), ("26.2.0", {4, 5, 10})])
+@pytest.mark.parametrize("version,numbers", [("8.5.0", {1, 4, 5, 6, 10}), ("26.2.0", {4, 5, 6, 10})])
 def test_valid_control_measurements_preserve_canonical_reference_and_report_actual_model_changes(
         version, numbers, tmp_path):
     root = Path(__file__).resolve().parents[1]
