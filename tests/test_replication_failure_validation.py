@@ -19,6 +19,7 @@ from tools import validate_replication_failures as validation
 
 @pytest.fixture
 def native_audit(tmp_path, monkeypatch):
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
     engine = tmp_path / "energyplus"
     engine.write_bytes(b"test native boundary")
     weather = tmp_path / "Seattle.epw"
@@ -351,6 +352,9 @@ def original_audit(native_audit, monkeypatch):
         if mode == "fatal":
             with (archive / "eplusout.err").open("a") as handle:
                 handle.write(" ** Fatal ** Original fatal error\n")
+        if mode == "signature":
+            diagnostic_file = archive / "eplusout.err"
+            diagnostic_file.write_text(diagnostic_file.read_text().replace("ZONE ONE", "OTHER ZONE"))
         return 666.0, archive
 
     monkeypatch.setattr(validation.reference_validation, "run_oracle", run_oracle)
@@ -457,3 +461,109 @@ def test_valid_control_measurements_preserve_canonical_reference_and_report_actu
         assert row["delta_percent"] == pytest.approx(100 * delta / abs(previous["objective"]),
                                                     rel=1e-12, abs=1e-9)
         _check_measured_values(problem, row)
+
+
+def test_numerical_mismatch_annotation_reports_the_actual_differences(native_audit, monkeypatch, capsys):
+    audit = native_audit
+    audit.rows[0]["objective"] = 9.0
+    audit.write()
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(audit.args)
+    output = capsys.readouterr().out
+    assert output.count("::error title=Recorded failure regression::") == 1
+    assert "case-1 [refined-values]" in output
+    assert "objective.objective: actual=10, expected=9, signed difference=+1" in output
+    assert "percentage=+11.1111111%25" in output
+    report = json.loads(audit.args.output.read_text())
+    difference = report["cases"][0]["refined"]["comparison"]["objective.objective"]
+    assert difference["actual"] == 10 and difference["expected"] == 9 and not difference["passed"]
+
+
+def test_changed_canonical_signature_annotation_includes_actual_and_reviewed_zone(
+        native_audit, monkeypatch, capsys):
+    native_audit.modes[("case-1", "canonical")] = "wrong-signature"
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(native_audit.args)
+    output = capsys.readouterr().out
+    assert "case-1 [canonical-simulation]" in output
+    assert "native reason=simulation, returncode=0" in output
+    assert "OTHER ZONE" in output and "reviewed failure=" in output and "ZONE ONE" in output
+    assert "CheckWarmupConvergence" in output
+
+
+def test_rejected_repair_reports_native_cause_and_keeps_its_objective_unavailable(
+        native_audit, monkeypatch, capsys):
+    native_audit.modes[("case-1", "repaired")] = "fatal"
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(native_audit.args)
+    output = capsys.readouterr().out
+    assert "case-1 [refined-simulation]" in output
+    assert "Interrupted simulation" in output and "%0A" in output
+    report = json.loads(native_audit.args.output.read_text())
+    row = report["cases"][0]["refined"]
+    assert row["objective"] is None
+    assert row["failure"]["reason"] == "simulation"
+    assert row["failure"]["returncode"] == 0
+    assert row["failure"]["diagnostics"]["fatal_count"] == 1
+
+
+def test_github_annotations_escape_percent_and_newlines(monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    validation._github_error("case: 50%\r\nnext line")
+    assert capsys.readouterr().out == (
+        "::error title=Recorded failure regression::case: 50%25%0D%0Anext line\n")
+    monkeypatch.delenv("GITHUB_ACTIONS")
+    validation._github_error("local error")
+    assert not capsys.readouterr().out
+
+
+def test_unavailable_native_diagnostics_preserve_the_original_failure_reason(tmp_path):
+    details = validation._native_failure(EnergyPlusError("timed out", reason="timeout",
+                                                         directory=tmp_path / "missing"))
+    assert details["reason"] == "timeout" and details["message"] == "timed out"
+    assert "diagnostics_unavailable" in details
+
+
+def test_preparation_failure_annotation_explains_the_baseline_problem(native_audit, monkeypatch, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    native_audit.args.baseline.unlink()
+    with pytest.raises(FileNotFoundError):
+        validation.validate(native_audit.args)
+    output = capsys.readouterr().out
+    assert "::error title=Recorded failure regression::Preparation failed:" in output
+    assert "baseline.json" in output
+    assert not native_audit.calls
+
+
+def test_csharp_missing_archive_cannot_mask_original_execution_error(original_audit, monkeypatch, capsys):
+    audit = original_audit
+    audit.original_modes[1] = "execution"
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(audit.args)
+    output = capsys.readouterr().out
+    assert "case-1 [original-csharp]: Original C# oracle failed" in output
+    report = json.loads(audit.args.output.read_text())
+    context = report["cases"][0]["canonical"]["original_csharp_failure"]
+    assert context["message"] == "Original C# oracle failed"
+    assert not context["archive_available"] and "diagnostics" not in context
+
+
+def test_csharp_changed_signature_annotation_includes_actual_and_reviewed_diagnostics(
+        original_audit, monkeypatch, capsys):
+    audit = original_audit
+    audit.original_modes[1] = "signature"
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    with pytest.raises(AssertionError):
+        validation.validate(audit.args)
+    output = capsys.readouterr().out
+    assert "case-1 [original-csharp]" in output and "original C#; diagnostics=" in output
+    assert "OTHER ZONE" in output and "reviewed failure=" in output and "ZONE ONE" in output
+    report = json.loads(audit.args.output.read_text())
+    context = report["cases"][0]["canonical"]["original_csharp_failure"]
+    assert context["archive_available"] and context["diagnostics"]["severe_count"] == 1
+    assert context["diagnostics"]["signatures"][0]["zone"] == "OTHER ZONE"
+    assert "EnergyPlus Completed Successfully" in context["completion"]

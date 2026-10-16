@@ -26,6 +26,61 @@ VARIANT = "convergence-refined"
 RTOL, ATOL = 1e-6, 1e-7
 
 
+def _diagnostic_context(directory):
+    details = {"directory": str(directory)}
+    try:
+        details["diagnostics"] = reference_validation.failure_diagnostics(directory)
+        lines = (Path(directory) / "eplusout.err").read_text(errors="replace").splitlines()
+        blocks = ["\n".join(lines[index:index + 7]) for index, line in enumerate(lines)
+                  if re.match(r"\s*\*\*\s*(?:Severe|Fatal)\s*\*\*", line, re.I)]
+        details["diagnostic_excerpt"] = "\n".join(blocks)[:8000]
+    except (OSError, ValueError) as diagnostic_error:
+        details["diagnostics_unavailable"] = str(diagnostic_error)
+    try:
+        details["completion"] = (Path(directory) / "eplusout.end").read_text(errors="replace").strip()
+    except OSError as completion_error:
+        details["completion_unavailable"] = str(completion_error)
+    return details
+
+
+def _native_failure(error):
+    details = {"reason": error.reason, "message": str(error), "returncode": error.returncode}
+    if error.directory is not None:
+        details.update(_diagnostic_context(error.directory))
+        try:
+            metadata = json.loads((Path(error.directory) / "run.json").read_text(encoding="utf-8"))
+            details["returncode"] = metadata.get("returncode", error.returncode)
+        except (OSError, ValueError) as metadata_error:
+            details["process_metadata_unavailable"] = str(metadata_error)
+    return details
+
+
+def _github_error(message):
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        escaped = str(message).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print("::error title=Recorded failure regression::" + escaped, flush=True)
+
+
+def _failure_message(item):
+    failure = item["failure"]
+    message = f"{item['case_id']} [{failure['stage']}]: {failure['message']}"
+    original = failure["stage"] == "original-csharp"
+    stage = "canonical" if original or failure["stage"].startswith("canonical") else "refined"
+    native = item[stage].get("original_csharp_failure" if original else "failure")
+    if native:
+        message += ("; original C#" if original else
+                    f"; native reason={native['reason']}, returncode={native['returncode']}")
+        if native.get("diagnostics"):
+            message += "; diagnostics=" + json.dumps(native["diagnostics"], ensure_ascii=False)
+        if stage == "canonical":
+            message += "; reviewed failure=" + json.dumps(item[stage]["expected_failure"], ensure_ascii=False)
+        if native.get("diagnostic_excerpt"):
+            message += "\n" + native["diagnostic_excerpt"]
+        if native.get("completion"):
+            message += "\ncompletion=" + native["completion"]
+    return message
+
+
 def _read_cases(args):
     fixture = json.loads(args.cases.read_text(encoding="utf-8"))
     cases = fixture["cases"]
@@ -62,8 +117,10 @@ def _baseline_identity(case, previous, problem, model_hash, weather_hash):
                 "input_sha256": model_hash, "weather_file": case["weather_file"],
                 "weather_sha256": weather_hash,
                 "numerical_recipe": problem.provenance["numerical_variant"]}
-    if any(previous.get(key) != value for key, value in identity.items()):
-        raise AssertionError("Reviewed repair design, model, weather, or numerical recipe changed")
+    changed = [f"{key}: actual={value!r}, expected={previous.get(key)!r}"
+               for key, value in identity.items() if previous.get(key) != value]
+    if changed:
+        raise AssertionError("Reviewed repair identity changed: " + "; ".join(changed))
     if (previous.get("passed") is not True or previous.get("severe_count") != 0
             or previous.get("fatal_count") != 0):
         raise AssertionError("Reviewed repair baseline is not a strict successful simulation")
@@ -114,13 +171,15 @@ def _compare(problem, x, run, previous):
 
 
 def _validate_case(args, runner, case, previous, item):
+    item["stage"] = "preparation"
     canonical = get_problem(case["problem"])
     repaired = get_problem(case["problem"], numerical_variant=VARIANT)
     canonical.validate(case["x"])
     weather = (args.weather_dir / case["weather_file"]).resolve(strict=True)
     weather_hash = sha256_file(weather)
     if canonical.weather_filename != weather.name or weather_hash != case["weather_sha256"]:
-        raise AssertionError("Recorded canonical weather selection or SHA256 changed")
+        raise AssertionError(f"Recorded canonical weather changed: actual={weather.name}/{weather_hash}, "
+                             f"expected={canonical.weather_filename}/{case['weather_sha256']}")
     case_dir = args.work_dir / case["case_id"]
     case_dir.mkdir(parents=True, exist_ok=False)
     suffix = ".idf" if args.version == "8.5.0" else ".epJSON"
@@ -128,15 +187,20 @@ def _validate_case(args, runner, case, previous, item):
         method = problem.render_legacy if args.version == "8.5.0" else problem.render_modern
         return method(case["x"], case_dir / (name + suffix))
     original_model = render(canonical, "canonical")
-    if sha256_file(original_model) != case["input_sha256"]:
-        raise AssertionError("Recorded canonical input SHA256 changed")
+    original_hash = sha256_file(original_model)
+    if original_hash != case["input_sha256"]:
+        raise AssertionError(f"Recorded canonical input SHA256 changed: actual={original_hash}, "
+                             f"expected={case['input_sha256']}")
     model = render(repaired, "repaired")
     model_hash = sha256_file(model)
     identity = _baseline_identity(case, previous, repaired, model_hash, weather_hash)
     item["refined"].update(identity)
+    item["stage"] = "canonical-simulation"
+    item["canonical"]["expected_failure"] = case["expected_failure"]
     try:
         runner.run(original_model, weather, design_day=canonical.design_day)
     except EnergyPlusError as error:
+        item["canonical"]["failure"] = _native_failure(error)
         _same_inputs(original_model, weather, case["input_sha256"], weather_hash)
         diagnostic, elapsed = reference_validation.require_native_failure(
             error, runner, original_model, weather, case["expected_failure"])
@@ -145,18 +209,43 @@ def _validate_case(args, runner, case, previous, item):
     else:
         raise AssertionError("Recorded canonical failure became successful; explicit review required")
     if getattr(args, "oracle", None) is not None:
-        reference_validation._compare_oracle(
-            canonical, case["x"], weather, original_model, case_dir, args, runner,
-            item["canonical"], expected_failure=case["expected_failure"])
+        item["stage"] = "original-csharp"
+        try:
+            reference_validation._compare_oracle(
+                canonical, case["x"], weather, original_model, case_dir, args, runner,
+                item["canonical"], expected_failure=case["expected_failure"])
+        except Exception as error:
+            archive = case_dir / "original-output"
+            context = {"type": type(error).__name__, "message": str(error),
+                       "archive_available": archive.is_dir()}
+            if context["archive_available"]:
+                context.update(_diagnostic_context(archive))
+            item["canonical"]["original_csharp_failure"] = context
+            raise
         item["canonical"]["original_csharp_checked"] = True
-    run = runner.run(model, weather, design_day=repaired.design_day)
+    item["stage"] = "refined-simulation"
+    try:
+        run = runner.run(model, weather, design_day=repaired.design_day)
+    except EnergyPlusError as error:
+        item["refined"]["failure"] = _native_failure(error)
+        raise
     _same_inputs(model, weather, model_hash, weather_hash)
+    item["stage"] = "refined-diagnostics"
     diagnostic = _strict_success(run, runner, model_hash, weather_hash)
+    item["stage"] = "refined-values"
     actual, comparisons = _compare(repaired, case["x"], run, previous)
     item["refined"].update(actual, diagnostics=diagnostic, elapsed_seconds=run.elapsed,
                            comparison=comparisons)
-    if not all(result["passed"] for result in comparisons.values()):
-        raise AssertionError("Repaired objective, components, or terms differ from reviewed baseline")
+    differences = []
+    for key, result in comparisons.items():
+        if not result["passed"]:
+            percentage = result["percentage_difference"]
+            percentage = f"{percentage:+.9g}%" if percentage is not None else "undefined"
+            differences.append(f"{key}: actual={result['actual']:.17g}, expected={result['expected']:.17g}, "
+                               f"signed difference={result['signed_difference']:+.17g}, "
+                               f"percentage={percentage}, allowed difference={result['allowed_difference']:.9g}")
+    if differences:
+        raise AssertionError("Repaired values differ from reviewed baseline: " + "; ".join(differences))
     item["passed"] = True
 
 
@@ -184,7 +273,9 @@ def validate(args):
             try:
                 _validate_case(args, runner, case, baseline[case["case_id"]], item)
             except Exception as error:
-                item["failure"] = {"type": type(error).__name__, "message": str(error)}
+                item["failure"] = {"type": type(error).__name__, "message": str(error),
+                                   "stage": item.get("stage", "preparation")}
+                _github_error(_failure_message(item))
             report["cases"].append(item)
             print(f"{case['case_id']}: {'PASS' if item['passed'] else 'FAIL'}", flush=True)
         report["original_csharp_checked"] = oracle is not None and all(
@@ -194,6 +285,8 @@ def validate(args):
         report["passed"] = True
     except BaseException as error:
         report["failure"] = {"type": type(error).__name__, "message": str(error)}
+        if not report["cases"]:
+            _github_error(f"Preparation failed: {error}")
         raise
     finally:
         args.output.parent.mkdir(parents=True, exist_ok=True)
