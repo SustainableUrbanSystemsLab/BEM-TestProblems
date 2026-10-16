@@ -83,8 +83,8 @@ recorded experiment.
 
 ## Extended-budget experiment
 
-[extended-budget.json](extended-budget.json) defines a separate PDFO BOBYQA
-experiment for all ten continuous problems and both EnergyPlus versions. Each
+[extended-budget.json](extended-budget.json) defines a separate PDFO BOBYQA and
+Py-BOBYQA experiment for all ten continuous problems and both EnergyPlus versions. Each
 of its 20 paired starts receives 100 times the full paper-budget allowance:
 
 | Problems | Variables | Paper-budget calls | Extended maximum calls per run |
@@ -97,8 +97,8 @@ of its 20 paired starts receives 100 times the full paper-budget allowance:
 These are maximum allowances. BOBYQA can stop earlier when its termination
 criteria are satisfied; increasing the cap alone does not force extra calls.
 The small 25-call timing pilots have a different purpose and never contribute
-to either full experiment's results. The extended experiment has 400 runs and
-a ceiling of 43.2 million objective calls. Actual throughput must be measured
+to either full experiment's results. The extended experiment has 800 runs and
+a ceiling of 86.4 million objective calls. Actual throughput must be measured
 on the workstation before estimating its duration.
 
 Use [extended_budget.py](extended_budget.py) on FOAM after the
@@ -134,7 +134,8 @@ Invoke-Checked { & $python replication\extended_budget.py pilot }
   and reviewed baselines. Each attempt keeps its own reports.
 - **Pilot** runs 48 separate searches with 48 workers and 25-call budgets.
   Inspect its printed timing and failure summary. All scheduled pilot runs
-  must terminate, and at least one strict trajectory must succeed per engine.
+  must terminate, and at least one strict trajectory must succeed for every
+  selected solver and engine pair.
   Known strict simulation rejections remain visible in the pilot's results.
 - **Run** requires unchanged, passing preflight and completed pilot evidence.
   Its 120 workers use two 60-worker pools with one numerical thread per worker.
