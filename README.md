@@ -52,7 +52,8 @@ callable throughout the run; repeated successful evaluations are cached.
 For separate bound vectors, use `lower, upper = zip(*bounds)`.
 
 Parameter names, paper symbols, units, and bounds are available through
-`problem.parameters`. The midpoint is a convenient start; the study's original
+`problem.parameters`; the [parameter guide](docs/parameters.md) explains their physical meaning.
+The midpoint is a convenient start; the study's original
 starting vectors are unavailable. Use `problem.validate(your_start)` to check a
 different start. Inspecting problem metadata does not require EnergyPlus.
 

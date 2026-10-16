@@ -53,6 +53,20 @@ the machine-readable `references` section of [CITATION.cff](../CITATION.cff).
 The source implementation is [BEOBenchmark V1](https://github.com/christophwaibel/BEOBenchmark/tree/54736a6b899a488222ad3184f306c1f401daf4f9),
 copyright 2018 Christoph Waibel, BSD-3-Clause. Its original file provenance is
 recorded in [manifest.json](../assets/manifest.json).
+The cited [source revision](https://github.com/christophwaibel/BEOBenchmark/commit/54736a6b899a488222ad3184f306c1f401daf4f9)
+is dated February 21, 2020; the source license retains its 2018 copyright year.
+
+## Solver references
+
+- **PDFO BOBYQA:** Ragonneau, T. M., and Zhang, Z. (2024). PDFO: a cross-platform
+  package for Powell's derivative-free optimization solvers. *Mathematical
+  Programming Computation*, 16(4), 535–559.
+  [doi:10.1007/s12532-024-00257-9](https://doi.org/10.1007/s12532-024-00257-9).
+- **Py-BOBYQA:** Cartis, C., Fiala, J., Marteau, B., and Roberts, L. (2019).
+  Improving the Flexibility and Robustness of Model-Based Derivative-Free
+  Optimization Solvers. *ACM Transactions on Mathematical Software*, 45(3),
+  Article 32, 32:1–32:41.
+  [doi:10.1145/3338517](https://doi.org/10.1145/3338517).
 
 ## Model ancestry and required credit
 
@@ -96,3 +110,19 @@ attribution. Numerical literature comparisons target the EnergyPlus-8.5 benchmar
 of Waibel, Wortmann, Evins, and Carmeliet (2019), with the thesis references
 labelled separately. Values from the originating studies' earlier simulator/model
 versions are not numerical fixtures for this project.
+
+## Bibliographic checks
+
+The eleven entries in [references.bib](../references.bib) were checked on
+October 16, 2026 against publisher, DOI-registration, institutional, and pinned
+source-project records. Author given names in that file and
+[CITATION.cff](../CITATION.cff) follow the published metadata.
+
+- The final Wortmann, Waibel, Nannicini, Evins, Schroepfer, and Carmeliet (2017)
+  title uses **“for Building Energy Optimization.”** The proceedings page range
+  is 51–58; the [publisher record](https://doi.org/10.22360/simaud.2017.simaud.006)
+  also identifies the paper as Article 6, pages 1–8. Conflicting secondary page
+  ranges and the DOI deposit's title variant are not substituted for the final paper.
+- The 2007 DOE entry is retained from the required model notice. The current
+  DOE page verifies the model-family name, but does not independently establish
+  a standalone 2007 report.
