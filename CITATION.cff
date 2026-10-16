@@ -76,7 +76,7 @@ references:
     title: "A comparison of global optimization algorithms with standard benchmark functions and real-world applications using EnergyPlus"
     authors:
       - family-names: Kämpf
-        given-names: Jérôme H.
+        given-names: Jérôme Henri
       - family-names: Wetter
         given-names: Michael
       - family-names: Robinson
@@ -92,13 +92,13 @@ references:
     title: "Optimization of energy consumption in buildings with hydronic heating systems considering thermal comfort by use of computer-based tools"
     authors:
       - family-names: Djuric
-        given-names: N.
+        given-names: Natasa
       - family-names: Novakovic
-        given-names: V.
+        given-names: Vojislav
       - family-names: Holst
-        given-names: J.
+        given-names: Johnny
       - family-names: Mitrovic
-        given-names: Z.
+        given-names: Zoran
     journal: "Energy and Buildings"
     volume: "39"
     issue: "4"
@@ -106,3 +106,35 @@ references:
     end: "477"
     year: 2007
     doi: "10.1016/j.enbuild.2006.08.009"
+  - type: article
+    title: "PDFO: a cross-platform package for Powell's derivative-free optimization solvers"
+    authors:
+      - family-names: Ragonneau
+        given-names: Tom M.
+      - family-names: Zhang
+        given-names: Zaikun
+    journal: "Mathematical Programming Computation"
+    volume: "16"
+    issue: "4"
+    start: "535"
+    end: "559"
+    year: 2024
+    doi: "10.1007/s12532-024-00257-9"
+  - type: article
+    title: "Improving the Flexibility and Robustness of Model-Based Derivative-Free Optimization Solvers"
+    authors:
+      - family-names: Cartis
+        given-names: Coralia
+      - family-names: Fiala
+        given-names: Jan
+      - family-names: Marteau
+        given-names: Benjamin
+      - family-names: Roberts
+        given-names: Lindon
+    journal: "ACM Transactions on Mathematical Software"
+    volume: "45"
+    issue: "3"
+    start: "32:1"
+    end: "32:41"
+    year: 2019
+    doi: "10.1145/3338517"
