@@ -121,5 +121,12 @@ No BB-O/FrOG/MetaheuristicsLibrary implementation is translated or bundled in th
 experiment adapters. In particular, an MIT license on a repository stub does not
 replace the GPL terms of the separately linked implementation.
 
+The optional native transports in `tools/paper2019/` call separately supplied
+FrOG/MetaheuristicsLibrary and Galapagos binaries. The recovered FrOG solver
+wrappers declare GPL-3.0-or-later. Grasshopper/Galapagos retain McNeel's terms;
+the user supplies an authorized archive. These binaries are not redistributed
+or relicensed by this project. The transport sources implement no search
+operators and include no copied third-party implementation source.
+
 See `docs/licensing.md` for the asset and release checks. These notices do not
 relicense any third-party material under MIT.

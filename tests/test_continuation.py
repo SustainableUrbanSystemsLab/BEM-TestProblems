@@ -201,6 +201,30 @@ def test_default_plan_is_read_only_and_has_exact_remaining_specs(setup):
     assert "origin" not in manifest["engines"]["26.2.0"]["executable"]
 
 
+def test_continuation_preserves_native_hashes_and_rejects_changed_configuration(setup, monkeypatch):
+    pinned = {"config_path": "private-native.json", "config_sha256": "original"}
+    setup.original["native_solvers"] = pinned
+    setup.original["manifest_id"] = continuation._digest({
+        key: value for key, value in setup.original.items() if key != "manifest_id"})
+    write(setup.origin / "manifest.json", setup.original)
+    for index, status in ((0, "completed"), (1, "running")):
+        write(setup.origin / "runs" / (setup.specs[index]["id"] + ".json"),
+              record(setup.specs[index], setup.original, status))
+    setup.target["native_solvers"] = copy.deepcopy(pinned)
+    received = []
+
+    def prepare(**kwargs):
+        received.append(kwargs)
+        return copy.deepcopy(setup.target)
+
+    monkeypatch.setattr(setup.runtime, "prepare_manifest", prepare)
+    continuation.prepare_continuation(setup.origin, setup.project, setup.output)
+    assert received[0]["native_solvers"] == "private-native.json"
+    setup.target["native_solvers"]["config_sha256"] = "changed"
+    with pytest.raises(ValueError, match="native_solvers differs"):
+        continuation.prepare_continuation(setup.origin, setup.project, setup.output)
+
+
 def test_extended_budget_handoff_preserves_multiplier_and_every_original_cap(setup, monkeypatch):
     for manifest in (setup.original, setup.target):
         manifest.update(protocol="extended-budget-experiment", budget_override=None,

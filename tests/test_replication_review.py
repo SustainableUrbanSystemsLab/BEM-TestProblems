@@ -71,6 +71,25 @@ def campaign(tmp_path):
     return origin, target, original, new
 
 
+def test_review_cannot_replace_native_inputs(campaign, tmp_path):
+    origin, _, original, _ = campaign
+    inputs = tmp_path / "native-inputs"
+    config, binary = inputs / "review-strict.json", inputs / "SolverBridge.exe"
+    write(config, {"schema_version": 1})
+    binary.write_bytes(b"original solver")
+    original["native_solvers"] = {"config_path": str(config), "backends": {
+        "bbo": {"files": {str(binary): "pinned"}}}}
+    write(origin / "manifest.json", seal(original))
+    for path in (origin / "runs").glob("*.json"):
+        row = json.loads(path.read_text())
+        row["manifest_id"] = original["manifest_id"]
+        write(path, row)
+    before = {path: path.read_bytes() for path in (config, binary)}
+    with pytest.raises(ValueError):
+        write_review(load_review(origin), inputs)
+    assert all(path.read_bytes() == value for path, value in before.items())
+
+
 def test_joined_records_keep_actual_manifests_and_full_denominators(campaign):
     origin, target, original, new = campaign
     dataset = load_review(origin, target)
@@ -185,8 +204,9 @@ def test_trace_reduction_validates_observations_after_the_winner(campaign):
     ("budget_multiplier", 100),
     ("effective_budget_rule", "100*(dimension+1)*budget_multiplier"),
     ("paper_budget_rule", "1000*(dimension+1)"),
+    ("native_solvers", {"config_sha256": "different native libraries"}),
 ])
-def test_continuation_cannot_change_budget_definition_metadata(campaign, field, value):
+def test_continuation_cannot_change_scientific_definition_metadata(campaign, field, value):
     origin, target, _, new = campaign
     new[field] = value
     for path in (target / "runs").glob("*.json"):

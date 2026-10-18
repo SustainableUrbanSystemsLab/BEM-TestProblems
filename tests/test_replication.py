@@ -111,6 +111,35 @@ def test_numerical_control_changes_invalidate_campaign_identity(local_setup, mon
     assert changed["runs"] == original["runs"]
 
 
+def test_native_profile_is_pinned_and_uses_the_checkpointed_evaluator(local_setup, monkeypatch):
+    from bem_testproblems import replication_native as native
+
+    configuration, calls = local_setup
+    configuration.update(solvers=["sga"], native_solvers="private.json")
+    pinned = {"config_path": "private.json", "config_sha256": "original",
+              "backends": {"bbo": {"source": "original library", "files": {}}}}
+    monkeypatch.setattr(native, "load_configuration", lambda *args: copy.deepcopy(pinned))
+    manifest = replication.prepare_manifest(**configuration)
+    assert manifest["solvers"]["sga"]["available"]
+    assert "replication_native.py" in manifest["code_sha256"]
+    assert manifest["problem_definitions"]["13"]["slider_interface"]["digits"] == [3] * 10
+    pinned["config_sha256"] = "changed"
+    assert replication.prepare_manifest(**configuration)["manifest_id"] != manifest["manifest_id"]
+
+    def solve(spec, inputs, objective, protocol):
+        assert inputs == manifest["native_solvers"]
+        assert Path(protocol).name == "solver-protocol.jsonl"
+        for _ in range(spec["budget"] + 1):
+            objective(spec["x0"])
+
+    monkeypatch.setattr(native, "solve", solve)
+    row = replication._run_one(manifest["runs"][0], manifest,
+                               configuration["project_root"] / "native-run", "none")
+    assert row["status"] == "budget_exhausted"
+    assert row["evaluation_count"] == len(row["trace"]) == len(calls) == 3
+    assert all(item["status"] == "success" for item in row["trace"])
+
+
 def test_hundredfold_budget_for_every_problem_and_engine_preserves_paired_designs(local_setup):
     configuration, _ = local_setup
     configuration.update(problems=replication.PROBLEM_IDS, versions=["8.5.0", "26.2.0"],

@@ -148,6 +148,14 @@ Invoke-Checked { & $python replication\pipeline.py run }
 
 The run stage verifies the current preflight receipt before starting. Append
 `--dry-run` to inspect any stage's command without launching a process.
+After the simulations exit, it automatically writes the strict tables, PNG/SVG
+boxplots, and `run-completion.json` into the configured private review directory.
+Terminal failed/skipped runs still produce reports and exit code 1; they are not
+retried as optimization work. A background launcher can use a completion record
+from its current invocation with `completed: true` and `phase: finished` to stop
+retrying a campaign that finished with failures. Reporting errors remain visible
+and nonzero. Rerunning a finished campaign refreshes reports without launching
+the simulation controller.
 
 Use literal absolute paths in the scheduled task; PowerShell variables from this
 terminal are not available there. For the example directory above, the Action
@@ -210,7 +218,9 @@ Invoke-Checked { & $python replication\pipeline.py status }
 Invoke-Checked { & $python replication\pipeline.py review }
 ```
 
-These commands combine the preserved laptop records with the Windows
+`run` generates the final review automatically. The commands above also let you
+inspect status and refresh reports during or after the campaign. They combine
+the preserved laptop records with the Windows
 continuation, retaining every run's actual manifest and the complete planned
 repetition counts. The generated tables include every design coordinate, each
 solver's best result, and the best across methods. Partial plots remain labelled

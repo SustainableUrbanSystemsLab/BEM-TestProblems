@@ -12,6 +12,7 @@ import re
 import subprocess
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -117,7 +118,7 @@ def commands(stage, config, paths, manifest, project):
         config["workers"],
     ]
     if stage in {"plan", "run"}:
-        return [
+        selected = [
             tool(
                 "continue_replication.py",
                 *continuation,
@@ -128,6 +129,21 @@ def commands(stage, config, paths, manifest, project):
                 ),
             )
         ]
+        if stage == "run":
+            selected.append(
+                tool(
+                    "review_replication.py",
+                    "--origin",
+                    paths["origin"],
+                    "--continuation",
+                    paths["continuation"],
+                    "--output-dir",
+                    paths["review"],
+                )
+            )
+            if manifest.get("diagnostics_policy") == "reference-warmup":
+                selected.append([*selected[-1], "--include-diagnostic-runs"])
+        return selected
     if stage == "preflight":
         executable = "energyplus.exe" if os.name == "nt" else "energyplus"
         attempt = 1
@@ -181,16 +197,21 @@ def commands(stage, config, paths, manifest, project):
                 pilot["budget"],
                 "--diagnostics-policy",
                 "reference-warmup",
+                *(["--native-solvers", manifest["native_solvers"]["config_path"]]
+                  if "native_solvers" in manifest else []),
             )
         ]
     if stage in {"status", "review"}:
-        return [
+        selected = [
             tool(
                 "review_replication.py",
                 *joined,
                 *(["--status-only"] if stage == "status" else ["--output-dir", paths["review"]]),
             )
         ]
+        if stage == "review" and manifest.get("diagnostics_policy") == "reference-warmup":
+            selected.append([*selected[0], "--include-diagnostic-runs"])
+        return selected
     if stage in {"replay", "replay-plan"}:
         return [
             tool(
@@ -250,6 +271,100 @@ def preflight_identity(plan, paths, manifest):
     }
 
 
+def atomic_json(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w", dir=path.parent, encoding="utf-8", delete=False
+    ) as temporary:
+        json.dump(value, temporary, indent=2, allow_nan=False)
+        temporary.write("\n")
+    Path(temporary.name).replace(path)
+
+
+def run_campaign(selected, paths, manifest, plan):
+    """Always produce a review after a run, including terminal simulation failures."""
+    controller_command, *review_commands = selected
+    receipt = paths["review"] / "run-completion.json"
+    result = {
+        "stage": "run",
+        "started_utc": datetime.now(timezone.utc).isoformat(),
+        "completed": False,
+        "phase": "simulations",
+        "controller_exit_code": None,
+        "completion_record": str(receipt),
+    }
+    atomic_json(receipt, result)
+    try:
+        # Planning has validated every checkpoint. Finished campaigns need only reporting.
+        if plan["remaining_runs"]:
+            try:
+                run_command(controller_command)
+                result["controller_exit_code"] = 0
+            except subprocess.CalledProcessError as error:
+                if error.returncode != 1:
+                    raise
+                # Exit 1 also means all simulations finished, with failed/skipped runs.
+                # The validated review distinguishes that outcome from an interruption.
+                result["controller_exit_code"] = error.returncode
+        result["phase"] = "review"
+        atomic_json(receipt, result)
+        review = run_command(review_commands[0], capture=True)
+        report = json.loads(Path(review["json"]).read_text(encoding="utf-8"))
+        if (
+            report["origin_manifest_id"] != manifest["manifest_id"]
+            or plan["manifest_id"] not in report["source_manifests"]
+            or report["selection"] != "strict-completed-trajectories"
+        ):
+            raise ValueError("Automatic review does not match the planned campaign")
+        statuses = report["status_counts"]
+        terminal_statuses = ("completed", "budget_exhausted", "failed", "skipped")
+        terminal = sum(statuses.get(key, 0) for key in terminal_statuses)
+        complete = not report["partial"] and terminal == report["requested_runs"]
+        failures = statuses.get("failed", 0) + statuses.get("skipped", 0)
+        if not complete:
+            campaign_status = "interrupted"
+        elif failures:
+            campaign_status = "finished-with-failures"
+        else:
+            campaign_status = "finished"
+        artifacts = [
+            review["json"], review["markdown"],
+            review["figures"]["summary"], *review["figures"]["plots"],
+        ]
+        if len(review_commands) > 1:
+            diagnostic = run_command(review_commands[1], capture=True)
+            diagnostic_report = json.loads(Path(diagnostic["json"]).read_text(encoding="utf-8"))
+            if (
+                diagnostic_report["selection"] != "diagnostic-completed-trajectories"
+                or any(diagnostic_report[key] != report[key] for key in (
+                    "origin_manifest_id", "source_manifests", "requested_runs", "status_counts",
+                    "partial",
+                ))
+            ):
+                raise ValueError("Diagnostic review does not match the strict review")
+            result["diagnostic_review"] = diagnostic
+            artifacts += [diagnostic["json"], diagnostic["markdown"],
+                          diagnostic["figures"]["summary"], *diagnostic["figures"]["plots"]]
+        result.update(
+            completed=complete,
+            phase="finished" if complete else "interrupted",
+            campaign_status=campaign_status,
+            exit_code=result["controller_exit_code"] or int(not complete or failures > 0),
+            requested_runs=report["requested_runs"],
+            status_counts=statuses,
+            source_manifest_ids=list(report["source_manifests"]),
+            review=review,
+            artifacts_sha256={name: digest(name) for name in artifacts},
+        )
+    except BaseException as error:
+        result.update(phase="failed", error=f"{type(error).__name__}: {error}")
+        raise
+    finally:
+        result["finished_utc"] = datetime.now(timezone.utc).isoformat()
+        atomic_json(receipt, result)
+    return result
+
+
 def run_stage(stage, config, paths, manifest, project, *, dry_run=False):
     selected = commands(stage, config, paths, manifest, project)
     if dry_run:
@@ -277,6 +392,8 @@ def run_stage(stage, config, paths, manifest, project, *, dry_run=False):
                 raise ValueError("Preflight evidence changed; run preflight again")
         elif receipt.is_file():
             receipt.unlink()
+    if stage == "run":
+        return run_campaign(selected, paths, manifest, plan)
     for command in selected:
         run_command(command)
     if stage == "preflight":
@@ -290,16 +407,10 @@ def run_stage(stage, config, paths, manifest, project, *, dry_run=False):
             for name in reports
         ):
             raise ValueError("A native preflight report did not pass")
-        with tempfile.NamedTemporaryFile(
-            mode="w", dir=receipt.parent, encoding="utf-8", delete=False
-        ) as temporary:
-            json.dump(
-                {"identity": identity, "attempt": report_paths[0].parent.name, "reports": reports},
-                temporary,
-                indent=2,
-            )
-            temporary.write("\n")
-        Path(temporary.name).replace(receipt)
+        atomic_json(
+            receipt,
+            {"identity": identity, "attempt": report_paths[0].parent.name, "reports": reports},
+        )
     return {"stage": stage, "completed": True}
 
 
@@ -351,4 +462,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main().get("exit_code", 0))
