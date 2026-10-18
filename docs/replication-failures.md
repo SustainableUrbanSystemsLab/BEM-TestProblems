@@ -204,6 +204,47 @@ at most six attempts, with 0.3 seconds of total delay. Persistent errors still
 raise, retaining the previous checkpoint. This affects durable recording, not
 the numerical experiment or diagnostic acceptance rules.
 
+### Caller and engine coverage on FOAM
+
+Fresh canonical-model checks on October 18, 2026 reproduced warmup failures
+through both Python and the unchanged C# source components with EnergyPlus
+**8.5.0**. The existing parity validator confirmed matching effective input
+fields, identical weather and engine bytes, and matching diagnostic signatures:
+
+| Canonical design | Python Severe / Fatal | C# Severe / Fatal |
+| --- | --- | --- |
+| P1, orientation 90 degrees | 1 / 0 | 1 / 0 |
+| P4, recorded `pybobyqa-r000-e0005` design | 1 / 0 | 1 / 0 |
+| P10, hard design `b8da307aebd5abff` | 11 / 0 | 11 / 0 |
+
+All these Severe diagnostics concern warmup convergence. The original C# caller
+returns a diagnostic annual objective despite those errors; Python rejects it.
+Thus an apparent C# success can conceal the same native simulation diagnostic.
+These checks compile the published C# components against test-only Grasshopper
+interfaces; they do not execute the proprietary Grasshopper plugin.
+
+There is **no original-C#/26.2 comparison** in this evidence. The original oracle
+supports 8.5 only. Modern checks launch native 26.2 from Python and validate its
+outputs independently. Nor were all 571 broader audit cases replayed through
+C#: the recent 24-case FOAM reports explicitly record
+`original_csharp_checked=false`. The three fresh comparisons above supplement
+that coverage; they do not turn the complete audit into a C# parity test.
+
+For the distinct `convergence-repaired` model, unresolved warmup counts are:
+
+| Problem | EnergyPlus | Audited designs | Still failing |
+| --- | --- | ---: | ---: |
+| P4 | 8.5.0 | 62 | 0 |
+| P4 | 26.2.0 | 81 | 5 |
+| P10 | 8.5.0 | 97 | 28 |
+| P10 | 26.2.0 | 90 | 3 |
+
+These are selected diagnostic designs, not a random sample or campaign failure
+rate. The remaining audited problems have no failures under the current recipe
+within their tested coverage. This does not establish full-domain convergence.
+The solver endpoint and Windows checkpoint issues belong to the Python
+optimization infrastructure and are separate from native EnergyPlus failures.
+
 ### Cross-platform precision
 
 - The same P4 start-0 model and weather produced **170.826614330621** on macOS
