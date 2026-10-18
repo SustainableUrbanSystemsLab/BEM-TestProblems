@@ -37,7 +37,7 @@ def loaded(setup):
 
 def test_config_keeps_inputs_and_outputs_in_separate_project_folders(setup):
     config, paths, manifest, project = loaded(setup)
-    assert config["workers"] == 120
+    assert config["workers"] == 118
     assert paths["origin"] == project / ".validation-local/handoff/origin"
     assert list(manifest["engines"]) == ["8.5.0", "26.2.0"]
 

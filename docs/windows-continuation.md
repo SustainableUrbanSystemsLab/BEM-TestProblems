@@ -185,7 +185,8 @@ still apply. Once the scheduled task is running, disconnecting RDP or closing
 the laptop does not end the task.
 
 After the 48-worker pilot, use the measured load to select the final worker
-count. The configuration uses 120 workers for a dedicated 120-core workstation;
+count. The configuration uses 118 workers on the 120-core workstation to leave
+capacity for interactive use;
 choose less in [continuation.json](../replication/continuation.json) if memory or
 disk throughput is limiting. The continuation tool
 divides work among separate process pools because

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "workers": 120,
+  "workers": 118,
   "paths": {
     "origin": ".validation-local/handoff/origin",
     "frozen_source": ".validation-local/handoff/source",
