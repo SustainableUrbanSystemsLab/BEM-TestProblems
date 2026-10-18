@@ -6,11 +6,14 @@ Its aim is a qualitative comparison with Figures 8 and 9 for the ten continuous
 problems, using both EnergyPlus 8.5 and 26.2. Exact historical seeds, starting
 vectors, and raw optimizer trajectories are unavailable. Fresh recorded seeds
 make this rerun reproducible without claiming the original trajectories.
+The current study is limited to the selected solvers already in use. Recovering
+all sixteen study methods is outside its scope; omitted methods do not block
+the comparison of the selected solvers across all ten problems.
 [Waibel's 2018 thesis Appendix C](published-solutions.md) supplies rounded final
 designs for a separate literature comparison. Those are neither starting points
 nor verified full-precision winning records from the journal study.
 
-The full reproduction of Figures 8–9 is a separate, unfinished effort. The
+The full reproduction of all methods in Figures 8–9 is a separate, optional effort. The
 completed six-method campaign below remains preserved. The current source audit
 has recovered the author's [2018 FrOG fork](https://github.com/christophwaibel/FrOG/tree/8e16536f63141a8e6145cca46ef48eeb93973359),
 including the original BB-O binaries and dimension-specific presets. The eight
