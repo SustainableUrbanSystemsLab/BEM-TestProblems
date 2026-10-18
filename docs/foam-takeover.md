@@ -31,9 +31,34 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File R:\BEM-TestProblems\.val
 
 `-CheckOnly` inspects the running campaign or validates the dormant continuation
 without launching it. `-Monitor` opens the read-only tqdm progress window.
+The helper also starts or reuses the private 12-hour progress reporter.
 The launching chat must verify the controller heartbeat and increasing
 checkpoint evaluations after restarting. An alive PID with an unverified
 identity requires inspection, since Windows can reuse PIDs.
+
+## Twelve-hour reports
+
+The user requested progress, failures and preliminary boxplots every half day.
+The ordinary-user reporter saves an initial report, then reports every 12 hours,
+and a final report after the pipeline review completes. Its heartbeat and next
+deadline are in the campaign's `reports/reporter-status.json`; open
+`reports/latest.md` for the latest summary. Timestamped report directories retain
+earlier snapshots. Plots use strict finished trajectories and display sample
+counts; incomplete distributions can be biased.
+
+Reports are saved locally. No email or automatic chat delivery is configured.
+Windows sign-out stops the reporter too; the recovery helper restores its saved
+deadline and generates an overdue report after sign-in.
+
+Whenever the user asks for a report, generate a fresh one and summarize it in
+chat; do not wait for the next 12-hour deadline:
+
+```powershell
+.venv\Scripts\python.exe .validation-local\setup\report-six-corrected.py --once
+```
+
+This leaves the periodic deadline unchanged. The user currently plans to stay
+signed in, so leave the campaign and reporter running.
 
 ## Rules for the next chat
 
