@@ -10,6 +10,20 @@ make this rerun reproducible without claiming the original trajectories.
 designs for a separate literature comparison. Those are neither starting points
 nor verified full-precision winning records from the journal study.
 
+The full reproduction of Figures 8–9 is a separate, unfinished effort. The
+completed six-method campaign below remains preserved. The current source audit
+has recovered the author's [2018 FrOG fork](https://github.com/christophwaibel/FrOG/tree/8e16536f63141a8e6145cca46ef48eeb93973359),
+including the original BB-O binaries and dimension-specific presets. The eight
+tuned/untuned BB-O configurations passed 64 native quadratic checks, each with
+an identical replay and the paper's call budget. These checks establish adapter
+repeatability, not building-energy replication. An opt-in
+[native adapter](../tools/paper2019/README.md) now calls these external libraries
+and the original Galapagos GA/SA from Grasshopper 0.9.76.0. It preserves the saved
+Grasshopper coordinate transformations, decimal rounding and Galapagos tick
+precision. Development pilots remain separate from final results. Silvereye,
+historical Goat/Opossum settings and paper/source parameter conflicts still need
+resolution before a complete journal-equivalent campaign can be claimed.
+
 ## Protocol and solver coverage
 
 Each problem/solver/engine combination requests **20 runs**. Each run has a hard
@@ -44,13 +58,12 @@ Available study methods retain their Figure 8/9 order; additions follow them:
 | PDFO BOBYQA | `pdfo`, method `bobyqa` | Added method; bounded scaling, recorded start preserved |
 | Py-BOBYQA | `pybobyqa` | Added method; bounded scaling, deterministic local mode, no global-restart heuristic |
 
-The eight BB-O tuned/untuned SGA, ES, PSO and FIPS methods are skipped because
-their original operators/tuned implementation have not been ported and validated.
-Silvereye and Galapagos GA/SA have no validated Python adapter here. RBFOpt is
-skipped because its historical configuration and external optimization
-dependencies have not been provisioned. Generic substitutes are not relabeled
-as those implementations. The manifest retains the full original solver order,
-metadata and omission reasons.
+The default registry skips the eight BB-O methods and Galapagos GA/SA unless an
+explicit native configuration supplies their recovered, hash-pinned libraries.
+Silvereye still has no validated adapter. RBFOpt's historical Opossum settings
+remain unverified; its external solver dependencies are being tested separately.
+Generic substitutes are not relabeled as those implementations. The manifest
+retains the full original solver order, metadata and omission reasons.
 
 With these six methods, the full experiment requests **2,400 optimization runs**
 and at most **2,592,000 objective calls**. Early termination can reduce the total.

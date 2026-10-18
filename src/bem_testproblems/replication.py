@@ -178,7 +178,7 @@ def _dependency_identity(name):
 def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "26.2.0"),
                      repetitions=20, budget=None, budget_multiplier=1, seed=2019, project_root=None,
                      executables=None, weather_dir=None, diagnostics_policy="strict",
-                     schedule="balanced", p1_warmup_100=False):
+                     schedule="balanced", p1_warmup_100=False, native_solvers=None):
     """Resolve all inputs and fixed random starts without running simulations."""
     repetitions = _positive_integer(repetitions, "repetitions")
     if budget is not None:
@@ -207,6 +207,20 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
     if not selected_solvers or len(set(selected_solvers)) != len(selected_solvers):
         raise ValueError("Select at least one solver, without duplicates")
     metadata = {name: solver_metadata(name) for name in selected_solvers}
+    native = None
+    if native_solvers is not None:
+        from .replication_native import load_configuration, slider_profile, solver_settings
+
+        native = load_configuration(native_solvers, selected_solvers)
+        for name in selected_solvers:
+            backend = native["backends"]["galapagos" if name.startswith("galapagos_") else "bbo"]
+            metadata[name].update(implemented=True, available=True, skip_reason=None,
+                source=backend["source"], dependency=None,
+                settings_by_dimension={str(p.dimension): solver_settings(name, p.dimension)
+                                       for p in definitions},
+                fidelity="Recovered original binary and saved GH slider interface. "
+                    "Source/paper preset conflicts and exact study build remain under review; "
+                    "journal-equivalent results are not claimed.")
     selected_versions = [_version(str(version)) for version in versions]
     if not selected_versions or len(set(selected_versions)) != len(selected_versions):
         raise ValueError("Select supported engine versions, without duplicates")
@@ -284,6 +298,17 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         "runs": specifications}
     if p1_warmup_100:
         configuration["p1_warmup_100"] = True
+    if native is not None:
+        configuration["native_solvers"] = native
+        configuration["code_sha256"]["replication_native.py"] = sha256_file(
+            source / "replication_native.py")
+        configuration["start_policy"] += (
+            "; native methods use the initialization recorded in settings_by_dimension")
+        for problem in definitions:
+            configuration["problem_definitions"][str(problem.id)]["slider_interface"] = slider_profile(
+                problem.id)
+        configuration["solver_registry"] = [metadata.get(name, solver_metadata(name))
+                                             for name in SOLVER_ORDER]
     if budget_multiplier != 1:
         configuration.update(protocol="extended-budget-experiment",
                              budget_multiplier=budget_multiplier,
@@ -485,8 +510,14 @@ def _run_one(spec, manifest, root, retain_success):
                 save()
             return value
 
-        result = solve_solver(spec["solver"], objective, spec["x0"],
-                              problem.bounds, spec["budget"], spec["seed"])
+        if "native_solvers" in manifest:
+            from .replication_native import solve
+
+            result = solve(spec, manifest["native_solvers"], objective,
+                           attempt_root / "solver-protocol.jsonl")
+        else:
+            result = solve_solver(spec["solver"], objective, spec["x0"],
+                                  problem.bounds, spec["budget"], spec["seed"])
         if failure is not None:
             raise failure
         record["solver_result"] = _json_value(result)

@@ -76,6 +76,28 @@ Rerun the same scheduled task after an interruption: finished destination runs
 are skipped, and interrupted attempts restart from their original seed, start,
 and full budget. Previous attempt histories remain available.
 
+After the controller exits, `run` automatically generates the strict review
+tables and Figure 8/9 PNG/SVG boxplots in the configured `paths.review` directory.
+This also happens when the controller returns exit code 1 for failed or skipped
+runs. Failed runs retain their status and remain excluded from strict boxplots.
+An interrupted campaign gets explicitly incomplete reports.
+
+For an explicitly recorded `reference-warmup` campaign, `run` and `review` also
+generate separate diagnostic tables and boxplots labelled **NOT STRICT**. The
+completion record includes both reviews and their artifact checksums. Strict
+figures continue to exclude every trajectory that used warmup-Severe outputs.
+
+`paths.review/run-completion.json` records the campaign status, counts, report
+locations, and artifact checksums. `completed: true` means every run is terminal
+and reporting succeeded; it does not mean every optimization succeeded. Exit
+code 1 still signals simulation failures or unfinished runs. Background launchers
+should stop retrying when a completion record from their current invocation has
+`completed: true` and `phase: finished`, even with `finished-with-failures`.
+Reporting errors leave a failed completion record and a nonzero exit code.
+Rerunning `run` on an already finished campaign validates the checkpoints and
+refreshes reporting without launching the simulation controller. Review generation
+does not run winner replays or bypass the public export gates.
+
 Keep the checkout, frozen source, engines, weather, and environment fixed during
 the campaign. Pull updates before setup or after stopping the scheduled task,
 never during a live campaign. Changes that alter its identity require a new
@@ -194,7 +216,8 @@ Invoke-Checked { & $python replication\pipeline.py status }
 Invoke-Checked { & $python replication\pipeline.py review }
 ```
 
-The status command accounts for every originally planned run. The review stage
+The status command accounts for every originally planned run. `run` generates the
+final review automatically; the separate review stage
 writes Markdown tables, full-precision JSON, and Figure 8/9-style PNG/SVG plots.
 The command prints the generated locations. Refresh it while the campaign runs;
 partial reports stay labelled incomplete.

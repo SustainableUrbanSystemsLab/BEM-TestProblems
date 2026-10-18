@@ -37,7 +37,8 @@ def load_review(origin, continuation=None):
                 raise ValueError("Continuation origin linkage or checkpoint hashes differ")
             for key in ("problem_definitions", "solvers", "code_sha256", "diagnostics_policy",
                         "protocol", "requested_repetitions", "budget_override", "master_seed",
-                        "budget_multiplier", "effective_budget_rule", "paper_budget_rule"):
+                        "budget_multiplier", "effective_budget_rule", "paper_budget_rule",
+                        "native_solvers"):
                 if target.get(key) != original.get(key):
                     raise ValueError(f"Continuation scientific definition differs: {key}")
             terminal = {key for key, row in records.items() if row["status"] in TERMINAL}
@@ -63,6 +64,11 @@ def load_review(origin, continuation=None):
     protected.extend(str(Path(root).with_name(Path(root).name + "-source"))
                      for root in roots.values())
     for manifest in manifests.values():
+        native = manifest.get("native_solvers", {})
+        if native.get("config_path"):
+            protected.append(native["config_path"])
+        for backend in native.get("backends", {}).values():
+            protected.extend(backend["files"])
         if manifest.get("weather_directory") and Path(manifest["weather_directory"]).is_absolute():
             protected.append(manifest["weather_directory"])
         for engine in manifest["engines"].values():
