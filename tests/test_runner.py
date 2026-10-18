@@ -155,6 +155,22 @@ def test_executable_replacement_is_rejected_before_running(tmp_path, fake_engine
     assert list(runner.output_root.iterdir()) == []
 
 
+@pytest.mark.parametrize("filename", ["energyplusapi.dll", "libenergyplusapi.so", "Energy+.idd", "Energy+.schema.epJSON"])
+@pytest.mark.parametrize("cache", [False, True])
+def test_changed_supporting_file_cannot_reuse_or_start_a_simulation(tmp_path, fake_engine, filename, cache):
+    supporting = fake_engine.parent / filename
+    supporting.write_bytes(b"original numerical runtime")
+    runner = EnergyPlusRunner(fake_engine, cache=cache, output_root=tmp_path / "runs")
+    source = model(tmp_path)
+    result = runner.run(source)
+    metadata = json.loads((result.directory / "run.json").read_text())
+    assert metadata["supporting_sha256"][filename] == sha256_file(supporting)
+    supporting.write_bytes(b"different runtime, same executable")
+    with pytest.raises(EnergyPlusError, match="supporting files changed"):
+        runner.run(source)
+    assert len(list(runner.output_root.iterdir())) == 1
+
+
 @pytest.mark.parametrize("changed_file,new_content", [
     ("eplusout.err", "** Fatal ** modified diagnostics"),
     ("eplusout.end", "EnergyPlus Terminated"),

@@ -225,6 +225,11 @@ def repair_legacy(text, problem_id):
     text = refine_legacy(text, problem_id)
     if problem_id not in (4, 5, 6):
         return text
+    return sizing_margin_legacy(text, SIZING_MARGIN)
+
+
+def sizing_margin_legacy(text, margin):
+    """Offset the five checked cooling sizing inputs, preserving their coordinates."""
     objects = _idf_objects(text, "Sizing:Zone")
     if len(objects) != 5:
         raise ValueError("convergence-repaired requires five Sizing:Zone objects")
@@ -234,7 +239,7 @@ def repair_legacy(text, problem_id):
         field = fields[3]
         token = re.search(r"\S+", field[1])
         left, right = start + field.start(1) + token.start(), start + field.start(1) + token.end()
-        text = text[:left] + repr(float(field[1]) - SIZING_MARGIN) + text[right:]
+        text = text[:left] + repr(float(field[1]) - margin) + text[right:]
     return text
 
 
@@ -265,6 +270,10 @@ def repair_modern(model, problem_id):
     refine_modern(model, problem_id)
     if problem_id not in (4, 5, 6):
         return
+    sizing_margin_modern(model, SIZING_MARGIN)
+
+
+def sizing_margin_modern(model, margin):
     objects = model.get("Sizing:Zone", {})
     if len(objects) != 5:
         raise ValueError("convergence-repaired requires five Sizing:Zone objects")
@@ -273,4 +282,4 @@ def repair_modern(model, problem_id):
         if (row.get("zone_cooling_design_supply_air_temperature_input_method") != "SupplyAirTemperature"
                 or not 12 <= row[field] <= 18):
             raise ValueError("convergence-repaired requires canonical cooling sizing inputs")
-        row[field] -= SIZING_MARGIN
+        row[field] -= margin

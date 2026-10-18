@@ -11,6 +11,7 @@ from tempfile import TemporaryDirectory
 from types import MappingProxyType
 from typing import Mapping, Sequence
 
+from .model_controls import CORRECTED_PROBLEM_IDS, corrected_provenance
 from .numerical_controls import (
     REFINED_PROBLEM_IDS,
     REPAIRED_PROBLEM_IDS,
@@ -50,7 +51,8 @@ class Problem:
     def __post_init__(self):
         supported = ((self.id == 1 and self.numerical_variant == "warmup-100")
                      or (self.id in REFINED_PROBLEM_IDS and self.numerical_variant == "convergence-refined")
-                     or (self.id in REPAIRED_PROBLEM_IDS and self.numerical_variant == "convergence-repaired"))
+                     or (self.id in REPAIRED_PROBLEM_IDS and self.numerical_variant == "convergence-repaired")
+                     or (self.id in CORRECTED_PROBLEM_IDS and self.numerical_variant == "model-corrected"))
         if self.numerical_variant is not None and not supported:
             raise ValueError("Unsupported numerical variant for this problem")
         object.__setattr__(self, "constants", MappingProxyType(dict(self.constants)))
@@ -82,7 +84,9 @@ class Problem:
             "source_references": self.source_references,
             "definition": self.definition,
         }
-        if self.numerical_variant == "convergence-refined":
+        if self.numerical_variant == "model-corrected":
+            provenance["numerical_variant"] = corrected_provenance(self.id)
+        elif self.numerical_variant == "convergence-refined":
             provenance["numerical_variant"] = refined_provenance(self.id)
         elif self.numerical_variant == "convergence-repaired":
             provenance["numerical_variant"] = repaired_provenance(self.id)
@@ -317,6 +321,10 @@ _REPAIRED_PROBLEMS = {
     number: replace(_PROBLEMS[number], definition="numerical-variant", numerical_variant="convergence-repaired")
     for number in REPAIRED_PROBLEM_IDS
 }
+_CORRECTED_PROBLEMS = {
+    number: replace(_PROBLEMS[number], definition="model-variant", numerical_variant="model-corrected")
+    for number in CORRECTED_PROBLEM_IDS
+}
 
 
 def get_problem(problem_id, *, numerical_variant=None) -> Problem:
@@ -340,6 +348,8 @@ def get_problem(problem_id, *, numerical_variant=None) -> Problem:
         return _REFINED_PROBLEMS[problem_id]
     if numerical_variant == "convergence-repaired" and problem_id in _REPAIRED_PROBLEMS:
         return _REPAIRED_PROBLEMS[problem_id]
+    if numerical_variant == "model-corrected" and problem_id in _CORRECTED_PROBLEMS:
+        return _CORRECTED_PROBLEMS[problem_id]
     raise ValueError("Unsupported numerical variant for this problem")
 
 

@@ -29,7 +29,7 @@ from importlib.metadata import version as package_version
 from importlib.resources import files
 from pathlib import Path
 
-from .energyplus import EnergyPlusRunner, _version, sha256_file
+from .energyplus import EnergyPlusRunner, _version, sha256_file, supporting_file_hashes
 from .evaluation import _default_project_root, make_objective
 from .outputs import extract_outputs
 from .problems import PROBLEM_IDS, get_problem
@@ -203,7 +203,7 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("schedule must be balanced or problem-first")
     if not isinstance(p1_warmup_100, bool):
         raise ValueError("p1_warmup_100 must be a boolean")
-    if numerical_variant not in (None, "convergence-refined", "convergence-repaired"):
+    if numerical_variant not in (None, "convergence-refined", "convergence-repaired", "model-corrected"):
         raise ValueError("Unsupported replication numerical variant")
     if numerical_variant is not None and p1_warmup_100:
         raise ValueError("Select one numerical variant")
@@ -211,9 +211,11 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
     if not definitions or len({p.id for p in definitions}) != len(definitions):
         raise ValueError("Select at least one problem, without duplicates")
     if numerical_variant is not None:
+        from .model_controls import CORRECTED_PROBLEM_IDS
         from .numerical_controls import REFINED_PROBLEM_IDS, REPAIRED_PROBLEM_IDS
 
-        selected = REPAIRED_PROBLEM_IDS if numerical_variant == "convergence-repaired" else REFINED_PROBLEM_IDS
+        selected = {"convergence-repaired": REPAIRED_PROBLEM_IDS, "convergence-refined": REFINED_PROBLEM_IDS,
+                    "model-corrected": CORRECTED_PROBLEM_IDS}[numerical_variant]
         definitions = [get_problem(p.id, numerical_variant=numerical_variant)
                        if p.id in selected else p for p in definitions]
     if p1_warmup_100:
@@ -252,9 +254,7 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         path = paths.get(version, base / ".tools/energyplus" / version / (
             "energyplus.exe" if os.name == "nt" else "energyplus"))
         runner = EnergyPlusRunner(path, expected_version=version, cache=False)
-        supporting = {p.name: sha256_file(p) for p in path.parent.iterdir()
-                      if p.is_file() and (p.name == "Energy+.idd" or
-                                         p.name.startswith(("libenergyplusapi", "energyplusapi.dll")))}
+        supporting = supporting_file_hashes(path)
         engines[version] = {"executable": str(path), "executable_sha256": runner.executable_sha256,
                             "version_output": runner.version_output, "supporting_sha256": supporting}
     identities = {str(p.id): {"name": p.name, "dimension": p.dimension,
@@ -267,7 +267,7 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
             identities[str(problem.id)]["numerical_variant"] = problem.numerical_variant
     source = Path(__file__).parent
     code_hashes = {name: sha256_file(source / name) for name in (
-        "problems.py", "losses.py", "models.py", "numerical_controls.py", "outputs.py", "energyplus.py",
+        "problems.py", "losses.py", "models.py", "numerical_controls.py", "model_controls.py", "outputs.py", "energyplus.py",
         "evaluation.py", "replication.py", "replication_solvers.py", "replication_diagnostics.py",
         "replication_journal.py")}
     specifications = []
@@ -463,6 +463,10 @@ def _run_one(spec, manifest, root, retain_success):
             expected_version=spec["version"], output_root=attempt_root, cache=False)
         if runner.executable_sha256 != record["engine_provenance"]["executable_sha256"]:
             raise ValueError("Engine executable changed after experiment manifest creation")
+        supporting = supporting_file_hashes(manifest["engines"][spec["version"]]["executable"])
+        if any(supporting.get(name) != digest for name, digest in
+               record["engine_provenance"].get("supporting_sha256", {}).items()):
+            raise ValueError("Engine supporting files changed after experiment manifest creation")
         if _model_identity(problem, spec["version"]) != record["problem_provenance"]["models"][spec["version"]]:
             raise ValueError("Model template or bindings changed after experiment manifest creation")
         if manifest["diagnostics_policy"] == "reference-warmup":

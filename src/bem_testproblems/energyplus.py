@@ -28,6 +28,13 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+def supporting_file_hashes(executable: str | Path) -> dict[str, str]:
+    """Identify the numerical library and input dictionaries beside the launcher."""
+    return {path.name: sha256_file(path) for path in sorted(Path(executable).parent.iterdir())
+            if path.is_file() and (path.name in {"Energy+.idd", "Energy+.schema.epJSON"}
+                                  or path.name.startswith(("libenergyplusapi", "energyplusapi.dll")))}
+
+
 def _version(value: str) -> str:
     parts = value.split(".")
     if len(parts) == 2:
@@ -148,7 +155,7 @@ class EnergyPlusRunner:
     Input files must refer to auxiliary files using absolute paths. Weather is
     supplied explicitly and is never downloaded or replaced by this runner.
     Disable caching for models that use mutable auxiliary files: the benchmark
-    cache keys cover the model, EPW, executable and simulation mode.
+    cache keys cover the model, EPW, immutable engine installation and simulation mode.
     """
 
     def __init__(self, executable: str | Path, *, expected_version: str = "26.2.0",
@@ -177,6 +184,7 @@ class EnergyPlusRunner:
                 reason="version",
             )
         self.executable_sha256 = sha256_file(self.executable)
+        self.supporting_sha256 = supporting_file_hashes(self.executable)
         self.cache = bool(cache)
         self._cache: dict[str, RunResult] = {}
         self._inflight: dict[str, threading.Lock] = {}
@@ -229,6 +237,8 @@ class EnergyPlusRunner:
             raise ValueError("weather_file must be an EPW file")
         if sha256_file(self.executable) != self.executable_sha256:
             raise EnergyPlusError("EnergyPlus executable changed after runner configuration", reason="version")
+        if supporting_file_hashes(self.executable) != self.supporting_sha256:
+            raise EnergyPlusError("EnergyPlus supporting files changed after runner configuration", reason="version")
         if not self.cache:
             return self._run_uncached(source, weather, design_day=design_day)
         source_hash = sha256_file(source)
@@ -293,6 +303,7 @@ class EnergyPlusRunner:
         metadata = {
             "version": self.version, "version_output": self.version_output,
             "executable": str(self.executable), "executable_sha256": self.executable_sha256,
+            "supporting_sha256": self.supporting_sha256,
             "source_input": str(source), "input_file": str(staged),
             "input_sha256": sha256_file(staged),
             "weather_file": str(weather) if weather else None,
