@@ -252,6 +252,30 @@ def test_extended_budget_handoff_preserves_multiplier_and_every_original_cap(set
     assert all(spec["budget"] == 50000 for spec in manifest["runs"])
 
 
+def test_continuation_preserves_and_checks_the_selected_numerical_variant(setup, monkeypatch):
+    variant = "convergence-repaired"
+    setup.original["numerical_variant"] = variant
+    setup.original.pop("manifest_id")
+    setup.original["manifest_id"] = continuation._digest(setup.original)
+    write(setup.origin / "manifest.json", setup.original)
+    for index, status in ((0, "completed"), (1, "running")):
+        write(setup.origin / "runs" / (setup.specs[index]["id"] + ".json"),
+              record(setup.specs[index], setup.original, status))
+    setup.target["numerical_variant"] = variant
+
+    def prepare(**kwargs):
+        assert kwargs["numerical_variant"] == variant
+        return copy.deepcopy(setup.target)
+
+    monkeypatch.setattr(setup.runtime, "prepare_manifest", prepare)
+    _, manifest, _, _ = continuation.prepare_continuation(setup.origin, setup.project, setup.output)
+    assert manifest["numerical_variant"] == variant
+    assert manifest["runs"] == setup.specs[1:]
+    setup.target["numerical_variant"] = "convergence-refined"
+    with pytest.raises(ValueError, match="numerical_variant differs"):
+        continuation.prepare_continuation(setup.origin, setup.project, setup.output)
+
+
 def test_120_workers_use_two_safe_pools_and_submit_union_once(setup):
     result = execute(setup, run=True, workers=120)
     assert [p.size for p in setup.pools] == [60, 60]

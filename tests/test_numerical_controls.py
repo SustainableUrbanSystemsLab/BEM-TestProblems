@@ -14,6 +14,101 @@ from tests.test_models import idf_objects
 IDS = (1, 4, 5, 6, 10)
 
 
+@pytest.mark.parametrize("number", IDS)
+@pytest.mark.parametrize("design_kind", ["midpoint", "lower", "upper"])
+@pytest.mark.parametrize("version", ["8.5.0", "26.2.0"])
+def test_repaired_profile_changes_only_the_documented_cooling_sizing_margin(
+    number, design_kind, version, tmp_path
+):
+    from bem_testproblems.numerical_controls import SIZING_MARGIN
+
+    refined = get_problem(number, numerical_variant="convergence-refined")
+    repaired = get_problem(number, numerical_variant="convergence-repaired")
+    assert repaired.parameters == refined.parameters
+    assert repaired.bounds == refined.bounds and repaired.constants == refined.constants
+    assert repaired.provenance["numerical_variant"]["name"] == "convergence-repaired"
+    design = {"midpoint": refined.midpoint, "lower": tuple(b[0] for b in refined.bounds),
+              "upper": tuple(b[1] for b in refined.bounds)}[design_kind]
+    if version == "8.5.0":
+        original = refined.render_legacy(design, tmp_path / "refined.idf")
+        changed = repaired.render_legacy(design, tmp_path / "repaired.idf")
+        expected = idf_objects(original)
+        if number in (4, 5, 6):
+            for i, row in enumerate(expected):
+                if row[0].casefold() == "sizing:zone":
+                    expected[i] = (*row[:3], repr(float(row[3]) - SIZING_MARGIN), *row[4:])
+        assert idf_objects(changed) == expected
+    else:
+        original = refined.render_modern(design, tmp_path / "refined.epJSON")
+        changed = repaired.render_modern(design, tmp_path / "repaired.epJSON")
+        expected = json.loads(original.read_text())
+        if number in (4, 5, 6):
+            for row in expected["Sizing:Zone"].values():
+                row["zone_cooling_design_supply_air_temperature"] -= SIZING_MARGIN
+        assert json.loads(changed.read_text()) == expected
+
+
+def test_repaired_profile_rejects_unexpected_cooling_sizing_inputs(tmp_path):
+    from bem_testproblems.numerical_controls import repair_legacy, repair_modern
+
+    canonical = get_problem(4)
+    text = canonical.render_legacy(canonical.midpoint, tmp_path / "model.idf").read_text()
+    with pytest.raises(ValueError, match="five Sizing:Zone"):
+        repair_legacy(text.replace("Sizing:Zone,", "UnexpectedSizing:Zone,", 1), 4)
+    with pytest.raises(ValueError, match="cooling sizing inputs"):
+        repair_legacy(text.replace("SupplyAirTemperature,", "TemperatureDifference,", 1), 4)
+    model = json.loads(canonical.render_modern(canonical.midpoint, tmp_path / "model.epJSON").read_text())
+    next(iter(model["Sizing:Zone"].values()))["zone_cooling_design_supply_air_temperature"] = 19
+    with pytest.raises(ValueError, match="cooling sizing inputs"):
+        repair_modern(model, 4)
+
+
+@pytest.mark.parametrize("number", (3, 9))
+@pytest.mark.parametrize("design_kind", ("midpoint", "lower", "upper"))
+@pytest.mark.parametrize("version", ("8.5.0", "26.2.0"))
+def test_additional_warmup_repairs_preserve_all_unlisted_inputs(
+    number, design_kind, version, tmp_path
+):
+    canonical = get_problem(number)
+    repaired = get_problem(number, numerical_variant="convergence-repaired")
+    assert repaired.parameters == canonical.parameters
+    assert repaired.constants == canonical.constants
+    design = {"midpoint": canonical.midpoint, "lower": tuple(b[0] for b in canonical.bounds),
+              "upper": tuple(b[1] for b in canonical.bounds)}[design_kind]
+    warmup_days = 100 if number == 3 else 365
+    if version == "8.5.0":
+        before = canonical.render_legacy(design, tmp_path / "canonical.idf")
+        after = repaired.render_legacy(design, tmp_path / "repaired.idf")
+        expected = []
+        for row in idf_objects(before):
+            fields = list(row)
+            if row[0].casefold() == "building":
+                fields[7] = str(warmup_days)
+            elif number == 9:
+                if row[0].casefold() == "timestep":
+                    fields[1] = "12"
+                elif row[0].casefold() == "sizing:parameters":
+                    fields[3] = "12"
+                elif row[0].casefold() == "convergencelimits":
+                    fields[2] = "100"
+            expected.append(tuple(fields))
+        if number == 9:
+            expected.append(("ZoneAirHeatBalanceAlgorithm", "AnalyticalSolution"))
+        assert idf_objects(after) == expected
+    else:
+        before = canonical.render_modern(design, tmp_path / "canonical.epJSON")
+        after = repaired.render_modern(design, tmp_path / "repaired.epJSON")
+        expected = json.loads(before.read_text())
+        next(iter(expected["Building"].values()))["maximum_number_of_warmup_days"] = warmup_days
+        if number == 9:
+            next(iter(expected["Timestep"].values()))["number_of_timesteps_per_hour"] = 12
+            next(iter(expected["Sizing:Parameters"].values()))["timesteps_in_averaging_window"] = 12
+            next(iter(expected["ConvergenceLimits"].values()))["maximum_hvac_iterations"] = 100
+            expected["ZoneAirHeatBalanceAlgorithm"] = {"BEM convergence-repaired": {
+                "algorithm": "AnalyticalSolution"}}
+        assert json.loads(after.read_text()) == expected
+
+
 def _objects(path):
     return {row[0].casefold(): row for row in idf_objects(path)
             if row[0].casefold() in {

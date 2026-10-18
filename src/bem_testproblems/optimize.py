@@ -5,7 +5,7 @@ from math import isfinite
 
 from .evaluation import make_objective
 from .problems import Problem
-from .replication_solvers import _pdfo_physical_point
+from .replication_solvers import _bounded_physical_point
 
 
 def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
@@ -54,7 +54,7 @@ def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
             failure = RuntimeError("PDFO attempted to exceed the requested evaluation budget")
             return float("nan")
         try:
-            physical = _pdfo_physical_point(x, problem.bounds)
+            physical = _bounded_physical_point(x, problem.bounds)
             evaluations += 1
             value = float(evaluate(physical))
             if not isfinite(value):
@@ -82,5 +82,5 @@ def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
     # PDFO applies the same affine mapping to its returned point. Keep the
     # documented OptimizeResult and array type while returning the physical
     # endpoint that was actually evaluated by the callback.
-    result.x = asarray(_pdfo_physical_point(result.x, problem.bounds))
+    result.x = asarray(_bounded_physical_point(result.x, problem.bounds))
     return result

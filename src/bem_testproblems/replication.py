@@ -93,7 +93,15 @@ def _atomic_json(path, value):
     try:
         temporary.write_text(json.dumps(_json_value(value), indent=2, allow_nan=False) + "\n",
                              encoding="utf-8")
-        temporary.replace(path)
+        for attempt in range(6):
+            try:
+                temporary.replace(path)
+                break
+            except PermissionError as error:
+                # Windows readers or scanners can briefly block atomic replacement.
+                if getattr(error, "winerror", None) not in (5, 32) or attempt == 5:
+                    raise
+                time.sleep(0.02 * (attempt + 1))
     finally:
         temporary.unlink(missing_ok=True)
 
@@ -178,7 +186,8 @@ def _dependency_identity(name):
 def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "26.2.0"),
                      repetitions=20, budget=None, budget_multiplier=1, seed=2019, project_root=None,
                      executables=None, weather_dir=None, diagnostics_policy="strict",
-                     schedule="balanced", p1_warmup_100=False, native_solvers=None):
+                     schedule="balanced", p1_warmup_100=False, native_solvers=None,
+                     numerical_variant=None):
     """Resolve all inputs and fixed random starts without running simulations."""
     repetitions = _positive_integer(repetitions, "repetitions")
     if budget is not None:
@@ -194,9 +203,19 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("schedule must be balanced or problem-first")
     if not isinstance(p1_warmup_100, bool):
         raise ValueError("p1_warmup_100 must be a boolean")
+    if numerical_variant not in (None, "convergence-refined", "convergence-repaired"):
+        raise ValueError("Unsupported replication numerical variant")
+    if numerical_variant is not None and p1_warmup_100:
+        raise ValueError("Select one numerical variant")
     definitions = [get_problem(number) for number in problems]
     if not definitions or len({p.id for p in definitions}) != len(definitions):
         raise ValueError("Select at least one problem, without duplicates")
+    if numerical_variant is not None:
+        from .numerical_controls import REFINED_PROBLEM_IDS, REPAIRED_PROBLEM_IDS
+
+        selected = REPAIRED_PROBLEM_IDS if numerical_variant == "convergence-repaired" else REFINED_PROBLEM_IDS
+        definitions = [get_problem(p.id, numerical_variant=numerical_variant)
+                       if p.id in selected else p for p in definitions]
     if p1_warmup_100:
         if not any(problem.id == 1 for problem in definitions):
             raise ValueError("p1_warmup_100 requires problem 1 to be selected")
@@ -298,6 +317,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         "runs": specifications}
     if p1_warmup_100:
         configuration["p1_warmup_100"] = True
+    if numerical_variant is not None:
+        configuration["numerical_variant"] = numerical_variant
     if native is not None:
         configuration["native_solvers"] = native
         configuration["code_sha256"]["replication_native.py"] = sha256_file(

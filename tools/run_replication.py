@@ -35,6 +35,8 @@ def main(argv=None):
     parser.add_argument("--diagnostics-policy", choices=("strict", "reference-warmup"), default="strict")
     parser.add_argument("--native-solvers", type=Path,
                         help="Opt into a private hash-pinned original BB-O/Galapagos configuration")
+    parser.add_argument("--numerical-variant", choices=("convergence-refined", "convergence-repaired"),
+                        help="Explicit numerical profile for the documented affected problems")
     parser.add_argument("--retry-failed", action="store_true")
     parser.add_argument("--p1-warmup-100", action="store_true",
                         help="Use the explicit P1 warmup-100 numerical model variant")

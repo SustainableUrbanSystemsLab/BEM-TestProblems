@@ -16,6 +16,38 @@ from bem_testproblems import get_problem, replication, replication_diagnostics
 from bem_testproblems.energyplus import EnergyPlusError, RunResult, sha256_file
 
 
+@pytest.mark.parametrize("blocked_attempts", [2, 6])
+def test_checkpoint_replacement_retries_transient_windows_locks_and_preserves_old_file(
+    tmp_path, monkeypatch, blocked_attempts
+):
+    path = tmp_path / "checkpoint.json"
+    path.write_text('{"version": 1}\n')
+    original_replace = Path.replace
+    attempts, waits = [], []
+
+    def replace(source, target):
+        attempts.append(source)
+        if len(attempts) <= blocked_attempts:
+            error = PermissionError("Windows file sharing violation")
+            error.winerror = 32
+            raise error
+        return original_replace(source, target)
+
+    monkeypatch.setattr(Path, "replace", replace)
+    monkeypatch.setattr(replication.time, "sleep", waits.append)
+    if blocked_attempts == 6:
+        with pytest.raises(PermissionError):
+            replication._atomic_json(path, {"version": 2})
+        assert json.loads(path.read_text()) == {"version": 1}
+        assert len(attempts) == 6
+    else:
+        replication._atomic_json(path, {"version": 2})
+        assert json.loads(path.read_text()) == {"version": 2}
+        assert len(attempts) == 3
+    assert len(waits) == len(attempts) - 1
+    assert not list(tmp_path.glob("*.tmp"))
+
+
 @pytest.fixture
 def local_setup(tmp_path, monkeypatch):
     engines = {}
@@ -70,6 +102,23 @@ def local_setup(tmp_path, monkeypatch):
                      "repetitions": 1, "budget": 3, "seed": 19,
                      "project_root": tmp_path, "executables": engines}
     return configuration, calls
+
+
+@pytest.mark.parametrize("variant", ["convergence-refined", "convergence-repaired"])
+def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, variant):
+    configuration, _ = local_setup
+    configuration.update(problems=[1, 2, 3, 4, 5, 6, 8, 9, 10, 13], budget=None, repetitions=20)
+    canonical = replication.prepare_manifest(**configuration)
+    repaired = replication.prepare_manifest(**configuration, numerical_variant=variant)
+    assert repaired["manifest_id"] != canonical["manifest_id"]
+    assert repaired["numerical_variant"] == variant
+    assert repaired["runs"] == canonical["runs"]
+    assert repaired["diagnostics_policy"] == "strict"
+    affected = (1, 3, 4, 5, 6, 9, 10) if variant == "convergence-repaired" else (1, 4, 5, 6, 10)
+    for number, definition in repaired["problem_definitions"].items():
+        assert definition.get("numerical_variant") == (variant if int(number) in affected else None)
+    with pytest.raises(ValueError, match="one numerical variant"):
+        replication.prepare_manifest(**configuration, numerical_variant=variant, p1_warmup_100=True)
 
 
 def test_paper_budget_paired_uniform_starts_and_balanced_schedule(local_setup):

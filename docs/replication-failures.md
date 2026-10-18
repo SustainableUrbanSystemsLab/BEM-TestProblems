@@ -145,7 +145,8 @@ Strict validation checks Severe/Fatal diagnostics from **every phase**.
   from the warmup errors also seen through C#.
 - Both PDFO entry points normalize only that immediately adjacent outside float to
   its endpoint. Larger violations, nonfinite values, and invalid dimensions still
-  fail. Direct problem calls and other solver adapters retain strict bounds.
+  fail. The same correction now applies to the Py-BOBYQA callback. Direct problem
+  calls retain strict bounds.
 - Saved replay coordinates use relative and absolute tolerances of `1e-12` for
   differences between compiled PDFO builds. Windows CI observed a `2.586e-12`
   difference in an interior coordinate before reaching the failing endpoint.
@@ -160,6 +161,48 @@ Strict validation checks Severe/Fatal diagnostics from **every phase**.
   the returned design vector.
 - These fixes do not alter the source of an experiment already running. Its
   failed records remain failed, with their original diagnostic evidence.
+
+### Broader FOAM audit
+
+The completed six-solver campaign exposed additional cases beyond the 24-design
+fixture. Its results remain preserved. All 12 recorded Py-BOBYQA bounds failures
+were a single adjacent binary64 float outside an endpoint. Replaying their
+saved objective prefixes through the real solver confirmed the corrected
+callback reaches the exact endpoint. Larger violations still fail, and starts,
+seeds, budgets, and solver settings are unchanged.
+
+The separate opt-in `convergence-repaired` variant adds a fixed **0.00001 K**
+cooling supply-temperature margin to the five `Sizing:Zone` inputs in P4, P5,
+and P6. Annual supply-temperature controls and decision bounds are unchanged.
+The five recorded P4 sizing failures passed with this margin on both engines:
+ten complete annual simulations with no Severe or Fatal diagnostics. The
+canonical models and existing `convergence-refined` baselines are unchanged.
+This remains a distinct numerical model; historical equivalence is not claimed.
+
+The broader strict audit contains 571 unique engine/design checks covering all
+711 earlier EnergyPlus failure records, the new sizing cases, and independent
+controls. The initial repaired recipe passed 517 checks; 54 still failed warmup.
+The exact public P3/P9 recipes then passed all 22 checks for those problems,
+including all 18 remaining failure designs and four midpoint controls:
+
+| Problem | Additional fixed recipe | Midpoint change from canonical |
+| --- | --- | --- |
+| P3 | Warmup cap 100; all other fields unchanged | Less than `3e-11%` on either engine |
+| P9 | Warmup cap 365; 12 timesteps/hour and 12 sizing-average steps; HVAC cap 100; analytical zone-air integration | +0.103156% on 8.5; +0.134385% on 26.2 |
+
+P4 on 26.2 and P10 on both engines still have unresolved recorded warmup cases.
+The current recipe passes 535 of the 571 checks; the remaining 36 comprise five
+P4 cases on 26.2, 28 P10 cases on 8.5, and three P10 cases on 26.2. Retained native
+evidence was reused only after all rendered input hashes matched exactly;
+P3 and P9 were remeasured. These are diagnostic-case counts, not campaign runs.
+Additional probe settings that fail diagnostics, input validation, or completion
+checks are excluded from the public recipe. These results do not establish
+that every feasible design converges or approve a new campaign.
+
+Windows checkpoint replacement also retries brief sharing/access conflicts for
+at most six attempts, with 0.3 seconds of total delay. Persistent errors still
+raise, retaining the previous checkpoint. This affects durable recording, not
+the numerical experiment or diagnostic acceptance rules.
 
 ### Cross-platform precision
 

@@ -358,12 +358,16 @@ def prepare_continuation(origin, project_root, output_root, *, workers=48, froze
            if "budget_multiplier" in original else {}),
         **({"native_solvers": original["native_solvers"]["config_path"]}
            if "native_solvers" in original else {}),
+        **({"numerical_variant": original["numerical_variant"]}
+           if "numerical_variant" in original else {}),
     )
     for key in ("problem_definitions", "solvers", "runs", "diagnostics_policy"):
         if target[key] != original[key]:
             raise ValueError(f"Target {key} differs from the frozen origin")
     if target.get("native_solvers") != original.get("native_solvers"):
         raise ValueError("Target native_solvers differs from the frozen origin")
+    if target.get("numerical_variant") != original.get("numerical_variant"):
+        raise ValueError("Target numerical_variant differs from the frozen origin")
     terminal = {name for name, row in records.items() if row["status"] in TERMINAL}
     target["runs"] = [row for row in target["runs"] if row["id"] not in terminal]
     target["execution_runtime"] = _runtime_identity()

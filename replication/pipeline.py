@@ -196,9 +196,11 @@ def commands(stage, config, paths, manifest, project):
                 "--budget",
                 pilot["budget"],
                 "--diagnostics-policy",
-                "reference-warmup",
+                manifest.get("diagnostics_policy", "reference-warmup"),
                 *(["--native-solvers", manifest["native_solvers"]["config_path"]]
                   if "native_solvers" in manifest else []),
+                *(["--numerical-variant", manifest["numerical_variant"]]
+                  if "numerical_variant" in manifest else []),
             )
         ]
     if stage in {"status", "review"}:
