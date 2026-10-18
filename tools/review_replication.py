@@ -38,7 +38,7 @@ def load_review(origin, continuation=None):
             for key in ("problem_definitions", "solvers", "code_sha256", "diagnostics_policy",
                         "protocol", "requested_repetitions", "budget_override", "master_seed",
                         "budget_multiplier", "effective_budget_rule", "paper_budget_rule",
-                        "native_solvers"):
+                        "native_solvers", "numerical_variant"):
                 if target.get(key) != original.get(key):
                     raise ValueError(f"Continuation scientific definition differs: {key}")
             terminal = {key for key, row in records.items() if row["status"] in TERMINAL}

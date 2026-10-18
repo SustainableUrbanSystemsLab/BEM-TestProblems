@@ -312,16 +312,18 @@ def test_saved_pdfos_reach_the_previously_rejected_endpoint_without_a_new_simula
     assert calls[0] == pytest.approx(case["x0"], rel=1e-14, abs=1e-14)
 
 
-def _fake_pdfo_proposals(monkeypatch, proposals):
-    def pdfo(callback, start, *, bounds, method, options):
+def _fake_solver_proposals(monkeypatch, method, proposals):
+    def propose(callback, *args, **kwargs):
         for point in proposals:
             callback(point)
-        return SimpleNamespace(status=0, success=True, message="fixture termination")
+        return SimpleNamespace(status=0, success=True, message="fixture termination",
+                               flag=0, EXIT_SUCCESS=0, EXIT_MAXFUN_WARNING=1, msg="fixture termination")
 
-    module = SimpleNamespace(pdfo=pdfo, __version__="fixture")
+    module = SimpleNamespace(pdfo=propose, solve=propose, __version__="fixture")
+    dependency = "pdfo" if method == "bobyqa" else "pybobyqa"
     real_import = adapters.import_module
     monkeypatch.setattr(adapters, "import_module", lambda name:
-                        module if name == "pdfo" else real_import(name))
+                        module if name == dependency else real_import(name))
 
 
 ENDPOINT_BOX = ((1.224, 5.832), (0.05, 1.05))
@@ -335,10 +337,11 @@ ENDPOINT_START = tuple((a + b) / 2 for a, b in ENDPOINT_BOX)
     ((2.0, math.nextafter(1.05, math.inf)), (2.0, 1.05)),
     ((math.nextafter(1.224, math.inf), 0.5), (math.nextafter(1.224, math.inf), 0.5)),
 ])
-def test_pdfo_normalizes_only_the_adjacent_outside_float_and_records_feasible_values(
-    monkeypatch, raw, expected
+@pytest.mark.parametrize("method", ["bobyqa", "pybobyqa"])
+def test_bobyqa_normalizes_only_the_adjacent_outside_float_and_records_feasible_values(
+    monkeypatch, method, raw, expected
 ):
-    _fake_pdfo_proposals(monkeypatch, [raw])
+    _fake_solver_proposals(monkeypatch, method, [raw])
     calls = []
 
     def objective(x):
@@ -346,7 +349,7 @@ def test_pdfo_normalizes_only_the_adjacent_outside_float_and_records_feasible_va
         assert all(a <= v <= b for v, (a, b) in zip(x, ENDPOINT_BOX))
         return 17.0
 
-    result = adapters.solve_solver("bobyqa", objective, ENDPOINT_START, ENDPOINT_BOX, 20, 0)
+    result = adapters.solve_solver(method, objective, ENDPOINT_START, ENDPOINT_BOX, 20, 0)
     assert calls == [expected]
     assert result["x"] == list(expected)
     assert result["fun"] == 17.0
@@ -361,23 +364,25 @@ def test_pdfo_normalizes_only_the_adjacent_outside_float_and_records_feasible_va
     (float("nan"), 0.5), (float("inf"), 0.5), (-float("inf"), 0.5),
     (2.0,), (2.0, 0.5, 0.5),
 ])
-def test_pdfo_rejects_more_than_one_ulp_nonfinite_and_wrong_dimensions_before_the_caller(
-    monkeypatch, bad
+@pytest.mark.parametrize("method", ["bobyqa", "pybobyqa"])
+def test_bobyqa_rejects_more_than_one_ulp_nonfinite_and_wrong_dimensions_before_the_caller(
+    monkeypatch, method, bad
 ):
-    _fake_pdfo_proposals(monkeypatch, [bad, ENDPOINT_START])
+    _fake_solver_proposals(monkeypatch, method, [bad, ENDPOINT_START])
 
     def objective(x):
         pytest.fail("An invalid proposal or a latched failure must not reach the caller")
 
     with pytest.raises(ValueError, match="nonfinite or out-of-bounds"):
-        adapters.solve_solver("bobyqa", objective, ENDPOINT_START, ENDPOINT_BOX, 20, 0)
+        adapters.solve_solver(method, objective, ENDPOINT_START, ENDPOINT_BOX, 20, 0)
 
 
-def test_pdfo_endpoint_normalization_does_not_change_the_hard_call_budget(monkeypatch):
+@pytest.mark.parametrize("method", ["bobyqa", "pybobyqa"])
+def test_bobyqa_endpoint_normalization_does_not_change_the_hard_call_budget(monkeypatch, method):
     raw = (math.nextafter(1.224, -math.inf), 0.5)
-    _fake_pdfo_proposals(monkeypatch, [raw] * 6)
+    _fake_solver_proposals(monkeypatch, method, [raw] * 6)
     calls = []
-    result = adapters.solve_solver("bobyqa", lambda x: calls.append(tuple(x)) or 17.,
+    result = adapters.solve_solver(method, lambda x: calls.append(tuple(x)) or 17.,
                                    ENDPOINT_START, ENDPOINT_BOX, 4, 0)
     assert calls == [(1.224, 0.5)] * 4
     assert result["nfev"] == 4 and result["status"] == "budget"

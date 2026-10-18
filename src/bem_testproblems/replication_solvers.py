@@ -93,7 +93,8 @@ _DEFINITIONS["pybobyqa"].update({
     "implemented": True, "dependency": "pybobyqa", "source": _PYBOBYQA,
     "skip_reason": None,
     "settings": {"scaling_within_bounds": True, "seek_global_minimum": False,
-                 "objfun_has_noise": False, "restarts.use_restarts": False},
+                 "objfun_has_noise": False, "restarts.use_restarts": False,
+                 "endpoint_roundoff": "normalize at most one binary64 ULP outside finite bounds"},
     "fidelity": "Added Py-BOBYQA comparison; not one of the paper's 16 methods.",
 })
 
@@ -251,10 +252,10 @@ def _cma(module, np, observed, start, bounds, budget, seed):
     return status, status != "budget", f"pycma stopped: {stop}", stop
 
 
-def _pdfo_physical_point(x, bounds):
-    """Remove only one-ULP endpoint overshoot from PDFO's affine unscaling.
+def _bounded_physical_point(x, bounds):
+    """Remove only one-ULP endpoint overshoot from affine solver unscaling.
 
-    PDFO 2.2.0 can map a feasible scaled endpoint to the adjacent float outside
+    PDFO 2.2.0 and Py-BOBYQA 1.5.0 can map an endpoint to the adjacent float outside
     its physical bound. Normalize that neighbor before validation/recording;
     all larger violations, nonfinite values, and wrong dimensions stay invalid.
     """
@@ -283,7 +284,7 @@ def _pdfo(module, observed, start, bounds, budget):
         if failure is not None:
             return float("nan")
         try:
-            return observed(_pdfo_physical_point(x, bounds))
+            return observed(_bounded_physical_point(x, bounds))
         except BaseException as exc:
             # Python exceptions must not cross PDFO's compiled Fortran callback.
             failure = exc
@@ -307,7 +308,7 @@ def _pybobyqa(module, np, observed, start, bounds, budget, seed):
         np.random.seed(seed)
         try:
             result = module.solve(
-                observed, np.array(start),
+                lambda x: observed(_bounded_physical_point(x, bounds)), np.array(start),
                 bounds=(np.array([a for a, _ in bounds]), np.array([b for _, b in bounds])),
                 maxfun=budget, npt=min(2 * len(start) + 1, budget),
                 scaling_within_bounds=True, seek_global_minimum=False,
