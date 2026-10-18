@@ -70,8 +70,8 @@ working directory to the checkout, and its arguments to the absolute path of
 The run stage checks the passing preflight receipt against the current
 destination manifest and report hashes before starting. Changed inputs require
 another preflight. Each preflight gets a fresh numbered attempt directory;
-failed and earlier attempts remain available. With 120 workers, the controller
-uses two 60-worker pools.
+failed and earlier attempts remain available. With 118 workers, the controller
+uses two 59-worker pools.
 Rerun the same scheduled task after an interruption: finished destination runs
 are skipped, and interrupted attempts restart from their original seed, start,
 and full budget. Previous attempt histories remain available.
