@@ -104,7 +104,7 @@ def local_setup(tmp_path, monkeypatch):
     return configuration, calls
 
 
-@pytest.mark.parametrize("variant", ["convergence-refined", "convergence-repaired"])
+@pytest.mark.parametrize("variant", ["convergence-refined", "convergence-repaired", "model-corrected"])
 def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, variant):
     configuration, _ = local_setup
     configuration.update(problems=[1, 2, 3, 4, 5, 6, 8, 9, 10, 13], budget=None, repetitions=20)
@@ -114,11 +114,24 @@ def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, varia
     assert repaired["numerical_variant"] == variant
     assert repaired["runs"] == canonical["runs"]
     assert repaired["diagnostics_policy"] == "strict"
-    affected = (1, 3, 4, 5, 6, 9, 10) if variant == "convergence-repaired" else (1, 4, 5, 6, 10)
+    affected = (1, 4, 5, 6, 10) if variant == "convergence-refined" else (1, 3, 4, 5, 6, 9, 10)
     for number, definition in repaired["problem_definitions"].items():
         assert definition.get("numerical_variant") == (variant if int(number) in affected else None)
     with pytest.raises(ValueError, match="one numerical variant"):
         replication.prepare_manifest(**configuration, numerical_variant=variant, p1_warmup_100=True)
+
+
+def test_replaced_runtime_library_is_rejected_before_any_objective_call(local_setup, tmp_path):
+    configuration, calls = local_setup
+    library = configuration["executables"]["26.2.0"].with_name("energyplusapi.dll")
+    library.write_bytes(b"original numerical library")
+    manifest = replication.prepare_manifest(**configuration)
+    assert manifest["engines"]["26.2.0"]["supporting_sha256"][library.name] == sha256_file(library)
+    library.write_bytes(b"changed numerical library, unchanged launcher")
+    record = replication._run_one(manifest["runs"][0], manifest, tmp_path / "experiment", "none")
+    assert record["status"] == "failed" and record["evaluation_count"] == 0
+    assert "Engine supporting files changed" in record["error"]["message"]
+    assert calls == []
 
 
 def test_paper_budget_paired_uniform_starts_and_balanced_schedule(local_setup):

@@ -258,6 +258,72 @@ optimization infrastructure and are separate from native EnergyPlus failures.
   not change EnergyPlus's warmup tolerances, permit Severe/Fatal errors, or
   identify a numerical variant with the canonical benchmark.
 
+## Labelled model corrections on FOAM
+
+The opt-in `model-corrected` profile is a modified benchmark. It does not change
+the canonical models or claim exact historical equivalence. Physical model and
+control corrections were explicitly authorized on 18 October 2026. Strict
+Severe/Fatal rejection and the original convergence thresholds remain in force.
+Starts, seeds, bounds, solver settings, budgets and objective equations remain
+unchanged.
+
+| Problem | Fixed correction, identical in both engines |
+| --- | --- |
+| P4 | Use TARP indoor convection instead of CeilingDiffuser; subtract 0.1 K from the five cooling sizing temperatures; allow up to 365 warmup days. Retain the original timestep, integration algorithm and annual HVAC controls. |
+| P10 | During warmup only, an EMS actuator makes the air loop available continuously. Release it to `Null` on every sizing/annual timestep. Allow up to 365 warmup days; retain the original timestep, integration, thermostat schedules, night-cycle settings and annual controls. |
+| P1, P3, P5, P6, P9 | Use the existing `convergence-repaired` numerical recipe without additional physical changes. |
+| P2, P8, P13 | Use the canonical definition. |
+
+P4's convection change removes the airflow-dependent surface heat-transfer
+feedback implicated by the repeated-day traces. It changes the physical heat
+transfer model. The 0.1 K sizing offset is a physical safety margin at the 2 K
+sizing threshold, rather than a floating-point correction. EnergyPlus describes
+the different convection correlations in its
+[simulation parameter reference](https://bigladdersoftware.com/epx/docs/8-5/input-output-reference/group-simulation-parameters.html#surfaceconvectionalgorithminside).
+
+P10's warmup-only conditioning removes fixed-duration night cycling from the
+initialization problem. The convergence checks therefore assess that corrected
+initialization, not the original cycling warmup model. The annual simulation
+then resumes the original controls. Four instrumented native cases, covering
+both engines, recorded zero active override timesteps throughout all 52,560
+annual zone timesteps per case and confirmed resumed night cycling. EnergyPlus
+documents the availability actuator and release mechanism in the
+[EMS guide](https://bigladdersoftware.com/epx/docs/8-5/ems-application-guide/hvac-systems.html#airloophvac-availability-status).
+
+The exact public profile passed all **571 retained diagnostic cases**, covering
+all 711 earlier EnergyPlus failures and the additional sizing/control fixtures.
+It also passed **460 additional checks**: 20 independently seeded uniform
+designs plus midpoint/lower/upper controls for each of ten problems and both
+engines. These are simulation checks, not completed optimization runs or a
+proof of convergence throughout the continuous design domain. P4 accounts for
+143 retained checks and P10 for 187. Every accepted result has finite required
+outputs, successful process/completion markers and zero Severe/Fatal errors.
+
+Compared with preserved original annual outputs, the measured objective changes
+were:
+
+| Problem | Engine | Comparable designs | Signed change range | Median absolute change |
+| --- | --- | ---: | ---: | ---: |
+| P4 | 8.5.0 | 57 | -7.51178% to +0.21362% | 2.56614% |
+| P4 | 26.2.0 | 74 | -23.12280% to -7.15321% | 10.59929% |
+| P10 | 8.5.0 | 95 | -0.00069% to +0.04378% | 0.00699% |
+| P10 | 26.2.0 | 89 | -0.00563% to +0.52053% | 0.01575% |
+
+Original outputs with warmup diagnostics remain diagnostic comparison values;
+they are not retroactively accepted. Some sizing-only cases lack comparable
+annual outputs. These selected designs do not establish boxplot equivalence.
+In particular, P4's substantial changes must remain visible in comparisons.
+
+The failed numerical-only probes, original checkpoints, model inputs, source
+snapshots and native outputs remain private. Receipts are under
+`.validation-local/model-corrections-20261018/`, including
+`retained-public-profile/verification.json`, `independent-non-p10/report.json`,
+`independent-p10/report.json`, `model-impact.json` and
+`warmup-release-verification.json`. Installed engine binaries were not changed.
+Runtime provenance now records and checks the numerical DLL/shared library,
+IDD and epJSON schema as well as the executable: a modern launcher can keep
+the same hash while its numerical DLL changes.
+
 ## What the tests require
 
 - These errors also occur through the original C# caller. The

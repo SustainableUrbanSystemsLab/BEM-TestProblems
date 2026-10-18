@@ -103,6 +103,14 @@ the campaign. Pull updates before setup or after stopping the scheduled task,
 never during a live campaign. Changes that alter its identity require a new
 recorded experiment.
 
+For a separately labelled corrected-model experiment, select
+`--numerical-variant model-corrected` when preparing the fresh manifest. This
+changes P4's physical convection/sizing model and P10's warmup control policy;
+it preserves strict diagnostics and the original optimization specifications.
+See the [correction record](../docs/replication-failures.md#labelled-model-corrections-on-foam)
+for measured objective changes and native validation. Keep its checkpoints and
+boxplots separate from canonical results.
+
 ## Extended-budget experiment
 
 [extended-budget.json](extended-budget.json) defines a separate PDFO BOBYQA
