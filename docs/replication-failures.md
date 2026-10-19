@@ -324,6 +324,80 @@ Runtime provenance now records and checks the numerical DLL/shared library,
 IDD and epJSON schema as well as the executable: a modern launcher can keep
 the same hash while its numerical DLL changes.
 
+## Warmup-only correction, version 2
+
+The full FOAM search exposed 47 additional failed designs in the first corrected
+profile: 28 P4/8.5 warmup cases, seven P5 warmup cases, ten P6/26.2 warmup cases,
+and one P6 cooling sizing case per engine. All completed annually with Severe
+diagnostics. Passing the earlier finite validation corpus did not establish
+convergence over the continuous design domain.
+
+The separate `model-corrected-v2` profile preserves the first profile and the
+canonical models. For P4/P5/P6, it sets interior surface convection coefficients
+to a fixed **2.5 W/(m² K) during weather-run warmup only**. The two canonical
+design-day environments retain their native convection during sizing warmup.
+Every surface actuator is released
+to `Null` after warmup, before measured simulation, and remains released on
+non-warmup timesteps. Both engines support the chosen EMS calling points.
+EnergyPlus documents these surface actuators in the
+[thermal-envelope EMS reference](https://bigladdersoftware.com/epx/docs/8-5/ems-application-guide/thermal-envelope.html#surface-convection-heat-transfer-coefficient).
+
+Annual convection algorithms remain those of version 1: TARP for P4 and the
+canonical CeilingDiffuser correlation for P5/P6. Version 2 permits 365 warmup
+days for all three problems. P5/P6 cooling sizing temperatures receive a fixed
+0.01 K margin, replacing the insufficient 0.00001 K margin. P4 retains its
+version-1 0.1 K margin. P6 additionally uses analytical zone-air integration and
+100 maximum HVAC iterations, replacing third-order integration and the default
+20 iterations. These numerical settings apply throughout simulation. Other
+problem inputs are identical to version 1.
+
+The earlier candidate also overrode convection during sizing warmup. Although
+it passed the failure corpus, it materially changed autosized equipment and
+annual objectives. Controlled tests isolated this effect to sizing initialization;
+the inactive-actuator control reproduced the previous results. That candidate
+remains diagnostic and is not the final version-2 recipe.
+
+This changes model initialization and sizing; it is not an exact historical
+replication. The original 0.004 K temperature and 0.04 load convergence
+thresholds, strict Severe/Fatal rejection, annual schedules, decision bounds,
+objective equations, starts, seeds, budgets and solver settings are preserved.
+No design-dependent retry or acceptance fallback is used.
+
+Native validation and annual-actuator release evidence are kept privately in
+`.validation-local/model-corrections-20261019/`. The original campaign and its
+565 successful runs remain preserved; shutdown-induced process-exit records
+are separate from the 47 scientific failures. Revised runs require their own
+manifest and frozen source rather than mixing results from the two profiles.
+
+The final profile passed all **2,516 validation cases**. Of these, 1,645 required
+new native simulations; 871 unchanged cases reused retained native outputs only
+after exact model-input, weather, engine and strict-diagnostic revalidation.
+The corpus includes the earlier failure/control sets, all 47 new failures and
+their cross-engine counterparts, independently seeded uniform and boundary
+designs, and neighborhoods around the new failures. Every final rendered input
+matches the audited input byte-for-byte. This is finite validation, not a proof
+over the entire continuous domain.
+
+Six instrumented cases checked all 54 surface actuators throughout **490,560
+annual zone timesteps**, or 26,490,240 actuator observations. All were released
+throughout measured annual simulation, and instrumentation changed objectives
+by exactly zero. Increasing P6 HVAC iterations alone to 100 or 500 still failed
+five audited designs; analytical integration was necessary in the tested recipe.
+The full test suite passed **1,344 tests**, with 26 skipped.
+
+Among previously accepted version-1 controls, the maximum absolute annual
+objective changes from version 1 to version 2 were:
+
+| Problem | EnergyPlus 8.5 | EnergyPlus 26.2 |
+| --- | ---: | ---: |
+| P4 | 0.03072% | 0.03029% |
+| P5 | 0.28015% | 0.39436% |
+| P6 | 4.64986% | 2.01009% |
+
+P6 remains a material numerical change. P4 also retains version 1's material
+physical departure from the original benchmark. These comparisons do not
+establish equivalence to the paper's historical numerical boxplots.
+
 ## What the tests require
 
 - These errors also occur through the original C# caller. The
