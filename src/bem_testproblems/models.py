@@ -10,7 +10,7 @@ from importlib.resources import files
 from pathlib import Path
 from typing import TYPE_CHECKING, Sequence
 
-from .model_controls import correct_legacy, correct_modern
+from .model_controls import correct_legacy, correct_modern, correct_v2_legacy, correct_v2_modern
 from .numerical_controls import refine_legacy, refine_modern, repair_legacy, repair_modern
 from .reference import legacy_template_path
 
@@ -130,6 +130,8 @@ def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
         text = repair_legacy(text, problem.id)
     elif problem.numerical_variant == "model-corrected":
         text = correct_legacy(text, problem.id)
+    elif problem.numerical_variant == "model-corrected-v2":
+        text = correct_v2_legacy(text, problem.id)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(("\n".join(text.splitlines()) + "\n").encode("utf-8"))
@@ -180,6 +182,8 @@ def render_modern(problem: "Problem", x: Sequence[float], path) -> Path:
         repair_modern(model, problem.id)
     elif problem.numerical_variant == "model-corrected":
         correct_modern(model, problem.id)
+    elif problem.numerical_variant == "model-corrected-v2":
+        correct_v2_modern(model, problem.id)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes((json.dumps(model, indent=2, sort_keys=True) + "\n").encode("utf-8"))

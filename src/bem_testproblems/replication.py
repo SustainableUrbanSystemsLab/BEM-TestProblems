@@ -203,7 +203,7 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("schedule must be balanced or problem-first")
     if not isinstance(p1_warmup_100, bool):
         raise ValueError("p1_warmup_100 must be a boolean")
-    if numerical_variant not in (None, "convergence-refined", "convergence-repaired", "model-corrected"):
+    if numerical_variant not in (None, "convergence-refined", "convergence-repaired", "model-corrected", "model-corrected-v2"):
         raise ValueError("Unsupported replication numerical variant")
     if numerical_variant is not None and p1_warmup_100:
         raise ValueError("Select one numerical variant")
@@ -215,7 +215,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         from .numerical_controls import REFINED_PROBLEM_IDS, REPAIRED_PROBLEM_IDS
 
         selected = {"convergence-repaired": REPAIRED_PROBLEM_IDS, "convergence-refined": REFINED_PROBLEM_IDS,
-                    "model-corrected": CORRECTED_PROBLEM_IDS}[numerical_variant]
+                    "model-corrected": CORRECTED_PROBLEM_IDS,
+                    "model-corrected-v2": CORRECTED_PROBLEM_IDS}[numerical_variant]
         definitions = [get_problem(p.id, numerical_variant=numerical_variant)
                        if p.id in selected else p for p in definitions]
     if p1_warmup_100:

@@ -10,6 +10,8 @@ from .numerical_controls import (
     _idf_objects,
     _idf_replace,
     _modern_object,
+    refine_legacy,
+    refine_modern,
     repair_legacy,
     repair_modern,
     repaired_provenance,
@@ -19,6 +21,8 @@ from .numerical_controls import (
 
 CORRECTED_PROBLEM_IDS = REPAIRED_PROBLEM_IDS
 P4_SIZING_MARGIN = 0.1  # K; a physical sizing correction, not roundoff handling.
+V2_SIZING_MARGIN = 0.01  # K; exceeds the observed P6 sizing drift of 0.00025 K.
+WARMUP_CONVECTION = 2.5  # W/(m2 K); initialization only, released before measured days.
 _WARMUP_LINES = ("IF WarmupFlag == 1", "SET BEM_WarmupAvailability = 2", "ELSE",
                  "SET BEM_WarmupAvailability = Null", "ENDIF")
 
@@ -101,3 +105,130 @@ def correct_modern(model, problem_id):
         model.update(objects)
         return
     repair_modern(model, problem_id)
+
+
+def warmup_convection_objects(surfaces):
+    """Stabilize initialization; explicitly release every surface before measured days."""
+    if not surfaces or len(surfaces) != len(set(surfaces)):
+        raise ValueError("Warmup convection requires unique heat-transfer surfaces")
+    names = [f"BEM_WarmupH{i:03}" for i in range(len(surfaces))]
+    release = [f"SET {name} = Null" for name in names]
+    lines = ["IF WarmupFlag == 1 && CurrentEnvironment > 2"]
+    lines += [f"SET {name} = {WARMUP_CONVECTION}" for name in names]
+    lines += ["ELSE", *release, "ENDIF"]
+    return {
+        "EnergyManagementSystem:Actuator": {name: {
+            "actuated_component_unique_name": surface, "actuated_component_type": "Surface",
+            "actuated_component_control_type": "Interior Surface Convection Heat Transfer Coefficient"}
+            for name, surface in zip(names, surfaces, strict=True)},
+        "EnergyManagementSystem:Program": {
+            "BEM_WarmupConvection": {"lines": [{"program_line": line} for line in lines]},
+            "BEM_ReleaseWarmupConvection": {"lines": [{"program_line": line} for line in release]}},
+        "EnergyManagementSystem:ProgramCallingManager": {
+            "BEM_WarmupConvection": {"energyplus_model_calling_point": "BeginTimestepBeforePredictor",
+                                    "programs": [{"program_name": "BEM_WarmupConvection"}]},
+            "BEM_ReleaseWarmupConvection": {
+                "energyplus_model_calling_point": "AfterNewEnvironmentWarmUpIsComplete",
+                "programs": [{"program_name": "BEM_ReleaseWarmupConvection"}]}},
+    }
+
+
+def corrected_v2_provenance(problem_id):
+    recipe = corrected_provenance(problem_id)
+    recipe["name"] = "model-corrected-v2"
+    if problem_id not in (4, 5, 6):
+        return recipe
+    recipe["physical_model_changes"] = True
+    for control in recipe["controls"]:
+        if control.get("field") == "maximum_number_of_warmup_days":
+            control["value"] = 365
+        elif problem_id in (5, 6) and control.get("object_type") == "Sizing:Zone":
+            control.update(offset_kelvin=-V2_SIZING_MARGIN,
+                           operation="subtract a fixed physical sizing margin")
+    recipe["controls"].append({
+        "object_type": "EnergyManagementSystem:Actuator", "component_type": "Surface",
+        "control_type": "Interior Surface Convection Heat Transfer Coefficient",
+        "surfaces": "all rendered BuildingSurface:Detailed and FenestrationSurface:Detailed objects",
+        "warmup_value_w_per_m2_k": WARMUP_CONVECTION, "measured_period_value": "Null",
+        "calling_points": ["BeginTimestepBeforePredictor", "AfterNewEnvironmentWarmUpIsComplete"],
+        "condition": "WarmupFlag == 1 && CurrentEnvironment > 2",
+        "scope": "weather-run warmup only; the two design-day environments keep native convection",
+    })
+    if problem_id == 6:
+        recipe["controls"].extend([
+            {"object_type": "ConvergenceLimits", "field": "maximum_hvac_iterations", "value": 100,
+             "canonical_by_engine": {"8.5.0": 20, "26.2.0": 20},
+             "preserved_effective_defaults": {"minimum_system_timestep": 1,
+                 "minimum_plant_iterations": 2, "maximum_plant_iterations": 8}},
+            {"object_type": "ZoneAirHeatBalanceAlgorithm", "field": "algorithm", "value": "AnalyticalSolution",
+             "canonical_by_engine": {"8.5.0": "ThirdOrderBackwardDifference", "26.2.0": "ThirdOrderBackwardDifference"}},
+        ])
+    return recipe
+
+
+def _convection_idf(objects):
+    blocks = []
+    for name, row in objects["EnergyManagementSystem:Actuator"].items():
+        blocks.append(f"EnergyManagementSystem:Actuator,{name},{row['actuated_component_unique_name']},"
+                      f"{row['actuated_component_type']},{row['actuated_component_control_type']};")
+    for name, row in objects["EnergyManagementSystem:Program"].items():
+        blocks.append(f"EnergyManagementSystem:Program,{name},"
+                      + ",".join(line["program_line"] for line in row["lines"]) + ";")
+    for name, row in objects["EnergyManagementSystem:ProgramCallingManager"].items():
+        blocks.append(f"EnergyManagementSystem:ProgramCallingManager,{name},{row['energyplus_model_calling_point']},"
+                      + ",".join(program["program_name"] for program in row["programs"]) + ";")
+    return "\n" + "\n".join(blocks) + "\n"
+
+
+def correct_v2_legacy(text, problem_id):
+    if problem_id not in (4, 5, 6):
+        return correct_legacy(text, problem_id)
+    if problem_id == 4:
+        text = correct_legacy(text, problem_id)
+    else:
+        text = refine_legacy(text, problem_id)
+        text = _idf_replace(text, "Building", 7, "100", 365)
+        text = sizing_margin_legacy(text, V2_SIZING_MARGIN)
+        if problem_id == 6:
+            if _idf_objects(text, "ConvergenceLimits") or _idf_objects(text, "ZoneAirHeatBalanceAlgorithm"):
+                raise ValueError("P6 v2 requires the canonical HVAC limits and zone-air algorithm")
+            text += "\nConvergenceLimits,1,100,2,8;\nZoneAirHeatBalanceAlgorithm,AnalyticalSolution;\n"
+    if (len(_idf_objects(text, "SizingPeriod:DesignDay")) != 2
+            or _idf_objects(text, "SizingPeriod:WeatherFileDays")
+            or _idf_objects(text, "SizingPeriod:WeatherFileConditionType")):
+        raise ValueError("Weather-only warmup correction requires the two canonical design-day environments")
+    surfaces = sorted(fields[1][1].strip()
+                      for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")
+                      for _, fields in _idf_objects(text, kind))
+    objects = warmup_convection_objects(surfaces)
+    if any(_idf_objects(text, kind) for kind in objects):
+        raise ValueError("Warmup convection requires a model without existing EMS objects")
+    return text + _convection_idf(objects)
+
+
+def correct_v2_modern(model, problem_id):
+    if problem_id not in (4, 5, 6):
+        return correct_modern(model, problem_id)
+    if problem_id == 4:
+        correct_modern(model, problem_id)
+    else:
+        refine_modern(model, problem_id)
+        _, building = _modern_object(model, "Building")
+        building["maximum_number_of_warmup_days"] = 365
+        sizing_margin_modern(model, V2_SIZING_MARGIN)
+        if problem_id == 6:
+            if model.get("ConvergenceLimits") or model.get("ZoneAirHeatBalanceAlgorithm"):
+                raise ValueError("P6 v2 requires the canonical HVAC limits and zone-air algorithm")
+            model["ConvergenceLimits"] = {"BEM v2 convergence": {
+                "minimum_system_timestep": 1, "maximum_hvac_iterations": 100,
+                "minimum_plant_iterations": 2, "maximum_plant_iterations": 8}}
+            model["ZoneAirHeatBalanceAlgorithm"] = {"BEM v2 convergence": {"algorithm": "AnalyticalSolution"}}
+    if (len(model.get("SizingPeriod:DesignDay", {})) != 2
+            or model.get("SizingPeriod:WeatherFileDays") or model.get("SizingPeriod:WeatherFileConditionType")):
+        raise ValueError("Weather-only warmup correction requires the two canonical design-day environments")
+    surfaces = sorted(name for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")
+                      for name in model.get(kind, {}))
+    objects = warmup_convection_objects(surfaces)
+    if set(objects).intersection(model):
+        raise ValueError("Warmup convection requires a model without existing EMS objects")
+    model.update(objects)
