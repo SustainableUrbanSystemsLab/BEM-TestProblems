@@ -1,5 +1,10 @@
 # Replication workflow
 
+For the current fresh FOAM campaign, follow [the FOAM handoff](../docs/foam-takeover.md).
+It uses a separate private configuration and an ordinary-user supervisor with
+118 workers. The default configuration and Task Scheduler instructions below
+describe the older transferred campaign.
+
 This folder is the entry point for continuing, reviewing, and publishing the
 continuous-problem experiment. Run the long stages on the Windows workstation.
 The code comes from GitHub; the preserved checkpoints come from the private
