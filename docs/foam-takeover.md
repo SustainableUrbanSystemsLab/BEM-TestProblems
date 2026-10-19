@@ -2,18 +2,23 @@
 
 Work in `R:\BEM-TestProblems` on `codex/windows-continuation`.
 The detailed private handoff is
-`.validation-local/foam-six-corrected-20261018/TAKEOVER.md`, alongside
+`.validation-local/foam-six-corrected-v2-20261019/TAKEOVER.md`, alongside
 `takeover-state.json`. Read both before taking action.
 
-This is the fresh, six-solver, **model-corrected** campaign, with 118 workers,
+This is the fresh, six-solver, **model-corrected-v2** campaign, with 118 workers,
 ten continuous problems and both EnergyPlus 8.5.0 and 26.2.0. Its numerical
-source was frozen from commit `b09d3d41dcba9b30fcb580b53e310c57a3218032`.
+source was frozen from commit `2a5ec2a`.
 Later documentation commits do not change that frozen source.
 
 The goal is to compare boxplots with Waibel et al. (2019). These labelled
-model corrections change the benchmark, particularly P4; their boxplots must
+model corrections change the benchmark, particularly P4 and P6; their boxplots must
 not be presented as exact replication of the original numerical results.
 See [the correction evidence](replication-failures.md).
+
+The version-1 campaign in `.validation-local/foam-six-corrected-20261018/`
+was stopped for repairs and must stay stopped. Its 565 successful runs and
+all other recorded attempts remain preserved. Version 2 uses a separate manifest
+and output directory; do not mix the two numerical profiles.
 
 ## Recover after signing in
 
@@ -26,7 +31,7 @@ duplicate launches. It uses the existing environment and supervisor, validates
 the continuation plan, and creates new logs without replacing earlier logs:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File R:\BEM-TestProblems\.validation-local\setup\resume-six-corrected.ps1 -Monitor
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File R:\BEM-TestProblems\.validation-local\setup\resume-six-corrected-v2.ps1 -Monitor
 ```
 
 `-CheckOnly` inspects the running campaign or validates the dormant continuation
@@ -54,7 +59,7 @@ Whenever the user asks for a report, generate a fresh one and summarize it in
 chat; do not wait for the next 12-hour deadline:
 
 ```powershell
-.venv\Scripts\python.exe .validation-local\setup\report-six-corrected.py --once
+.venv\Scripts\python.exe .validation-local\setup\report-six-corrected-v2.py --once
 ```
 
 This leaves the periodic deadline unchanged. The user currently plans to stay
@@ -62,7 +67,7 @@ signed in, so leave the campaign and reporter running.
 
 ## Rules for the next chat
 
-- Use `.validation-local/foam-six-corrected-20261018/pipeline.json` explicitly.
+- Use `.validation-local/foam-six-corrected-v2-20261019/pipeline.json` explicitly.
   The default `replication/continuation.json` belongs to an older experiment.
 - Keep DIRECT, CRS2, Sbplex, CMA-ES, PDFO BOBYQA and Py-BOBYQA; cap workers at 118.
 - Preserve the frozen source, installed numerical environment, inputs, seeds,
