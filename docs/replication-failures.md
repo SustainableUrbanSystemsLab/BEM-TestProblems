@@ -143,10 +143,9 @@ Strict validation checks Severe/Fatal diagnostics from **every phase**.
   mapped a lower-bound endpoint of `1.224` to `1.2239999999999998`, one adjacent
   binary64 float outside the box. This is a Python solver-adapter issue, separate
   from the warmup errors also seen through C#.
-- Both PDFO entry points normalize only that immediately adjacent outside float to
-  its endpoint. Larger violations, nonfinite values, and invalid dimensions still
-  fail. The same correction now applies to the Py-BOBYQA callback. Direct problem
-  calls retain strict bounds.
+- Both PDFO entry points and the Py-BOBYQA callback normalize up to two adjacent
+  outside binary64 floats to the endpoint. Larger violations, nonfinite values,
+  and invalid dimensions still fail. Direct problem calls retain strict bounds.
 - Saved replay coordinates use relative and absolute tolerances of `1e-12` for
   differences between compiled PDFO builds. Windows CI observed a `2.586e-12`
   difference in an interior coordinate before reaching the failing endpoint.
@@ -170,6 +169,15 @@ were a single adjacent binary64 float outside an endpoint. Replaying their
 saved objective prefixes through the real solver confirmed the corrected
 callback reaches the exact endpoint. Larger violations still fail, and starts,
 seeds, budgets, and solver settings are unchanged.
+
+The corrected-v2 campaign later exposed a two-step Py-BOBYQA overshoot on P6/8.5:
+south-window width `5.832000000000002` against an upper bound of `5.832` m.
+Replaying all 96 saved objective observations reproduced the same exception
+without running EnergyPlus. The checkout adapter now normalizes this two-step
+overshoot to the exact endpoint and records the allowance in solver metadata.
+Three-step violations remain invalid. The running campaign retains its frozen
+one-step adapter; its original failed record stays preserved. A corrected replay
+stops at the first unsaved objective rather than inventing an energy value.
 
 The separate opt-in `convergence-repaired` variant adds a fixed **0.00001 K**
 cooling supply-temperature margin to the five `Sizing:Zone` inputs in P4, P5,
