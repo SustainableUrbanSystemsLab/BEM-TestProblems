@@ -86,7 +86,7 @@ _DEFINITIONS["bobyqa"].update({
     "implemented": True, "dependency": "pdfo", "source": "https://www.pdfo.net/",
     "skip_reason": None,
     "settings": {"method": "bobyqa", "scale": True, "quiet": True, "honour_x0": True,
-                 "endpoint_roundoff": "normalize at most one binary64 ULP outside finite bounds"},
+                 "endpoint_roundoff": "normalize at most two binary64 ULPs outside finite bounds"},
     "fidelity": "Added PDFO BOBYQA comparison; not one of the paper's 16 methods.",
 })
 _DEFINITIONS["pybobyqa"].update({
@@ -94,7 +94,7 @@ _DEFINITIONS["pybobyqa"].update({
     "skip_reason": None,
     "settings": {"scaling_within_bounds": True, "seek_global_minimum": False,
                  "objfun_has_noise": False, "restarts.use_restarts": False,
-                 "endpoint_roundoff": "normalize at most one binary64 ULP outside finite bounds"},
+                 "endpoint_roundoff": "normalize at most two binary64 ULPs outside finite bounds"},
     "fidelity": "Added Py-BOBYQA comparison; not one of the paper's 16 methods.",
 })
 
@@ -253,10 +253,11 @@ def _cma(module, np, observed, start, bounds, budget, seed):
 
 
 def _bounded_physical_point(x, bounds):
-    """Remove only one-ULP endpoint overshoot from affine solver unscaling.
+    """Normalize at most two floating-point steps outside a physical bound.
 
-    PDFO 2.2.0 and Py-BOBYQA 1.5.0 can map an endpoint to the adjacent float outside
-    its physical bound. Normalize that neighbor before validation/recording;
+    PDFO 2.2.0 and Py-BOBYQA 1.5.0 can overshoot endpoints during affine unscaling.
+    A recorded Py-BOBYQA proposal was two steps above its upper bound. Normalize
+    only these immediate neighbors before strict validation and recording;
     all larger violations, nonfinite values, and wrong dimensions stay invalid.
     """
     physical = tuple(float(value) for value in x)
@@ -264,9 +265,9 @@ def _bounded_physical_point(x, bounds):
         raise ValueError("The solver requested a nonfinite or out-of-bounds design")
     corrected = []
     for value, (lower, upper) in zip(physical, bounds, strict=True):
-        if isfinite(value) and value == nextafter(lower, -inf):
+        if isfinite(value) and nextafter(lower, -inf, steps=2) <= value < lower:
             value = lower
-        elif isfinite(value) and value == nextafter(upper, inf):
+        elif isfinite(value) and upper < value <= nextafter(upper, inf, steps=2):
             value = upper
         if not isfinite(value) or not lower <= value <= upper:
             raise ValueError("The solver requested a nonfinite or out-of-bounds design")

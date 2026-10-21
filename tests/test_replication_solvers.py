@@ -335,10 +335,15 @@ ENDPOINT_START = tuple((a + b) / 2 for a, b in ENDPOINT_BOX)
     ((math.nextafter(5.832, math.inf), 0.5), (5.832, 0.5)),
     ((2.0, math.nextafter(0.05, -math.inf)), (2.0, 0.05)),
     ((2.0, math.nextafter(1.05, math.inf)), (2.0, 1.05)),
+    ((math.nextafter(1.224, -math.inf, steps=2), 0.5), (1.224, 0.5)),
+    ((5.832000000000002, 0.5), (5.832, 0.5)),  # Recorded P6/Py-BOBYQA proposal.
+    ((2.0, math.nextafter(0.05, -math.inf, steps=2)), (2.0, 0.05)),
+    ((2.0, math.nextafter(1.05, math.inf, steps=2)), (2.0, 1.05)),
     ((math.nextafter(1.224, math.inf), 0.5), (math.nextafter(1.224, math.inf), 0.5)),
+    ((math.nextafter(5.832, -math.inf), 0.5), (math.nextafter(5.832, -math.inf), 0.5)),
 ])
 @pytest.mark.parametrize("method", ["bobyqa", "pybobyqa"])
-def test_bobyqa_normalizes_only_the_adjacent_outside_float_and_records_feasible_values(
+def test_bobyqa_normalizes_up_to_two_outside_floats_and_records_feasible_values(
     monkeypatch, method, raw, expected
 ):
     _fake_solver_proposals(monkeypatch, method, [raw])
@@ -354,18 +359,20 @@ def test_bobyqa_normalizes_only_the_adjacent_outside_float_and_records_feasible_
     assert result["x"] == list(expected)
     assert result["fun"] == 17.0
     assert result["nfev"] == 1
-    assert "one binary64 ULP" in result["settings"]["endpoint_roundoff"]
+    assert "two binary64 ULPs" in result["settings"]["endpoint_roundoff"]
 
 
 @pytest.mark.parametrize("bad", [
-    (math.nextafter(math.nextafter(1.224, -math.inf), -math.inf), 0.5),
-    (math.nextafter(math.nextafter(5.832, math.inf), math.inf), 0.5),
+    (math.nextafter(1.224, -math.inf, steps=3), 0.5),
+    (math.nextafter(5.832, math.inf, steps=3), 0.5),
+    (2.0, math.nextafter(0.05, -math.inf, steps=3)),
+    (2.0, math.nextafter(1.05, math.inf, steps=3)),
     (1.223, 0.5), (5.833, 0.5),
     (float("nan"), 0.5), (float("inf"), 0.5), (-float("inf"), 0.5),
     (2.0,), (2.0, 0.5, 0.5),
 ])
 @pytest.mark.parametrize("method", ["bobyqa", "pybobyqa"])
-def test_bobyqa_rejects_more_than_one_ulp_nonfinite_and_wrong_dimensions_before_the_caller(
+def test_bobyqa_rejects_more_than_two_ulps_nonfinite_and_wrong_dimensions_before_the_caller(
     monkeypatch, method, bad
 ):
     _fake_solver_proposals(monkeypatch, method, [bad, ENDPOINT_START])
@@ -379,7 +386,7 @@ def test_bobyqa_rejects_more_than_one_ulp_nonfinite_and_wrong_dimensions_before_
 
 @pytest.mark.parametrize("method", ["bobyqa", "pybobyqa"])
 def test_bobyqa_endpoint_normalization_does_not_change_the_hard_call_budget(monkeypatch, method):
-    raw = (math.nextafter(1.224, -math.inf), 0.5)
+    raw = (math.nextafter(1.224, -math.inf, steps=2), 0.5)
     _fake_solver_proposals(monkeypatch, method, [raw] * 6)
     calls = []
     result = adapters.solve_solver(method, lambda x: calls.append(tuple(x)) or 17.,
@@ -388,8 +395,9 @@ def test_bobyqa_endpoint_normalization_does_not_change_the_hard_call_budget(monk
     assert result["nfev"] == 4 and result["status"] == "budget"
 
 
-def test_one_ulp_outside_remains_invalid_for_direct_users_and_other_solver_callbacks():
-    raw = (math.nextafter(1.224, -math.inf), 0.5)
+@pytest.mark.parametrize("steps", [1, 2])
+def test_outside_floats_remain_invalid_for_direct_users_and_other_solver_callbacks(steps):
+    raw = (math.nextafter(1.224, -math.inf, steps=steps), 0.5)
     with pytest.raises(ValueError, match="inside the box"):
         adapters._inputs(raw, ENDPOINT_BOX, 20, 0)
     observed = adapters._ObservedObjective(lambda x: pytest.fail("Invalid point"), ENDPOINT_BOX, 20)

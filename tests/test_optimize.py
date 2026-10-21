@@ -247,8 +247,9 @@ def test_public_solve_replays_saved_failures_through_the_feasible_endpoint(case,
 
 
 @pytest.mark.parametrize("bound,direction", [(1.224, -math.inf), (5.832, math.inf)])
+@pytest.mark.parametrize("steps", [1, 2])
 def test_public_solve_returns_the_feasible_evaluated_endpoint_and_optimize_result_type(
-    monkeypatch, bound, direction
+    monkeypatch, bound, direction, steps
 ):
     np = pytest.importorskip("numpy")
     scipy = pytest.importorskip("scipy.optimize")
@@ -262,7 +263,7 @@ def test_public_solve_returns_the_feasible_evaluated_endpoint_and_optimize_resul
             calls.append(tuple(x))
             return super().evaluate(x, **kwargs)
 
-    raw = np.array([math.nextafter(bound, direction), 0.5])
+    raw = np.array([math.nextafter(bound, direction, steps=steps), 0.5])
     native = scipy.OptimizeResult()
 
     def pdfo(objective, *args, **kwargs):
@@ -279,8 +280,8 @@ def test_public_solve_returns_the_feasible_evaluated_endpoint_and_optimize_resul
 
 
 @pytest.mark.parametrize("bad", [
-    (math.nextafter(math.nextafter(1.224, -math.inf), -math.inf), 0.5),
-    (math.nextafter(math.nextafter(5.832, math.inf), math.inf), 0.5),
+    (math.nextafter(1.224, -math.inf, steps=3), 0.5),
+    (math.nextafter(5.832, math.inf, steps=3), 0.5),
     (float("nan"), 0.5), (float("inf"), 0.5), (-float("inf"), 0.5),
     (1.223, 0.5), (5.833, 0.5), (2.,), (2., 0.5, 0.5),
 ])
