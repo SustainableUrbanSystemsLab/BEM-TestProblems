@@ -104,7 +104,8 @@ def local_setup(tmp_path, monkeypatch):
     return configuration, calls
 
 
-@pytest.mark.parametrize("variant", ["convergence-refined", "convergence-repaired", "model-corrected"])
+@pytest.mark.parametrize("variant", ["convergence-refined", "convergence-repaired", "model-corrected",
+                                     "model-corrected-v2", "model-corrected-v3"])
 def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, variant):
     configuration, _ = local_setup
     configuration.update(problems=[1, 2, 3, 4, 5, 6, 8, 9, 10, 13], budget=None, repetitions=20)

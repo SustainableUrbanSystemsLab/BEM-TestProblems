@@ -169,3 +169,65 @@ def test_v2_preserves_annual_fields_and_releases_every_surface(number, version, 
     program = programs["BEM_WarmupConvection"]
     assert program[0] == "IF WarmupFlag == 1 && CurrentEnvironment > 2" and program[-1] == "ENDIF"
     assert tuple(program[program.index("ELSE") + 1:-1]) == tuple(release)
+
+
+@pytest.mark.parametrize("number", [1, 3, 6, 9])
+def test_v3_keeps_unaffected_v2_inputs_identical(number, tmp_path):
+    before = get_problem(number, numerical_variant="model-corrected-v2")
+    after = get_problem(number, numerical_variant="model-corrected-v3")
+    for renderer in ("render_legacy", "render_modern"):
+        old = getattr(before, renderer)(before.midpoint, tmp_path / "v2")
+        new = getattr(after, renderer)(after.midpoint, tmp_path / "v3")
+        assert old.read_bytes() == new.read_bytes()
+
+
+@pytest.mark.parametrize("number", [4, 5, 10])
+@pytest.mark.parametrize("version", ["8.5.0", "26.2.0"])
+@pytest.mark.parametrize("design_kind", ["midpoint", "lower", "upper"])
+def test_v3_changes_only_weather_warmup_convection(number, version, design_kind, tmp_path):
+    before = get_problem(number, numerical_variant="model-corrected-v2")
+    after = get_problem(number, numerical_variant="model-corrected-v3")
+    design = {"midpoint": before.midpoint, "lower": tuple(b[0] for b in before.bounds),
+              "upper": tuple(b[1] for b in before.bounds)}[design_kind]
+    assert after.parameters == before.parameters and after.constants == before.constants
+    assert after.provenance["numerical_variant"]["historical_equivalence"] == "not claimed"
+    if version == "8.5.0":
+        old = idf_objects(before.render_legacy(design, tmp_path / "v2.idf"))
+        new = idf_objects(after.render_legacy(design, tmp_path / "v3.idf"))
+        assert [row for row in new if not row[0].startswith("EnergyManagementSystem:")] == [
+            row for row in old if not row[0].startswith("EnergyManagementSystem:")]
+        surfaces = {row[1] for row in new if row[0] in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")}
+        actuators = [row for row in new if row[0] == "EnergyManagementSystem:Actuator" and row[3] == "Surface"]
+        assert {row[2] for row in actuators} == surfaces
+        names = {row[1] for row in actuators}
+        programs = {row[1]: row[2:] for row in new if row[0] == "EnergyManagementSystem:Program"}
+        managers = {(row[2], row[3]) for row in new if row[0] == "EnergyManagementSystem:ProgramCallingManager"}
+        if number == 10:
+            assert all(row in new for row in old if row[0].startswith("EnergyManagementSystem:"))
+    else:
+        old = json.loads(before.render_modern(design, tmp_path / "v2.epJSON").read_text())
+        new = json.loads(after.render_modern(design, tmp_path / "v3.epJSON").read_text())
+        assert {key: value for key, value in new.items() if not key.startswith("EnergyManagementSystem:")} == {
+            key: value for key, value in old.items() if not key.startswith("EnergyManagementSystem:")}
+        surfaces = {name for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed") for name in new[kind]}
+        actuators = {name: row for name, row in new["EnergyManagementSystem:Actuator"].items()
+                     if row["actuated_component_type"] == "Surface"}
+        assert {row["actuated_component_unique_name"] for row in actuators.values()} == surfaces
+        names = set(actuators)
+        programs = {name: tuple(line["program_line"] for line in row["lines"])
+                    for name, row in new["EnergyManagementSystem:Program"].items()}
+        managers = {(row["energyplus_model_calling_point"], row["programs"][0]["program_name"])
+                    for row in new["EnergyManagementSystem:ProgramCallingManager"].values()}
+        if number == 10:
+            for kind, rows in old.items():
+                if kind.startswith("EnergyManagementSystem:"):
+                    assert all(new[kind][name] == row for name, row in rows.items())
+    assert len(names) == len(surfaces)
+    program = programs["BEM_WarmupConvection"]
+    release = programs["BEM_ReleaseWarmupConvection"]
+    assert program[0] == "IF WarmupFlag == 1 && CurrentEnvironment > 2"
+    assert set(program[1:program.index("ELSE")]) == {f"SET {name} = 1" for name in names}
+    assert set(release) == {f"SET {name} = Null" for name in names}
+    assert program[program.index("ELSE") + 1:-1] == release
+    assert ("BeginTimestepBeforePredictor", "BEM_WarmupConvection") in managers
+    assert ("AfterNewEnvironmentWarmUpIsComplete", "BEM_ReleaseWarmupConvection") in managers

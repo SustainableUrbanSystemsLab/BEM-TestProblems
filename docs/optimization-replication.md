@@ -9,6 +9,9 @@ make this rerun reproducible without claiming the original trajectories.
 The current study is limited to the selected solvers already in use. Recovering
 all sixteen study methods is outside its scope; omitted methods do not block
 the comparison of the selected solvers across all ten problems.
+The separately validated [version-3 warmup correction](replication-failures.md#weather-warmup-convection-correction-version-3)
+is available through `--numerical-variant model-corrected-v3`. It is opt-in;
+the completed version-2 campaign retains its original inputs and checkpoints.
 [Waibel's 2018 thesis Appendix C](published-solutions.md) supplies rounded final
 designs for a separate literature comparison. Those are neither starting points
 nor verified full-precision winning records from the journal study.

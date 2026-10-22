@@ -366,8 +366,8 @@ the inactive-actuator control reproduced the previous results. That candidate
 remains diagnostic and is not the final version-2 recipe.
 
 This changes model initialization and sizing; it is not an exact historical
-replication. The original 0.004 K temperature and 0.04 load convergence
-thresholds, strict Severe/Fatal rejection, annual schedules, decision bounds,
+replication. The original problem-specific temperature thresholds and 0.04 load
+threshold, strict Severe/Fatal rejection, annual schedules, decision bounds,
 objective equations, starts, seeds, budgets and solver settings are preserved.
 No design-dependent retry or acceptance fallback is used.
 
@@ -438,3 +438,57 @@ establish equivalence to the paper's historical numerical boxplots.
 - Public fixtures contain original numerical observations and sanitized
   diagnostics under the project's [licensing rules](licensing.md). Raw models,
   weather files, simulation folders, and literature transcriptions are excluded.
+
+## Weather-warmup convection correction, version 3
+
+The completed FOAM version-2 campaign retained 23 additional warmup failures:
+one P4/8.5, four P5/26.2, and nine P10 cases per engine. All completed annually
+but failed the existing strict diagnostics after 365 warmup days. Instrumented
+replays preserved their annual objectives exactly and exposed persistent
+two-day cycles in the representative P5 and P10 cases. One P10 cooling peak
+alternated between approximately 629 W and 737 W; this exceeds the 4% load
+criterion despite nearly unchanged zone temperatures.
+
+The opt-in **`model-corrected-v3`** profile applies a fixed interior-surface
+convection coefficient of **1 W/(m² K) during weather-run warmup** to P4, P5 and
+P10. P4/P5 previously used 2.5 W/(m² K); P10 gains the same surface override.
+The condition remains `WarmupFlag == 1 && CurrentEnvironment > 2`, guarded by
+the two canonical design-day environments. Every surface actuator returns to
+`Null` after warmup and on non-warmup timesteps. P10 retains its existing
+warmup air-loop availability control. Other problems retain version-2 input
+bytes. Annual model fields, sizing controls, convergence tolerances, bounds,
+starts, seeds, budgets and solver settings are unchanged from version 2.
+
+This is a labelled initialization correction, selected in exploratory screens
+before the separate independent validation. It reduces the warmup coupling
+that sustained the observed cycles; it does not establish exact historical
+model equivalence or convergence at every point in the continuous boxes.
+
+The [aggregate native audit](validation-results/model-corrected-v3-audit.json)
+records the bounded evidence:
+
+- All **23 retained failures pass**, completing warmup in **6–21 days** with
+  the original thresholds: 0.004 K for P4/P5 temperature, 0.2 K for P10
+  temperature, and 0.04 for load comparisons.
+- All **2,850 engine/design combinations pass**: the earlier 2,516-case corpus,
+  the new failure designs on both engines, and independent random, boundary
+  and nearby designs. There were 1,776 new native simulations and 1,074 reused
+  results with byte-identical inputs. Frozen source and engine hashes remained
+  unchanged during validation.
+- Native sizing records are exactly unchanged across **1,442 paired designs**.
+  Annual objectives do change through initialization: the largest absolute
+  difference from previously accepted version-2 outputs was **0.05564%**.
+  This is an observation, not a new acceptance tolerance.
+- Eight instrumented runs verified **38,684,160 annual surface-actuator
+  observations**, with none active, and exactly reproduced their uninstrumented
+  version-3 annual objectives. The guarded phase condition and sizing-record
+  comparisons separately check that sizing remains unaffected.
+- The full Python suite passed **1,385 tests**, with 26 skips. Tests also check
+  that the original profiles and annual model fields remain preserved.
+
+Select the profile explicitly with `--numerical-variant model-corrected-v3` in
+`tools/run_replication.py`. These validation measurements are separate from
+optimizer trajectories. The completed version-2 campaign and its failed records
+remain preserved. Since annual objectives can change, a version-3 solver
+comparison requires a new frozen manifest and separate results; existing
+version-2 trajectories must not be relabelled or combined with repaired values.
