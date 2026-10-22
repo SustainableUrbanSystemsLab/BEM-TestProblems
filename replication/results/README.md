@@ -7,6 +7,10 @@ full-precision designs, plots, replay summary, attribution, and checksum invento
 
 No full campaign has been published here yet. Raw checkpoints, machine paths,
 licensed simulator inputs, and private literature comparisons stay outside Git.
+The completed FOAM version-2 campaign has private reports and boxplots under
+`.validation-local/foam-six-corrected-v2-20261019/review/`. See the
+[current handoff](../../docs/foam-takeover.md) for the result locations, failure
+counts and separately validated version-3 warmup correction.
 The pipeline's `run` stage automatically generates private review tables and
 PNG/SVG boxplots in `paths.review` from the selected configuration; its
 `run-completion.json` lists the generated files. Those reports are available

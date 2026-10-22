@@ -1,88 +1,85 @@
-# FOAM campaign: next-chat handoff
+# FOAM replication: next-session handoff
 
-Work in `R:\BEM-TestProblems` on `codex/windows-continuation`.
-The detailed private handoff is
-`.validation-local/foam-six-corrected-v2-20261019/TAKEOVER.md`, alongside
-`takeover-state.json`. Read both before taking action.
+Updated **22 October 2026**. Work in `R:\BEM-TestProblems` on
+`codex/windows-continuation`.
 
-This is the fresh, six-solver, **model-corrected-v2** campaign, with 118 workers,
-ten continuous problems and both EnergyPlus 8.5.0 and 26.2.0. Its numerical
-source was frozen from commit `2a5ec2a`.
-Later documentation commits do not change that frozen source.
+Read the detailed local note first:
+**`.validation-local/SESSION-HANDOFF-20261022.txt`**. Its adjacent JSON records
+completion and the process check at handoff. These private notes stay on FOAM.
 
-The goal is to compare boxplots with Waibel et al. (2019). These labelled
-model corrections change the benchmark, particularly P4 and P6; their boxplots must
-not be presented as exact replication of the original numerical results.
-See [the correction evidence](replication-failures.md).
+## Current state
 
-The version-1 campaign in `.validation-local/foam-six-corrected-20261018/`
-was stopped for repairs and must stay stopped. Its 565 successful runs and
-all other recorded attempts remain preserved. Version 2 uses a separate manifest
-and output directory; do not mix the two numerical profiles.
+The **model-corrected-v2 campaign is finished**: 2,400 terminal attempts,
+2,288 successful, 112 failed, zero remaining. It recorded 1,769,625 evaluations
+using 118 workers. The last simulation finished on 22 October at 05:13 Eastern;
+the automatic final review finished at 05:15. No EnergyPlus or project background
+Python jobs were active at handoff, so logout will not interrupt an experiment.
 
-## Recover after signing in
+The user's next requested step is to **look at the completed replication**.
+Open the reports and plots before taking further action. There is nothing to
+resume after login. Old recovery instructions describe historical running state;
+some controller text still says `interrupted`, while `review/run-completion.json`
+correctly records `finished-with-failures` and all 2,400 attempts are terminal.
 
-Windows sign-out stops this ordinary-user background job. Completed runs and
-saved evaluations stay on disk. Interrupted optimizations restart with their
-original start, seed and full budget; optimizer internal state is not saved.
+## Results to review
 
-The private helper checks live process identities and campaign locks to prevent
-duplicate launches. It uses the existing environment and supervisor, validates
-the continuation plan, and creates new logs without replacing earlier logs:
+Private root: `.validation-local/foam-six-corrected-v2-20261019/`.
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File R:\BEM-TestProblems\.validation-local\setup\resume-six-corrected-v2.ps1 -Monitor
-```
+- Final tables and discussion: `review/review-strict.md`.
+- Full review data: `review/review-strict.json`.
+- Boxplot values and sample counts: `review/plots-strict/boxplot-summary.json`.
+- Figures 8 and 9 for each engine: `review/plots-strict/figure8-energyplus-8.5.0.png`,
+  `figure9-energyplus-8.5.0.png`, `figure8-energyplus-26.2.0.png` and
+  `figure9-energyplus-26.2.0.png`. Matching SVG files exist.
+- Raw designs, evaluation traces and errors: `campaign/runs/*.json`.
+- Failure details: `diagnostics/failure-details-20261021T201858Z/`.
 
-`-CheckOnly` inspects the running campaign or validates the dormant continuation
-without launching it. `-Monitor` opens the read-only tqdm progress window.
-The helper also starts or reuses the private 12-hour progress reporter.
-The launching chat must verify the controller heartbeat and increasing
-checkpoint evaluations after restarting. An alive PID with an unverified
-identity requires inspection, since Windows can reuse PIDs.
+The final review and plots were generated automatically and their hashes checked.
+`replication/results/` is the public export destination; no public campaign package
+has been published there. Private results are available without a public export.
 
-## Twelve-hour reports
+## Repairs and scientific limits
 
-The user requested progress, failures and preliminary boxplots every half day.
-The ordinary-user reporter saves an initial report, then reports every 12 hours,
-and a final report after the pipeline review completes. Its heartbeat and next
-deadline are in the campaign's `reports/reporter-status.json`; open
-`reports/latest.md` for the latest summary. Timestamped report directories retain
-earlier snapshots. Plots use strict finished trajectories and display sample
-counts; incomplete distributions can be biased.
+The original 112 failed attempts comprise 88 storage errors, 23 warmup failures
+and one bounds-adapter error. The bounds adapter was fixed in `5bf4cf1`.
+The warmup correction was committed and pushed as **`e965a13`**, an explicit
+**`model-corrected-v3`** option. All 23 retained failing designs pass its strict
+native checks, but their optimizer trajectories have not been rerun.
 
-Reports are saved locally. No email or automatic chat delivery is configured.
-Windows sign-out stops the reporter too; the recovery helper restores its saved
-deadline and generates an overdue report after sign-in.
+Version 3 sets surface convection to 1 W/(m? K) during weather warmup only for
+P4/P5/P10, releasing the overrides before measured simulation. It preserves
+convergence thresholds and version-2 annual/sizing input fields. All 2,850 native
+validation cases pass; sizing records match at 1,442 paired designs. Full pytest:
+1,385 passed, 26 skipped. See [the repair evidence](replication-failures.md#weather-warmup-convection-correction-version-3)
+and the private `.validation-local/warmup-repair-20261022/REPORT.txt`.
 
-Whenever the user asks for a report, generate a fresh one and summarize it in
-chat; do not wait for the next 12-hour deadline:
+Current assessment: **partial reproduction** of the paper/dissertation. Eight of
+ten best objectives from the overlapping solver families are within 0.12% of
+rounded dissertation best values. P4 differs by -4.19% and P6 by +1.13%; material
+model/numerical departures remain. Boxplot medians, quartiles and tails have not
+been established as matching, and excluded failures can bias distributions.
+The saved publication comparison is under `review/publication-comparison-20261022/`.
+Use EnergyPlus 8.5 for historical comparisons; 26.2 is a separate engine experiment.
 
-```powershell
-.venv\Scripts\python.exe .validation-local\setup\report-six-corrected-v2.py --once
-```
+## Constraints for future work
 
-This leaves the periodic deadline unchanged. The user currently plans to stay
-signed in, so leave the campaign and reporter running.
+- Retain the six selected methods: DIRECT, CRS2, Sbplex, CMA-ES, PDFO BOBYQA,
+  Py-BOBYQA; ten continuous problems; both installed engines; at most 118 workers.
+- Preserve the existing `.venv`, numerical dependencies, engines, weather,
+  frozen sources, starts, seeds, budgets, solver settings, checkpoints and results.
+- A version-3 optimizer comparison needs a separate frozen manifest and output
+  root. Keep version-2 trajectories and version-3 measurements separate.
+- The default `replication/continuation.json` belongs to an older experiment.
+  Do not run old recovery/preparation helpers merely to resume this session.
+- No administrator access, Windows Task Scheduler or website build. Keep private
+  inputs, checkpoints and licensed documents outside Git. No automatic email/chat
+  delivery is configured. The completed campaign's reporter has finished.
+- Native result folders may require ordinary-user execution outside the tool
+  sandbox; this does not require administrator privileges or ACL changes.
 
-## Rules for the next chat
+Suggested prompt after signing in:
 
-- Use `.validation-local/foam-six-corrected-v2-20261019/pipeline.json` explicitly.
-  The default `replication/continuation.json` belongs to an older experiment.
-- Keep DIRECT, CRS2, Sbplex, CMA-ES, PDFO BOBYQA and Py-BOBYQA; cap workers at 118.
-- Preserve the frozen source, installed numerical environment, inputs, seeds,
-  starts, budgets, solver settings, checkpoints and earlier results.
-- Use the normal signed-in account. No administrator access or Task Scheduler.
-- Keep private files outside Git. Do not run the fresh-campaign preparation
-  scripts, reinstall dependencies, launch the stopped ten-solver cohort, or
-  build the website.
-- After recovery, use the existing `replication/pipeline.py run` workflow;
-  its automatic review generates the final tables and boxplots in the private
-  campaign's `review/` directory. Inspect failures before making claims.
-
-Suggested prompt for a new chat:
-
-> Read `docs/foam-takeover.md` and its private handoff in this checkout.
-> Check whether the corrected six-solver campaign is alive. Resume the same
-> campaign if needed using the provided helper, verify checkpoint growth,
-> and continue monitoring and reviewing the boxplot experiment with 118 workers.
+> Read `docs/foam-takeover.md` and `.validation-local/SESSION-HANDOFF-20261022.txt`.
+> I want to review the completed replication and boxplots first. Show me the
+> results and explain what matches Waibel's paper/dissertation and what remains
+> unresolved. Do not automatically restart or launch a campaign.
