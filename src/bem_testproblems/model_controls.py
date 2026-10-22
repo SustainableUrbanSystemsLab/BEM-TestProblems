@@ -107,14 +107,14 @@ def correct_modern(model, problem_id):
     repair_modern(model, problem_id)
 
 
-def warmup_convection_objects(surfaces):
+def warmup_convection_objects(surfaces, coefficient=WARMUP_CONVECTION):
     """Stabilize initialization; explicitly release every surface before measured days."""
     if not surfaces or len(surfaces) != len(set(surfaces)):
         raise ValueError("Warmup convection requires unique heat-transfer surfaces")
     names = [f"BEM_WarmupH{i:03}" for i in range(len(surfaces))]
     release = [f"SET {name} = Null" for name in names]
     lines = ["IF WarmupFlag == 1 && CurrentEnvironment > 2"]
-    lines += [f"SET {name} = {WARMUP_CONVECTION}" for name in names]
+    lines += [f"SET {name} = {coefficient}" for name in names]
     lines += ["ELSE", *release, "ENDIF"]
     return {
         "EnergyManagementSystem:Actuator": {name: {
@@ -180,7 +180,7 @@ def _convection_idf(objects):
     return "\n" + "\n".join(blocks) + "\n"
 
 
-def correct_v2_legacy(text, problem_id):
+def correct_v2_legacy(text, problem_id, *, coefficient=WARMUP_CONVECTION):
     if problem_id not in (4, 5, 6):
         return correct_legacy(text, problem_id)
     if problem_id == 4:
@@ -200,13 +200,13 @@ def correct_v2_legacy(text, problem_id):
     surfaces = sorted(fields[1][1].strip()
                       for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")
                       for _, fields in _idf_objects(text, kind))
-    objects = warmup_convection_objects(surfaces)
+    objects = warmup_convection_objects(surfaces, coefficient)
     if any(_idf_objects(text, kind) for kind in objects):
         raise ValueError("Warmup convection requires a model without existing EMS objects")
     return text + _convection_idf(objects)
 
 
-def correct_v2_modern(model, problem_id):
+def correct_v2_modern(model, problem_id, *, coefficient=WARMUP_CONVECTION):
     if problem_id not in (4, 5, 6):
         return correct_modern(model, problem_id)
     if problem_id == 4:
@@ -228,7 +228,61 @@ def correct_v2_modern(model, problem_id):
         raise ValueError("Weather-only warmup correction requires the two canonical design-day environments")
     surfaces = sorted(name for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")
                       for name in model.get(kind, {}))
-    objects = warmup_convection_objects(surfaces)
+    objects = warmup_convection_objects(surfaces, coefficient)
     if set(objects).intersection(model):
         raise ValueError("Warmup convection requires a model without existing EMS objects")
     model.update(objects)
+
+
+def corrected_v3_provenance(problem_id):
+    """Disclose the fixed initialization correction separately from version 2."""
+    recipe = corrected_v2_provenance(problem_id)
+    recipe["name"] = "model-corrected-v3"
+    if problem_id in (4, 5):
+        for control in recipe["controls"]:
+            if control.get("control_type") == "Interior Surface Convection Heat Transfer Coefficient":
+                control["warmup_value_w_per_m2_k"] = 1
+    elif problem_id == 10:
+        recipe["controls"].append({
+            "object_type": "EnergyManagementSystem:Actuator", "component_type": "Surface",
+            "control_type": "Interior Surface Convection Heat Transfer Coefficient",
+            "surfaces": "all rendered BuildingSurface:Detailed and FenestrationSurface:Detailed objects",
+            "warmup_value_w_per_m2_k": 1, "measured_period_value": "Null",
+            "calling_points": ["BeginTimestepBeforePredictor", "AfterNewEnvironmentWarmUpIsComplete"],
+            "condition": "WarmupFlag == 1 && CurrentEnvironment > 2",
+            "scope": "weather-run warmup only; sizing and measured-day convection unchanged",
+        })
+    return recipe
+
+
+def correct_v3_legacy(text, problem_id):
+    if problem_id in (4, 5):
+        return correct_v2_legacy(text, problem_id, coefficient=1)
+    text = correct_v2_legacy(text, problem_id)
+    if problem_id != 10:
+        return text
+    if (len(_idf_objects(text, "SizingPeriod:DesignDay")) != 2
+            or _idf_objects(text, "SizingPeriod:WeatherFileDays")
+            or _idf_objects(text, "SizingPeriod:WeatherFileConditionType")):
+        raise ValueError("Weather-only warmup correction requires the two canonical design-day environments")
+    surfaces = sorted(fields[1][1].strip()
+                      for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")
+                      for _, fields in _idf_objects(text, kind))
+    return text + _convection_idf(warmup_convection_objects(surfaces, coefficient=1))
+
+
+def correct_v3_modern(model, problem_id):
+    if problem_id in (4, 5):
+        return correct_v2_modern(model, problem_id, coefficient=1)
+    correct_v2_modern(model, problem_id)
+    if problem_id != 10:
+        return
+    if (len(model.get("SizingPeriod:DesignDay", {})) != 2
+            or model.get("SizingPeriod:WeatherFileDays") or model.get("SizingPeriod:WeatherFileConditionType")):
+        raise ValueError("Weather-only warmup correction requires the two canonical design-day environments")
+    surfaces = sorted(name for kind in ("BuildingSurface:Detailed", "FenestrationSurface:Detailed")
+                      for name in model.get(kind, {}))
+    for kind, rows in warmup_convection_objects(surfaces, coefficient=1).items():
+        if set(rows).intersection(model.get(kind, {})):
+            raise ValueError("Warmup convection requires unique EMS object names")
+        model.setdefault(kind, {}).update(rows)
