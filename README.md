@@ -157,6 +157,16 @@ To solve all ten problems locally from their midpoints, run
 .venv/bin/python examples/solve_all_bobyqa.py
 ```
 
+To run problems in parallel, leaving two logical CPUs available:
+
+```sh
+.venv/bin/python examples/solve_all_bobyqa.py --workers auto
+```
+
+Or choose a limit with `--workers 4`. The default is one worker; at most ten
+workers are used because there are ten problems. Each worker uses a separate
+process and output directory. Final values are printed as problems finish.
+
 Each invocation saves designs, objective values, termination messages, timings,
 and native diagnostics in a fresh folder under `.validation-local/bobyqa/`.
 After each problem, it prints the final and best observed objective values with units.
