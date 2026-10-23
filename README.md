@@ -118,18 +118,21 @@ errors and select a separately labelled corrected model.
 
 ## Solve with BOBYQA
 
-The `optimize` extra installed above also provides PDFO BOBYQA, the package's
-default optional solver:
+The `optimize` extra installed above also provides PDFO. The `solve_bobyqa()`
+adapter calls it with `method="bobyqa"`, passing the problem's bounds and scaling
+the variables:
 
 ```python
-from bem_testproblems import get_problem, solve
+from bem_testproblems import get_problem, solve_bobyqa
 
-problem = get_problem(1)
-result = solve(problem, x0=problem.midpoint, max_evaluations=100)
-print(result.x, result.fun)
+problem = get_problem(13)
+result = solve_bobyqa(problem, x0=problem.midpoint, max_evaluations=100)
+print("Parameters:", result.x)
+print("Objective:", result.fun, problem.objective_unit)
 ```
 
 The budget counts objective calls and must be at least `problem.dimension + 3`.
+The original `solve()` name remains an alias for compatibility.
 For solvers that exploit objective structure, see the
 [simulator outputs, additive terms, and known derivatives](docs/objective-structure.md).
 

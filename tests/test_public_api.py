@@ -5,12 +5,13 @@ import pytest
 import bem_testproblems as bem
 from bem_testproblems.energyplus import EnergyPlusRunner
 from bem_testproblems.evaluation import make_objective
-from bem_testproblems.optimize import solve
+from bem_testproblems.optimize import solve, solve_bobyqa
 
 
 def test_documented_lazy_exports_are_the_public_implementations():
     assert bem.EnergyPlusRunner is EnergyPlusRunner
     assert bem.make_objective is make_objective
+    assert bem.solve_bobyqa is solve_bobyqa
     assert bem.solve is solve
     with pytest.raises(AttributeError, match="unknown_entry_point"):
         getattr(bem, "unknown_entry_point")

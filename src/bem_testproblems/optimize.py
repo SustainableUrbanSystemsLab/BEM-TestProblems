@@ -8,8 +8,8 @@ from .problems import Problem
 from .replication_solvers import _bounded_physical_point
 
 
-def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
-    """Minimize a problem with bounded, scaled BOBYQA evaluations.
+def solve_bobyqa(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
+    """Minimize a problem with PDFO's bounded, scaled BOBYQA implementation.
 
     ``max_evaluations`` counts objective calls, including initialization, and
     must be at least ``problem.dimension + 3``. Smaller budgets use fewer
@@ -84,3 +84,7 @@ def solve(problem, *, runner=None, weather=None, x0=None, max_evaluations=1000):
     # endpoint that was actually evaluated by the callback.
     result.x = asarray(_bounded_physical_point(result.x, problem.bounds))
     return result
+
+
+# Preserve the original public entry point.
+solve = solve_bobyqa

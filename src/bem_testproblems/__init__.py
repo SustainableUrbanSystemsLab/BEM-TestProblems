@@ -22,8 +22,8 @@ def __getattr__(name):
         from .energyplus import EnergyPlusRunner
 
         return EnergyPlusRunner
-    if name == "solve":
-        from .optimize import solve
+    if name in {"solve_bobyqa", "solve"}:
+        from .optimize import solve_bobyqa
 
-        return solve
+        return solve_bobyqa
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
