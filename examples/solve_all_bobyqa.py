@@ -33,6 +33,7 @@ def solve_problem(problem_id, directory, corrected_models=False):
         variant = "model-corrected-v3"
     problem = get_problem(problem_id, numerical_variant=variant)
     max_evaluations = 100 * (problem.dimension + 1)
+    options = {"maxfev": max_evaluations, "scale": True, "honour_x0": True}
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=False)
     record = {
@@ -43,6 +44,7 @@ def solve_problem(problem_id, directory, corrected_models=False):
         "solver": "PDFO BOBYQA",
         "pdfo_version": version("pdfo"),
         "max_evaluations": max_evaluations,
+        "solver_options": options,
         "parameter_names": [parameter.name for parameter in problem.parameters],
         "bounds": problem.bounds,
         "starting_point": problem.midpoint,
@@ -58,7 +60,7 @@ def solve_problem(problem_id, directory, corrected_models=False):
             x0=problem.midpoint,
             bounds=problem.bounds,
             method="bobyqa",
-            options={"maxfev": max_evaluations, "honour_x0": True},
+            options=options,
         )
         parameters = problem.validate(result.x)
         if not math.isfinite(result.fun):

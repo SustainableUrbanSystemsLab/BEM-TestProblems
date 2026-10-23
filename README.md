@@ -134,11 +134,21 @@ result = pdfo(
     x0=problem.midpoint,
     bounds=problem.bounds,
     method="bobyqa",
-    options={"maxfev": 100},
+    options={
+        "maxfev": 100 * (problem.dimension + 1),
+        "scale": True,
+        "honour_x0": True,
+    },
 )
 print("Parameters:", result.x)
 print("Objective:", result.fun, problem.objective_unit)
 ```
+
+`scale=True` scales the solver's internal coordinates using the bounds, which
+matters when variables have different units and ranges. The objective and
+`result.x` still use physical units. `honour_x0=True` preserves the supplied
+start. These options match the PDFO comparison settings; this example uses
+the midpoint rather than the experiment's twenty paired starting points.
 
 To solve all ten problems locally from their midpoints, run
 [solve_all_bobyqa.py](examples/solve_all_bobyqa.py) after setup:
