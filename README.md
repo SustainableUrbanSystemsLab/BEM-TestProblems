@@ -15,21 +15,24 @@ The original C# and Grasshopper implementation is available in
 Problem numbers follow the original study. The [references](docs/references.md)
 also credit the earlier studies on which these benchmarks build.
 
-All ten use box constraints: each optimization variable has a lower and an upper
-bound.
+## Available problems
 
-| Problem number | Optimization variables | Box constraints |
-|---|---:|---|
-| 1 | 4 | Yes |
-| 2 | 4 | Yes |
-| 3 | 4 | Yes |
-| 4 | 13 | Yes |
-| 5 | 13 | Yes |
-| 6 | 13 | Yes |
-| 8 | 11 | Yes |
-| 9 | 13 | Yes |
-| 10 | 13 | Yes |
-| 13 | 10 | Yes |
+| Problem number | Optimization variables | Box constraints | Building and climate | Objective |
+|---|---:|---|---|---|
+| 1 | 4 | Yes | Simple office: Seattle | Primary energy, kWh/(m² year) |
+| 2 | 4 | Yes | Simple office: Houston | Primary energy, kWh/(m² year) |
+| 3 | 4 | Yes | Simple office: Chicago | Primary energy, kWh/(m² year) |
+| 4 | 13 | Yes | Detailed office: Seattle | Primary energy, kWh/(m² year) |
+| 5 | 13 | Yes | Detailed office: Houston | Primary energy, kWh/(m² year) |
+| 6 | 13 | Yes | Detailed office: Chicago | Primary energy, kWh/(m² year) |
+| 8 | 11 | Yes | Detailed office: Chicago, two fixed parameters | Primary energy, kWh/(m² year) |
+| 9 | 13 | Yes | Small office: San Francisco | Penalized source energy, MJ/m² |
+| 10 | 13 | Yes | Large office: San Francisco | Penalized source energy, MJ/m² |
+| 13 | 10 | Yes | School: Belgrade winter design day | Energy, insulation, and radiator cost, EUR |
+
+Problem 8 fixes the paper's `x11 = 25 °C` and `x13 = 12 °C`; its input vector
+contains the eleven free parameters in their original order. Problem 13 includes
+its design-day conditions and needs no weather file.
 
 See the [documentation guide](docs/README.md) for setup, problem definitions,
 simulation failures, and solver experiments.
@@ -130,20 +133,6 @@ The budget counts objective calls and must be at least `problem.dimension + 3`.
 For solvers that exploit objective structure, see the
 [simulator outputs, additive terms, and known derivatives](docs/objective-structure.md).
 
-## Available problems
-
-| Problems | Building and climate | Objective |
-|---|---|---|
-| 1, 2, 3 | Simple office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
-| 4, 5, 6 | Detailed office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
-| 8 | Detailed office: Chicago, two fixed parameters | Primary energy, kWh/(m² year) |
-| 9, 10 | Small and large offices: San Francisco | Penalized source energy, MJ/m² |
-| 13 | School: Belgrade winter design day | Energy, insulation, and radiator cost, EUR |
-
-Problem 8 fixes the paper's `x11 = 25 °C` and `x13 = 12 °C`; its input vector
-contains the eleven free parameters in their original order. Problem 13 includes
-its design-day conditions and needs no weather file.
-
 ## Tests and validation
 
 ```sh
@@ -169,6 +158,11 @@ For repeated optimization runs and Figure 8/9-style boxplots, follow the
 budgets, engine versions, and failures, and distinguishes partial runs from
 completed experiments. The [model transition guide](docs/model-transition.md)
 documents the EnergyPlus upgrade.
+
+## Acknowledgments
+
+OpenAI Codex (GPT-6) assisted with implementation, debugging, testing, and
+documentation.
 
 ## License and credit
 
