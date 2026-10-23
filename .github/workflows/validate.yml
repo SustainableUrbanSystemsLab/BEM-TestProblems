@@ -41,12 +41,12 @@ jobs:
       - name: Create project-local environment
         run: |
           python -m venv .venv
-          "$VENV_PY" -m pip install -c constraints/replication-py312.txt -e '.[dev,optimize,replication]'
+          "$VENV_PY" -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
       - name: Fetch checksum-pinned reference inputs
         run: '"$VENV_PY" tools/fetch_reference.py'
       - name: Install optional NLopt adapters for analytic tests
         if: runner.os == 'Linux' || runner.os == 'Windows'
-        run: '"$VENV_PY" -m pip install -c constraints/replication-py312.txt -e ".[replication-nlopt]"'
+        run: '"$VENV_PY" -m pip install -c dependencies-py312.txt -e ".[replication-nlopt]"'
       - name: Lint
         run: '"$VENV_PY" -m ruff check src tests tools replication'
       - name: Verify published replication packages
@@ -112,7 +112,7 @@ jobs:
       - name: Create project-local environment
         run: |
           python -m venv .venv
-          .venv/Scripts/python.exe -m pip install -c constraints/replication-py312.txt -e '.[dev]'
+          .venv/Scripts/python.exe -m pip install -c dependencies-py312.txt -e '.[dev]'
       - name: Fetch checksum-pinned reference inputs
         run: .venv/Scripts/python.exe tools/fetch_reference.py
       - name: Install pinned EnergyPlus 8.5 core files
@@ -217,7 +217,7 @@ jobs:
       - name: Create project-local environment
         run: |
           python -m venv .venv
-          .venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[dev]'
+          .venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev]'
       - name: Install pinned EnergyPlus 26.2
         run: .venv/bin/python tools/install_energyplus.py
       - name: Fetch checksum-verified canonical weather temporarily

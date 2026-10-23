@@ -26,13 +26,13 @@ Set-Location $project
 Invoke-Checked { py -3.12 -m venv .venv }
 $python = Join-Path $project '.venv\Scripts\python.exe'
 $env:PIP_CACHE_DIR = Join-Path $project '.cache\pip'
-Invoke-Checked { & $python -m pip install -c constraints\replication-py312.txt -e '.[dev,replication,replication-nlopt]' }
+Invoke-Checked { & $python -m pip install -c dependencies-py312.txt -e '.[dev,replication,replication-nlopt]' }
 ```
 
 The small helper stops setup when a native command fails; PowerShell otherwise
 allows later commands to continue. Using the environment's executable directly
-avoids activation and changes to PowerShell's execution policy. The numerical constraints are in
-[replication-py312.txt](../constraints/replication-py312.txt).
+avoids activation and changes to PowerShell's execution policy. The tested Python
+dependency versions are in [dependencies-py312.txt](../dependencies-py312.txt).
 
 ## 2. Install both engines and fetch the inputs
 

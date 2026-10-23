@@ -76,7 +76,9 @@ def load_review(origin, continuation=None):
                 protected.append(str(Path(engine["executable"]).parent))
         if manifest.get("project_root") and Path(manifest["project_root"]).is_absolute():
             project = Path(manifest["project_root"])
+            # Protect the current dependency file and older experiment layouts.
             protected.extend(str(project / relative) for relative in (
+                "dependencies-py312.txt",
                 "src", "tools", "reference", "assets", "constraints",
                 "tests", "docs", ".github", ".reference-cache", ".tools", ".venv"))
             workflow = project / "replication"

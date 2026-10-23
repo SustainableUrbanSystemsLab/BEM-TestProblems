@@ -47,7 +47,7 @@
 - **Solver experiments:** starts, seeds, settings, model/weather identities,
   engine identities, and numerical package versions are recorded. The tested
   Python package versions are constrained in
-  [replication-py312.txt](../constraints/replication-py312.txt); see the
+  [dependencies-py312.txt](../dependencies-py312.txt); see the
   [experiment setup and replay limits](optimization-replication.md#reproducibility-scope).
 - **Historical-study limit:** repeated project results do not establish exact
   reproduction of the journal study. Its original starts and full-precision

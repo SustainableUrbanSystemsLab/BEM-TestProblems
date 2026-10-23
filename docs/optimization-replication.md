@@ -82,17 +82,17 @@ and at most **2,592,000 objective calls**. Early termination can reduce the tota
 
 Use the existing project virtual environment and the local engine/weather setup
 in the [engine guide](engine-versions.md). The tested numerical and plotting
-versions are recorded in [replication-py312.txt](../constraints/replication-py312.txt).
-Install optional experiment dependencies with those constraints:
+versions are recorded in [dependencies-py312.txt](../dependencies-py312.txt).
+Install optional experiment dependencies with those pinned versions:
 
 ```sh
-.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[replication]'
+.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[replication]'
 ```
 
 On Windows or Linux with a compatible NLopt wheel, also install:
 
 ```sh
-.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[replication-nlopt]'
+.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[replication-nlopt]'
 ```
 
 NLopt 2.7.1 is pinned to keep NumPy 1 compatibility with PDFO 2.2. On Apple Silicon
@@ -165,7 +165,7 @@ presented as the paper-budget experiment.
 - The experiment manifest records starts, seeds, budgets, solver settings,
   exact numerical package versions, and input/engine hashes. Reusing a result
   directory with changed recorded inputs or software is rejected.
-- [replication-py312.txt](../constraints/replication-py312.txt) constrains the
+- [dependencies-py312.txt](../dependencies-py312.txt) pins the
   tested numerical and plotting Python versions. It does not install unused
   optional methods, freeze development tools, or lock native binary contents.
 - An exact optimizer replay also depends on the interpreter, operating system,
