@@ -9,8 +9,9 @@ Run from the repository root after completing the README setup:
 
 Problems run sequentially by default. --workers auto uses CPU count minus two,
 with at least one worker and at most one worker per problem.
-Corrected v3 models are the default where available. Use --canonical-models
-to select the original benchmark models instead.
+Defaults: historical HVAC compatibility for P6/P8, corrected v3 models for
+P1/P3/P4/P5/P9/P10, and canonical models for P2/P13. Use --canonical-models
+to select the original benchmark models for every problem.
 The function-evaluation budget is 100 * (n + 1), where n is the dimension.
 Each invocation creates a fresh results directory. Simulation failures are
 recorded with their diagnostics; the remaining problems are still attempted.
@@ -29,6 +30,7 @@ from tempfile import mkdtemp
 from time import perf_counter
 
 from bem_testproblems import get_problem, make_objective
+from bem_testproblems.historical_hvac import HISTORICAL_HVAC_PROBLEMS
 from bem_testproblems.model_controls import CORRECTED_PROBLEM_IDS
 from bem_testproblems.problems import PROBLEM_IDS
 
@@ -37,11 +39,14 @@ def solve_problem(problem_id, directory, corrected_models=True):
     """Attempt one bounded search and save its result, including any error."""
     from pdfo import pdfo
 
-    print(f"P{problem_id}: starting", flush=True)
     variant = None
-    if corrected_models and problem_id in CORRECTED_PROBLEM_IDS:
-        variant = "model-corrected-v3"
+    if corrected_models:
+        if problem_id in HISTORICAL_HVAC_PROBLEMS:
+            variant = "historical-hvac"
+        elif problem_id in CORRECTED_PROBLEM_IDS:
+            variant = "model-corrected-v3"
     problem = get_problem(problem_id, numerical_variant=variant)
+    print(f"P{problem_id}: starting; model={variant or 'canonical'}; EnergyPlus 26.2.0", flush=True)
     max_evaluations = 100 * (problem.dimension + 1)
     options = {"maxfev": max_evaluations, "scale": True, "honour_x0": True}
     directory = Path(directory)
@@ -151,7 +156,7 @@ def main():
     )
     models.add_argument(
         "--corrected-models", dest="corrected_models", action="store_true",
-        help="Use corrected v3 models where available (default)",
+        help="Use corrected models, including historical HVAC for P6/P8 (default)",
     )
     parser.set_defaults(corrected_models=True)
     args = parser.parse_args()
@@ -159,7 +164,8 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     directory = Path(mkdtemp(prefix="run-", dir=args.output)).resolve()
     print(f"Results: {directory}", flush=True)
-    profile = "corrected v3 where available" if args.corrected_models else "canonical"
+    profile = ("historical-hvac for P6/P8; corrected v3 for P1/P3/P4/P5/P9/P10; "
+               "canonical for P2/P13") if args.corrected_models else "canonical"
     print(f"Models: {profile}", flush=True)
     print(f"Workers: {workers} for {len(PROBLEM_IDS)} problems", flush=True)
     failures = 0

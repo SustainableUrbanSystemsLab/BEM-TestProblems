@@ -60,6 +60,8 @@ def test_batch_keeps_results_and_continues_after_simulation_error(
     output = capsys.readouterr().out
     assert output.count("Final objective:") == 10
     assert output.count("Best observed objective:") == 10
+    p8_model = "historical-hvac" if corrected else "canonical"
+    assert f"P8: starting; model={p8_model}; EnergyPlus 26.2.0" in output
     assert previous.read_text() == "preserve me"
     directory, = [path for path in tmp_path.iterdir() if path.is_dir()]
     records = {}
@@ -73,8 +75,13 @@ def test_batch_keeps_results_and_continues_after_simulation_error(
     assert records[4]["outcome"] == "failed"
     assert "Deliberate simulation failure" in records[4]["error"]
     assert (directory / "P4/traceback.txt").is_file()
+    expected_models = {
+        1: "model-corrected-v3", 2: None, 3: "model-corrected-v3", 4: "model-corrected-v3",
+        5: "model-corrected-v3", 6: "historical-hvac", 8: "historical-hvac",
+        9: "model-corrected-v3", 10: "model-corrected-v3", 13: None,
+    }
     for number, record in records.items():
-        expected_variant = "model-corrected-v3" if corrected and number not in (2, 8, 13) else None
+        expected_variant = expected_models[number] if corrected else None
         assert variants[number] == expected_variant
         assert record["model"] == (expected_variant or "canonical")
         if number != 4:
