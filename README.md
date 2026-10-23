@@ -86,7 +86,7 @@ result = minimize(
     x0=x0,
     bounds=bounds,
     method="Powell",
-    options={"maxfev": 100},
+    options={"maxfev": 300},
 )
 
 print("Parameters:", result.x)
@@ -95,9 +95,10 @@ print("Evaluations:", result.nfev)
 print("Converged:", result.success, result.message)
 ```
 
-The package handles EnergyPlus for each objective evaluation. The 100-call
-budget is illustrative and may be reached before convergence; increase
-`maxfev` for a longer search, and inspect the termination message.
+The package handles EnergyPlus for each objective evaluation. This example
+allows 300 evaluations and uses Powell's default stopping tolerances. Reaching
+the budget before convergence sets `result.success` to `False`; inspect the
+termination message.
 
 To use your own solver, pass it `objective`, `x0`, and `bounds`. It should minimize
 `objective(x)`, where `x` contains the physical parameter values. Reuse the
