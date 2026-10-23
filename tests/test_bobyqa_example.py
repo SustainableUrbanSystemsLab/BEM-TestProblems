@@ -7,8 +7,11 @@ import pytest
 from bem_testproblems.energyplus import EnergyPlusError
 
 
-@pytest.mark.parametrize("corrected", [False, True])
-def test_batch_keeps_results_and_continues_after_simulation_error(tmp_path, monkeypatch, corrected):
+@pytest.mark.parametrize(("model_flag", "corrected"), [
+    (None, True), ("--canonical-models", False), ("--corrected-models", True),
+])
+def test_batch_keeps_results_and_continues_after_simulation_error(
+        tmp_path, monkeypatch, model_flag, corrected):
     pytest.importorskip("pdfo")
     from examples import solve_all_bobyqa as example
 
@@ -22,8 +25,8 @@ def test_batch_keeps_results_and_continues_after_simulation_error(tmp_path, monk
 
     monkeypatch.setattr(example, "make_objective", analytic_objective)
     args = ["solve_all_bobyqa.py", "--output", str(tmp_path)]
-    if corrected:
-        args.append("--corrected-models")
+    if model_flag:
+        args.append(model_flag)
     monkeypatch.setattr("sys.argv", args)
     previous = tmp_path / "previous-results.txt"
     previous.write_text("preserve me")
@@ -45,6 +48,7 @@ def test_batch_keeps_results_and_continues_after_simulation_error(tmp_path, monk
     for number, record in records.items():
         expected_variant = "model-corrected-v3" if corrected and number not in (2, 8, 13) else None
         assert variants[number] == expected_variant
+        assert record["model"] == (expected_variant or "canonical")
         if number != 4:
             assert record["outcome"] == "completed"
             assert record["objective"] == pytest.approx(0, abs=1e-12)

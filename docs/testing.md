@@ -22,8 +22,9 @@ The native C#/EnergyPlus comparisons need additional tools; see the
 
 For local BOBYQA searches with saved results, use
 [examples/solve_all_bobyqa.py](../examples/solve_all_bobyqa.py). Full optimization
-searches are manual and are excluded from GitHub Actions. The optional native
-integration test runs the same ten canonical problems from their midpoints:
+searches are manual and are excluded from GitHub Actions. The example defaults
+to corrected models where available. The optional native integration test
+explicitly uses the ten canonical models from their midpoints:
 
 ```sh
 .venv/bin/python -m pytest -q tests/test_bobyqa_integration.py
