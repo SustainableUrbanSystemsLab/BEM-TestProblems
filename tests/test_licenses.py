@@ -241,6 +241,31 @@ def test_public_ci_checks_canonical_weather_and_keeps_synthetic_supplemental() -
         assert "tools/synthetic_weather.py --output-dir .validation-local/weather" in body
         assert "--weather-kind ${{ matrix.weather_kind }}" in body
         assert "--cases ${{ matrix.cases }}" in body
+        steps = re.split(r"(?m)(?=^      - )", body)
+        repairs = next(step for step in steps if "tools/validate_replication_failures.py" in step)
+        assert "matrix.weather_kind == 'canonical'" in repairs
+        assert "always() && !cancelled()" in repairs
+        corrected = next(step for step in steps if "--cases reference/corrected-model-cases.json" in step)
+        assert "matrix.weather_kind == 'canonical'" in corrected
+        assert "always() && !cancelled()" in corrected
+        assert "--rtol 1e-4 --atol 1e-7" in corrected
+        assert "--oracle" not in corrected
+
+
+def test_ci_uploads_wait_for_validation_and_require_numeric_reports() -> None:
+    workflow = (ROOT / ".github/workflows/validate.yml").read_text()
+    steps = re.split(r"(?m)(?=^      - )", workflow)
+    for report, producer in (
+        ("pytest-coverage.json", "coverage_report"),
+        ("original-csharp.json", "original_compare"),
+        ("modern-regression.json", "modern_compare"),
+    ):
+        upload = next(step for step in steps
+                      if "uses: actions/upload-artifact@" in step and report in step)
+        assert "always() && !cancelled()" in upload
+        assert f"steps.{producer}.outcome == 'success'" in upload
+        assert f"steps.{producer}.outcome == 'failure'" in upload
+        assert "if-no-files-found: error" in upload
 
 
 def test_canonical_ci_fixtures_cover_pinned_inputs_and_explicit_rejections(tmp_path) -> None:
