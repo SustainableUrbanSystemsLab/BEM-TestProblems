@@ -4,30 +4,50 @@ Updated **23 October 2026**. Work in `R:\BEM-TestProblems` on
 `codex/windows-continuation`.
 
 Read the detailed local note first:
-**`.validation-local/SESSION-HANDOFF-20261023.txt`** for the latest fan diagnosis.
+**`.validation-local/SESSION-HANDOFF-20261023-RERUN.txt`** for the active P6/P8 rerun.
+**`.validation-local/SESSION-HANDOFF-20261023.txt`** preserves the fan diagnosis.
 The preserved **`.validation-local/SESSION-HANDOFF-20261022.txt`** and adjacent
 JSON record campaign completion and the earlier process check. These private
 notes stay on FOAM.
 
 ## Current state
 
+The **P6/P8 historical-HVAC rerun started on 23 October at 10:44 Eastern**.
+Its separate root is `.validation-local/foam-p6-p8-historical-hvac-20261023/`:
+480 fresh searches, both engines, six solvers, 20 repetitions, 118 workers.
+All starts, seeds and budgets match the old subset. Numerical source is frozen
+at `b70e396`; engines, weather and dependencies are unchanged. Both engines passed
+the canonical preflight. Read the new root's `README.txt` and
+`launch-verification.json` before acting. Do not stop the active searches.
+
+The launch encountered 48 version-probe timeouts before any objective evaluations.
+Automatic postprocessing will retry only zero-evaluation probe timeouts after the
+main controller finishes, preserving the original attempts and using staggered
+starts with at most 48 workers. Final review and dissertation comparison figures
+are regenerated afterward. This leaves the frozen numerical source unchanged.
+Use `review/run-completion.json` for final outcomes after recovery.
+
+Open `show-progress.cmd` in that root for the read-only progress monitor.
+The controller log is `campaign/controller.log`; 12-hour reports are under
+`reports/`; final boxplots and dissertation comparisons are under `review/`.
+Windows sign-out/reboot stops these ordinary-user processes.
+
 The **model-corrected-v2 campaign is finished**: 2,400 terminal attempts,
 2,288 successful, 112 failed, zero remaining. It recorded 1,769,625 evaluations
 using 118 workers. The last simulation finished on 22 October at 05:13 Eastern;
-the automatic final review finished at 05:15. No EnergyPlus or project background
-Python jobs were active at handoff, so logout will not interrupt an experiment.
+the automatic final review finished at 05:15. Its results remain preserved.
 
-The user's latest request was to **address the P6/P8 modern fan-energy shift**.
+The P6/P8 rerun follows the repair of the modern fan-energy shift.
 The new opt-in `historical-hvac` option is implemented and validated: see
 [the compatibility record](historical-hvac.md). All 240 native checks passed;
 remaining fan differences are below 0.057% for P6 and 0.647% for P8 across the
-80-design audit. No optimizer campaign has used this option. Existing boxplots
-still show the original version-2 results. Private evidence and the before/after
+80-design audit, with another 80 exact production replays passing. The existing
+full-ten-problem boxplots still show the original version-2 results. Private evidence and the before/after
 PNG are under `.validation-local/fan-diagnosis-20261023/`.
 
 To **look at the completed replication**, open the reports and plots before
-taking further action. There is nothing to
-resume after login. Old recovery instructions describe historical running state;
+taking further action. The completed v2 campaign needs no restart. Its old
+recovery instructions describe historical running state;
 some controller text still says `interrupted`, while `review/run-completion.json`
 correctly records `finished-with-failures` and all 2,400 attempts are terminal.
 

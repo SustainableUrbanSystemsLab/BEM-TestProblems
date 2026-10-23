@@ -7,9 +7,9 @@ The ten continuous problems come from
 [Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
 and the earlier studies listed in the [references](docs/references.md).
 
-For the completed FOAM experiment, report and boxplot locations, and next-session
+For the FOAM experiments, report and boxplot locations, and next-session
 instructions, read [the FOAM handoff](docs/foam-takeover.md). Detailed session
-notes are saved on FOAM at `.validation-local/SESSION-HANDOFF-20261023.txt`
+notes are saved on FOAM at `.validation-local/SESSION-HANDOFF-20261023-RERUN.txt`
 and remain outside Git.
 
 ## Set up locally
