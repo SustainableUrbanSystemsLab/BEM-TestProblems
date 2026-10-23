@@ -139,6 +139,21 @@ print("Parameters:", result.x)
 print("Objective:", result.fun, problem.objective_unit)
 ```
 
+To solve all ten problems locally from their midpoints, run
+[solve_all_bobyqa.py](examples/solve_all_bobyqa.py) after setup:
+
+```sh
+.venv/bin/python examples/solve_all_bobyqa.py
+```
+
+Each invocation saves designs, objective values, termination messages, timings,
+and native diagnostics in a fresh folder under `.validation-local/bobyqa/`.
+Failed problems are recorded and the script continues. Canonical models are the
+default; add `--corrected-models` to select labelled `model-corrected-v3` variants
+for P1/P3/P4/P5/P6/P9/P10. These change the models and remain separate results.
+Each problem uses a function-evaluation budget of `100 * (n + 1)`, where `n` is
+its number of optimization variables. The budget may be reached before convergence.
+
 The optional [package adapter](src/bem_testproblems/optimize.py), `solve_bobyqa()`,
 adds strict budget enforcement, endpoint-roundoff handling, and safe propagation
 of simulation errors through PDFO's compiled callbacks.
@@ -151,11 +166,12 @@ For solvers that exploit objective structure, see the
 .venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
 .venv/bin/python tools/fetch_reference.py
 .venv/bin/python -m pytest -q -m 'not integration'
-.venv/bin/python -m ruff check src tests tools replication
+.venv/bin/python -m ruff check src tests tools replication examples
 ```
 
-CI covers Linux, Windows, macOS, and both EnergyPlus versions. See
-[testing](docs/testing.md) for check details and [validation](docs/validation.md)
+CI covers Linux, Windows, macOS, and both EnergyPlus versions. Native checks
+evaluate every problem at its midpoint; full optimization searches run manually.
+See [testing](docs/testing.md) for check details and [validation](docs/validation.md)
 for numerical evidence and remaining discrepancies.
 
 ## Acknowledgments

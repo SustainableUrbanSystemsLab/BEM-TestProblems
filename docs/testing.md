@@ -9,7 +9,7 @@ From the repository root, use the Python 3.12 environment created during
 .venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
 .venv/bin/python tools/fetch_reference.py
 .venv/bin/python -m pytest -q -m 'not integration'
-.venv/bin/python -m ruff check src tests tools replication
+.venv/bin/python -m ruff check src tests tools replication examples
 ```
 
 On Windows, replace `.venv/bin/python` with `.venv\Scripts\python.exe`.
@@ -20,7 +20,10 @@ The native C#/EnergyPlus comparisons need additional tools; see the
 
 ## What the tests check
 
-For a native BOBYQA search on every problem from its midpoint, run:
+For local BOBYQA searches with saved results, use
+[examples/solve_all_bobyqa.py](../examples/solve_all_bobyqa.py). Full optimization
+searches are manual and are excluded from GitHub Actions. The optional native
+integration test runs the same ten canonical problems from their midpoints:
 
 ```sh
 .venv/bin/python -m pytest -q tests/test_bobyqa_integration.py
@@ -72,8 +75,9 @@ not launching a process for invalid input, counting every objective call, or
 preserving a checkpoint after a write failure. Prefer simple code and named
 intermediate values to nested conditional expressions or unnecessary abstractions.
 
-Canonical native checks evaluate 27 explicit designs per engine. They compare
-accepted objectives/components using the documented tolerances and verify the
+Canonical native checks evaluate 27 explicit designs per engine, including all
+ten problem midpoints in [canonical-cases.json](../reference/canonical-cases.json).
+They compare accepted objectives/components using the documented tolerances and verify the
 known strict warmup rejections separately. These checks complement the offline
 pytest suite; changing a reference requires reviewing the measured evidence.
 
