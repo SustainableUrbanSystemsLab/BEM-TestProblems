@@ -1,506 +1,107 @@
-# Failed replication runs
+# Simulation failures and model variants
 
-- **Coverage:** [replication-failure-cases.json](../reference/replication-failure-cases.json)
-  freezes **24 distinct engine/design combinations from 34 failed run records**:
-  16 pilot records and 18 extended-campaign records. The initial snapshot was
-  captured on October 16, 2026, at 05:47 UTC, and extended through a bounded
-  06:53 UTC audit and one later P6 sizing-period failure. Other later records
-  are outside this cohort.
-- **Observed outcome:** every recorded failure is a warmup-convergence **Severe**
-  diagnostic after 25 days, with **zero Fatal errors**. Each process exited with
-  code zero and wrote “Completed Successfully.” Those signals alone do not make
-  its objective valid. All failed designs satisfy their box constraints.
-- **Evidence:** the fixture records full vectors, original evaluation indices,
-  successful prefixes, diagnostic excerpts, and input, weather, and engine hashes.
-  These are new project measurements, rather than published reference values.
+A design can satisfy every box bound and still fail EnergyPlus convergence.
+The default evaluator raises an error for Severe or Fatal diagnostics, even if
+EnergyPlus exits successfully and writes annual outputs. It does not substitute
+a penalty or accept an unconverged result.
 
-## Causes and numerical changes
+## Diagnose an evaluation
 
-| Problems | Recorded failure | Fixed recipe in `convergence-refined` |
+An `EnergyPlusError` exposes `reason` and, when a simulation directory exists,
+`directory`. Inspect `eplusout.err` there; the retained `run.json` records the
+command, input identities, and failure reason. The objective factory normally
+places these directories below `.runs/<engine-version>/`.
+
+| Symptom | Meaning and next step |
+| --- | --- |
+| Warmup convergence error | Repeated initialization days did not meet the temperature or load criteria. Read the [warmup guide](warmup-diagnostics.md), then decide whether the study should use a labelled model variant. |
+| Cooling sizing error | A valid control setting can lie on an equipment-sizing threshold. The corrected profiles apply explicit sizing margins; these change the model and must be recorded. |
+| Version probe failure or timeout | The engine was not verified. Check its path, prerequisite runtime, and startup load before attributing this to a building design. |
+| No space left on device | Check the simulation-output drive and the directories selected by `TEMP` and `TMP`. Preserve checkpoints and failure evidence; choose adequate storage before a new run. |
+| Bound violation | Inspect the proposed coordinate. Solver adapters normalize at most two adjacent binary64 values outside an endpoint; larger violations remain errors. Direct problem calls use strict bounds. |
+
+A warmup failure is a simulation acceptance failure, not necessarily a process
+crash. The failed optimization retains its earlier observations but is excluded
+from completed-run boxplots. Other scheduled searches can continue.
+
+## Choose a model
+
+`get_problem(number)` always selects the canonical definition. Alternatives are
+explicit and remain distinct benchmarks:
+
+| Selection | Problems | Purpose |
 | --- | --- | --- |
-| P1, EnergyPlus 8.5 | Temperature history has not converged at the 25-day cap | Allow 100 warmup days, preserving both convergence tolerances |
-| P4, both engines | Temperature differences, and sometimes peak-load differences, remain above tolerance | Warmup cap 100; HVAC iteration cap 100; 12 timesteps/hour and 12 sizing-average steps |
-| P5, EnergyPlus 26.2 | Temperature differences remain above tolerance | Warmup cap 100; HVAC iteration cap 100; analytical zone-air integration; 12 timesteps/hour and 12 sizing-average steps |
-| P6, both engines | Slow annual temperature convergence in 8.5; summer-sizing cooling-load nonconvergence in 26.2 | Warmup cap 100; 12 timesteps/hour and 12 sizing-average steps; original HVAC iteration cap and integration |
-| P10, both engines | Daily peak heating or cooling loads fail convergence, while temperature checks pass | Warmup cap 100; 12 timesteps/hour; 12 sizing-average steps; analytical zone-air integration; original HVAC iteration cap 20 |
+| Default | All ten | Preserve the canonical model for the selected engine |
+| `warmup-100` | 1 | Increase the historical warmup allowance without changing convergence thresholds |
+| `model-corrected-v3` | 1, 3, 4, 5, 6, 9, 10 | Use the validated correction profile, including sizing and warmup controls |
+| `historical-hvac` | 6, 8 | Restore selected historical convection and fan-sizing behavior in 26.2 |
 
-- The earlier [warmup analysis](warmup-diagnostics.md) distinguishes slow P1
-  initialization from persistent P4/P10 cycling. Increasing warmup days alone did
-  not remove the latter failures. Individual controllers have not been isolated
-  as the sole cause of every new failure.
-- The explicit recipes are defined in
-  [numerical_controls.py](../src/bem_testproblems/numerical_controls.py).
-  Each recipe is fixed for a problem and preserves the physical parameters,
-  objective formula, and convergence tolerances. It defines a separate numerical
-  function; historical equivalence is not claimed.
-- All timestep changes preserve the original **60-minute sizing average**.
-  Simply doubling the timestep count while retaining the old averaging-step
-  count would also change the sizing calculation.
-- Additional days alone did not repair every design. The new P4 case still
-  failed with 100 warmup days and 100 HVAC iterations, including an analytical
-  integration probe; the fixed timestep recipe passed after 13 days. One P10
-  case still failed after 100 days at 12 timesteps/hour; analytical integration
-  resolved that recorded failure after 11 days without increasing HVAC iterations.
-- The broader audit found a P5 design that still failed four temperature checks
-  after 100 days with analytical integration and 100 HVAC iterations. Its maximum
-  temperature residuals were 0.044–0.051 K, against the unchanged 0.004 K limit;
-  load checks passed. Adding the same 12/12 timestep and sizing settings resolved
-  it after 13 days. Earlier P5 cases and both engine midpoint controls were
-  remeasured under this fixed recipe. Their revised measurements supersede the
-  earlier P5 profile; the baseline records its prior Git revision and provenance.
-  This demonstrates sensitivity to numerical resolution, without establishing
-  one controller as the unique cause.
-
-Select a numerical variant explicitly:
+For example, select the corrected P4 model before constructing the objective:
 
 ```python
 from bem_testproblems import get_problem, make_objective
 
-problem = get_problem(4, numerical_variant="convergence-refined")
+problem = get_problem(4, numerical_variant="model-corrected-v3")
 objective = make_objective(problem)
+value = objective(problem.midpoint)
+print(value, problem.objective_unit)
 ```
 
-The ordinary `get_problem(4)` keeps the canonical definition. The variant is
-available for P1, P4, P5, P6, and P10. A failed evaluation
-raises an error; it does not receive a substitute objective or penalty. A running
-canonical experiment is not silently switched to a numerical variant.
-
-## Measured results
-
-All 24 repaired inputs and nine midpoint controls completed with **zero Severe
-or Fatal errors**, using the recorded canonical weather. These are evaluations
-of fixed designs, not restarted optimization runs or claims of convergence
-throughout the box. Full-precision vectors, components, terms, model identities,
-and settings are in the reviewed
-[8.5 baseline](../reference/baselines/8.5.0-replication-failures.json) and
-[26.2 baseline](../reference/baselines/26.2.0-replication-failures.json).
-
-| Recorded failed case | Repaired annual warmup days | Repaired objective |
-| --- | ---: | ---: |
-| `p01-8.5.0-bobyqa-r000-e0001` | 27 | 204.528660 |
-| `p04-26.2.0-bobyqa-r000-e0001` | 23 | 170.826614 |
-| `p04-8.5.0-pybobyqa-r000-e0005` | 21 | 150.950765 |
-| `p05-26.2.0-pybobyqa-r000-e0033` | 14 | 214.334090 |
-| `p04-26.2.0-bobyqa-r001-e0031` | 13 | 157.012973 |
-| `p01-8.5.0-bobyqa-r002-e0001` | 29 | 173.619522 |
-| `p01-8.5.0-pybobyqa-r001-e0002` | 28 | 155.697909 |
-| `p10-26.2.0-bobyqa-r002-e0001` | 20 | 1641.855000 |
-| `p10-26.2.0-pybobyqa-r000-e0010` | 13 | 2412.640000 |
-| `p10-8.5.0-bobyqa-r001-e0001` | 14 | 1158.020000 |
-| `p10-8.5.0-bobyqa-r002-e0003` | 19 | 1636.800000 |
-| `p10-8.5.0-pybobyqa-r000-e0012` | 11 | 2386.420000 |
-| `p10-8.5.0-pybobyqa-r002-e0015` | 19 | 1637.610000 |
-| `p06-8.5.0-bobyqa-r001-e0001` | 23 | 338.310089 |
-| `p01-8.5.0-bobyqa-r003-e0001` | 32 | 174.051459 |
-| `p01-8.5.0-bobyqa-r004-e0002` | 28 | 158.663445 |
-| `p04-26.2.0-bobyqa-r004-e0033` | 15 | 151.378973 |
-| `p05-26.2.0-bobyqa-r001-e0065` | 11 | 202.019728 |
-| `p05-26.2.0-bobyqa-r002-e0067` | 13 | 201.286392 |
-| `p10-26.2.0-bobyqa-r001-e0091` | 9 | 1115.320000 |
-| `p10-26.2.0-bobyqa-r003-e0003` | 14 | 1867.365000 |
-| `p10-8.5.0-bobyqa-r000-e0089` | 13 | 2138.940000 |
-| `p10-8.5.0-bobyqa-r003-e0033` | 14 | 1821.045000 |
-| `p06-26.2.0-bobyqa-r006-e0025` | 16 | 200.675430 |
-
-Objectives for P1, P4, P5, and P6 are in kWh/(m² year); P10 uses MJ/m².
-Canonical failed evaluations have **no accepted objective**.
-
-The midpoint controls quantify changes to previously valid evaluations:
-
-| Problem | EnergyPlus | Canonical objective | Refined objective | Signed difference | Difference (%) |
-| --- | --- | ---: | ---: | ---: | ---: |
-| P1 | 8.5.0 | 153.181082 | 153.181082 | +0.000000 | +0.000000% |
-| P4 | 8.5.0 | 147.638635 | 152.865617 | +5.226982 | +3.540389% |
-| P5 | 8.5.0 | 214.609328 | 213.627610 | -0.981718 | -0.457444% |
-| P6 | 8.5.0 | 179.577025 | 180.067794 | +0.490769 | +0.273292% |
-| P10 | 8.5.0 | 1198.570000 | 1260.450000 | +61.880000 | +5.162819% |
-| P4 | 26.2.0 | 172.688497 | 180.567867 | +7.879370 | +4.562765% |
-| P5 | 26.2.0 | 241.746830 | 248.638758 | +6.891927 | +2.850886% |
-| P6 | 26.2.0 | 201.960714 | 204.320870 | +2.360156 | +1.168621% |
-| P10 | 26.2.0 | 1201.820000 | 1265.170000 | +63.350000 | +5.271172% |
-
-Percentage differences use `100 × (refined − canonical) / |canonical|`.
-The largest control change here is **+5.271172%**. The numerical variants
-therefore require their own reference values and experiment labels; they are
-not evidence that these objectives equal the historical C# benchmark.
-
-The earlier P6 failure design also passed with the final EnergyPlus 26.2
-profile after eight annual warmup days. The later P6 design exposes a separate
-**summer-sizing** failure: its interior-zone cooling-load difference remained
-**6.98086%** after 100 sizing warmup days, above the unchanged **4%** limit.
-The annual run converged in 16 days even while sizing failed. The final timestep
-recipe removed the sizing Severe error. Its annual warmup count remains 16;
-the successful sizing-period day count is not reported.
-
-`actual_warmup_days` in the measurements records the annual RunPeriod summary.
-Failed sizing environments and their warmup caps are recorded separately.
-Strict validation checks Severe/Fatal diagnostics from **every phase**.
-
-## PDFO endpoint roundoff
-
-- Three searches stopped when the adapter rejected a proposed point before
-  submitting that point to EnergyPlus. PDFO's scaling
-  mapped a lower-bound endpoint of `1.224` to `1.2239999999999998`, one adjacent
-  binary64 float outside the box. This is a Python solver-adapter issue, separate
-  from the warmup errors also seen through C#.
-- Both PDFO entry points and the Py-BOBYQA callback normalize up to two adjacent
-  outside binary64 floats to the endpoint. Larger violations, nonfinite values,
-  and invalid dimensions still fail. Direct problem calls retain strict bounds.
-- Saved replay coordinates use relative and absolute tolerances of `1e-12` for
-  differences between compiled PDFO builds. Windows CI observed a `2.586e-12`
-  difference in an interior coordinate before reaching the failing endpoint.
-  The endpoint must still equal `1.224` exactly; production bound guards and
-  native objective-comparison tolerances are unchanged.
-- [The recorded traces](../reference/pdfo-endpoint-cases.json) reproduce all three
-  failures using existing objective values and the real PDFO solver. The
-  [replication-adapter tests](../tests/test_replication_solvers.py) stop at the
-  first unsaved evaluation, without inventing an objective or running EnergyPlus. They verify
-  feasible recorded coordinates, rejection boundaries, and the evaluation budget.
-  The [public solver tests](../tests/test_optimize.py) also cover its callback and
-  the returned design vector.
-- These fixes do not alter the source of an experiment already running. Its
-  failed records remain failed, with their original diagnostic evidence.
-
-### Broader FOAM audit
-
-The completed six-solver campaign exposed additional cases beyond the 24-design
-fixture. Its results remain preserved. All 12 recorded Py-BOBYQA bounds failures
-were a single adjacent binary64 float outside an endpoint. Replaying their
-saved objective prefixes through the real solver confirmed the corrected
-callback reaches the exact endpoint. Larger violations still fail, and starts,
-seeds, budgets, and solver settings are unchanged.
-
-The corrected-v2 campaign later exposed a two-step Py-BOBYQA overshoot on P6/8.5:
-south-window width `5.832000000000002` against an upper bound of `5.832` m.
-Replaying all 96 saved objective observations reproduced the same exception
-without running EnergyPlus. The checkout adapter now normalizes this two-step
-overshoot to the exact endpoint and records the allowance in solver metadata.
-Three-step violations remain invalid. The running campaign retains its frozen
-one-step adapter; its original failed record stays preserved. A corrected replay
-stops at the first unsaved objective rather than inventing an energy value.
-
-The separate opt-in `convergence-repaired` variant adds a fixed **0.00001 K**
-cooling supply-temperature margin to the five `Sizing:Zone` inputs in P4, P5,
-and P6. Annual supply-temperature controls and decision bounds are unchanged.
-The five recorded P4 sizing failures passed with this margin on both engines:
-ten complete annual simulations with no Severe or Fatal diagnostics. The
-canonical models and existing `convergence-refined` baselines are unchanged.
-This remains a distinct numerical model; historical equivalence is not claimed.
-
-The broader strict audit contains 571 unique engine/design checks covering all
-711 earlier EnergyPlus failure records, the new sizing cases, and independent
-controls. The initial repaired recipe passed 517 checks; 54 still failed warmup.
-The exact public P3/P9 recipes then passed all 22 checks for those problems,
-including all 18 remaining failure designs and four midpoint controls:
-
-| Problem | Additional fixed recipe | Midpoint change from canonical |
-| --- | --- | --- |
-| P3 | Warmup cap 100; all other fields unchanged | Less than `3e-11%` on either engine |
-| P9 | Warmup cap 365; 12 timesteps/hour and 12 sizing-average steps; HVAC cap 100; analytical zone-air integration | +0.103156% on 8.5; +0.134385% on 26.2 |
-
-P4 on 26.2 and P10 on both engines still have unresolved recorded warmup cases.
-The current recipe passes 535 of the 571 checks; the remaining 36 comprise five
-P4 cases on 26.2, 28 P10 cases on 8.5, and three P10 cases on 26.2. Retained native
-evidence was reused only after all rendered input hashes matched exactly;
-P3 and P9 were remeasured. These are diagnostic-case counts, not campaign runs.
-Additional probe settings that fail diagnostics, input validation, or completion
-checks are excluded from the public recipe. These results do not establish
-that every feasible design converges or approve a new campaign.
-
-Windows checkpoint replacement also retries brief sharing/access conflicts for
-at most six attempts, with 0.3 seconds of total delay. Persistent errors still
-raise, retaining the previous checkpoint. This affects durable recording, not
-the numerical experiment or diagnostic acceptance rules.
-
-### Caller and engine coverage on FOAM
-
-Fresh canonical-model checks on October 18, 2026 reproduced warmup failures
-through both Python and the unchanged C# source components with EnergyPlus
-**8.5.0**. The existing parity validator confirmed matching effective input
-fields, identical weather and engine bytes, and matching diagnostic signatures:
-
-| Canonical design | Python Severe / Fatal | C# Severe / Fatal |
-| --- | --- | --- |
-| P1, orientation 90 degrees | 1 / 0 | 1 / 0 |
-| P4, recorded `pybobyqa-r000-e0005` design | 1 / 0 | 1 / 0 |
-| P10, hard design `b8da307aebd5abff` | 11 / 0 | 11 / 0 |
-
-All these Severe diagnostics concern warmup convergence. The original C# caller
-returns a diagnostic annual objective despite those errors; Python rejects it.
-Thus an apparent C# success can conceal the same native simulation diagnostic.
-These checks compile the published C# components against test-only Grasshopper
-interfaces; they do not execute the proprietary Grasshopper plugin.
-
-There is **no original-C#/26.2 comparison** in this evidence. The original oracle
-supports 8.5 only. Modern checks launch native 26.2 from Python and validate its
-outputs independently. Nor were all 571 broader audit cases replayed through
-C#: the recent 24-case FOAM reports explicitly record
-`original_csharp_checked=false`. The three fresh comparisons above supplement
-that coverage; they do not turn the complete audit into a C# parity test.
-
-For the distinct `convergence-repaired` model, unresolved warmup counts are:
-
-| Problem | EnergyPlus | Audited designs | Still failing |
-| --- | --- | ---: | ---: |
-| P4 | 8.5.0 | 62 | 0 |
-| P4 | 26.2.0 | 81 | 5 |
-| P10 | 8.5.0 | 97 | 28 |
-| P10 | 26.2.0 | 90 | 3 |
-
-These are selected diagnostic designs, not a random sample or campaign failure
-rate. The remaining audited problems have no failures under the current recipe
-within their tested coverage. This does not establish full-domain convergence.
-The solver endpoint and Windows checkpoint issues belong to the Python
-optimization infrastructure and are separate from native EnergyPlus failures.
-
-### Cross-platform precision
-
-- The same P4 start-0 model and weather produced **170.826614330621** on macOS
-  and **170.827190446342** on Linux: **+0.000576115721 kWh/(m² year)**,
-  or **+0.000337251735%**. Both simulations passed strict diagnostics.
-- The largest measured component difference in the two affected P4 designs was
-  **0.0012808956%**. These differences are below the native comparison target of
-  **0.01%** (`rtol=1e-4`). Every actual value and signed difference remains in
-  the CI report. Model and weather checksums must still match exactly.
-- This tolerance concerns numerical comparisons between native builds. It does
-  not change EnergyPlus's warmup tolerances, permit Severe/Fatal errors, or
-  identify a numerical variant with the canonical benchmark.
-
-## Labelled model corrections on FOAM
-
-The opt-in `model-corrected` profile is a modified benchmark. It does not change
-the canonical models or claim exact historical equivalence. Physical model and
-control corrections were explicitly authorized on 18 October 2026. Strict
-Severe/Fatal rejection and the original convergence thresholds remain in force.
-Starts, seeds, bounds, solver settings, budgets and objective equations remain
-unchanged.
-
-| Problem | Fixed correction, identical in both engines |
-| --- | --- |
-| P4 | Use TARP indoor convection instead of CeilingDiffuser; subtract 0.1 K from the five cooling sizing temperatures; allow up to 365 warmup days. Retain the original timestep, integration algorithm and annual HVAC controls. |
-| P10 | During warmup only, an EMS actuator makes the air loop available continuously. Release it to `Null` on every sizing/annual timestep. Allow up to 365 warmup days; retain the original timestep, integration, thermostat schedules, night-cycle settings and annual controls. |
-| P1, P3, P5, P6, P9 | Use the existing `convergence-repaired` numerical recipe without additional physical changes. |
-| P2, P8, P13 | Use the canonical definition. |
-
-P4's convection change removes the airflow-dependent surface heat-transfer
-feedback implicated by the repeated-day traces. It changes the physical heat
-transfer model. The 0.1 K sizing offset is a physical safety margin at the 2 K
-sizing threshold, rather than a floating-point correction. EnergyPlus describes
-the different convection correlations in its
-[simulation parameter reference](https://bigladdersoftware.com/epx/docs/8-5/input-output-reference/group-simulation-parameters.html#surfaceconvectionalgorithminside).
-
-P10's warmup-only conditioning removes fixed-duration night cycling from the
-initialization problem. The convergence checks therefore assess that corrected
-initialization, not the original cycling warmup model. The annual simulation
-then resumes the original controls. Four instrumented native cases, covering
-both engines, recorded zero active override timesteps throughout all 52,560
-annual zone timesteps per case and confirmed resumed night cycling. EnergyPlus
-documents the availability actuator and release mechanism in the
-[EMS guide](https://bigladdersoftware.com/epx/docs/8-5/ems-application-guide/hvac-systems.html#airloophvac-availability-status).
-
-The exact public profile passed all **571 retained diagnostic cases**, covering
-all 711 earlier EnergyPlus failures and the additional sizing/control fixtures.
-It also passed **460 additional checks**: 20 independently seeded uniform
-designs plus midpoint/lower/upper controls for each of ten problems and both
-engines. These are simulation checks, not completed optimization runs or a
-proof of convergence throughout the continuous design domain. P4 accounts for
-143 retained checks and P10 for 187. Every accepted result has finite required
-outputs, successful process/completion markers and zero Severe/Fatal errors.
-
-Compared with preserved original annual outputs, the measured objective changes
-were:
-
-| Problem | Engine | Comparable designs | Signed change range | Median absolute change |
-| --- | --- | ---: | ---: | ---: |
-| P4 | 8.5.0 | 57 | -7.51178% to +0.21362% | 2.56614% |
-| P4 | 26.2.0 | 74 | -23.12280% to -7.15321% | 10.59929% |
-| P10 | 8.5.0 | 95 | -0.00069% to +0.04378% | 0.00699% |
-| P10 | 26.2.0 | 89 | -0.00563% to +0.52053% | 0.01575% |
-
-Original outputs with warmup diagnostics remain diagnostic comparison values;
-they are not retroactively accepted. Some sizing-only cases lack comparable
-annual outputs. These selected designs do not establish boxplot equivalence.
-In particular, P4's substantial changes must remain visible in comparisons.
-
-The failed numerical-only probes, original checkpoints, model inputs, source
-snapshots and native outputs remain private. Receipts are under
-`.validation-local/model-corrections-20261018/`, including
-`retained-public-profile/verification.json`, `independent-non-p10/report.json`,
-`independent-p10/report.json`, `model-impact.json` and
-`warmup-release-verification.json`. Installed engine binaries were not changed.
-Runtime provenance now records and checks the numerical DLL/shared library,
-IDD and epJSON schema as well as the executable: a modern launcher can keep
-the same hash while its numerical DLL changes.
-
-## Warmup-only correction, version 2
-
-The full FOAM search exposed 47 additional failed designs in the first corrected
-profile: 28 P4/8.5 warmup cases, seven P5 warmup cases, ten P6/26.2 warmup cases,
-and one P6 cooling sizing case per engine. All completed annually with Severe
-diagnostics. Passing the earlier finite validation corpus did not establish
-convergence over the continuous design domain.
-
-The separate `model-corrected-v2` profile preserves the first profile and the
-canonical models. For P4/P5/P6, it sets interior surface convection coefficients
-to a fixed **2.5 W/(m² K) during weather-run warmup only**. The two canonical
-design-day environments retain their native convection during sizing warmup.
-Every surface actuator is released
-to `Null` after warmup, before measured simulation, and remains released on
-non-warmup timesteps. Both engines support the chosen EMS calling points.
-EnergyPlus documents these surface actuators in the
-[thermal-envelope EMS reference](https://bigladdersoftware.com/epx/docs/8-5/ems-application-guide/thermal-envelope.html#surface-convection-heat-transfer-coefficient).
-
-Annual convection algorithms remain those of version 1: TARP for P4 and the
-canonical CeilingDiffuser correlation for P5/P6. Version 2 permits 365 warmup
-days for all three problems. P5/P6 cooling sizing temperatures receive a fixed
-0.01 K margin, replacing the insufficient 0.00001 K margin. P4 retains its
-version-1 0.1 K margin. P6 additionally uses analytical zone-air integration and
-100 maximum HVAC iterations, replacing third-order integration and the default
-20 iterations. These numerical settings apply throughout simulation. Other
-problem inputs are identical to version 1.
-
-The earlier candidate also overrode convection during sizing warmup. Although
-it passed the failure corpus, it materially changed autosized equipment and
-annual objectives. Controlled tests isolated this effect to sizing initialization;
-the inactive-actuator control reproduced the previous results. That candidate
-remains diagnostic and is not the final version-2 recipe.
-
-This changes model initialization and sizing; it is not an exact historical
-replication. The original problem-specific temperature thresholds and 0.04 load
-threshold, strict Severe/Fatal rejection, annual schedules, decision bounds,
-objective equations, starts, seeds, budgets and solver settings are preserved.
-No design-dependent retry or acceptance fallback is used.
-
-Native validation and annual-actuator release evidence are kept privately in
-`.validation-local/model-corrections-20261019/`. The original campaign and its
-565 successful runs remain preserved; shutdown-induced process-exit records
-are separate from the 47 scientific failures. Revised runs require their own
-manifest and frozen source rather than mixing results from the two profiles.
-
-The final profile passed all **2,516 validation cases**. Of these, 1,645 required
-new native simulations; 871 unchanged cases reused retained native outputs only
-after exact model-input, weather, engine and strict-diagnostic revalidation.
-The corpus includes the earlier failure/control sets, all 47 new failures and
-their cross-engine counterparts, independently seeded uniform and boundary
-designs, and neighborhoods around the new failures. Every final rendered input
-matches the audited input byte-for-byte. This is finite validation, not a proof
-over the entire continuous domain.
-
-Six instrumented cases checked all 54 surface actuators throughout **490,560
-annual zone timesteps**, or 26,490,240 actuator observations. All were released
-throughout measured annual simulation, and instrumentation changed objectives
-by exactly zero. Increasing P6 HVAC iterations alone to 100 or 500 still failed
-five audited designs; analytical integration was necessary in the tested recipe.
-The full test suite passed **1,344 tests**, with 26 skipped.
-
-Among previously accepted version-1 controls, the maximum absolute annual
-objective changes from version 1 to version 2 were:
-
-| Problem | EnergyPlus 8.5 | EnergyPlus 26.2 |
-| --- | ---: | ---: |
-| P4 | 0.03072% | 0.03029% |
-| P5 | 0.28015% | 0.39436% |
-| P6 | 4.64986% | 2.01009% |
-
-P6 remains a material numerical change. P4 also retains version 1's material
-physical departure from the original benchmark. These comparisons do not
-establish equivalence to the paper's historical numerical boxplots.
-
-## What the tests require
-
-- These errors also occur through the original C# caller. The
-  [canonical Windows comparison](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38855535049/job/116826022732)
-  reproduced P1 orientation-90 and P10 lower-bound warmup errors. The expanded
-  check additionally replays every recorded EnergyPlus 8.5 failure through the
-  unchanged C# components, comparing generated model fields and failure
-  signatures. Values returned by C# for these runs remain diagnostic only.
-
-- [test_replication_failures.py](../tests/test_replication_failures.py) checks all
-  recorded vectors and rendered input hashes, strict rejection despite successful
-  process markers, retained valid prefixes, and continuation of other scheduled
-  runs. Failed observations have no accepted objective. A valid prefix remains
-  available for diagnosis, but its failed search is excluded from strict rankings.
-- [test_numerical_controls.py](../tests/test_numerical_controls.py) checks that
-  only the declared numerical fields change and that unexpected canonical fields
-  cause an error.
-- The [native validator](../tools/validate_replication_failures.py), exercised by
-  [its tests](../tests/test_replication_failure_validation.py), requires canonical
-  failures to retain their reviewed diagnostic signatures. Separately, each
-  numerical variant must pass strict diagnostics and match reviewed objective,
-  component, and additive-term values across native builds at `rtol=1e-4`
-  (0.01%), with `atol=1e-7` near zero. Same-engine C#/Python parity in the
-  [original-code checks](../tools/validate_cases.py) remains at `rtol=1e-6`.
-- [GitHub Actions](../.github/workflows/validate.yml) performs these native checks
-  with both EnergyPlus versions and canonical weather. The validator requires an
-  existing reviewed baseline and cannot create or update it. An unexpected
-  canonical success, changed failure signature, or failed numerical variant
-  requires review.
-- Public fixtures contain original numerical observations and sanitized
-  diagnostics under the project's [licensing rules](licensing.md). Raw models,
-  weather files, simulation folders, and literature transcriptions are excluded.
+Use the same variant for the entire experiment and a new result directory.
+Changing a running campaign's model would change the function being optimized.
+The historical profiles `convergence-refined`, `convergence-repaired`,
+`model-corrected`, and `model-corrected-v2` remain available to replay older
+experiments. Their exact recipes are recorded in
+[numerical_controls.py](../src/bem_testproblems/numerical_controls.py) and
+[model_controls.py](../src/bem_testproblems/model_controls.py).
 
 ## Weather-warmup convection correction, version 3
 
-The completed FOAM version-2 campaign retained 23 additional warmup failures:
-one P4/8.5, four P5/26.2, and nine P10 cases per engine. All completed annually
-but failed the existing strict diagnostics after 365 warmup days. Instrumented
-replays preserved their annual objectives exactly and exposed persistent
-two-day cycles in the representative P5 and P10 cases. One P10 cooling peak
-alternated between approximately 629 W and 737 W; this exceeds the 4% load
-criterion despite nearly unchanged zone temperatures.
+The version-3 profile extends version 2 with a fixed interior-surface convection
+coefficient of **1 W/(m2 K)** during weather-run warmup for P4, P5, and P10.
+Every actuator is released after warmup. The two design-day sizing environments
+retain their previous treatment. P10 also retains its warmup air-loop control.
+P6 keeps version 2's 2.5 W/(m2 K) warmup setting and its numerical controls.
 
-The opt-in **`model-corrected-v3`** profile applies a fixed interior-surface
-convection coefficient of **1 W/(m² K) during weather-run warmup** to P4, P5 and
-P10. P4/P5 previously used 2.5 W/(m² K); P10 gains the same surface override.
-The condition remains `WarmupFlag == 1 && CurrentEnvironment > 2`, guarded by
-the two canonical design-day environments. Every surface actuator returns to
-`Null` after warmup and on non-warmup timesteps. P10 retains its existing
-warmup air-loop availability control. Other problems retain version-2 input
-bytes. Annual model fields, sizing controls, convergence tolerances, bounds,
-starts, seeds, budgets and solver settings are unchanged from version 2.
+The profile inherits earlier model changes: P4 uses TARP indoor convection and
+a 0.1 K cooling-sizing margin; P5/P6 use a 0.01 K sizing margin; P6 uses analytical
+zone-air integration and 100 maximum HVAC iterations. P1, P3, and P9 retain their
+previous numerical recipes. These are declared model and initialization changes,
+not exact historical equivalence.
 
-This is a labelled initialization correction, selected in exploratory screens
-before the separate independent validation. It reduces the warmup coupling
-that sustained the observed cycles; it does not establish exact historical
-model equivalence or convergence at every point in the continuous boxes.
+The [native audit](validation-results/model-corrected-v3-audit.json) found:
 
-The [aggregate native audit](validation-results/model-corrected-v3-audit.json)
-records the bounded evidence:
+- All 23 retained version-2 warmup failures passed with the original thresholds,
+  completing warmup in 6-21 days.
+- All 2,850 audited engine/design combinations passed strict diagnostics;
+  1,776 were new native simulations and 1,074 reused byte-identical inputs.
+- Sizing records were unchanged across 1,442 version-2/version-3 pairs. The
+  largest measured annual-objective change from accepted version-2 outputs
+  was 0.05564%; this is not a bound on changes from the canonical models.
+- Instrumented runs confirmed the surface actuators were inactive throughout
+  measured annual simulation.
 
-- All **23 retained failures pass**, completing warmup in **6–21 days** with
-  the original thresholds: 0.004 K for P4/P5 temperature, 0.2 K for P10
-  temperature, and 0.04 for load comparisons.
-- All **2,850 engine/design combinations pass**: the earlier 2,516-case corpus,
-  the new failure designs on both engines, and independent random, boundary
-  and nearby designs. There were 1,776 new native simulations and 1,074 reused
-  results with byte-identical inputs. Frozen source and engine hashes remained
-  unchanged during validation.
-- Native sizing records are exactly unchanged across **1,442 paired designs**.
-  Annual objectives do change through initialization: the largest absolute
-  difference from previously accepted version-2 outputs was **0.05564%**.
-  This is an observation, not a new acceptance tolerance.
-- Eight instrumented runs verified **38,684,160 annual surface-actuator
-  observations**, with none active, and exactly reproduced their uninstrumented
-  version-3 annual objectives. The guarded phase condition and sizing-record
-  comparisons separately check that sizing remains unaffected.
-- The full Python suite passed **1,385 tests**, with 26 skips. Tests also check
-  that the original profiles and annual model fields remain preserved.
+This is finite validation. It does not prove convergence for every point in the
+continuous domain or reproduce the publication's objective distributions.
+Earlier P4 corrections also changed annual convection: selected 26.2 annual
+outputs changed by up to 23.12% from the canonical outputs. Some canonical
+comparison outputs contained warmup diagnostics and remain unaccepted. Small
+version-2/version-3 differences therefore do not imply canonical equivalence.
+See [historical HVAC compatibility](historical-hvac.md) for P6/P8's separate
+cross-engine correction.
 
-Select the profile explicitly with `--numerical-variant model-corrected-v3` in
-`tools/run_replication.py`. These validation measurements are separate from
-optimizer trajectories. The completed version-2 campaign and its failed records
-remain preserved. Since annual objectives can change, a version-3 solver
-comparison requires a new frozen manifest and separate results; existing
-version-2 trajectories must not be relabelled or combined with repaired values.
+## Solver bounds and failure records
 
-## P6/P8 modern fan-energy shift
+Both PDFO BOBYQA entry points and the Py-BOBYQA callback handle endpoint roundoff.
+For example, `5.832000000000002` is two adjacent binary64 values above the
+upper bound `5.832`. The adapter uses the exact endpoint for the simulation and
+returned design. It rejects three-step overshoots, nonfinite coordinates, and
+wrong dimensions. This narrow allowance is recorded in solver metadata; it does
+not widen the physical design bounds.
 
-The separate [`historical-hvac` option](historical-hvac.md), audited on 23 October
-2026, restores selected EnergyPlus 8.5 convection and fan-sizing algorithms under
-26.2. It addresses a simulator-version difference rather than an output parsing
-or solver failure. Across 80 fixed designs and 240 strict native checks, the
-remaining fan-energy differences were within 0.057% for P6 and 0.647% for P8.
-Total objective differences remained below 0.757% in absolute value. These are
-observed differences, not new acceptance tolerances or proof of full historical
-equivalence. Existing variants, checkpoints and boxplots remain preserved;
-no optimizer campaign has yet used this option.
+The [recorded endpoint cases](../reference/pdfo-endpoint-cases.json) exercise the
+real solver against saved objective observations. The
+[simulation failure fixtures](../reference/replication-failure-cases.json) and
+[native baselines](../reference/baselines) independently check model inputs,
+strict diagnostics, and accepted values. Existing failed records retain their
+original status; a repaired adapter or model does not retroactively validate them.

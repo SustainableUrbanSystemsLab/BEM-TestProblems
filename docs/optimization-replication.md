@@ -1,38 +1,21 @@
-# Optimization experiments following the 2019 study
+# Compare optimization solvers
 
-The experiment follows the random-start and evaluation-budget protocol of
-[Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048).
-Its aim is a qualitative comparison with Figures 8 and 9 for the ten continuous
-problems, using both EnergyPlus 8.5 and 26.2. Exact historical seeds, starting
-vectors, and raw optimizer trajectories are unavailable. Fresh recorded seeds
-make this rerun reproducible without claiming the original trajectories.
-The current study is limited to the selected solvers already in use. Recovering
-all sixteen study methods is outside its scope; omitted methods do not block
-the comparison of the selected solvers across all ten problems.
-The separately validated [version-3 warmup correction](replication-failures.md#weather-warmup-convection-correction-version-3)
-is available through `--numerical-variant model-corrected-v3`. It is opt-in;
-the completed version-2 campaign retains its original inputs and checkpoints.
-For P6/P8, the separate [historical HVAC compatibility](historical-hvac.md)
-option addresses the modern engine's fan-energy shift. It is selected with
-`--numerical-variant historical-hvac` for an experiment limited to those problems;
-its fixed-design validation is distinct from an optimizer rerun.
-[Waibel's 2018 thesis Appendix C](published-solutions.md) supplies rounded final
-designs for a separate literature comparison. Those are neither starting points
-nor verified full-precision winning records from the journal study.
+Run repeated searches using the random-start and evaluation-budget protocol of
+[Waibel et al. (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048), then compare
+final-objective distributions for the ten continuous-variable problems. The
+commands below use six solver implementations and can run EnergyPlus 8.5,
+26.2, or both. A fresh experiment needs no transferred checkpoints.
 
-The full reproduction of all methods in Figures 8–9 is a separate, optional effort. The
-completed six-method campaign below remains preserved. The current source audit
-has recovered the author's [2018 FrOG fork](https://github.com/christophwaibel/FrOG/tree/8e16536f63141a8e6145cca46ef48eeb93973359),
-including the original BB-O binaries and dimension-specific presets. The eight
-tuned/untuned BB-O configurations passed 64 native quadratic checks, each with
-an identical replay and the paper's call budget. These checks establish adapter
-repeatability, not building-energy replication. An opt-in
-[native adapter](../tools/paper2019/README.md) now calls these external libraries
-and the original Galapagos GA/SA from Grasshopper 0.9.76.0. It preserves the saved
-Grasshopper coordinate transformations, decimal rounding and Galapagos tick
-precision. Development pilots remain separate from final results. Silvereye,
-historical Goat/Opossum settings and paper/source parameter conflicts still need
-resolution before a complete journal-equivalent campaign can be claimed.
+Choose the model before starting. Canonical models preserve their known failure
+behavior; [corrected profiles](replication-failures.md) are explicit alternatives.
+For a separate P6/P8 comparison, the
+[historical HVAC profile](historical-hvac.md) addresses selected modern fan-energy
+differences. Give every changed model or protocol a new result directory.
+
+Original seeds, starting vectors, and raw optimizer trajectories are unavailable.
+New recorded seeds make this experiment repeatable without claiming the original
+trajectories. The [dissertation designs](published-solutions.md) are rounded final
+solutions for a separate pointwise comparison, not historical starting points.
 
 ## Protocol and solver coverage
 
@@ -68,12 +51,11 @@ Available study methods retain their Figure 8/9 order; additions follow them:
 | PDFO BOBYQA | `pdfo`, method `bobyqa` | Added method; bounded scaling, recorded start preserved |
 | Py-BOBYQA | `pybobyqa` | Added method; bounded scaling, deterministic local mode, no global-restart heuristic |
 
-The default registry skips the eight BB-O methods and Galapagos GA/SA unless an
-explicit native configuration supplies their recovered, hash-pinned libraries.
-Silvereye still has no validated adapter. RBFOpt's historical Opossum settings
-remain unverified; its external solver dependencies are being tested separately.
-Generic substitutes are not relabeled as those implementations. The manifest
-retains the full original solver order, metadata and omission reasons.
+The six implementations above are the supported comparison set described here.
+Historical BB-O and Galapagos adapters have
+[separate setup requirements](../tools/paper2019/README.md). They are not silently
+substituted for unavailable paper methods. The manifest records solver identities,
+settings, and omission reasons; this experiment does not cover all study methods.
 
 With these six methods, the full experiment requests **2,400 optimization runs**
 and at most **2,592,000 objective calls**. Early termination can reduce the total.

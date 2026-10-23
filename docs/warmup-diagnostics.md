@@ -1,274 +1,80 @@
-# Canonical-weather results and warmup failure analysis
+# Warmup convergence
 
-This report covers the **26 recorded canonical validation cases plus one paired
-P1 trial**: 54 engine/design combinations, 51 accepted evaluations and three
-rejected evaluations. Every recorded failure is a warmup-convergence severe
-diagnostic; these cases contain no fatal errors. All ten problem midpoints passed
-with both engines. This is coverage of the listed designs, not every point in
-their boxes or the published winning designs.
+Before a sizing or weather simulation, EnergyPlus repeats the first day to
+initialize the building's thermal history. It compares successive days' maximum
+and minimum zone temperatures and peak heating and cooling loads. Warmup ends
+when all checks pass or the maximum number of days is reached.
 
-The [numeric evidence](validation-results/warmup-diagnostics.json) preserves full
-decision vectors, parameter order, input/weather/engine hashes, per-zone
-convergence metrics and separate scratch-probe results. The first 26 rows come
-from the [8.5 audit](validation-results/8.5.0-canonical-audit.json) and
-[26.2 audit](validation-results/26.2.0-canonical-audit.json).
-These are new project measurements; no numerical paper result is substituted.
+A convergence error means the repeated days still differ too much. It does not
+necessarily mean that EnergyPlus crashed: it can continue into the annual
+simulation and write outputs. The package rejects those outputs under its
+normal strict policy.
 
-This report preserves the original measurements and exploratory numerical probes.
-For the current supported opt-in profiles and their bounded validation, see
-[Failed replication runs](replication-failures.md).
+## Thresholds
 
-## Complete canonical case table
+Temperature criteria use absolute differences in kelvin. Load criteria compare
+relative changes in daily peaks, subject to the engine's low-load rules.
+Representative benchmark thresholds are:
 
-An objective below means the engine run passed strict diagnostics. **Rejected**
-means no objective was accepted. Displayed numbers are rounded to six decimals;
-the JSON records retain full available precision. Values from different engine
-versions are not expected to coincide. The baseline is EnergyPlus 8.5:
-`Δ objective = f26.2 - f8.5` and `Δ (%) = 100 × (f26.2 - f8.5) / |f8.5|`.
-Positive changes are increases; negative changes are decreases. A dash means a
-comparison is unavailable because an evaluation was rejected (or, for a percentage,
-the baseline is zero). Changes are computed from full-precision values.
+| Models | Temperature tolerance | Load tolerance |
+| --- | ---: | ---: |
+| P1 and detailed offices P4/P5/P6/P8 | 0.004 K | 4% |
+| P10 | 0.2 K | 4% |
 
-| Case | EnergyPlus 8.5 objective | EnergyPlus 26.2 objective | Δ objective | Δ (%) | Units |
-| --- | ---: | ---: | ---: | ---: | --- |
-| p01-midpoint | 153.181082 | 147.566000 | -5.615082 | -3.6656% | kWh/(m2 year) |
-| p02-midpoint | 194.745959 | 186.875943 | -7.870016 | -4.0412% | kWh/(m2 year) |
-| p03-midpoint | 173.274743 | 170.143885 | -3.130858 | -1.8069% | kWh/(m2 year) |
-| p04-midpoint | 147.638635 | 172.688497 | +25.049861 | +16.9670% | kWh/(m2 year) |
-| p05-midpoint | 214.609328 | 241.746830 | +27.137502 | +12.6451% | kWh/(m2 year) |
-| p06-midpoint | 179.577025 | 201.960714 | +22.383688 | +12.4647% | kWh/(m2 year) |
-| p08-midpoint | 173.938191 | 190.621682 | +16.683491 | +9.5916% | kWh/(m2 year) |
-| p09-midpoint | 843.380000 | 840.870000 | -2.510000 | -0.2976% | MJ/m2 |
-| p10-midpoint | 1198.570000 | 1201.820000 | +3.250000 | +0.2712% | MJ/m2 |
-| p13-midpoint | 1932.967349 | 1928.196660 | -4.770689 | -0.2468% | EUR |
-| p01-lower | 237.042291 | 233.781187 | -3.261104 | -1.3757% | kWh/(m2 year) |
-| p01-upper | 148.337251 | 145.932647 | -2.404604 | -1.6210% | kWh/(m2 year) |
-| p04-lower | 202.643114 | **Rejected** | — | — | kWh/(m2 year) |
-| p04-upper | 147.725439 | 163.447883 | +15.722444 | +10.6430% | kWh/(m2 year) |
-| p09-lower | 830.190000 | 828.530000 | -1.660000 | -0.2000% | MJ/m2 |
-| p09-upper | 909.470000 | 907.110000 | -2.360000 | -0.2595% | MJ/m2 |
-| p10-lower | **Rejected** | 1095.630000 | — | — | MJ/m2 |
-| p10-upper | 1646.560000 | 2330.740000 | +684.180000 | +41.5521% | MJ/m2 |
-| p13-lower | 1983.035176 | 1978.814154 | -4.221022 | -0.2129% | EUR |
-| p13-upper | 2212.926716 | 2206.941898 | -5.984818 | -0.2704% | EUR |
-| p09-penalty-below | 1262.055000 | 1258.380000 | -3.675000 | -0.2912% | MJ/m2 |
-| p09-penalty-above | 841.370000 | 838.920000 | -2.450000 | -0.2912% | MJ/m2 |
-| p10-penalty-below | 1801.200000 | 1805.745000 | +4.545000 | +0.2523% | MJ/m2 |
-| p10-penalty-above | 1200.790000 | 1203.830000 | +3.040000 | +0.2532% | MJ/m2 |
-| p06-embedded-p08 | 173.938191 | 190.621682 | +16.683491 | +9.5916% | kWh/(m2 year) |
-| p08-embedded-check | 173.938191 | 190.621682 | +16.683491 | +9.5916% | kWh/(m2 year) |
-| p01-orientation90 | **Rejected** | 152.729368 | — | — | kWh/(m2 year) |
+These are convergence criteria, not optimization stopping tolerances. A small
+annual-objective difference does not establish that warmup passed. Increasing
+the day allowance can help slow convergence, but cannot guarantee removal of a
+persistent repeated-day cycle.
 
-`lower` and `upper` set every free variable to its corresponding box endpoint.
-The embedded P6/P8 rows test the reduced problem's fixed-coordinate mapping; they
-are deliberately related designs. Penalty rows are the two recorded sides of the
-window-height boundary. Exact vectors for every row are in the numeric evidence.
+The version-specific definitions are in the EnergyPlus
+[8.5 source](https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/HeatBalanceManager.cc)
+and [26.2 source](https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc).
 
-## Complete failure summary
+## Recorded canonical cases
 
-| Problem and engine | Design | Affected zones | Severe / Fatal | Failure |
-| --- | --- | --- | ---: | --- |
-| P1, EnergyPlus 8.5 | `[90, 3, 3, 0.5]` | ZONE ONE | 1 / 0 | Minimum daily temperature changes by 0.00647 K; limit is approximately 0.004 K |
-| P4, EnergyPlus 26.2 | All free variables at lower bounds | ZONE SOUTH | 1 / 0 | Maximum daily temperature changes by 0.0058081 K; limit is 0.004 K |
-| P10, EnergyPlus 8.5 | All free variables at lower bounds | Seven perimeter zones below | 7 / 0 | Heating or cooling daily-peak load changes exceed 4% |
+The initial audit covered 26 designs plus a paired P1 trial, evaluated with both
+engines: 51 accepted evaluations and three rejections. All ten midpoints passed
+on both engines. These counts describe that audit, not a campaign failure rate.
 
-The failing corner vectors, in the same free-parameter order as `get_problem`, are:
+| Case | Failed criterion | Interpretation |
+| --- | --- | --- |
+| P1, 8.5, `[90, 3, 3, 0.5]` | Minimum-temperature difference 0.00647 K versus 0.004 K | The original 25-day allowance was too short for this design. |
+| P4, 26.2, simultaneous lower bounds | Maximum-temperature difference 0.0058081 K versus 0.004 K | The observed cycle also persisted with a 100-day allowance. |
+| P10, 8.5, simultaneous lower bounds | Seven zone-load comparisons above 4% | Temperature checks passed; additional warmup days alone did not remove load cycling. |
 
-- **P4:** `[1.224, 7.344, 7.344, 1.224, 0.05, 0.05, 0.05, 100, 100, 100, 20, 20, 12]`.
-- **P10:** `[0.8, 1.35, 0.8, 1.35, 0.8, 1.35, 0.8, 1.35, 12, 13, 13, 24, 24]`.
+The [audit data](validation-results/warmup-diagnostics.json) retain the complete
+vectors, objective/component table, per-zone measurements, and diagnostic probes.
+The original C# caller also encounters warmup diagnostics; this is not solely a
+Python translation issue. Its use of completed annual outputs differs from the
+package's strict acceptance policy.
 
-For P1 and P4, only the stated temperature criterion fails; their other three
-warmup checks pass. For P10, all temperature checks pass with its 0.2 K tolerance.
-Its seven original failed load checks are listed below. The limit is **4%** in
-every row.
+## What to do
 
-| Zone | Failed load criterion | At 25 days | At 100 days |
-| --- | --- | ---: | ---: |
-| PERIMETER_BOT_ZN_3 | Cooling peak | 4.9607% | 4.7140% |
-| PERIMETER_BOT_ZN_2 | Cooling peak | 11.0700% | 9.9559% |
-| PERIMETER_BOT_ZN_1 | Cooling peak | 10.1700% | 9.2213% |
-| PERIMETER_MID_ZN_2 | Cooling peak | 26.0700% | 21.1300% |
-| PERIMETER_MID_ZN_1 | Cooling peak | 12.8300% | 11.3300% |
-| PERIMETER_TOP_ZN_3 | Heating peak | 4.8326% | 4.6107% |
-| PERIMETER_TOP_ZN_4 | Heating peak | 4.2746% | 4.0999% |
+Read the retained `eplusout.err` to identify the engine, environment, zone, and
+failed criterion. Distinguish sizing warmup from weather-run warmup: an annual
+convergence report does not establish that sizing was valid.
 
-The scratch 100-day P10 run also adds a cooling-load failure in
-`PERIMETER_TOP_ZN_1`, reported as **100%**. This eighth error belongs to the
-modified-cap diagnostic run; the unchanged 25-day benchmark has seven.
-
-## What warmup is checking
-
-EnergyPlus repeats the first day of each environment to initialize thermal
-history. It compares successive days' maximum and minimum zone temperatures and
-peak heating and cooling loads, and requires all four checks to pass in every
-zone. A maximum-day cap can end warmup before that occurs.
-[Engineering reference](https://energyplus.readthedocs.io/en/stable/guides/engineering-reference/1.5-warmup-convergence.html).
-
-Temperature comparisons are absolute differences; the load diagnostics here are
-relative daily-peak differences. The version-specific source determines the
-100 W low-load handling.
-[8.5 implementation](https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/HeatBalanceManager.cc),
-[26.2 implementation](https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc).
-
-These warmup thresholds are separate from objective-comparison tolerances.
-Same-engine C#/Python parity uses `rtol=1e-6`; repaired-model comparisons across
-native builds use `rtol=1e-4` (0.01%). Passing a numerical comparison of a reported
-objective does not override a failed simulation diagnostic.
-
-### P1: insufficient warmup allowance at this design
-
-The original model stops after 25 days with a minimum-temperature change of
-0.00647 K, above its approximately 0.004 K limit. A scratch copy with a 100-day cap
-passes after **28 days**, without changing either convergence tolerance. The
-current modern model, already configured with a 100-day cap, passes the same
-vector after **34 days**.
-
-The model derives from a high-mass BESTEST case and contains 200 mm concrete-block
-walls, 180 mm plus 50 mm concrete floor/ceiling layers and brick internal mass.
-Slow initialization of stored heat is consistent with the observed need for
-additional days. Thermal mass was not isolated by changing the constructions, so
-it is a supported contributor rather than a proven sole cause.
-
-| P1 condition | Actual warmup days | Severe / Fatal | Objective status |
-| --- | ---: | ---: | --- |
-| Original 8.5, cap 25 | 25 | 1 / 0 | Rejected |
-| Scratch 8.5, cap 100 | 28 | 0 / 0 | Diagnostic variant: 156.46031464 |
-| Current 26.2, cap 100 | 34 | 0 / 0 | Accepted: 152.72936839 |
-
-The failed 8.5 run still writes a diagnostic-only value, 156.45937753. Changing
-the warmup cap increases that diagnostic value by **0.00093710 kWh/(m² year)**,
-or **+0.000599%** against the failed run (relative change `5.99e-6`). This is only
-a diagnostic comparison; the canonical comparison remains unavailable because
-the original evaluation was rejected. Neither the failed-run value nor the
-scratch-cap variant is an unchanged historical benchmark observation.
-
-Against the successful scratch 8.5 cap-100 variant, the current 26.2 value is
-**3.73094625 kWh/(m² year) lower (−2.3846%)**. Both runs pass diagnostics, but the
-baseline is the scratch numerical variant rather than the original benchmark.
-
-### P4: a persistent two-day numerical cycle
-
-At a 100-day cap, the south zone's late daily maximum alternates between
-**24.8310816691°C** and **24.8253485019°C**. Their difference, **0.0057331672 K**,
-still exceeds 0.004 K. This cycle is stable across the final 20 days, so increasing
-the cap alone does not remove it.
-
-At the lower bounds, heating and night-cooling setpoints coincide at 20°C during
-the 07–08 morning overlap, while the main cooling coil is unavailable. Heating
-is 18°C during the other night hours. This is relevant control context, but no
-individual controller was isolated as the cause.
-Sensitivity tests support an interaction with the coupled numerical solution:
-
-| P4 scratch condition | Actual warmup days | Severe / Fatal | Diagnostic-only objective |
-| --- | ---: | ---: | ---: |
-| Unchanged model, cap 25 | 25 | 1 / 0 | Rejected |
-| Cap 100, otherwise unchanged numerical settings | 100 | 1 / 0 | Rejected |
-| HVAC iteration limit increased from 20 to 100; cap 25 | 16 | 0 / 0 | 232.841307 |
-| Analytical zone-air integration; cap 25 | 17 | 0 / 0 | 229.858837 |
-| Valid 12 timesteps/hour; 12-step sizing window preserves 60 minutes; cap 100 | 14 | 0 / 0 | 238.772703 |
-
-All convergence tolerances and physical decision coordinates were preserved in
-these exploratory probes. The later supported fixed profiles have their own
-[bounded validation](replication-failures.md); their settings differ from some
-of the individual probes above. Annual HVAC iteration warnings still occur in
-some passing probes; passing warmup alone does not establish their overall
-physical accuracy.
-
-An earlier timestep request of 8/hour was invalid. EnergyPlus normalized it to
-10/hour and the unchanged four-step sizing window became 24 minutes. Its pass
-and objective are retained in the JSON with that confound; the valid 12/hour
-test above corrects the experiment by preserving the 60-minute window.
-
-### P10: load cycling, low-load test behavior and numerical resolution
-
-At the original ten-minute timestep, late warmup daily-peak loads alternate
-between two phases. The temperature checks pass, but seven peak-load comparisons
-remain above 4% after 100 days. Examples are `PERIMETER_MID_ZN_2` cooling peaks
-of approximately **241.70 W** and **306.45 W**, and
-`PERIMETER_TOP_ZN_3` heating peaks of approximately **5677.11 W** and **5951.52 W**.
-
-The added top-zone-1 error has a separate low-load effect: cooling alternates
-between **0 W** and **37.1888 W**. EnergyPlus 8.5 floors the positive current peak
-to 100 W while the stored previous zero remains zero; its comparison becomes
-`abs(100 - 0) / 100 = 1`. Version 26.2 floors both sides of that positive-load
-comparison. This explains the reported 100% small-load artifact, not the other
-zones' larger-load oscillations.
-
-The model repeats January 1 as a holiday during these probes. Fans are scheduled
-off while night-cycle control can enable them. Those switching controls and the
-autosized VAV system are plausible contributors; individual control changes
-were not isolated.
-
-| P10 scratch condition | Actual warmup days | Severe / Fatal | Objective status |
-| --- | ---: | ---: | --- |
-| Original ten-minute timestep, cap 25 | 25 | 7 / 0 | Rejected |
-| Same timestep, cap 100 | 100 | 8 / 0 | Rejected |
-| Five-minute timestep, sizing window inadvertently shortened to 30 minutes, cap 100 | 100 | 3 / 0 | Rejected; confounded diagnostic |
-| Five-minute timestep, 12-step sizing window preserves 60 minutes, cap 100 | 17 | 0 / 0 | Diagnostic variant: 1096.91 |
-
-The corrected refinement passes all four checks in all 16 zones. Its largest
-reconstructed active heating and cooling residuals are approximately 0.00138
-and 0.03750, below 0.04. This supports numerical-resolution/sizing sensitivity;
-it does not isolate one controller or prove equivalence to the original model.
-
-## Consequences for evaluation and validation
-
-EnergyPlus can exit with code zero and print “Completed Successfully” while
-also reporting severe warmup errors. The original C# caller does not reject
-those diagnostics. The Python evaluator does: rejected results cannot become
-accepted objective values or a passing reference comparison.
-
-The P1 extended-warmup variant is described below. The P4 and P10 results above
-record the earlier exploratory probes. The later
-[failed-run validation](replication-failures.md) documents the supported fixed
-`convergence-refined` profiles for P1, P4, P5, P6, and P10, tested at 24 recorded
-failed inputs and nine midpoint controls. That bounded validation does not
-establish convergence throughout each problem's box. Each numerical change may
-change objectives; exact historical compatibility and a revised numerical model
-retain separate identities and references.
-
-The [recorded code CI](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/actions/runs/38674953272)
-passed all five jobs, including both 26-case engine comparisons. Those public
-simulation checks use independently generated synthetic weather; they do not
-erase the canonical failures above. No benchmark asset, warmup tolerance or
-simulation acceptance policy was changed by this analysis.
-
-The current workflow additionally runs canonical-weather checks over all 27
-listed designs. Successful values are checked numerically; each recorded warmup
-rejection is checked as a rejected diagnostic outcome with no accepted objective.
-Unexpected failures, changed signatures or newly successful previously rejected
-cases require review. Synthetic checks remain supplemental. Only numerical JSON
-reports are uploaded; no raw canonical weather is published.
+For canonical-model comparisons, retain the rejection and report it. If the
+study permits model corrections, select a fixed, labelled profile before
+starting a separate experiment. The [model-variant guide](replication-failures.md)
+describes the supported corrections and their measured effects. The version-3
+profile passed all 23 retained version-2 failures; full-domain convergence
+remains unproven.
 
 ## P1 extended-warmup variant
 
-- Select `get_problem(1, numerical_variant="warmup-100")` and use the ordinary
-  objective or solver API. The [implementation](../src/bem_testproblems/models.py)
-  changes only the legacy Building maximum warmup field, from 25 to 100 days.
-  It checks the original field before applying the change. The temperature and
-  load tolerances, physical parameters, and objective remain unchanged.
-- The modern P1 input already allows 100 days. The variant checks that setting
-  and renders byte-identical modern input. The named variant remains recorded
-  in provenance, including when no modern input change is needed.
-- A fresh canonical-weather matrix tested 12 designs under each legacy cap:
-  midpoint, lower and upper corners, orientation 90°, the printed thesis design,
-  the independently optimized design, an explicit width-swap hypothesis, and
-  five diverse warmup-rejected points from its optimization trajectory.
-- The original cap accepted **6/12**; the extended cap accepted **12/12**, with
-  **zero Severe/Fatal errors**. The six formerly rejected designs converged in
-  **26–35 days**. All six already accepted designs retained exactly the same
-  objectives and components: **0% difference** for their nonzero values.
-- Diagnostic-only objective changes at formerly rejected points ranged from
-  **−0.00000938% to +0.00149125%**, relative to their rejected-run output. Those
-  comparisons do not make the original rejected values valid.
-- The five public [variant cases](../reference/warmup-100-cases.json) cover the
-  canonical P1 vectors and the independently optimized candidate. Their
-  [reviewed strict baseline](../reference/baselines/8.5.0-warmup-100-canonical.json)
-  records objectives, components, input/weather hashes, and convergence days.
-  The [CI workflow](../.github/workflows/validate.yml) checks them separately from
-  unchanged C# versus Python parity. No thesis table, raw weather, or model is
-  distributed with these numerical fixtures.
-- This demonstrates the repair on the tested points, rather than proving
-  convergence throughout the box. A selected recorded-start CMA-ES rerun uses
-  the same start, seed, and 500-call budget under strict diagnostics to check the
-  full search path. Its result must be assessed separately from the 12-point matrix.
+```python
+from bem_testproblems import get_problem, make_objective
+
+problem = get_problem(1, numerical_variant="warmup-100")
+objective = make_objective(problem, energyplus_version="8.5.0")
+```
+
+This increases the historical maximum warmup allowance from 25 to 100 days,
+keeping the original thresholds. The modern canonical P1 model already permits
+100 days. The historical change has its own input identity and is not exact
+canonical parity. Native CI checks it separately using the
+[warmup cases](../reference/warmup-100-cases.json).
+
+For a repeated experiment, `--p1-warmup-100` selects this option. Use a new output
+directory; Severe and Fatal diagnostics still reject evaluations.

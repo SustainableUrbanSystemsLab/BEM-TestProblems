@@ -1,346 +1,145 @@
-# Replication workflow
+# Run, review, and publish solver experiments
 
-For the current fresh FOAM campaign, follow [the FOAM handoff](../docs/foam-takeover.md).
-It uses a separate private configuration and an ordinary-user supervisor with
-118 workers. The default configuration and Task Scheduler instructions below
-describe the older transferred campaign.
+For a new experiment, start with the [experiment guide](../docs/optimization-replication.md).
+It explains solver selection, paired starts, evaluation budgets, and boxplots.
+A fresh experiment does not require a private handoff.
 
-This folder is the entry point for continuing, reviewing, and publishing the
-continuous-problem experiment. Run the long stages on the Windows workstation.
-The code comes from GitHub; the preserved checkpoints come from the private
-handoff. They are kept separate so that pulling code never overwrites results.
+This directory provides additional workflows for continuing an existing campaign
+and running an explicitly extended-budget experiment. Both preserve checkpoints,
+record provenance, and produce reports. Use Python 3.12 and the
+[local setup](../README.md#set-up-locally); Windows users can follow the
+[PowerShell guide](../docs/windows-continuation.md).
 
-Start with the [Windows setup](../docs/windows-continuation.md), through extracting
-the verified handoff. Use the local Python environment throughout. The commands
-below assume its `$python` variable and `Invoke-Checked` helper are available.
+## Continue an existing campaign
 
-## One configuration
+A continuation requires the original manifest, checkpoints, and frozen numerical
+source. Completed results retain their provenance. Only unfinished
+specifications enter the continuation; interrupted optimizers restart from their
+recorded starts, seeds, and full budgets. Internal optimizer state is not saved.
 
-[continuation.json](continuation.json) defines project-relative folders, the
-worker allocation, and the small timing pilot. Edit it before launching if the
-workstation needs a different allocation. Full-campaign starts, seeds, budgets, models, engine
-versions, and solver choices come from the original manifest, rather than being
-copied into another configuration.
+Copy [continuation.json](continuation.json) to an ignored configuration such as
+`.validation-local/my-continuation.json`. Set its paths and worker count before
+planning. Paths are relative to the project root unless absolute.
 
-| Location | Contents | GitHub |
-|---|---|---|
-| `.validation-local/handoff/` | Immutable origin checkpoints and frozen numerical source | Private |
-| `.validation-local/windows-continuation/` | New Windows manifest, checkpoints, attempt histories, and controller log | Private |
-| `.validation-local/windows-checks/` | Native preflight reports and receipt | Private |
-| `.validation-local/replication-review/` | Combined tables and boxplots | Private |
-| `.validation-local/replication-replay/` | Native winner replays and retained diagnostics | Private |
-| `.validation-local/publication-preview/` | Explicitly unvalidated export preview | Private |
-| [results/](results/README.md) | Reviewed, allowlisted result packages | Public |
+| Configuration entry | Contents |
+| --- | --- |
+| `paths.origin` | Original manifest and checkpoints |
+| `paths.frozen_source` | Source snapshot matching the original numerical hashes |
+| `paths.continuation` | New manifest, checkpoints, attempt histories, and controller log |
+| `paths.preflight` | Canonical native checks and passing receipt |
+| `paths.pilot` | Separate short timing experiment |
+| `paths.review` | Tables, best designs, boxplots, and completion record |
+| `paths.replay` | Independent native winner checks |
+| `paths.publication` | Reviewed public result package |
 
-The original and Windows records retain their actual manifest IDs and platforms.
-Review joins them by the validated continuation relationship. It never creates
-replacement checkpoints with invented provenance.
-The preserved campaign's numerical source is frozen at
-[0a06e384](https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems/commit/0a06e384663e4b2a6dbd3453a4255b90e935e511);
-its nine numerical module hashes match the original manifest. The workflow and
-reporting code can be newer than that frozen simulator caller.
+The supplied 118-worker setting is an example for a large workstation. Choose an
+allocation for your hardware, leaving room for other users. Its 48-run pilot has
+reduced budgets and contributes no values to full-experiment boxplots.
 
-## Check, measure, and launch
+From the repository root, run these stages separately and inspect each result:
 
-```powershell
-Invoke-Checked { & $python replication\pipeline.py status }
-Invoke-Checked { & $python replication\pipeline.py preflight }
-Invoke-Checked { & $python replication\pipeline.py pilot }
-Invoke-Checked { & $python replication\pipeline.py plan }
+```sh
+.venv/bin/python replication/pipeline.py status --config .validation-local/my-continuation.json
+.venv/bin/python replication/pipeline.py preflight --config .validation-local/my-continuation.json
+.venv/bin/python replication/pipeline.py pilot --config .validation-local/my-continuation.json
+.venv/bin/python replication/pipeline.py plan --config .validation-local/my-continuation.json
 ```
 
-- **Status** reads checkpoints without starting simulations.
-- **Preflight** runs both installed engines on the canonical validation cases.
-  It requires objective/component agreement at relative tolerance `1e-6`, with
-  absolute tolerance `1e-7` near zero, and the documented rejected outcomes.
-- **Pilot** runs the separate 48-run timing experiment. Inspect its timings,
-  failures, memory use, and CPU use before choosing the full worker count.
-  Its reduced budgets do not enter the full experiment's results.
-- **Plan** checks frozen source, inputs, provenance, completed records, and the
-  exact remaining run specifications without optimizing anything.
+On Windows, use `.venv\Scripts\python.exe` instead of `.venv/bin/python`.
 
-Append `--dry-run` to any stage to inspect its commands without launching a
-process. The pipeline invokes numerical stages in fresh interpreters so that
-the current analysis package cannot contaminate the frozen numerical source.
+| Stage | What to check |
+| --- | --- |
+| `status` | All planned runs are accounted for; a controller is not already running |
+| `preflight` | Both engines match canonical references and documented rejected outcomes |
+| `pilot` | Timing, failures, peak memory, CPU use, and disk activity support the allocation |
+| `plan` | Frozen source and input identities match; remaining starts, seeds, and budgets are unchanged |
 
-For the persistent job, use the [Task Scheduler settings](../docs/windows-continuation.md#6-run-independently-of-the-remote-desktop-window).
-Set its program to the full path of the environment's Python executable, its
-working directory to the checkout, and its arguments to the absolute path of
-[pipeline.py](pipeline.py) followed by `run`. For the example checkout:
+Then start the campaign:
 
-```text
-"D:\benchmarks\BEM-TestProblems\replication\pipeline.py" run
+```sh
+.venv/bin/python replication/pipeline.py run --config .validation-local/my-continuation.json
 ```
 
-The run stage checks the passing preflight receipt against the current
-destination manifest and report hashes before starting. Changed inputs require
-another preflight. Each preflight gets a fresh numbered attempt directory;
-failed and earlier attempts remain available. With 118 workers, the controller
-uses two 59-worker pools.
-Rerun the same scheduled task after an interruption: finished destination runs
-are skipped, and interrupted attempts restart from their original seed, start,
-and full budget. Previous attempt histories remain available.
+The controller lock prevents two coordinators using the same output directory.
+The run stage requires the passing preflight receipt and verifies its identities
+and report hashes. Changed inputs require a new preflight. Append `--dry-run` to
+inspect a stage's commands without launching its processes.
 
-After the controller exits, `run` automatically generates the strict review
-tables and Figure 8/9 PNG/SVG boxplots in the configured `paths.review` directory.
-This also happens when the controller returns exit code 1 for failed or skipped
-runs. Failed runs retain their status and remain excluded from strict boxplots.
-An interrupted campaign gets explicitly incomplete reports.
+Keep the numerical source, engines, inputs, and environment fixed throughout the
+campaign. Resume with the same configuration; completed terminal records remain
+preserved, and interrupted attempts retain their histories. For background use,
+see [Windows process lifetime](../docs/windows-continuation.md#background-runs).
 
-For an explicitly recorded `reference-warmup` campaign, `run` and `review` also
-generate separate diagnostic tables and boxplots labelled **NOT STRICT**. The
-completion record includes both reviews and their artifact checksums. Strict
-figures continue to exclude every trajectory that used warmup-Severe outputs.
+## Review and export
 
-`paths.review/run-completion.json` records the campaign status, counts, report
-locations, and artifact checksums. `completed: true` means every run is terminal
-and reporting succeeded; it does not mean every optimization succeeded. Exit
-code 1 still signals simulation failures or unfinished runs. Background launchers
-should stop retrying when a completion record from their current invocation has
-`completed: true` and `phase: finished`, even with `finished-with-failures`.
-Reporting errors leave a failed completion record and a nonzero exit code.
-Rerunning `run` on an already finished campaign validates the checkpoints and
-refreshes reporting without launching the simulation controller. Review generation
-does not run winner replays or bypass the public export gates.
+After the controller exits, `run` automatically generates strict tables and
+Figure 8/9-style PNG/SVG boxplots in `paths.review`. It also reports failed or
+interrupted campaigns. Refresh a review explicitly with:
 
-Keep the checkout, frozen source, engines, weather, and environment fixed during
-the campaign. Pull updates before setup or after stopping the scheduled task,
-never during a live campaign. Changes that alter its identity require a new
-recorded experiment.
+```sh
+.venv/bin/python replication/pipeline.py review --config .validation-local/my-continuation.json
+```
 
-For a separately labelled corrected-model experiment, select
-`--numerical-variant model-corrected` when preparing the fresh manifest. This
-changes P4's physical convection/sizing model and P10's warmup control policy;
-it preserves strict diagnostics and the original optimization specifications.
-See the [correction record](../docs/replication-failures.md#labelled-model-corrections-on-foam)
-for measured objective changes and native validation. Keep its checkpoints and
-boxplots separate from canonical results.
+`paths.review/run-completion.json` lists counts, output locations, and artifact
+checksums. `completed: true` means every run is terminal and reporting succeeded;
+it does not mean all optimizations succeeded. `finished-with-failures` retains
+those failures. Failed and non-strict trajectories are excluded from strict
+boxplots; partial figures are labelled incomplete.
 
-For a separate P6/P8 experiment, `--numerical-variant historical-hvac` restores
-selected 8.5 convection and fan-sizing algorithms under 26.2. All 240 native
-checks passed; smaller objective differences remain. See the
-[compatibility record](../docs/historical-hvac.md). This option supports only
-P6/P8 and does not replace the other problems' correction profiles. It requires
-a fresh manifest and separate results; the completed campaign is preserved.
+For a fresh experiment run outside this pipeline, generate equivalent review
+outputs directly:
+
+```sh
+.venv/bin/python tools/review_replication.py --origin .validation-local/my-experiment --output-dir .validation-local/my-review
+```
+
+Before publishing a configured continuation, replay its strict winners and export:
+
+```sh
+.venv/bin/python replication/pipeline.py replay-plan --config .validation-local/my-continuation.json
+.venv/bin/python replication/pipeline.py replay --config .validation-local/my-continuation.json
+.venv/bin/python replication/pipeline.py export --config .validation-local/my-continuation.json
+.venv/bin/python replication/pipeline.py check-export
+```
+
+Export requires a complete campaign and passing native replays of the current
+strict winners. It includes computed results, designs, figures, sanitized
+provenance, attribution, and checksums. Raw checkpoints, machine paths, native
+outputs, original models, weather, engines, and literature transcriptions are
+excluded. See [public results](results/README.md).
+
+Replay and export preserve existing output directories. Choose a new replay or
+publication path for a new attempt. `export-preview` instead writes an explicitly
+unvalidated private preview; it cannot pass the public export checks.
 
 ## Extended-budget experiment
 
-[extended-budget.json](extended-budget.json) defines a separate PDFO BOBYQA
-experiment for all ten continuous problems and both EnergyPlus versions. Each
-of its 20 paired starts receives 100 times the full paper-budget allowance:
+[extended_budget.py](extended_budget.py) provides a fresh experiment without a
+handoff. Copy [extended-budget.json](extended-budget.json) to a private
+configuration and choose its workers, solvers, and result paths before planning.
+The supplied configuration uses PDFO BOBYQA, all ten problems, both engines,
+20 repetitions, and 100 times the paper's evaluation allowance.
 
-| Problems | Variables | Paper-budget calls | Extended maximum calls per run |
-|---|---:|---:|---:|
-| 1, 2, and 3 | 4 | 500 | 50,000 |
-| 4, 5, 6, 9, and 10 | 13 | 1,400 | 140,000 |
-| 8 | 11 | 1,200 | 120,000 |
-| 13 | 10 | 1,100 | 110,000 |
+| Problems | Paper-budget calls | Extended maximum calls per run |
+| --- | ---: | ---: |
+| 1, 2, 3 | 500 | 50,000 |
+| 4, 5, 6, 9, 10 | 1,400 | 140,000 |
+| 8 | 1,200 | 120,000 |
+| 13 | 1,100 | 110,000 |
 
-These are maximum allowances. BOBYQA can stop earlier when its termination
-criteria are satisfied; increasing the cap alone does not force extra calls.
-The small 25-call timing pilots have a different purpose and never contribute
-to either full experiment's results. The extended experiment has 400 runs and
-a ceiling of 43.2 million objective calls. Actual throughput must be measured
-on the workstation before estimating its duration.
+The default experiment has 400 searches and at most 43.2 million objective calls.
+Solvers can stop earlier; the increased cap does not force extra evaluations.
+This is a different protocol from the publication comparison.
 
-Use [extended_budget.py](extended_budget.py) on FOAM after the
-[Windows setup](../docs/windows-continuation.md) has installed the virtual
-environment, both engines, canonical weather, and reference assets. This fresh
-experiment does **not** require the original campaign's private handoff.
-If the original experiment is already running, use a separate checkout and
-virtual environment. Do not pull updates into a live campaign's checkout.
-
-Choose the permanent checkout path **before** planning. If `R:` is a mapped
-network drive, use its UNC path for setup, planning, and Task Scheduler;
-mapped drive letters may be unavailable to a background task. The plan binds
-the actual path, so switching from `R:` to UNC after planning requires a new
-experiment. For an idle checkout on a local `R:` drive, run in PowerShell:
-
-```powershell
-Set-Location R:\BEM-TestProblems
-$python = (Resolve-Path .\.venv\Scripts\python.exe).Path
-function Invoke-Checked {
-    param([scriptblock] $Command)
-    & $Command
-    if ($LASTEXITCODE -ne 0) { throw "Command failed with exit code $LASTEXITCODE" }
-}
-Invoke-Checked { & $python replication\extended_budget.py plan }
-Invoke-Checked { & $python replication\extended_budget.py preflight }
-Invoke-Checked { & $python replication\extended_budget.py pilot }
+```sh
+.venv/bin/python replication/extended_budget.py plan --config .validation-local/my-extended.json
+.venv/bin/python replication/extended_budget.py preflight --config .validation-local/my-extended.json
+.venv/bin/python replication/extended_budget.py pilot --config .validation-local/my-extended.json
+.venv/bin/python replication/extended_budget.py run --config .validation-local/my-extended.json
 ```
 
-- **Plan** freezes the complete Python package in a private source snapshot,
-  records the exact starts, seeds, budgets, solver settings, and native input
-  hashes, and binds the plan to this workstation and interpreter.
-- **Preflight** validates both installed engines against the canonical cases
-  and reviewed baselines. Each attempt keeps its own reports.
-- **Pilot** runs six repetitions of four problems and both engines: 48 separate
-  searches with 48 workers and 25-call budgets.
-  Inspect its printed timing and failure summary. All scheduled pilot runs
-  must terminate, and at least one strict trajectory must succeed for every
-  selected solver and engine pair.
-  Known strict simulation rejections remain visible in the pilot's results.
-- **Run** requires unchanged, passing preflight and completed pilot evidence.
-  Its 120 workers use two 60-worker pools with one numerical thread per worker.
-
-Launch `run` with Task Scheduler, using the
-[persistent task settings](../docs/windows-continuation.md#6-run-independently-of-the-remote-desktop-window):
-
-| Task Scheduler field | Value for this checkout |
-|---|---|
-| Program | `R:\BEM-TestProblems\.venv\Scripts\python.exe` |
-| Arguments | `"R:\BEM-TestProblems\replication\extended_budget.py" run` |
-| Start in | `R:\BEM-TestProblems` |
-| Stop task after a time limit | Disabled |
-| If the task is already running | Do not start another instance |
-
-Use the same permanent path chosen before planning in all three fields.
-Use the user's own account and the option to run whether or not the user is
-logged on.
-
-The full experiment writes its controller log, checkpoints, and append-only
-evaluation journals under `.validation-local/extended-budget/campaign/`.
-The original continuation and private handoff remain separate. Restarting the
-same task preserves finished runs and records interrupted attempts before
-restarting them from the planned start, seed, and full allowance.
-
-```powershell
-Invoke-Checked { & $python replication\extended_budget.py status }
-Invoke-Checked { & $python replication\extended_budget.py review }
-# After every run has terminated:
-Invoke-Checked { & $python replication\extended_budget.py replay-plan }
-Invoke-Checked { & $python replication\extended_budget.py replay }
-Invoke-Checked { & $python replication\extended_budget.py export }
-Invoke-Checked { & $python replication\extended_budget.py check-export }
-```
-
-The review supplies objective values, complete design vectors, and plots.
-It labels this as an extended-budget experiment, because its allowance differs
-from the paper's protocol. Final export requires passing independent strict
-winner replays. Publish only its reviewed, allowlisted package on a results
-branch; source snapshots, checkpoints, weather, models, and literature
-transcriptions stay private.
-
-Edit solver selections or worker counts in
-[extended-budget.json](extended-budget.json) **before** planning. Supported
-solvers are `direct`, `crs2`, `sbplex`, `cma_es`, `bobyqa`, and `pybobyqa`.
-Adding solvers increases the pilot and full run counts. After planning, changed
-configuration, source snapshots, native inputs, or runtime identities require
-new experiment folders. Append `--dry-run` to inspect any stage without
-probing engines, writing a snapshot, or launching a process.
-
-## Review simulations and solutions
-
-```powershell
-Invoke-Checked { & $python replication\pipeline.py status }
-Invoke-Checked { & $python replication\pipeline.py review }
-```
-
-The status command accounts for every originally planned run. `run` generates the
-final review automatically; the separate review stage
-writes Markdown tables, full-precision JSON, and Figure 8/9-style PNG/SVG plots.
-The command prints the generated locations. Refresh it while the campaign runs;
-partial reports stay labelled incomplete.
-
-Review these items before drawing conclusions:
-
-- Completed, failed, interrupted, and missing counts, with the full planned
-  repetition denominators.
-- Excluded non-strict searches. A valid final point does not make a search strict
-  if it used warmup-error outputs earlier.
-- Each solver's best full design vector and the best across methods, with
-  parameter names, units, seeds, calls, and actual source manifest IDs.
-- Objective differences and percentages between engines. Their winning designs
-  can differ, so this comparison alone does not isolate the engine change.
-- Retained failed-simulation diagnostics and their checkpoint error records.
-  **Severe** indicates a serious simulation problem; **Fatal** terminates the
-  simulation. Both reject ordinary benchmark evaluations.
-
-For a separate compatibility view, use
-[review_replication.py](../tools/review_replication.py) with
-`--include-diagnostic-runs`; its output is explicitly labelled diagnostic.
-The [diagnostic policy](../docs/optimization-replication.md#diagnostics-and-figures)
-explains the distinction. Private dissertation comparisons and the ten-design
-C# check retain their own instructions in the handoff; they are not public data.
-
-## Replay and export
-
-```powershell
-Invoke-Checked { & $python replication\pipeline.py replay-plan }
-Invoke-Checked { & $python replication\pipeline.py replay }
-Invoke-Checked { & $python replication\pipeline.py export }
-Invoke-Checked { & $python replication\pipeline.py check-export }
-```
-
-Replay checks the full-precision strict winner for each problem/engine using the
-frozen numerical source and recorded engine/input identities. It retains native
-diagnostics and compares objectives and components with the recorded incumbent.
-Run this stage on the workstation after the campaign finishes.
-
-Export requires a complete campaign and passing replays of the current strict
-winners. It creates a fresh public package containing our computed results,
-figures, sanitized provenance, replay comparisons, attribution, and checksums.
-The public protocol also records solver settings, starts, seeds, budgets, and
-the exact scheduled designs so others can reproduce the searches without the
-private raw manifests.
-Raw checkpoints, local machine paths, native outputs, original models, weather,
-engines, and thesis transcriptions are excluded.
-
-For an early inspection only, `export-preview` writes to the private preview
-folder and labels its contents **UNVALIDATED PARTIAL PREVIEW**. It bypasses the
-completion/replay gates and cannot pass the public-package check.
-
-Replay and export preserve existing output directories. After a failed replay,
-inspect its diagnostics, correct the cause, and give `paths.replay` a new suffix
-in [continuation.json](continuation.json) before retrying. For another preview or
-export, similarly choose a fresh `paths.preview` or `paths.publication` directory.
-Keep the earlier attempts. The review stage supports refreshing its own reports.
-
-## Review and push a results branch
-
-After the scheduled task has stopped, inspect the exported figures, vectors,
-diagnostics summary, scope, and included files. Then create a dedicated branch:
-
-For the first commit on this workstation, set your identity for this repository
-using your actual name and GitHub-associated email, or GitHub's supplied
-`noreply` address:
-
-```powershell
-Invoke-Checked { git config user.name 'Your name' }
-Invoke-Checked { git config user.email 'Your commit email' }
-```
-
-These settings are local to the checkout; see
-[GitHub's identity guidance](https://docs.github.com/en/get-started/git-basics/setting-your-username-in-git).
-Git for Windows includes Git Credential Manager. Its browser sign-in handles
-HTTPS push authentication; use your own account with repository write access.
-See [GitHub's authentication guidance](https://docs.github.com/en/get-started/git-basics/caching-your-github-credentials-in-git).
-Enter credentials only in that sign-in flow.
-
-```powershell
-Invoke-Checked { git switch -c codex/replication-results }
-Invoke-Checked { & $python replication\pipeline.py check-export }
-Invoke-Checked { git add -- replication/results/continuous-rerun }
-Invoke-Checked { git diff --cached --stat }
-Invoke-Checked { git diff --cached --check }
-Invoke-Checked { git diff --cached }
-```
-
-Adjust the result directory to match [continuation.json](continuation.json).
-Stage only that exported package. After inspecting the staged change:
-
-```powershell
-Invoke-Checked { git commit -m 'Add reviewed continuous-problem replication results' }
-Invoke-Checked { git push -u origin codex/replication-results }
-```
-
-Open a pull request against the development branch and review CI before merging.
-[CI](../.github/workflows/validate.yml) verifies public-package inventories and
-recorded completion/replay gates on all three test platforms. Those checks
-establish package integrity; native replay evidence and the numerical review
-remain necessary for scientific conclusions. No full experiment runs in CI.
-
-For a new experiment rather than this continuation, use the
-[experiment protocol](../docs/optimization-replication.md#local-setup-and-execution)
-with a new output directory. The review tool also accepts a single fresh
-experiment as its origin.
+The plan freezes the source and experiment identity. Run requires passing
+preflight and completed pilot evidence. The default pilot contains 48 short
+searches, separate from full results. Use the same configuration for `status`,
+`review`, `replay-plan`, `replay`, and `export`; `check-export` verifies published
+packages. Changed settings after planning require a new experiment directory.

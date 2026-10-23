@@ -94,14 +94,14 @@ physical parameter in [parameters.py](../src/bem_testproblems/parameters.py).
   and [model/weather addition on 29 August 2018](https://github.com/christophwaibel/BEOBenchmark/commit/ae75e3473f517108e77faa032c5b21d4bc24a36f).
   This does not prove that the public files identify the exact unpublished
   winning-run inputs.
-- On FOAM, all ten rounded candidate designs were also evaluated with the
+- All ten rounded candidate designs were also evaluated with the
   unchanged original C# caller and canonical EnergyPlus 8.5. All 75 objective
   and component comparisons passed the existing tolerances (`rtol=1e-6`,
   `atol=1e-7`); the largest relative difference was `1.7e-16`. The P2 and P6
   thesis discrepancies occur in both implementations. This rules out the Python
   translation as their cause at these designs, but does not resolve the
-  historical input or publication differences. Reports and native outputs remain
-  private under `.validation-local/paper2019/`.
+  historical input or publication differences. Raw reports and native outputs
+  are not distributed.
 - Full numerical research records remain local. Physical models, strict
   acceptance tolerances, and canonical CI baselines were not changed to fit
   the thesis values.
