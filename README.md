@@ -33,7 +33,7 @@ Use Python 3.12. From the repository root on macOS or Linux:
 
 ```sh
 python3.12 -m venv .venv
-.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[optimize]'
+.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[optimize]'
 .venv/bin/python tools/install_energyplus.py
 .venv/bin/python tools/fetch_weather.py
 ```
@@ -141,7 +141,7 @@ its design-day conditions and needs no weather file.
 ## Tests and validation
 
 ```sh
-.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[dev,optimize,replication]'
+.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
 .venv/bin/python tools/fetch_reference.py
 .venv/bin/python -m pytest -q -m 'not integration'
 .venv/bin/python -m ruff check src tests tools

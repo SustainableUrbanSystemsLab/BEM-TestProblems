@@ -1,6 +1,6 @@
 include LICENSE THIRD_PARTY_NOTICES.md CITATION.cff references.bib
 recursive-include assets *.json
-recursive-include constraints *.txt
+include dependencies-py312.txt
 recursive-include docs *.md *.json
 recursive-include reference *.cs *.csproj LICENSE *.md *.txt *.json
 recursive-include src/bem_testproblems/data *.epJSON *.json *.txt
