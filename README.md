@@ -38,7 +38,7 @@ Use Python 3.12. From the repository root on macOS or Linux:
 
 ```sh
 python3.12 -m venv .venv
-.venv/bin/python -m pip install -e .
+.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[optimize]'
 .venv/bin/python tools/install_energyplus.py
 .venv/bin/python tools/fetch_weather.py
 ```
@@ -47,7 +47,8 @@ On Windows, create the environment with `py -3.12 -m venv .venv` and use
 `.venv\Scripts\python.exe` in place of `.venv/bin/python` in subsequent commands.
 
 These commands install EnergyPlus and download the benchmark weather into this
-project, with checksum verification. They leave the system PATH unchanged.
+project, with checksum verification. The `optimize` extra installs SciPy and
+PDFO BOBYQA for the examples below. These commands leave the system PATH unchanged.
 Once set up, evaluations run offline. The default engine is EnergyPlus 26.2;
 the [engine guide](docs/engine-versions.md) explains how to use historical 8.5
 models and a compatible local engine.
@@ -56,45 +57,11 @@ For the experiment pipeline, combined reports, native replay checks, and
 reviewed GitHub results, start with the [replication workflow](replication/README.md).
 The [Windows guide](docs/windows-continuation.md) covers installation and persistent jobs.
 
-## Evaluate a problem with your own solver
-
-```python
-from bem_testproblems import get_problem, make_objective
-
-problem = get_problem(1)
-n = problem.dimension              # Number of free variables
-bounds = problem.bounds             # (lower, upper) pairs in parameter order
-x0 = problem.midpoint               # A feasible starting point
-objective = make_objective(problem)
-
-f0 = objective(x0)                  # Runs EnergyPlus and returns a float
-print(n, bounds, x0, f0, problem.objective_unit)
-```
-
-Pass `objective`, `x0`, and `bounds` to your solver. It should minimize
-`objective(x)`, where `x` contains the physical parameter values. Reuse the
-callable throughout the run; repeated successful evaluations are cached.
-For separate bound vectors, use `lower, upper = zip(*bounds)`.
-
-Parameter names, paper symbols, units, and bounds are available through
-`problem.parameters`; the [parameter guide](docs/parameters.md) explains their physical meaning.
-The midpoint is a convenient start; the study's original
-starting vectors are unavailable. Use `problem.validate(your_start)` to check a
-different start. Inspecting problem metadata does not require EnergyPlus.
-
-Failed simulations raise errors and retain their diagnostics. Some designs
-within the bounds fail warmup convergence; the [warmup guide](docs/warmup-diagnostics.md)
-explains these cases and the separately validated P1 extended-warmup option.
-The [replication failure tests](docs/replication-failures.md) cover failures found
-during optimization and the separately validated numerical variants.
-
 ## Solve with SciPy
 
-After setup, install SciPy in the same virtual environment:
-
-```sh
-.venv/bin/python -m pip install -c constraints/replication-py312.txt scipy
-```
+After setup, start the virtual environment's Python console with `.venv/bin/python`
+on macOS/Linux or `.venv\Scripts\python.exe` on Windows. Paste the entire example
+below to run an optimization.
 
 This complete example uses problem 13, which needs no weather file, and
 [SciPy's Powell method](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-powell.html),
@@ -107,10 +74,12 @@ from bem_testproblems import get_problem, make_objective
 
 problem = get_problem(13)
 objective = make_objective(problem)
+x0 = problem.midpoint  # A feasible starting point
+bounds = problem.bounds  # (lower, upper) pairs in parameter order
 result = minimize(
     objective,
-    x0=problem.midpoint,
-    bounds=problem.bounds,
+    x0=x0,
+    bounds=bounds,
     method="Powell",
     options={"maxfev": 100},
 )
@@ -125,13 +94,28 @@ The package handles EnergyPlus for each objective evaluation. The 100-call
 budget is illustrative and may be reached before convergence; increase
 `maxfev` for a longer search, and inspect the termination message.
 
+To use your own solver, pass it `objective`, `x0`, and `bounds`. It should minimize
+`objective(x)`, where `x` contains the physical parameter values. Reuse the
+callable throughout the run; repeated successful evaluations are cached.
+For separate bound vectors, use `lower, upper = zip(*bounds)`.
+
+The number of optimization variables is `problem.dimension`. Parameter names,
+paper symbols, units, and bounds are available through `problem.parameters`;
+the [parameter guide](docs/parameters.md) explains their physical meaning.
+The midpoint is a convenient start; the study's original starting vectors are
+unavailable. Use `problem.validate(your_start)` to check a different start.
+Inspecting problem metadata does not require EnergyPlus.
+
+Failed simulations raise errors and retain their diagnostics. Some designs
+within the bounds fail warmup convergence; the [warmup guide](docs/warmup-diagnostics.md)
+explains these cases and the separately validated P1 extended-warmup option.
+The [replication failure tests](docs/replication-failures.md) cover failures found
+during optimization and the separately validated numerical variants.
+
 ## Solve with BOBYQA
 
-The optional default solver is PDFO BOBYQA. Install it in the same environment:
-
-```sh
-.venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[optimize]'
-```
+The `optimize` extra installed above also provides PDFO BOBYQA, the package's
+default optional solver:
 
 ```python
 from bem_testproblems import get_problem, solve
