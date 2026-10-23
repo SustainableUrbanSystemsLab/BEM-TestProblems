@@ -2,7 +2,8 @@
 
 This repository provides Python implementations of ten building energy
 optimization benchmark problems, including objective functions, variable bounds,
-EnergyPlus simulation interfaces, and tools for comparing optimization solvers.
+[EnergyPlus](https://energyplus.net/) simulation interfaces, and tools for comparing
+optimization solvers.
 
 This package implements ten problems with continuous variables selected from the
 benchmark in
