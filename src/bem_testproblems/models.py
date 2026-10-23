@@ -10,6 +10,7 @@ from importlib.resources import files
 from pathlib import Path
 from typing import TYPE_CHECKING, Sequence
 
+from .historical_hvac import apply_historical_hvac
 from .model_controls import (
     correct_legacy,
     correct_modern,
@@ -141,6 +142,8 @@ def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
         text = correct_v2_legacy(text, problem.id)
     elif problem.numerical_variant == "model-corrected-v3":
         text = correct_v3_legacy(text, problem.id)
+    elif problem.numerical_variant == "historical-hvac" and problem.id == 6:
+        text = correct_v3_legacy(text, 6)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(("\n".join(text.splitlines()) + "\n").encode("utf-8"))
@@ -195,6 +198,8 @@ def render_modern(problem: "Problem", x: Sequence[float], path) -> Path:
         correct_v2_modern(model, problem.id)
     elif problem.numerical_variant == "model-corrected-v3":
         correct_v3_modern(model, problem.id)
+    elif problem.numerical_variant == "historical-hvac":
+        apply_historical_hvac(model, problem.id)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes((json.dumps(model, indent=2, sort_keys=True) + "\n").encode("utf-8"))

@@ -12,6 +12,10 @@ the comparison of the selected solvers across all ten problems.
 The separately validated [version-3 warmup correction](replication-failures.md#weather-warmup-convection-correction-version-3)
 is available through `--numerical-variant model-corrected-v3`. It is opt-in;
 the completed version-2 campaign retains its original inputs and checkpoints.
+For P6/P8, the separate [historical HVAC compatibility](historical-hvac.md)
+option addresses the modern engine's fan-energy shift. It is selected with
+`--numerical-variant historical-hvac` for an experiment limited to those problems;
+its fixed-design validation is distinct from an optimizer rerun.
 [Waibel's 2018 thesis Appendix C](published-solutions.md) supplies rounded final
 designs for a separate literature comparison. Those are neither starting points
 nor verified full-precision winning records from the journal study.

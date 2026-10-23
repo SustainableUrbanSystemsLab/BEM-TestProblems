@@ -492,3 +492,15 @@ optimizer trajectories. The completed version-2 campaign and its failed records
 remain preserved. Since annual objectives can change, a version-3 solver
 comparison requires a new frozen manifest and separate results; existing
 version-2 trajectories must not be relabelled or combined with repaired values.
+
+## P6/P8 modern fan-energy shift
+
+The separate [`historical-hvac` option](historical-hvac.md), audited on 23 October
+2026, restores selected EnergyPlus 8.5 convection and fan-sizing algorithms under
+26.2. It addresses a simulator-version difference rather than an output parsing
+or solver failure. Across 80 fixed designs and 240 strict native checks, the
+remaining fan-energy differences were within 0.057% for P6 and 0.647% for P8.
+Total objective differences remained below 0.757% in absolute value. These are
+observed differences, not new acceptance tolerances or proof of full historical
+equivalence. Existing variants, checkpoints and boxplots remain preserved;
+no optimizer campaign has yet used this option.

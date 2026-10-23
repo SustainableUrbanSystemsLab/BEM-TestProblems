@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-23",
+  "variant": "historical-hvac",
+  "problems": [
+    6,
+    8
+  ],
+  "fixed_designs": 80,
+  "strict_native_runs": 240,
+  "strict_failures": 0,
+  "design_selection": "Per problem: best/middle/worst saved outcomes from each of six solvers and both engines, deduplicated; midpoint, lower/upper corners, five independently seeded random designs.",
+  "optimization_rerun": false,
+  "original_campaign_modified": false,
+  "per_problem": [
+    {
+      "problem": 6,
+      "designs": 40,
+      "before_fan_difference_percent": {
+        "minimum": 35.617124448481306,
+        "maximum": 72.59597991345674,
+        "median_absolute": 39.395584331390666
+      },
+      "before_objective_difference_percent": {
+        "minimum": 10.777065162157307,
+        "maximum": 39.40718379932151,
+        "median_absolute": 13.306446653570436
+      },
+      "after_fan_difference_percent": {
+        "minimum": -0.044176646648785844,
+        "maximum": 0.05649280950656976,
+        "median_absolute": 0.0066276758617589415
+      },
+      "after_objective_difference_percent": {
+        "minimum": -0.6274821597864411,
+        "maximum": -0.08084873484061061,
+        "median_absolute": 0.302434995727785
+      }
+    },
+    {
+      "problem": 8,
+      "designs": 40,
+      "before_fan_difference_percent": {
+        "minimum": 25.64743591709373,
+        "maximum": 37.12820004959296,
+        "median_absolute": 33.62427966996138
+      },
+      "before_objective_difference_percent": {
+        "minimum": 6.174045973687292,
+        "maximum": 12.317854937244599,
+        "median_absolute": 10.826687530544266
+      },
+      "after_fan_difference_percent": {
+        "minimum": 0.0018144228760785808,
+        "maximum": 0.6465241162002533,
+        "median_absolute": 0.6102072840274642
+      },
+      "after_objective_difference_percent": {
+        "minimum": -0.7566229487856013,
+        "maximum": 0.08529103112373537,
+        "median_absolute": 0.032580457799707974
+      }
+    }
+  ],
+  "limitations": [
+    "Empirical ranges are observations, not newly relaxed acceptance tolerances.",
+    "Restores selected EnergyPlus 8.5 equations under 26.2, not the entire historical simulator.",
+    "P6 retains the v3/v2 numerical corrections; its dissertation mismatch is not resolved by this audit.",
+    "These are fixed-design measurements, not replacement optimization trajectories or boxplots.",
+    "Other problems, engines, dependencies, historical profiles and saved results are unchanged."
+  ],
+  "inputs": {
+    ".validation-local\\fan-diagnosis-20261023\\validation-candidate\\cases.json": "9b529785c9902345d7820062419fed586bb944f7c9e6c1b39291330b744a2dbf",
+    ".validation-local\\fan-diagnosis-20261023\\validation-candidate\\summary.json": "eccdca8189d57bd4242fa73fa831a61cd966e87237b6ee0dc71c11469d925d7a",
+    ".validation-local\\fan-diagnosis-20261023\\uncorrected-controls\\summary.json": "cd38ff68c55f98dd29d390b8dd3e7eb412a3351a4746727c3ad681e344891aee",
+    ".validation-local\\fan-diagnosis-20261023\\production-input-equivalence\\verification.json": "794cdb99df1b9197a248ac085219c23f16587a493fe0531432f79ca8b62f8816"
+  },
+  "engines": {
+    "8.5.0": {
+      "executable_sha256": "50115bd8bacc102bf793caa7bbb33f19508b8cbf28b7c20169e301c9b32d3d98",
+      "supporting_sha256": {
+        "Energy+.idd": "701e070690ae3cc7dbb213830e2495852a7a22055cd951307e686a4845041fd1",
+        "energyplusapi.dll": "7bf551f6f92aea0de18bce7adea952f0fbd36f9f0cbc8aaed2b7f24ef085ec86"
+      }
+    },
+    "26.2.0": {
+      "executable_sha256": "71278a62c9c3871922b3f7ee28a3c7c9f658caa995a934fccb92e8f8965a3977",
+      "supporting_sha256": {
+        "Energy+.idd": "c307d88afba83fba3603c04899b0ec063f7472879d80d5cfa75020202707d55f",
+        "Energy+.schema.epJSON": "28ba2e4267d79e69331c9988ec52f0211a86077629f0336c46b1cc9103e63c44",
+        "energyplusapi.dll": "d018859a87c38276ff1cfef49487b32cfa1db0a4aa2d6ec3e7949d1bcd448d83"
+      }
+    }
+  },
+  "production_inputs_equal_after_line_ending_normalization": 160,
+  "production_native_exact_replays": 80,
+  "total_native_validation_runs": 320,
+  "pytest": {
+    "passed": 1396,
+    "skipped": 26,
+    "warnings": 23
+  },
+  "ruff": "passed",
+  "original_boxplot_summary_sha256": "631de3c591c68bc257e6c6cf5280bc6b68cadbbddac78535bdbb2a99da2d6dfc",
+  "implementation_sha256": {
+    "src\\bem_testproblems\\historical_hvac.py": "68d69969e577ae7c2423424fe6c4e67844a30332bcb68cd6fb23f9167a8bee05",
+    "src\\bem_testproblems\\models.py": "20cb1cd5e38e9895258728ac8a18a67ff51140554bfef5fed8bb739d74e91b2e",
+    "src\\bem_testproblems\\problems.py": "23583fd4ed7e6f5508c3b6119fc889df95b8f9dc8b01e6661a39bcf01df97cba",
+    "src\\bem_testproblems\\replication.py": "682f5c98edb4b72daf06203e4a323cb0cbafe59e580f4ce35fda2f1e78deb1ad",
+    "tools\\run_replication.py": "f8dc2a6813bfca2e7ab8668f3d16b0f890930dc7e153eb8824d238a363203422"
+  },
+  "versioned_engine_source_sha256": {
+    "26.2.0-ConvectionCoefficients.cc": "cc03776afa87f28d7d62acfed8dafd2f6da35699f7c993d19dd507bf354470d2",
+    "26.2.0-SimAirServingZones.cc": "f7ebf59671142be8cf74abcfe971b3b5396e6b2dbf8a265f90ad2e116255ec69",
+    "8.5.0-ConvectionCoefficients.cc": "e37b3c25f3b315ec8f2e61457a9928715a7153f36ebe9c08c3b13dee7571681b",
+    "8.5.0-SimAirServingZones.cc": "c0e1a4e4ed3ca2832f73316118626d80a16d2bb554f33ff4b092df3412968ca6"
+  },
+  "engine_identities_match_original_campaign": true
+}
