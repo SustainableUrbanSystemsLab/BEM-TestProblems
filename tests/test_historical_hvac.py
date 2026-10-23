@@ -8,10 +8,10 @@ from bem_testproblems import get_problem
 from bem_testproblems.historical_hvac import apply_historical_hvac
 
 
-@pytest.mark.parametrize("number", [6, 8])
+@pytest.mark.parametrize("number", [5, 6, 8])
 @pytest.mark.parametrize("position", ["midpoint", "lower", "upper"])
 def test_historical_hvac_preserves_legacy_inputs_and_non_ems_modern_fields(number, position, tmp_path):
-    base = get_problem(number, numerical_variant="model-corrected-v3" if number == 6 else None)
+    base = get_problem(number, numerical_variant="model-corrected-v3" if number in (5, 6) else None)
     changed = get_problem(number, numerical_variant="historical-hvac")
     x = {"midpoint": base.midpoint, "lower": [a for a, b in base.bounds],
          "upper": [b for a, b in base.bounds]}[position]
@@ -29,6 +29,19 @@ def test_historical_hvac_preserves_legacy_inputs_and_non_ems_modern_fields(numbe
     assert without_ems(new) == without_ems(old)
     assert get_problem(number, numerical_variant=None).numerical_variant is None
     assert "numerical_variant" not in get_problem(number, numerical_variant=None).provenance
+
+
+@pytest.mark.parametrize(("number", "coefficient"), [(5, 1), (6, 2.5)])
+def test_historical_hvac_retains_each_validated_weather_warmup_policy(number, coefficient, tmp_path):
+    problem = get_problem(number, numerical_variant="historical-hvac")
+    model = json.loads(problem.render_modern(problem.midpoint, tmp_path / "model.epJSON").read_text())
+    lines = [row["program_line"] for row in
+             model["EnergyManagementSystem:Program"]["HistoricalSizingConvection"]["lines"]]
+    start = lines.index("IF CurrentEnvironment > 2 && WarmupFlag == 1")
+    surfaces = [name for name in model["EnergyManagementSystem:Actuator"]
+                if name.startswith("HistoricalH")]
+    assert lines[start + 1:-1] == [f"SET {name} = {coefficient}" for name in surfaces]
+    assert lines[-1] == "ENDIF"
 
 
 @pytest.mark.parametrize("modification", ["extra-design-period", "foreign-control", "different-convection"])

@@ -8,7 +8,7 @@ commands below use six solver implementations and can run EnergyPlus 8.5,
 
 Choose the model before starting. Canonical models preserve their known failure
 behavior; [corrected profiles](replication-failures.md) are explicit alternatives.
-For a separate P6/P8 comparison, the
+For a separate P5/P6/P8 comparison, the
 [historical HVAC profile](historical-hvac.md) addresses selected modern fan-energy
 differences. Give every changed model or protocol a new result directory.
 

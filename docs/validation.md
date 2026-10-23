@@ -27,9 +27,9 @@ The [workflow](../.github/workflows/validate.yml) has seven jobs:
 
 Canonical native checks use 27 explicit designs per engine, including known
 strict rejections. Supplemental checks use 26 designs. Canonical jobs also check
-P1's extended-warmup model, retained failure cases, and five corrected-model
+P1's extended-warmup model, retained failure cases, and six corrected-model
 regressions per engine. The corrected cases cover P4/P5/P10 with
-`model-corrected-v3` and P6/P8 with `historical-hvac`.
+`model-corrected-v3` and P5/P6/P8 with `historical-hvac`.
 
 Canonical objective/component comparisons use relative tolerance `1e-6` and
 absolute tolerance `1e-7` near zero. Separately labelled corrected-model native

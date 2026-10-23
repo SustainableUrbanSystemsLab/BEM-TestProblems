@@ -25,7 +25,7 @@ class FakeRunner:
         pytest.fail("Binding an objective must not launch an EnergyPlus simulation")
 
 
-@pytest.mark.parametrize("number", [6, 8])
+@pytest.mark.parametrize("number", [5, 6, 8])
 def test_number_selects_historical_hvac_and_explicit_problem_keeps_its_model(number, tmp_path):
     weather = tmp_path / "weather.epw"
     weather.write_text("Explicit weather fixture")

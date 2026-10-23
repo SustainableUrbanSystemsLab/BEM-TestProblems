@@ -357,8 +357,8 @@ _DEFAULT_PROBLEMS = {**_PROBLEMS, **_CORRECTED_V3_PROBLEMS, **_HISTORICAL_HVAC_P
 def get_problem(problem_id, *, numerical_variant="replication") -> Problem:
     """Select the replication profile; use ``canonical`` for uncorrected models.
 
-    Defaults use historical HVAC compatibility for P6/P8, corrected v3 for
-    P1/P3/P4/P5/P9/P10, and canonical models for P2/P13. These labelled profiles
+    Defaults use historical HVAC compatibility for P5/P6/P8, corrected v3 for
+    P1/P3/P4/P9/P10, and canonical models for P2/P13. These labelled profiles
     support publication comparisons without claiming exact historical results.
     Explicit ``None`` retains its original meaning: the canonical model.
     """

@@ -31,8 +31,10 @@ shade; `0.2` means a transmitted fraction of 20%.
 
 ## Detailed office: problems 4–6 and 8
 
-Problems 4–6 use Seattle, Houston, and Chicago, respectively. Problem 8 is the
-reduced Chicago problem. Window widths are horizontal dimensions; overhang
+The canonical problems 4–6 share their building, HVAC system, variables and
+bounds, with Seattle, Houston and Chicago climate inputs, respectively.
+Problem 8 is the reduced Chicago problem with two fixed controls listed below.
+Window widths are horizontal dimensions; overhang
 depths describe the projection above the window. The shading setpoints are
 incident-solar thresholds used by the exterior-shade controls. Night-cooling
 setpoints are thermostat temperatures; supply temperature is a cooling-system

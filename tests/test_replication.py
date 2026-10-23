@@ -117,7 +117,7 @@ def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, varia
     assert repaired["diagnostics_policy"] == "strict"
     affected = (1, 4, 5, 6, 10) if variant == "convergence-refined" else (1, 3, 4, 5, 6, 9, 10)
     if variant == "historical-hvac":
-        affected = (6, 8)
+        affected = (5, 6, 8)
     for number, definition in repaired["problem_definitions"].items():
         assert definition.get("numerical_variant") == (variant if int(number) in affected else None)
     with pytest.raises(ValueError, match="one numerical variant"):

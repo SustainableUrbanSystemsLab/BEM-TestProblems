@@ -32,11 +32,11 @@ The selected profile is recorded in `problem.numerical_variant` and
 
 | Selection | Problems | Purpose |
 | --- | --- | --- |
-| Default (`replication`) | All ten | Historical HVAC for P6/P8, corrected v3 for P1/P3/P4/P5/P9/P10, canonical for P2/P13 |
+| Default (`replication`) | All ten | Historical HVAC for P5/P6/P8, corrected v3 for P1/P3/P4/P9/P10, canonical for P2/P13 |
 | `canonical` or explicit `None` | All ten | Preserve the uncorrected model for the selected engine |
 | `warmup-100` | 1 | Increase the historical warmup allowance without changing convergence thresholds |
 | `model-corrected-v3` | 1, 3, 4, 5, 6, 9, 10 | Use the validated correction profile, including sizing and warmup controls |
-| `historical-hvac` | 6, 8 | Restore selected historical convection and fan-sizing behavior in 26.2 |
+| `historical-hvac` | 5, 6, 8 | Restore selected historical convection and fan-sizing behavior in 26.2 |
 
 For example, the default P8 model includes historical HVAC compatibility:
 
@@ -93,7 +93,7 @@ Earlier P4 corrections also changed annual convection: selected 26.2 annual
 outputs changed by up to 23.12% from the canonical outputs. Some canonical
 comparison outputs contained warmup diagnostics and remain unaccepted. Small
 version-2/version-3 differences therefore do not imply canonical equivalence.
-See [historical HVAC compatibility](historical-hvac.md) for P6/P8's separate
+See [historical HVAC compatibility](historical-hvac.md) for P5/P6/P8's separate
 cross-engine correction.
 
 ## Solver bounds and failure records

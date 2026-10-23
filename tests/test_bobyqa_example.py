@@ -77,7 +77,7 @@ def test_batch_keeps_results_and_continues_after_simulation_error(
     assert (directory / "P4/traceback.txt").is_file()
     expected_models = {
         1: "model-corrected-v3", 2: None, 3: "model-corrected-v3", 4: "model-corrected-v3",
-        5: "model-corrected-v3", 6: "historical-hvac", 8: "historical-hvac",
+        5: "historical-hvac", 6: "historical-hvac", 8: "historical-hvac",
         9: "model-corrected-v3", 10: "model-corrected-v3", 13: None,
     }
     for number, record in records.items():

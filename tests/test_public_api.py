@@ -11,7 +11,7 @@ from bem_testproblems.problems import get_problem, list_problems
 
 @pytest.mark.parametrize(("number", "variant"), [
     (1, "model-corrected-v3"), (2, None), (3, "model-corrected-v3"),
-    (4, "model-corrected-v3"), (5, "model-corrected-v3"), (6, "historical-hvac"),
+    (4, "model-corrected-v3"), (5, "historical-hvac"), (6, "historical-hvac"),
     (8, "historical-hvac"), (9, "model-corrected-v3"), (10, "model-corrected-v3"), (13, None),
 ])
 def test_defaults_use_replication_profiles_and_canonical_selection_is_explicit(number, variant):
