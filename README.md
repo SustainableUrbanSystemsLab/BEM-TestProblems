@@ -3,9 +3,29 @@
 Building energy optimization problems for testing your solver in Python. Choose
 a problem, get its objective and bounds, and let the package handle EnergyPlus.
 
-The ten continuous problems come from
+This package implements ten problems with continuous variables selected from the
+benchmark in
 [Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
-and the earlier studies listed in the [references](docs/references.md).
+and Christoph Waibel's ETH Zurich dissertation,
+[*Simulation-Based Optimization of Buildings and Multi-Energy Systems* (2018)](https://doi.org/10.3929/ethz-b-000307674).
+Problem numbers follow the original study. The [references](docs/references.md)
+also credit the earlier studies on which these benchmarks build.
+
+All ten use box constraints: each optimization variable has a lower and an upper
+bound.
+
+| Problem number | Optimization variables | Box constraints |
+|---|---:|---|
+| 1 | 4 | Yes |
+| 2 | 4 | Yes |
+| 3 | 4 | Yes |
+| 4 | 13 | Yes |
+| 5 | 13 | Yes |
+| 6 | 13 | Yes |
+| 8 | 11 | Yes |
+| 9 | 13 | Yes |
+| 10 | 13 | Yes |
+| 13 | 10 | Yes |
 
 For the FOAM experiments, report and boxplot locations, and next-session
 instructions, read [the FOAM handoff](docs/foam-takeover.md). Detailed session
@@ -127,13 +147,13 @@ For solvers that exploit objective structure, see the
 
 ## Available problems
 
-| Problems | Free variables | Building and climate | Objective |
-|---|---:|---|---|
-| 1, 2, 3 | 4 | Simple office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
-| 4, 5, 6 | 13 | Detailed office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
-| 8 | 11 | Detailed office: Chicago, two fixed parameters | Primary energy, kWh/(m² year) |
-| 9, 10 | 13 | Small and large offices: San Francisco | Penalized source energy, MJ/m² |
-| 13 | 10 | School: Belgrade winter design day | Energy, insulation, and radiator cost, EUR |
+| Problems | Building and climate | Objective |
+|---|---|---|
+| 1, 2, 3 | Simple office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
+| 4, 5, 6 | Detailed office: Seattle, Houston, Chicago | Primary energy, kWh/(m² year) |
+| 8 | Detailed office: Chicago, two fixed parameters | Primary energy, kWh/(m² year) |
+| 9, 10 | Small and large offices: San Francisco | Penalized source energy, MJ/m² |
+| 13 | School: Belgrade winter design day | Energy, insulation, and radiator cost, EUR |
 
 Problem 8 fixes the paper's `x11 = 25 °C` and `x13 = 12 °C`; its input vector
 contains the eleven free parameters in their original order. Problem 13 includes
