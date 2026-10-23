@@ -207,7 +207,7 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("Unsupported replication numerical variant")
     if numerical_variant is not None and p1_warmup_100:
         raise ValueError("Select one numerical variant")
-    definitions = [get_problem(number) for number in problems]
+    definitions = [get_problem(number, numerical_variant=None) for number in problems]
     if not definitions or len({p.id for p in definitions}) != len(definitions):
         raise ValueError("Select at least one problem, without duplicates")
     if numerical_variant is not None:

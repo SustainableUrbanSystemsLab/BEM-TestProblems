@@ -300,7 +300,7 @@ def test_canonical_ci_fixtures_cover_pinned_inputs_and_explicit_rejections(tmp_p
         for case_id, row in records.items():
             spec = specifications[case_id]
             assert all(row[key] == spec[key] for key in ("problem", "x", "purpose"))
-            problem = get_problem(row["problem"])
+            problem = get_problem(row["problem"], numerical_variant=None)
             assert tuple(row["x"]) == problem.validate(row["x"])
             if problem.design_day:
                 assert row["weather_file"] is None and row["weather_sha256"] is None

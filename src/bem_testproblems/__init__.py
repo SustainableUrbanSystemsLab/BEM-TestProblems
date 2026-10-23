@@ -6,8 +6,12 @@ Problem definitions are independent of the execution and optimization backends.
 __version__ = "0.1.0.dev0"
 
 
-def get_problem(problem_id, *, numerical_variant=None):
-    """Return one of problems 1–6, 8–10 or 13; imports require no simulator."""
+def get_problem(problem_id, *, numerical_variant="replication"):
+    """Return a replication profile; pass numerical_variant="canonical" to opt out.
+
+    P6/P8 use historical HVAC compatibility, P1/P3/P4/P5/P9/P10 use corrected
+    v3, and P2/P13 use canonical models. Imports require no simulator.
+    """
     from .problems import get_problem as lookup
 
     return lookup(problem_id, numerical_variant=numerical_variant)

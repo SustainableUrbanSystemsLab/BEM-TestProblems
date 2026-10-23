@@ -420,8 +420,7 @@ def validate(args):
             try:
                 previous = expected.pop(case["case_id"]) if expected is not None else None
                 variant = case.get("numerical_variant")
-                problem = (get_problem(case["problem"], numerical_variant=variant)
-                           if variant is not None else get_problem(case["problem"]))
+                problem = get_problem(case["problem"], numerical_variant=variant)
                 x = case["x"]
                 problem.validate(x)
                 case_dir = args.work_dir / case["case_id"]

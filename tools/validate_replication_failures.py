@@ -204,7 +204,7 @@ def _compare(problem, actual, previous):
 
 def _validate_case(args, runner, case, previous, item):
     item["stage"] = "preparation"
-    canonical = get_problem(case["problem"])
+    canonical = get_problem(case["problem"], numerical_variant=None)
     repaired = get_problem(case["problem"], numerical_variant=VARIANT)
     canonical.validate(case["x"])
     weather = (args.weather_dir / case["weather_file"]).resolve(strict=True)

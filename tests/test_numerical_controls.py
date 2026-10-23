@@ -51,7 +51,7 @@ def test_repaired_profile_changes_only_the_documented_cooling_sizing_margin(
 def test_repaired_profile_rejects_unexpected_cooling_sizing_inputs(tmp_path):
     from bem_testproblems.numerical_controls import repair_legacy, repair_modern
 
-    canonical = get_problem(4)
+    canonical = get_problem(4, numerical_variant=None)
     text = canonical.render_legacy(canonical.midpoint, tmp_path / "model.idf").read_text()
     with pytest.raises(ValueError, match="five Sizing:Zone"):
         repair_legacy(text.replace("Sizing:Zone,", "UnexpectedSizing:Zone,", 1), 4)
@@ -69,7 +69,7 @@ def test_repaired_profile_rejects_unexpected_cooling_sizing_inputs(tmp_path):
 def test_additional_warmup_repairs_preserve_all_unlisted_inputs(
     number, design_kind, version, tmp_path
 ):
-    canonical = get_problem(number)
+    canonical = get_problem(number, numerical_variant=None)
     repaired = get_problem(number, numerical_variant="convergence-repaired")
     assert repaired.parameters == canonical.parameters
     assert repaired.constants == canonical.constants
@@ -118,7 +118,7 @@ def _objects(path):
 
 @pytest.mark.parametrize("number", IDS)
 def test_profile_is_explicit_frozen_and_preserves_physical_problem(number):
-    base = get_problem(number)
+    base = get_problem(number, numerical_variant=None)
     refined = get_problem(number, numerical_variant="convergence-refined")
     assert refined is get_problem(f"p{number}", numerical_variant="convergence-refined")
     assert refined != base and refined.definition == "numerical-variant"
@@ -150,13 +150,13 @@ def test_profile_cannot_silently_apply_to_unreviewed_problem(number):
     with pytest.raises(ValueError, match="numerical variant"):
         get_problem(number, numerical_variant="convergence-refined")
     with pytest.raises(ValueError, match="numerical variant"):
-        replace(get_problem(number), numerical_variant="convergence-refined")
+        replace(get_problem(number, numerical_variant=None), numerical_variant="convergence-refined")
 
 
 @pytest.mark.parametrize("number", IDS)
 @pytest.mark.parametrize("design_kind", ("midpoint", "lower", "upper"))
 def test_legacy_profile_keeps_every_unlisted_object_and_field(number, design_kind, tmp_path):
-    base = get_problem(number)
+    base = get_problem(number, numerical_variant=None)
     refined = get_problem(number, numerical_variant="convergence-refined")
     design = {"midpoint": base.midpoint, "lower": tuple(b[0] for b in base.bounds),
               "upper": tuple(b[1] for b in base.bounds)}[design_kind]
@@ -198,7 +198,7 @@ def test_legacy_profile_keeps_every_unlisted_object_and_field(number, design_kin
 @pytest.mark.parametrize("number", IDS)
 @pytest.mark.parametrize("design_kind", ("midpoint", "lower", "upper"))
 def test_modern_profile_keeps_every_unlisted_object_and_field(number, design_kind, tmp_path):
-    base = get_problem(number)
+    base = get_problem(number, numerical_variant=None)
     refined = get_problem(number, numerical_variant="convergence-refined")
     design = {"midpoint": base.midpoint, "lower": tuple(b[0] for b in base.bounds),
               "upper": tuple(b[1] for b in base.bounds)}[design_kind]
@@ -226,7 +226,7 @@ def test_modern_profile_keeps_every_unlisted_object_and_field(number, design_kin
 @pytest.mark.parametrize("number", IDS)
 @pytest.mark.parametrize("mutation", ("missing", "duplicate", "name", "cap", "tolerance"))
 def test_legacy_profile_rejects_unexpected_building_before_writing(number, mutation, tmp_path):
-    problem = get_problem(number)
+    problem = get_problem(number, numerical_variant=None)
     path = problem.render_legacy(problem.midpoint, tmp_path / "canonical.idf")
     text = path.read_text()
     building = next(row for row in idf_objects(path) if row[0].casefold() == "building")
@@ -268,7 +268,7 @@ def test_modern_profile_rejects_unexpected_building(number, mutation):
                                         (5, "ZoneAirHeatBalanceAlgorithm"),
                                         (10, "ZoneAirHeatBalanceAlgorithm")])
 def test_refinement_refuses_existing_objects_instead_of_overwriting_them(number, kind, tmp_path):
-    problem = get_problem(number)
+    problem = get_problem(number, numerical_variant=None)
     original = problem.render_legacy(problem.midpoint, tmp_path / "canonical.idf").read_text()
     text = original + f"\n{kind},unexpected;\n"
     with pytest.raises(ValueError, match=kind):
@@ -285,7 +285,7 @@ def test_refinement_refuses_existing_objects_instead_of_overwriting_them(number,
     ("Sizing:Parameters", "timesteps_in_averaging_window", 3),
 ])
 def test_refinement_requires_original_time_resolution(number, kind, field, index, tmp_path):
-    problem = get_problem(number)
+    problem = get_problem(number, numerical_variant=None)
     original = problem.render_legacy(problem.midpoint, tmp_path / "canonical.idf")
     rows = []
     for row in idf_objects(original):

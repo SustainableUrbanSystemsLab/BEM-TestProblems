@@ -1,9 +1,11 @@
 # Historical HVAC compatibility for P6 and P8
 
-The opt-in `historical-hvac` variant restores selected EnergyPlus 8.5 HVAC
+The `historical-hvac` variant restores selected EnergyPlus 8.5 HVAC
 algorithms under 26.2 for the Chicago office problems. It addresses the large
 fan-energy shift measured in optimization experiments. Canonical models,
 existing numerical variants, engine installations and recorded runs are preserved.
+It is the default returned by `get_problem(6)` and `get_problem(8)`.
+Select `numerical_variant="canonical"` to evaluate their uncorrected models.
 
 ## Diagnosis
 

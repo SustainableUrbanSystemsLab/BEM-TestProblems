@@ -351,10 +351,17 @@ _HISTORICAL_HVAC_PROBLEMS = {
     number: replace(_PROBLEMS[number], definition="model-variant", numerical_variant="historical-hvac")
     for number in HISTORICAL_HVAC_PROBLEMS
 }
+_DEFAULT_PROBLEMS = {**_PROBLEMS, **_CORRECTED_V3_PROBLEMS, **_HISTORICAL_HVAC_PROBLEMS}
 
 
-def get_problem(problem_id, *, numerical_variant=None) -> Problem:
-    """Select a canonical problem or an explicitly supported numerical variant."""
+def get_problem(problem_id, *, numerical_variant="replication") -> Problem:
+    """Select the replication profile; use ``canonical`` for uncorrected models.
+
+    Defaults use historical HVAC compatibility for P6/P8, corrected v3 for
+    P1/P3/P4/P5/P9/P10, and canonical models for P2/P13. These labelled profiles
+    support publication comparisons without claiming exact historical results.
+    Explicit ``None`` retains its original meaning: the canonical model.
+    """
     if isinstance(problem_id, bool):
         raise ValueError(f"Expected one of {PROBLEM_IDS}")
     if isinstance(problem_id, str):
@@ -366,7 +373,9 @@ def get_problem(problem_id, *, numerical_variant=None) -> Problem:
         raise ValueError(
             f"Only continuous problems {PROBLEM_IDS} are available; received {problem_id!r}"
         )
-    if numerical_variant is None:
+    if numerical_variant == "replication":
+        return _DEFAULT_PROBLEMS[problem_id]
+    if numerical_variant is None or numerical_variant == "canonical":
         return _PROBLEMS[problem_id]
     if problem_id == 1 and numerical_variant == "warmup-100":
         return _P1_WARMUP_100
@@ -385,5 +394,6 @@ def get_problem(problem_id, *, numerical_variant=None) -> Problem:
     raise ValueError("Unsupported numerical variant for this problem")
 
 
-def list_problems() -> tuple[Problem, ...]:
-    return tuple(_PROBLEMS[number] for number in PROBLEM_IDS)
+def list_problems(*, numerical_variant="replication") -> tuple[Problem, ...]:
+    """List the default profiles, or explicitly request canonical models."""
+    return tuple(get_problem(number, numerical_variant=numerical_variant) for number in PROBLEM_IDS)

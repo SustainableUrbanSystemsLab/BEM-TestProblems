@@ -13,7 +13,7 @@ from bem_testproblems.problems import PROBLEM_IDS
 def test_bobyqa_from_midpoint(problem_id, tmp_path):
     from pdfo import pdfo
 
-    problem = get_problem(problem_id)
+    problem = get_problem(problem_id, numerical_variant=None)
     objective = make_objective(problem, energyplus_version="26.2.0", output_root=tmp_path)
     initial_value = objective(problem.midpoint)
     result = pdfo(

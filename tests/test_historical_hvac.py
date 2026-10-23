@@ -27,13 +27,13 @@ def test_historical_hvac_preserves_legacy_inputs_and_non_ems_modern_fields(numbe
     def without_ems(model):
         return {k: v for k, v in model.items() if not k.startswith("EnergyManagementSystem:")}
     assert without_ems(new) == without_ems(old)
-    assert get_problem(number).numerical_variant is None
-    assert "numerical_variant" not in get_problem(number).provenance
+    assert get_problem(number, numerical_variant=None).numerical_variant is None
+    assert "numerical_variant" not in get_problem(number, numerical_variant=None).provenance
 
 
 @pytest.mark.parametrize("modification", ["extra-design-period", "foreign-control", "different-convection"])
 def test_historical_hvac_rejects_inputs_outside_the_audited_scope(modification, tmp_path):
-    problem = get_problem(8)
+    problem = get_problem(8, numerical_variant=None)
     path = problem.render_modern(problem.midpoint, tmp_path / "model.epJSON")
     model = json.loads(path.read_text(encoding="utf-8"))
     if modification == "extra-design-period":
