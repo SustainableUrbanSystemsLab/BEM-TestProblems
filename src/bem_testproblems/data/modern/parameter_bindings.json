@@ -1,0 +1,5184 @@
+{
+  "copyright": "Copyright (c) 2018, Christoph Waibel. All rights reserved.",
+  "legacy_idd_sha256": "c55ec6cd15221540a821c4b6697bfade5e30800e5e6d24adbd9e1473c4963ed4",
+  "license": "BSD-3-Clause",
+  "license_notice": "../licenses/BEOBenchmark-LICENSE.txt",
+  "method": "Original 8.5 IDD semantic field labels mapped to target epJSON schema; every midpoint value checked",
+  "models": {
+    "1": {
+      "baseline_x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "binding_count": 12,
+      "bindings": [
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "solar_transmittance"
+          ],
+          "source_field_index": 2,
+          "source_field_name": "Solar Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "visible_transmittance"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Visible Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "infrared_transmittance"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Infrared Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "Building",
+            "office zone",
+            "north_axis"
+          ],
+          "source_field_index": 2,
+          "source_field_name": "North Axis",
+          "source_object_name": "office zone",
+          "source_object_type": "Building",
+          "token": "%azimuth%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 1 EAST WINDOW",
+            "vertex_3_y_coordinate"
+          ],
+          "source_field_index": 18,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 1 EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 1 EAST WINDOW",
+            "vertex_4_y_coordinate"
+          ],
+          "source_field_index": 21,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 1 EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "EAST WINDOW OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "EAST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "EAST WINDOW OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "EAST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 2 WEST WINDOW",
+            "vertex_1_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 1 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 2 WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 2 WEST WINDOW",
+            "vertex_2_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 2 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 2 WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "WEST WINDOW OVERHANG",
+            "vertices",
+            0,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Vertex 1 Y-coordinate",
+          "source_object_name": "WEST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "WEST WINDOW OVERHANG",
+            "vertices",
+            1,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Vertex 2 Y-coordinate",
+          "source_object_name": "WEST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_we_win%"
+        }
+      ],
+      "model_sha256": "3b87cf11743f1388d75c4efe415aca891371e3e024f3a880627670971109eaa9",
+      "source_template": "simple_seattle_template.idf",
+      "source_template_sha256": "dbb424d5ae2cf8d8684f13c6fa8e341c01b8ae71d032aa598ed3e880ea8af9f0",
+      "token_count": 4
+    },
+    "10": {
+      "baseline_x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "binding_count": 91,
+      "bindings": [
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_3_Wall_North_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%1%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_3_Wall_North_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%0%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_3_Wall_North_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%0%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_3_Wall_North_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%1%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_2_Wall_East_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%3%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_2_Wall_East_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%2%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_2_Wall_East_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%2%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_2_Wall_East_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%3%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_1_Wall_South_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%5%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_1_Wall_South_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%4%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_1_Wall_South_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%4%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_1_Wall_South_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%5%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_4_Wall_West_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%7%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_4_Wall_West_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%6%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_4_Wall_West_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%6%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_bot_ZN_4_Wall_West_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_bot_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%7%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_3_Wall_North_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%14%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_3_Wall_North_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%13%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_3_Wall_North_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%13%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_3_Wall_North_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%14%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_2_Wall_East_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%16%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_2_Wall_East_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%15%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_2_Wall_East_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%15%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_2_Wall_East_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%16%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_1_Wall_South_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%18%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_1_Wall_South_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%17%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_1_Wall_South_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%17%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_1_Wall_South_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%18%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_4_Wall_West_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%20%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_4_Wall_West_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%19%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_4_Wall_West_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%19%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_mid_ZN_4_Wall_West_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_mid_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%20%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_3_Wall_North_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%22%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_3_Wall_North_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%21%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_3_Wall_North_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%21%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_3_Wall_North_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_3_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%22%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_2_Wall_East_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%24%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_2_Wall_East_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%23%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_2_Wall_East_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%23%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_2_Wall_East_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_2_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%24%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_1_Wall_South_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%26%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_1_Wall_South_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%25%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_1_Wall_South_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%25%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_1_Wall_South_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_1_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%26%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_4_Wall_West_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%28%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_4_Wall_West_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%27%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_4_Wall_West_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%27%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Perimeter_top_ZN_4_Wall_West_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Perimeter_top_ZN_4_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%28%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            3,
+            "field"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Field 4",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            7,
+            "field"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Field 8",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            13,
+            "field"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Field 14",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            17,
+            "field"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Field 18",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            20,
+            "field"
+          ],
+          "source_field_index": 23,
+          "source_field_name": "Field 21",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%10%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            3,
+            "field"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Field 4",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            7,
+            "field"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Field 8",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            10,
+            "field"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Field 11",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            14,
+            "field"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Field 15",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            20,
+            "field"
+          ],
+          "source_field_index": 23,
+          "source_field_name": "Field 21",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%12%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Core_bottom",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Core_bottom",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 2",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Core_mid",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 2",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Core_mid",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 3",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Core_top",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 3",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Core_top",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 4",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_bot_ZN_3",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 4",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_bot_ZN_3",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 5",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_bot_ZN_2",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 5",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_bot_ZN_2",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 6",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_bot_ZN_1",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 6",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_bot_ZN_1",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 7",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_bot_ZN_4",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 7",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_bot_ZN_4",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 8",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_mid_ZN_3",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 8",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_mid_ZN_3",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 9",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_mid_ZN_2",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 9",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_mid_ZN_2",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 10",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_mid_ZN_1",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 10",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_mid_ZN_1",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 11",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_mid_ZN_4",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 11",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_mid_ZN_4",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 12",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_top_ZN_3",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 12",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_top_ZN_3",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 13",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_top_ZN_2",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 13",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_top_ZN_2",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 14",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_top_ZN_1",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 14",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_top_ZN_1",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 15",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Perimeter_top_ZN_4",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 15",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Perimeter_top_ZN_4",
+          "source_object_type": "Sizing:Zone",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "precool_design_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Precool Design Humidity Ratio",
+          "source_object_name": "VAV WITH REHEAT",
+          "source_object_type": "Sizing:System",
+          "token": "%29%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Central Cooling Design Supply Air Temperature",
+          "source_object_name": "VAV WITH REHEAT",
+          "source_object_type": "Sizing:System",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Central Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "VAV WITH REHEAT",
+          "source_object_type": "Sizing:System",
+          "token": "%29%"
+        }
+      ],
+      "model_sha256": "64458b358cefc0e215cf8d9b106d2d3bb7d260b39332199fd94b0aafd1d56fd6",
+      "source_template": "problem_10_template.idf",
+      "source_template_sha256": "2754c757b68996c7a4a70b23ae05f8be370339c8a5dae1c2b5bf9688332e8bb0",
+      "token_count": 30
+    },
+    "13": {
+      "baseline_x": [
+        0.175,
+        600.0,
+        90.0,
+        80.0,
+        120.0,
+        35.0,
+        130.0,
+        210.0,
+        570.0,
+        525.0
+      ],
+      "binding_count": 10,
+      "bindings": [
+        {
+          "path": [
+            "Material",
+            "MineralWoolOut",
+            "thickness"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Thickness",
+          "source_object_name": "MineralWoolOut",
+          "source_object_type": "Material",
+          "token": "%delta%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "ClassZone2Radiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "ClassZone2Radiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA1%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "WorkZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "WorkZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA2%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "KitchenZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "KitchenZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA3%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "MusiceZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "MusiceZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA4%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "ServiceZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "ServiceZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA5%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "WashingZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "WashingZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA6%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "BigZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "BigZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA7%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "ClassZone1Radiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "ClassZone1Radiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA8%"
+        },
+        {
+          "path": [
+            "ZoneHVAC:Baseboard:Convective:Water",
+            "OfficeZoneRadiant",
+            "u_factor_times_area_value"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "U-Factor Times Area Value",
+          "source_object_name": "OfficeZoneRadiant",
+          "source_object_type": "ZoneHVAC:Baseboard:Convective:Water",
+          "token": "%UA9%"
+        }
+      ],
+      "model_sha256": "483cc0d46da16526e41547a7c7dccd34d7afd7ffd30979a4ec48a1d3479aaea2",
+      "source_template": "Problem13_template.idf",
+      "source_template_sha256": "f7a23c1ee905d92ee5d05e0186923c8192119eacb7c7abeab5277a9fcf5d5d60",
+      "token_count": 10
+    },
+    "2": {
+      "baseline_x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "binding_count": 12,
+      "bindings": [
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "solar_transmittance"
+          ],
+          "source_field_index": 2,
+          "source_field_name": "Solar Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "visible_transmittance"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Visible Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "infrared_transmittance"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Infrared Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "Building",
+            "office zone",
+            "north_axis"
+          ],
+          "source_field_index": 2,
+          "source_field_name": "North Axis",
+          "source_object_name": "office zone",
+          "source_object_type": "Building",
+          "token": "%azimuth%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 1 EAST WINDOW",
+            "vertex_3_y_coordinate"
+          ],
+          "source_field_index": 18,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 1 EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 1 EAST WINDOW",
+            "vertex_4_y_coordinate"
+          ],
+          "source_field_index": 21,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 1 EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "EAST WINDOW OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "EAST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "EAST WINDOW OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "EAST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 2 WEST WINDOW",
+            "vertex_1_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 1 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 2 WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 2 WEST WINDOW",
+            "vertex_2_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 2 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 2 WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "WEST WINDOW OVERHANG",
+            "vertices",
+            0,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Vertex 1 Y-coordinate",
+          "source_object_name": "WEST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "WEST WINDOW OVERHANG",
+            "vertices",
+            1,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Vertex 2 Y-coordinate",
+          "source_object_name": "WEST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_we_win%"
+        }
+      ],
+      "model_sha256": "1eb47bbf2182d094bab44eeed68ad01dfe4319ba3b94dd58640dd37c776fd027",
+      "source_template": "simple_houston_template.idf",
+      "source_template_sha256": "6eee8a6ed1abec2a953d1b1aea2c9500dcba308dcb17edab45b2405579199885",
+      "token_count": 4
+    },
+    "3": {
+      "baseline_x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "binding_count": 12,
+      "bindings": [
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "solar_transmittance"
+          ],
+          "source_field_index": 2,
+          "source_field_name": "Solar Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "visible_transmittance"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Visible Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "WindowMaterial:Shade",
+            "ExtShade",
+            "infrared_transmittance"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Infrared Transmittance",
+          "source_object_name": "ExtShade",
+          "source_object_type": "WindowMaterial:Shade",
+          "token": "%tau%"
+        },
+        {
+          "path": [
+            "Building",
+            "office zone",
+            "north_axis"
+          ],
+          "source_field_index": 2,
+          "source_field_name": "North Axis",
+          "source_object_name": "office zone",
+          "source_object_type": "Building",
+          "token": "%azimuth%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 1 EAST WINDOW",
+            "vertex_3_y_coordinate"
+          ],
+          "source_field_index": 18,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 1 EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 1 EAST WINDOW",
+            "vertex_4_y_coordinate"
+          ],
+          "source_field_index": 21,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 1 EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "EAST WINDOW OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "EAST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "EAST WINDOW OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "EAST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_ea_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 2 WEST WINDOW",
+            "vertex_1_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 1 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 2 WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SUBSURFACE 2 WEST WINDOW",
+            "vertex_2_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 2 Y-coordinate",
+          "source_object_name": "ZONE SUBSURFACE 2 WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "WEST WINDOW OVERHANG",
+            "vertices",
+            0,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Vertex 1 Y-coordinate",
+          "source_object_name": "WEST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_we_win%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "WEST WINDOW OVERHANG",
+            "vertices",
+            1,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Vertex 2 Y-coordinate",
+          "source_object_name": "WEST WINDOW OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%w_we_win%"
+        }
+      ],
+      "model_sha256": "ff2ffc7dfe8c322e07fc98c4434a7dd279183aac5a18f307ab2a8ff9b8434ea8",
+      "source_template": "simple_chicago_template.idf",
+      "source_template_sha256": "7387c85ef74b369aaabf896c059b7e7a025393257c85cefec065ce7cd6451c77",
+      "token_count": 4
+    },
+    "4": {
+      "baseline_x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "binding_count": 77,
+      "bindings": [
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl WEST-ZONE WEST",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl WEST",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaWes%"
+        },
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl EAST-ZONE EAST",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl EAST",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaEas%"
+        },
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl SOUTH-ZONE SOUTH",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl SOUTH",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveSou%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE NORTH",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 2",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE WEST",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 3",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE EAST",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 4",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE SOUTH",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 5",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE INTERIOR",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Central Cooling Design Supply Air Temperature",
+          "source_object_name": "VAV Sys 1",
+          "source_object_type": "Sizing:System",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_1"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Hour 1",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_2"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Hour 2",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_3"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Hour 3",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_4"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Hour 4",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_5"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Hour 5",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_6"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Hour 6",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_7"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Hour 7",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_8"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Hour 8",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_22"
+          ],
+          "source_field_index": 24,
+          "source_field_name": "Hour 22",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_23"
+          ],
+          "source_field_index": 25,
+          "source_field_name": "Hour 23",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_24"
+          ],
+          "source_field_index": 26,
+          "source_field_name": "Hour 24",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_1"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Hour 1",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_2"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Hour 2",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_3"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Hour 3",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_4"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Hour 4",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_5"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Hour 5",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_6"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Hour 6",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_7"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Hour 7",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_8"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Hour 8",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_22"
+          ],
+          "source_field_index": 24,
+          "source_field_name": "Hour 22",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_23"
+          ],
+          "source_field_index": 25,
+          "source_field_name": "Hour 23",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_24"
+          ],
+          "source_field_index": 26,
+          "source_field_name": "Hour 24",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        }
+      ],
+      "model_sha256": "bfa4d2ab4c23003b3a53a38f84072fed1ffcd1e3478ee0129827b9d9212d0f29",
+      "source_template": "detailed_seattle_template.idf",
+      "source_template_sha256": "8a9a68a15d18f870c0708cd53f6c3033e6bd61d546d970a4a41a662d2893100a",
+      "token_count": 29
+    },
+    "5": {
+      "baseline_x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "binding_count": 77,
+      "bindings": [
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl WEST-ZONE WEST",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl WEST",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaWes%"
+        },
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl EAST-ZONE EAST",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl EAST",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaEas%"
+        },
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl SOUTH-ZONE SOUTH",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl SOUTH",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveSou%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE NORTH",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 2",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE WEST",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 3",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE EAST",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 4",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE SOUTH",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 5",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE INTERIOR",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Central Cooling Design Supply Air Temperature",
+          "source_object_name": "VAV Sys 1",
+          "source_object_type": "Sizing:System",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_1"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Hour 1",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_2"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Hour 2",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_3"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Hour 3",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_4"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Hour 4",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_5"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Hour 5",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_6"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Hour 6",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_7"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Hour 7",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_8"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Hour 8",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_22"
+          ],
+          "source_field_index": 24,
+          "source_field_name": "Hour 22",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_23"
+          ],
+          "source_field_index": 25,
+          "source_field_name": "Hour 23",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_24"
+          ],
+          "source_field_index": 26,
+          "source_field_name": "Hour 24",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_1"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Hour 1",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_2"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Hour 2",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_3"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Hour 3",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_4"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Hour 4",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_5"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Hour 5",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_6"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Hour 6",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_7"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Hour 7",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_8"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Hour 8",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_22"
+          ],
+          "source_field_index": 24,
+          "source_field_name": "Hour 22",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_23"
+          ],
+          "source_field_index": 25,
+          "source_field_name": "Hour 23",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_24"
+          ],
+          "source_field_index": 26,
+          "source_field_name": "Hour 24",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        }
+      ],
+      "model_sha256": "2d8c1ab5640f97b5a934f1dbc7922aeb6b85d49311c6d1b136cdacae37ddf321",
+      "source_template": "detailed_houston_template.idf",
+      "source_template_sha256": "7259afafda40431d42bed7f94fe1f6f7c046e0e4b07d79e889342b139e069612",
+      "token_count": 29
+    },
+    "6": {
+      "baseline_x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "binding_count": 77,
+      "bindings": [
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl WEST-ZONE WEST",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl WEST",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaWes%"
+        },
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl EAST-ZONE EAST",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl EAST",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaEas%"
+        },
+        {
+          "path": [
+            "WindowShadingControl",
+            "WinShadingControl SOUTH-ZONE SOUTH",
+            "setpoint"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Setpoint",
+          "source_object_name": "WinShadingControl SOUTH",
+          "source_object_type": "WindowProperty:ShadingControl",
+          "token": "%shaSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE NORTH WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE NORTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveNor%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE NORTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE NORTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveNor%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE WEST WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE WEST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveWes%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE WEST OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE WEST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveWes%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE EAST WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE EAST WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveEas%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE EAST OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE EAST OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveEas%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_1_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_2_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x1WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_3_x_coordinate"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%y0WinSou%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "ZONE SOUTH WINDOW",
+            "vertex_4_x_coordinate"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE SOUTH WINDOW",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%x0WinSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            0,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Vertex 1 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            1,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Vertex 2 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 11,
+          "source_field_name": "Vertex 3 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x0OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            2,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 12,
+          "source_field_name": "Vertex 3 Y-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_x_coordinate"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Vertex 4 X-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%x1OveSou%"
+        },
+        {
+          "path": [
+            "Shading:Zone:Detailed",
+            "ZONE SOUTH OVERHANG",
+            "vertices",
+            3,
+            "vertex_y_coordinate"
+          ],
+          "source_field_index": 15,
+          "source_field_name": "Vertex 4 Y-coordinate",
+          "source_object_name": "ZONE SOUTH OVERHANG",
+          "source_object_type": "Shading:Zone:Detailed",
+          "token": "%yOveSou%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE NORTH",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 2",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE WEST",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 3",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE EAST",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 4",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE SOUTH",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 5",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "ZONE INTERIOR",
+          "source_object_type": "Sizing:Zone",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Central Cooling Design Supply Air Temperature",
+          "source_object_name": "VAV Sys 1",
+          "source_object_type": "Sizing:System",
+          "token": "%CooDesSupTem%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_1"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Hour 1",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_2"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Hour 2",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_3"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Hour 3",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_4"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Hour 4",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_5"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Hour 5",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_6"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Hour 6",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_7"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Hour 7",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_8"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Hour 8",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_22"
+          ],
+          "source_field_index": 24,
+          "source_field_name": "Hour 22",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_23"
+          ],
+          "source_field_index": 25,
+          "source_field_name": "Hour 23",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Win",
+            "hour_24"
+          ],
+          "source_field_index": 26,
+          "source_field_name": "Hour 24",
+          "source_object_name": "Clg-SetP-DSch-Win",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigWin%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_1"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Hour 1",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_2"
+          ],
+          "source_field_index": 4,
+          "source_field_name": "Hour 2",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_3"
+          ],
+          "source_field_index": 5,
+          "source_field_name": "Hour 3",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_4"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Hour 4",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_5"
+          ],
+          "source_field_index": 7,
+          "source_field_name": "Hour 5",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_6"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Hour 6",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_7"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Hour 7",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_8"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Hour 8",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_22"
+          ],
+          "source_field_index": 24,
+          "source_field_name": "Hour 22",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_23"
+          ],
+          "source_field_index": 25,
+          "source_field_name": "Hour 23",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        },
+        {
+          "path": [
+            "Schedule:Day:Hourly",
+            "Clg-SetP-DSch-Sum",
+            "hour_24"
+          ],
+          "source_field_index": 26,
+          "source_field_name": "Hour 24",
+          "source_object_name": "Clg-SetP-DSch-Sum",
+          "source_object_type": "Schedule:Day:Hourly",
+          "token": "%TZonCooNigSum%"
+        }
+      ],
+      "model_sha256": "0f3c571e35a2ba28a5f0fbef06df643bb84e15c416251c6d1d98dd9911ae1731",
+      "source_template": "detailed_chicago_template.idf",
+      "source_template_sha256": "1164daf091367c6b317ca1073c36ea414e6f4c911f2c07f4cd661e90e39ccd7b",
+      "token_count": 29
+    },
+    "9": {
+      "baseline_x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "binding_count": 31,
+      "bindings": [
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            3,
+            "field"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Field 4",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            7,
+            "field"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Field 8",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            13,
+            "field"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Field 14",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            17,
+            "field"
+          ],
+          "source_field_index": 20,
+          "source_field_name": "Field 18",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%9%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "HTGSETP_SCH",
+            "data",
+            20,
+            "field"
+          ],
+          "source_field_index": 23,
+          "source_field_name": "Field 21",
+          "source_object_name": "HTGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%10%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            3,
+            "field"
+          ],
+          "source_field_index": 6,
+          "source_field_name": "Field 4",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            7,
+            "field"
+          ],
+          "source_field_index": 10,
+          "source_field_name": "Field 8",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            10,
+            "field"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Field 11",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            14,
+            "field"
+          ],
+          "source_field_index": 17,
+          "source_field_name": "Field 15",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%11%"
+        },
+        {
+          "path": [
+            "Schedule:Compact",
+            "CLGSETP_SCH",
+            "data",
+            20,
+            "field"
+          ],
+          "source_field_index": 23,
+          "source_field_name": "Field 21",
+          "source_object_name": "CLGSETP_SCH",
+          "source_object_type": "Schedule:Compact",
+          "token": "%12%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_North_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Office_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%1%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_North_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Office_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%0%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_North_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Office_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%0%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_North_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Office_Wall_North_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%1%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_East_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Office_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%3%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_East_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Office_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%2%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_East_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Office_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%2%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_East_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Office_Wall_East_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%3%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_South_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Office_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%5%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_South_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Office_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%4%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_South_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Office_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%4%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_South_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Office_Wall_South_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%5%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_West_Window",
+            "vertex_1_z_coordinate"
+          ],
+          "source_field_index": 13,
+          "source_field_name": "Vertex 1 Z-coordinate",
+          "source_object_name": "Office_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%7%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_West_Window",
+            "vertex_2_z_coordinate"
+          ],
+          "source_field_index": 16,
+          "source_field_name": "Vertex 2 Z-coordinate",
+          "source_object_name": "Office_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%6%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_West_Window",
+            "vertex_3_z_coordinate"
+          ],
+          "source_field_index": 19,
+          "source_field_name": "Vertex 3 Z-coordinate",
+          "source_object_name": "Office_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%6%"
+        },
+        {
+          "path": [
+            "FenestrationSurface:Detailed",
+            "Office_Wall_West_Window",
+            "vertex_4_z_coordinate"
+          ],
+          "source_field_index": 22,
+          "source_field_name": "Vertex 4 Z-coordinate",
+          "source_object_name": "Office_Wall_West_Window",
+          "source_object_type": "FenestrationSurface:Detailed",
+          "token": "%7%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 3,
+          "source_field_name": "Zone Cooling Design Supply Air Temperature",
+          "source_object_name": "Office",
+          "source_object_type": "Sizing:Zone",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:Zone",
+            "Sizing:Zone 1",
+            "zone_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Zone Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "Office",
+          "source_object_type": "Sizing:Zone",
+          "token": "%13%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "precool_design_humidity_ratio"
+          ],
+          "source_field_index": 8,
+          "source_field_name": "Precool Design Humidity Ratio",
+          "source_object_name": "FURNACE_PACU_CAV:1",
+          "source_object_type": "Sizing:System",
+          "token": "%13%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_temperature"
+          ],
+          "source_field_index": 9,
+          "source_field_name": "Central Cooling Design Supply Air Temperature",
+          "source_object_name": "FURNACE_PACU_CAV:1",
+          "source_object_type": "Sizing:System",
+          "token": "%8%"
+        },
+        {
+          "path": [
+            "Sizing:System",
+            "Sizing:System 1",
+            "central_cooling_design_supply_air_humidity_ratio"
+          ],
+          "source_field_index": 14,
+          "source_field_name": "Central Cooling Design Supply Air Humidity Ratio",
+          "source_object_name": "FURNACE_PACU_CAV:1",
+          "source_object_type": "Sizing:System",
+          "token": "%13%"
+        }
+      ],
+      "model_sha256": "368598897fd8d1645d297444905dd9f0effa22a3213de69e4f8d473f1010a7ae",
+      "source_template": "problem_9_template.idf",
+      "source_template_sha256": "5b8d0611bac7b4d220ace246ba5eb3ac2604e51b7165102ee43bcac4e0cd9780",
+      "token_count": 14
+    }
+  },
+  "modern_schema_sha256": "e2062595d6245c76092c1047e778603e85ee043009582d05d8c67a7c850cb782",
+  "schema_version": 1,
+  "source_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "source_repository": "https://github.com/milzj/BEOBenchmark",
+  "target_energyplus_version": "26.2"
+}

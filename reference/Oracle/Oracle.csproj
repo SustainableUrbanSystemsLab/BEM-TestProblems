@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ReferenceSourceDir Condition="'$(ReferenceSourceDir)' == ''">$(MSBuildProjectDirectory)/../../.reference-cache/beobenchmark/legacy-source</ReferenceSourceDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(ReferenceSourceDir)/GHEPlusRunParametric1to3.cs" />
+    <Compile Include="$(ReferenceSourceDir)/GHEPlusRunParametric4to8.cs" />
+    <Compile Include="$(ReferenceSourceDir)/GHEPlusRunParametric9.cs" />
+    <Compile Include="$(ReferenceSourceDir)/GHEPlusRunParametric10.cs" />
+    <Compile Include="$(ReferenceSourceDir)/GHEPlusRunParametric13.cs" />
+    <Compile Include="$(ReferenceSourceDir)/Misc.cs" />
+    <Compile Include="GhStubs.cs" />
+    <Compile Include="Program.cs" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <Target Name="RequireReferenceSource" BeforeTargets="CoreCompile">
+    <Error Condition="!Exists('$(ReferenceSourceDir)/Misc.cs')" Text="Run tools/fetch_reference.py before building the original-code oracle." />
+  </Target>
+</Project>

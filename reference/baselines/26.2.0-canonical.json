@@ -1,0 +1,989 @@
+{
+  "schema_version": 1,
+  "license": "MIT",
+  "engine_version": "26.2.0",
+  "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+  "upstream_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "platform": "Darwin-arm64",
+  "weather_kind": "canonical",
+  "comparison": "reviewed-engine-baseline-with-expected-strict-failures",
+  "diagnostics_policy": "strict",
+  "rtol": 1e-06,
+  "atol": 1e-07,
+  "case_fixture": {
+    "path": "reference/canonical-cases.json",
+    "sha256": "de5ff68ea61d20036a75607fa847bc1e00172957bd2f7d1eab2250fa071e23cb"
+  },
+  "provenance": {
+    "kind": "Independently generated project numerical measurements; no published optimum or raw external asset is copied.",
+    "source_ledgers": [
+      {
+        "path": "docs/validation-results/26.2.0-canonical-audit.json",
+        "sha256": "b616624a8bd25729331981f8fca9208b7437d631a0ca3578b77d8f8c62179783"
+      },
+      {
+        "path": "docs/validation-results/warmup-diagnostics.json",
+        "sha256": "8eb250ac3a04183018446d3de64e97a5cfe9c7a4a0842bf8940143283bfd44d7"
+      }
+    ],
+    "p13_no_epw_replay": {
+      "measurement_ledger_sha256": "7025806b742ed4cbbe8941d7638497761c995bc99e8e97bd5ecfce1da7b8f425",
+      "case_ids": [
+        "p13-midpoint",
+        "p13-lower",
+        "p13-upper"
+      ],
+      "scope": "Fresh direct strict-success observations without an EPW. Exact objective and observable agreement with the corresponding prior EPW audit was checked for each vector and engine."
+    },
+    "input_line_ending_normalization": {
+      "case_ids": [],
+      "scope": "Only the original audited CRLF encoding changes to portable LF; per-case original input hashes and exact reversible normalization are retained."
+    },
+    "reference_engine_hash_scope": "This executable hash identifies the measured reference build; another platform build must record its own hash and match the selected version and baseline comparisons."
+  },
+  "scope": "The 27 explicit canonical cases only. Expected warmup failures remain strict rejections with no accepted objective; a changed outcome or signature is a regression. These are not publication optimum fixtures or full-domain validation.",
+  "cases": [
+    {
+      "case_id": "p01-midpoint",
+      "problem": 1,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 147.5659999247044,
+      "components": {
+        "Q_h": 9.82489465965589,
+        "Q_c": 2156.5422127996253,
+        "E_L": 3781.100838086635
+      },
+      "terms": {
+        "heating": 0.23259693796533829,
+        "cooling": 29.174001796531726,
+        "lighting": 118.15940119020735
+      },
+      "input_sha256": "9e13cdbc8074136d048c2cf08ced8aad33927957d19a0a102e4c62e74b9bdd98",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81"
+    },
+    {
+      "case_id": "p02-midpoint",
+      "problem": 2,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 186.87594278036502,
+      "components": {
+        "Q_h": 1.3189510371073274,
+        "Q_c": 6518.196894838241,
+        "E_L": 3157.300706134807
+      },
+      "terms": {
+        "heating": 0.031225166598184834,
+        "cooling": 88.17907054705411,
+        "lighting": 98.66564706671272
+      },
+      "input_sha256": "6221f96dc20af2da7d4322c1a5ecb04a5cc2bb814393bcd32ae1154bc442c5e2",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145"
+    },
+    {
+      "case_id": "p03-midpoint",
+      "problem": 3,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 170.14388537158788,
+      "components": {
+        "Q_h": 1064.8359044609306,
+        "Q_c": 2984.499891497613,
+        "E_L": 3345.9191698543436
+      },
+      "terms": {
+        "heating": 25.209183344245517,
+        "cooling": 40.374727969394115,
+        "lighting": 104.55997405794824
+      },
+      "input_sha256": "b19c28729d9049e2d4901c7a574118988ad6af0412f5a9b8d7bbad4203d6d044",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec"
+    },
+    {
+      "case_id": "p04-midpoint",
+      "problem": 4,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 172.68849670335467,
+      "components": {
+        "H_1": 4.015887375797243,
+        "H_2": 46.986478987392864,
+        "H_3": 57.9862121322805,
+        "H_4": 0.1410702019009971,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 907.2623795531468,
+        "L_N": 1992.465458370221,
+        "L_W": 5486.555277080369,
+        "L_E": 5300.8143952983055,
+        "L_S": 1519.6777260710803,
+        "L_I": 6345.6,
+        "V_legacy": 13956.021131565201,
+        "V_return": 13956.021131565201
+      },
+      "terms": {
+        "heating": 0.09884931947225689,
+        "cooling": 2.465386900959638,
+        "lighting": 94.2763195505032,
+        "fans": 75.84794093241958
+      },
+      "input_sha256": "8075d1f91e7c7960a16ba1013b2053f971ccb0c2523906a988e4a05cc6a143b4",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81"
+    },
+    {
+      "case_id": "p05-midpoint",
+      "problem": 5,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 241.74683046205237,
+      "components": {
+        "H_1": 0.08139197697597018,
+        "H_2": 10.477506307579713,
+        "H_3": 7.7287954380127175,
+        "H_4": 0.0,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 22645.94134498235,
+        "L_N": 1749.6114351689273,
+        "L_W": 4547.885490886263,
+        "L_E": 4326.668686388444,
+        "L_S": 1319.792412784961,
+        "L_I": 6345.6,
+        "V_legacy": 17871.81147505062,
+        "V_return": 17871.81147505062
+      },
+      "terms": {
+        "heating": 0.016564939966094563,
+        "cooling": 61.53788408962596,
+        "lighting": 83.0629712419678,
+        "fans": 97.12941019049251
+      },
+      "input_sha256": "45b5eac6dde311e9271b5c71b888675619dfdab1673d46e8947161ffd876aced",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145"
+    },
+    {
+      "case_id": "p06-midpoint",
+      "problem": 6,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 201.96071376725243,
+      "components": {
+        "H_1": 2297.13170968848,
+        "H_2": 2631.7968432612506,
+        "H_3": 2650.3483905701987,
+        "H_4": 1497.3009668056234,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 5606.01722077129,
+        "L_N": 1877.3739465645313,
+        "L_W": 4737.996202398593,
+        "L_E": 4691.489145004492,
+        "L_S": 1368.5625281185596,
+        "L_I": 6345.6,
+        "V_legacy": 16842.615877325272,
+        "V_return": 16842.615877325272
+      },
+      "terms": {
+        "heating": 8.221537962251405,
+        "cooling": 15.233742447748073,
+        "lighting": 86.9694775022243,
+        "fans": 91.53595585502866
+      },
+      "input_sha256": "f564b6451bdec8df3bb9821da856b1142a004d98fce5a58a90b7b2c64edc62dc",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec"
+    },
+    {
+      "case_id": "p08-midpoint",
+      "problem": 8,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 190.62168177067485,
+      "components": {
+        "H_1": 2483.6625934118997,
+        "H_2": 2960.1030988870643,
+        "H_3": 2977.745327285101,
+        "H_4": 1636.6152063370118,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 7531.272272207758,
+        "L_N": 1877.3739465645313,
+        "L_W": 4737.996202398593,
+        "L_E": 4691.489145004492,
+        "L_S": 1368.5625281185596,
+        "L_I": 6345.6,
+        "V_legacy": 13630.015078304177,
+        "V_return": 13630.015078304177
+      },
+      "terms": {
+        "heating": 9.110621581450252,
+        "cooling": 20.465413783173254,
+        "lighting": 86.9694775022243,
+        "fans": 74.07616890382705
+      },
+      "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec"
+    },
+    {
+      "case_id": "p09-midpoint",
+      "problem": 9,
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 840.87,
+      "components": {
+        "Y": 840.87
+      },
+      "terms": {
+        "source_energy": 840.87,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "058b9df013c2e18e788a1c1d16c806d1c97f03b7439b24668c916ebb787c9717",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p10-midpoint",
+      "problem": 10,
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 1201.82,
+      "components": {
+        "Y": 1201.82
+      },
+      "terms": {
+        "source_energy": 1201.82,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "fb0b0b21abee9bbc3025d5f475a8d8f06a0aab84ccc8f6168bcde96b278bb768",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p13-midpoint",
+      "problem": 13,
+      "x": [
+        0.175,
+        600.0,
+        90.0,
+        80.0,
+        120.0,
+        35.0,
+        130.0,
+        210.0,
+        570.0,
+        525.0
+      ],
+      "purpose": "nominal physical midpoint",
+      "passed": true,
+      "objective": 1928.1966599775135,
+      "components": {
+        "Q": 439.1196017522009,
+        "P": 18.296650073008365
+      },
+      "terms": {
+        "energy": 782.3491599775134,
+        "insulation": 113.34749999999998,
+        "radiators": 1032.5
+      },
+      "input_sha256": "bc306e7700ddb3a9ba025afcacbb7b4b03b225bc20cd8121dd2c9248b85c804d",
+      "weather_file": null,
+      "weather_sha256": null,
+      "measurement_source": "Fresh strict-success design-day replay without EPW; all observables equal the prior EPW audit at recorded precision."
+    },
+    {
+      "case_id": "p01-lower",
+      "problem": 1,
+      "x": [
+        -180.0,
+        0.1,
+        0.1,
+        0.2
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 233.78118687799343,
+      "components": {
+        "Q_h": 0.0,
+        "Q_c": 3209.5351685514293,
+        "E_L": 6091.588816220712
+      },
+      "terms": {
+        "heating": 0.0,
+        "cooling": 43.419036371096176,
+        "lighting": 190.36215050689725
+      },
+      "input_sha256": "79f7a987ff70e07589a216f352bd2c28a90b8153e22b831c48004f98647c317b",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81"
+    },
+    {
+      "case_id": "p01-upper",
+      "problem": 1,
+      "x": [
+        180.0,
+        5.9,
+        5.9,
+        0.8
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 145.93264712165546,
+      "components": {
+        "Q_h": 128.55072148742667,
+        "Q_c": 3253.9340210200044,
+        "E_L": 3163.828351346222
+      },
+      "terms": {
+        "heating": 3.0433409443046084,
+        "cooling": 44.019670197781444,
+        "lighting": 98.86963597956942
+      },
+      "input_sha256": "8107c34f613e68de0685ba0509b0b610799bf9b88ee9d6b3c00e5349792f6419",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81"
+    },
+    {
+      "case_id": "p04-lower",
+      "problem": 4,
+      "x": [
+        1.224,
+        7.344,
+        7.344,
+        1.224,
+        0.05,
+        0.05,
+        0.05,
+        100.0,
+        100.0,
+        100.0,
+        20.0,
+        20.0,
+        12.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": false,
+      "objective": null,
+      "components": null,
+      "terms": null,
+      "input_sha256": "67909545993480e08587b6cae8e57848b3000819e3f7c38482d20bdfd1814aa6",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "expected_failure": {
+        "stage": "simulation",
+        "reason": "simulation",
+        "severe_count": 1,
+        "fatal_count": 0,
+        "signatures": [
+          {
+            "zone": "ZONE SOUTH",
+            "environment": "RUNPERIOD 1",
+            "kind": "CheckWarmupConvergence"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "p04-upper",
+      "problem": 4,
+      "x": [
+        5.832,
+        25.668,
+        25.668,
+        5.832,
+        1.05,
+        1.05,
+        1.05,
+        600.0,
+        600.0,
+        600.0,
+        25.0,
+        25.0,
+        18.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 163.44788293535206,
+      "components": {
+        "H_1": 32.26098608923944,
+        "H_2": 110.05662871396525,
+        "H_3": 117.77538007224977,
+        "H_4": 2.21395482842449,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 3087.3498706623704,
+        "L_N": 1629.6780955675774,
+        "L_W": 5177.844426129351,
+        "L_E": 5014.275747301005,
+        "L_S": 1370.1196330169416,
+        "L_I": 6345.6,
+        "V_legacy": 12718.663291646468,
+        "V_return": 12718.663291646468
+      },
+      "terms": {
+        "heating": 0.2375968747317744,
+        "cooling": 8.389537692017312,
+        "lighting": 85.69757830530693,
+        "fans": 69.12317006329603
+      },
+      "input_sha256": "74f45bdbefa04ee4154ce22feba2c215af4c1b17c173f85b81927efe023c0845",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81"
+    },
+    {
+      "case_id": "p09-lower",
+      "problem": 9,
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 828.53,
+      "components": {
+        "Y": 828.53
+      },
+      "terms": {
+        "source_energy": 828.53,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "1450852e00f26ff54cf9d2fa350833b31243704fc1cc489bf94f845b9a9b4020",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p09-upper",
+      "problem": 9,
+      "x": [
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        18.0,
+        21.0,
+        21.0,
+        36.0,
+        36.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 907.11,
+      "components": {
+        "Y": 907.11
+      },
+      "terms": {
+        "source_energy": 907.11,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "2bd9a1f63626913ad40c47f288d7ae24f9de3e2ffe30528fceda667121a3e954",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p10-lower",
+      "problem": 10,
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 1095.63,
+      "components": {
+        "Y": 1095.63
+      },
+      "terms": {
+        "source_energy": 1095.63,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "6bbef0c74b7c9e306a3b1315053d4ab8b8d09f23ec97f534d479f040b85c6a52",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p10-upper",
+      "problem": 10,
+      "x": [
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        18.0,
+        21.0,
+        21.0,
+        36.0,
+        36.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 2330.74,
+      "components": {
+        "Y": 2330.74
+      },
+      "terms": {
+        "source_energy": 2330.74,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "c76d4d5b9dc8cc6fa4136c236978b51dc2a07d8146ed4f7037adafa91ae9e6c0",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p13-lower",
+      "problem": 13,
+      "x": [
+        0.05,
+        400.0,
+        60.0,
+        50.0,
+        80.0,
+        20.0,
+        80.0,
+        140.0,
+        380.0,
+        350.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 1978.8141538891032,
+      "components": {
+        "Q": 711.5693703710018,
+        "P": 29.648723765458403
+      },
+      "terms": {
+        "energy": 1267.7541538891032,
+        "insulation": 28.56,
+        "radiators": 682.5
+      },
+      "input_sha256": "300a4d4d9660950070bb50ad8a8c6011831d22743b21a2ef14590d69f648a02b",
+      "weather_file": null,
+      "weather_sha256": null,
+      "measurement_source": "Fresh strict-success design-day replay without EPW; all observables equal the prior EPW audit at recorded precision."
+    },
+    {
+      "case_id": "p13-upper",
+      "problem": 13,
+      "x": [
+        0.3,
+        800.0,
+        120.0,
+        110.0,
+        160.0,
+        50.0,
+        180.0,
+        280.0,
+        760.0,
+        700.0
+      ],
+      "purpose": "representative family bounds",
+      "passed": true,
+      "objective": 2206.9418977143155,
+      "components": {
+        "Q": 351.53566919771663,
+        "P": 14.64731954990486
+      },
+      "terms": {
+        "energy": 626.3068977143155,
+        "insulation": 198.135,
+        "radiators": 1382.5
+      },
+      "input_sha256": "fa57e894fdb1ee6694c5568b26fd1ea0025891976f909020a6c5ae05b39525da",
+      "weather_file": null,
+      "weather_sha256": null,
+      "measurement_source": "Fresh strict-success design-day replay without EPW; all observables equal the prior EPW audit at recorded precision."
+    },
+    {
+      "case_id": "p09-penalty-below",
+      "problem": 9,
+      "x": [
+        1.0,
+        1.5487,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "passed": true,
+      "objective": 1258.3799999999999,
+      "components": {
+        "Y": 838.92
+      },
+      "terms": {
+        "source_energy": 838.92,
+        "window_penalty": 419.46
+      },
+      "input_sha256": "85652d5826a08eb3f75d9817f98e749c5e24833f19567f11b74cd0a275b76a2b",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p09-penalty-above",
+      "problem": 9,
+      "x": [
+        1.0,
+        1.5489000000000002,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "passed": true,
+      "objective": 838.92,
+      "components": {
+        "Y": 838.92
+      },
+      "terms": {
+        "source_energy": 838.92,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "3d7188447b41fc551b2eb8e5f28b73387c4304a38aac3be05b881734ec05d32b",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p10-penalty-below",
+      "problem": 10,
+      "x": [
+        1.0,
+        1.5487,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "passed": true,
+      "objective": 1805.745,
+      "components": {
+        "Y": 1203.83
+      },
+      "terms": {
+        "source_energy": 1203.83,
+        "window_penalty": 601.915
+      },
+      "input_sha256": "e9f5a7c220ed87d7efd7354241f6c4669e9b3903402abc96510cb6ef4c8a5bf8",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p10-penalty-above",
+      "problem": 10,
+      "x": [
+        1.0,
+        1.5489000000000002,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "purpose": "straddle historical window-height penalty",
+      "passed": true,
+      "objective": 1203.83,
+      "components": {
+        "Y": 1203.83
+      },
+      "terms": {
+        "source_energy": 1203.83,
+        "window_penalty": 0.0
+      },
+      "input_sha256": "63055fce459663dfc57b33dbee28e4956ca2e372994e2f530a7ca8163492524d",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+    },
+    {
+      "case_id": "p06-embedded-p08",
+      "problem": 6,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        25.0,
+        22.5,
+        12.0
+      ],
+      "purpose": "P8 equivalent full-dimensional design",
+      "passed": true,
+      "objective": 190.62168177067485,
+      "components": {
+        "H_1": 2483.6625934118997,
+        "H_2": 2960.1030988870643,
+        "H_3": 2977.745327285101,
+        "H_4": 1636.6152063370118,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 7531.272272207758,
+        "L_N": 1877.3739465645313,
+        "L_W": 4737.996202398593,
+        "L_E": 4691.489145004492,
+        "L_S": 1368.5625281185596,
+        "L_I": 6345.6,
+        "V_legacy": 13630.015078304177,
+        "V_return": 13630.015078304177
+      },
+      "terms": {
+        "heating": 9.110621581450252,
+        "cooling": 20.465413783173254,
+        "lighting": 86.9694775022243,
+        "fans": 74.07616890382705
+      },
+      "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec"
+    },
+    {
+      "case_id": "p08-embedded-check",
+      "problem": 8,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "purpose": "P8 equivalent reduced-dimensional design",
+      "passed": true,
+      "objective": 190.62168177067485,
+      "components": {
+        "H_1": 2483.6625934118997,
+        "H_2": 2960.1030988870643,
+        "H_3": 2977.745327285101,
+        "H_4": 1636.6152063370118,
+        "H_5": 0.0,
+        "H_6": 0.0,
+        "C": 7531.272272207758,
+        "L_N": 1877.3739465645313,
+        "L_W": 4737.996202398593,
+        "L_E": 4691.489145004492,
+        "L_S": 1368.5625281185596,
+        "L_I": 6345.6,
+        "V_legacy": 13630.015078304177,
+        "V_return": 13630.015078304177
+      },
+      "terms": {
+        "heating": 9.110621581450252,
+        "cooling": 20.465413783173254,
+        "lighting": 86.9694775022243,
+        "fans": 74.07616890382705
+      },
+      "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec"
+    },
+    {
+      "case_id": "p01-orientation90",
+      "problem": 1,
+      "x": [
+        90.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "Paired orientation-90 trial with a recorded EnergyPlus8.5 warmup rejection; current26.2 passes.",
+      "passed": true,
+      "objective": 152.72936839353014,
+      "components": {
+        "Q_h": 3.021359999665709,
+        "Q_c": 2100.765026059212,
+        "E_L": 3975.628790299186
+      },
+      "terms": {
+        "heating": 0.071528409082995,
+        "cooling": 28.419440287597563,
+        "lighting": 124.23839969684957
+      },
+      "input_sha256": "195d2635fd1f9f91bc414e7004e24ff51ac475bae3237328c51eff4b27024384",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81"
+    }
+  ],
+  "summary": {
+    "case_count": 27,
+    "strict_success_count": 26,
+    "expected_strict_failure_count": 1
+  }
+}

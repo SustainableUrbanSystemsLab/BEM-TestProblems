@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-10-22T14:00:50.697680+00:00",
+  "numerical_variant": "model-corrected-v3",
+  "base_variant": "model-corrected-v2",
+  "platform": "Windows-AMD64",
+  "engines": [
+    "8.5.0",
+    "26.2.0"
+  ],
+  "strict_acceptance": true,
+  "recipe": {
+    "problems": [
+      4,
+      5,
+      10
+    ],
+    "warmup_surface_convection_w_per_m2_k": 1,
+    "condition": "WarmupFlag == 1 && CurrentEnvironment > 2",
+    "release": "Null after warmup and on every non-warmup timestep",
+    "unchanged": [
+      "sizing controls",
+      "annual model fields",
+      "convergence tolerances",
+      "bounds",
+      "starts",
+      "seeds",
+      "budgets",
+      "solver settings"
+    ],
+    "historical_equivalence": "not claimed"
+  },
+  "retained_failures": {
+    "planned": 23,
+    "passed": 23,
+    "warmup_days_minimum": 6,
+    "warmup_days_maximum": 21,
+    "maximum_absolute_annual_objective_difference_percent": 0.0068565921667041235
+  },
+  "validation": {
+    "planned": 2850,
+    "completed": 2850,
+    "passed": 2850,
+    "source_unchanged": true,
+    "engines_unchanged": true,
+    "identical_native_inputs_reused": 1074
+  },
+  "independent_seed": 20261022,
+  "sizing_equivalence": {
+    "paired_designs": 1442,
+    "changed": 0
+  },
+  "annual_objective_changes_from_v2": [
+    {
+      "problem": 4,
+      "engine": "26.2.0",
+      "count": 369,
+      "minimum_percent": -0.04759786599962444,
+      "median_percent": -0.02307472234431218,
+      "maximum_percent": 0.04132902878541179,
+      "maximum_absolute_percent": 0.04759786599962444
+    },
+    {
+      "problem": 4,
+      "engine": "8.5.0",
+      "count": 350,
+      "minimum_percent": -0.046107972732552925,
+      "median_percent": -0.013273717588701488,
+      "maximum_percent": 0.045737348128025525,
+      "maximum_absolute_percent": 0.046107972732552925
+    },
+    {
+      "problem": 5,
+      "engine": "26.2.0",
+      "count": 255,
+      "minimum_percent": -0.000205664634065538,
+      "median_percent": 0.0168972099404928,
+      "maximum_percent": 0.0518155428607215,
+      "maximum_absolute_percent": 0.0518155428607215
+    },
+    {
+      "problem": 5,
+      "engine": "8.5.0",
+      "count": 197,
+      "minimum_percent": 0.005325539183941284,
+      "median_percent": 0.021860680480606003,
+      "maximum_percent": 0.05563973015150378,
+      "maximum_absolute_percent": 0.05563973015150378
+    },
+    {
+      "problem": 10,
+      "engine": "26.2.0",
+      "count": 132,
+      "minimum_percent": -0.013224947541049439,
+      "median_percent": 0.0,
+      "maximum_percent": 0.014474425974719377,
+      "maximum_absolute_percent": 0.014474425974719377
+    },
+    {
+      "problem": 10,
+      "engine": "8.5.0",
+      "count": 139,
+      "minimum_percent": -0.004625518058018292,
+      "median_percent": 0.0008273762245223305,
+      "maximum_percent": 0.005150966235424655,
+      "maximum_absolute_percent": 0.005150966235424655
+    }
+  ],
+  "release_traces": {
+    "passed": true,
+    "native_runs": 8,
+    "annual_surface_actuator_observations": 38684160,
+    "active_annual_observations": 0,
+    "maximum_instrumentation_objective_difference": 0,
+    "sizing_trace_observations": "not present; sizing checked by guarded environment condition and paired native sizing records"
+  },
+  "tests": {
+    "passed": 1385,
+    "skipped": 26,
+    "warnings": 23
+  },
+  "private_evidence_sha256": {
+    "full-validation/report.json": "77f1cc1901bde84eb42ceba1cdaba54224e2d7ccda818d9ffd9d0c4efa67609b",
+    "full-validation/inputs.json": "0d0cfcbb227081aa739d463e98da70d34efd073e59943a49cd1a010879cd61d9",
+    "annual-model-impact.json": "188d082c4e9e5fa07f41072d8275ca95690ddeb62b2eab31296c04ae2cda9255",
+    "sizing-equivalence.json": "ad66602c6e68f5c86f735f57c506bceeab579d9494ebce764abf6a75cf753c50",
+    "release-traces-variables/verification.json": "e2e571e4277021bf6cb091d59506d13f49202bb8f69c777dbef94a1c17bd6448",
+    "baseline-traces/daily-warmup-extrema.json": "09163a84283133acbfdb352af7a4bb68cfa450365abb6c9f0c9637768ed66f7a",
+    "repaired-failures.json": "eeef100a46f32fac1065755871b558966b604243c9ef41d33c9adc62e9b217f6",
+    "final-render-equivalence.json": "735a7da0e2a3e928cf9138afde35be291895a967fef77872aec3ffb1c2512c98"
+  },
+  "qualifications": [
+    "Validation covers the retained corpus and sampled independent designs, not every point in the continuous design domain.",
+    "The coefficient was selected in exploratory fixed-recipe screens before the independent validation.",
+    "This changes initialization and inherits all version-2 numerical and physical departures from the original benchmark.",
+    "No repaired optimizer trajectory or full version-3 campaign is claimed; version-2 checkpoints remain historical records."
+  ],
+  "engine_files_sha256": {
+    "8.5.0": {
+      "Energy+.idd": "701e070690ae3cc7dbb213830e2495852a7a22055cd951307e686a4845041fd1",
+      "energyplusapi.dll": "7bf551f6f92aea0de18bce7adea952f0fbd36f9f0cbc8aaed2b7f24ef085ec86",
+      "energyplus.exe": "50115bd8bacc102bf793caa7bbb33f19508b8cbf28b7c20169e301c9b32d3d98"
+    },
+    "26.2.0": {
+      "Energy+.idd": "c307d88afba83fba3603c04899b0ec063f7472879d80d5cfa75020202707d55f",
+      "Energy+.schema.epJSON": "28ba2e4267d79e69331c9988ec52f0211a86077629f0336c46b1cc9103e63c44",
+      "energyplusapi.dll": "d018859a87c38276ff1cfef49487b32cfa1db0a4aa2d6ec3e7949d1bcd448d83",
+      "energyplus.exe": "71278a62c9c3871922b3f7ee28a3c7c9f658caa995a934fccb92e8f8965a3977"
+    }
+  },
+  "final_input_checks": {
+    "final_v3_inputs_identical_to_validated_candidate": 2850,
+    "existing_v2_inputs_unchanged": 2516,
+    "repaired_retained_failures": 23,
+    "original_campaign_files_unchanged": 474
+  }
+}

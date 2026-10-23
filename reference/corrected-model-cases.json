@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "license": "MIT",
+  "purpose": "Small regression set for explicitly corrected models; independently measured native values, separate from canonical C# parity and publication comparisons.",
+  "cases": [
+    {
+      "case_id": "p04-retained-warmup-v3",
+      "problem": 4,
+      "x": [
+        5.827666553791937,
+        10.970156600216642,
+        18.024522325237243,
+        5.6976616668676945,
+        0.3761937439779791,
+        1.0475441816614521,
+        0.09802309252816935,
+        252.3963089704183,
+        230.49684767003907,
+        326.1831472202454,
+        23.73892151007328,
+        20.37911098867083,
+        12.238858572607995
+      ],
+      "numerical_variant": "model-corrected-v3",
+      "purpose": "Regression of a retained version-2 warmup failure"
+    },
+    {
+      "case_id": "p05-retained-warmup-v3",
+      "problem": 5,
+      "x": [
+        5.529994369376338,
+        16.733537245533007,
+        25.18169352901231,
+        4.380867169836007,
+        0.24635656162124336,
+        0.25469394014081054,
+        0.24863392133413326,
+        542.6170724534115,
+        180.7130850872169,
+        361.80795346617924,
+        20.004603645611567,
+        21.535765533484547,
+        16.955536916612616
+      ],
+      "numerical_variant": "model-corrected-v3",
+      "purpose": "Regression of a retained version-2 warmup failure"
+    },
+    {
+      "case_id": "p10-retained-warmup-v3",
+      "problem": 10,
+      "x": [
+        0.8859209026073808,
+        1.8818067041823763,
+        0.8943353230562675,
+        1.8229930979312436,
+        0.9565761817499494,
+        1.7063846592070089,
+        0.8754858057298476,
+        1.8366811407763763,
+        12.18583457996534,
+        16.038799827283114,
+        16.38418148085967,
+        25.262592968228823,
+        31.337011389211135
+      ],
+      "numerical_variant": "model-corrected-v3",
+      "purpose": "Regression of a retained version-2 warmup failure"
+    },
+    {
+      "case_id": "p06-midpoint-historical-hvac",
+      "problem": 6,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "numerical_variant": "historical-hvac",
+      "purpose": "Regression of historical convection and fan sizing at the midpoint"
+    },
+    {
+      "case_id": "p08-midpoint-historical-hvac",
+      "problem": 8,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "numerical_variant": "historical-hvac",
+      "purpose": "Regression of historical convection and fan sizing at the midpoint"
+    },
+    {
+      "case_id": "p05-midpoint-historical-hvac",
+      "problem": 5,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "numerical_variant": "historical-hvac",
+      "purpose": "Regression of historical convection and fan sizing at the midpoint"
+    }
+  ]
+}
