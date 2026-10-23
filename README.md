@@ -27,6 +27,9 @@ bound.
 | 10 | 13 | Yes |
 | 13 | 10 | Yes |
 
+See the [documentation guide](docs/README.md) for setup, problem definitions,
+simulation failures, and solver experiments.
+
 ## Set up locally
 
 Use Python 3.12. From the repository root on macOS or Linux:
@@ -48,9 +51,9 @@ Once set up, evaluations run offline. The default engine is EnergyPlus 26.2;
 the [engine guide](docs/engine-versions.md) explains how to use historical 8.5
 models and a compatible local engine.
 
-For the experiment pipeline, combined reports, native replay checks, and
-reviewed GitHub results, start with the [replication workflow](replication/README.md).
-The [Windows guide](docs/windows-continuation.md) covers installation and persistent jobs.
+The [Windows guide](docs/windows-continuation.md) provides PowerShell setup
+commands. For repeated solver comparisons and boxplots, use the
+[experiment guide](docs/optimization-replication.md).
 
 ## Solve with SciPy
 
@@ -101,11 +104,10 @@ The midpoint is a convenient start; the study's original starting vectors are
 unavailable. Use `problem.validate(your_start)` to check a different start.
 Inspecting problem metadata does not require EnergyPlus.
 
-Failed simulations raise errors and retain their diagnostics. Some designs
-within the bounds fail warmup convergence; the [warmup guide](docs/warmup-diagnostics.md)
-explains these cases and the separately validated P1 extended-warmup option.
-The [replication failure tests](docs/replication-failures.md) cover failures found
-during optimization and the separately validated numerical variants.
+Failed simulations raise errors and retain their diagnostics. Canonical models
+can fail convergence at designs within the bounds. The
+[simulation failure guide](docs/replication-failures.md) explains how to inspect
+errors and select a separately labelled corrected model.
 
 ## Solve with BOBYQA
 
@@ -144,7 +146,7 @@ its design-day conditions and needs no weather file.
 .venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
 .venv/bin/python tools/fetch_reference.py
 .venv/bin/python -m pytest -q -m 'not integration'
-.venv/bin/python -m ruff check src tests tools
+.venv/bin/python -m ruff check src tests tools replication
 ```
 
 GitHub Actions runs tests on Linux, Windows, and macOS. It also compares Python

@@ -2,7 +2,7 @@
 
 The opt-in `historical-hvac` variant restores selected EnergyPlus 8.5 HVAC
 algorithms under 26.2 for the Chicago office problems. It addresses the large
-fan-energy shift measured in the completed FOAM campaign. Canonical models,
+fan-energy shift measured in optimization experiments. Canonical models,
 existing numerical variants, engine installations and recorded runs are preserved.
 
 ## Diagnosis
@@ -84,12 +84,8 @@ Engine and supporting-library hashes were fixed throughout. The full Python suit
 with 26 skipped and 23 existing PDFO warnings. Tests verify unchanged legacy
 inputs, preserved non-EMS fields and unchanged experiment specifications.
 
-Private evidence is under `.validation-local/fan-diagnosis-20261023/`:
-`verification.json`, `matched-comparison.csv`, `fan-energy-before-after.png`,
-native inputs/outputs and the input-equivalence records.
-
 This is finite fixed-design validation. Other 26.2 physics and numerical
 differences remain, and P6's earlier dissertation discrepancy is separate.
-No optimizer trajectories have been rerun using this option. Existing boxplots
-still describe the original completed campaign. A comparison using this variant
-requires a new frozen manifest and separate outputs.
+A solver comparison using this variant requires a new frozen manifest and
+separate outputs. Its fixed-design audit alone does not establish agreement
+between optimized distributions or with the dissertation's boxplots.

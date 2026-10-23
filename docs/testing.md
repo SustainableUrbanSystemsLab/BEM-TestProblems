@@ -1,4 +1,24 @@
-# Tests and readable code
+# Testing
+
+## Run locally
+
+From the repository root, use the Python 3.12 environment created during
+[setup](../README.md#set-up-locally):
+
+```sh
+.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
+.venv/bin/python tools/fetch_reference.py
+.venv/bin/python -m pytest -q -m 'not integration'
+.venv/bin/python -m ruff check src tests tools replication
+```
+
+On Windows, replace `.venv/bin/python` with `.venv\Scripts\python.exe`.
+Install `.[replication-nlopt]` with the same dependency file to exercise the
+optional NLopt adapters. Tests for unavailable optional solvers are skipped.
+The native C#/EnergyPlus comparisons need additional tools; see the
+[reference checks](../reference/README.md).
+
+## What the tests check
 
 Tests protect behavior that a solver user or maintainer relies on. Expected
 values come from hand calculations, independent output fixtures, the documented
