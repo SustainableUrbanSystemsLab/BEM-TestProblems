@@ -27,11 +27,6 @@ bound.
 | 10 | 13 | Yes |
 | 13 | 10 | Yes |
 
-For the FOAM experiments, report and boxplot locations, and next-session
-instructions, read [the FOAM handoff](docs/foam-takeover.md). Detailed session
-notes are saved on FOAM at `.validation-local/SESSION-HANDOFF-20261023-RERUN.txt`
-and remain outside Git.
-
 ## Set up locally
 
 Use Python 3.12. From the repository root on macOS or Linux:
