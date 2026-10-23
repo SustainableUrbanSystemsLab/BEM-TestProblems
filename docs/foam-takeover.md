@@ -1,11 +1,13 @@
 # FOAM replication: next-session handoff
 
-Updated **22 October 2026**. Work in `R:\BEM-TestProblems` on
+Updated **23 October 2026**. Work in `R:\BEM-TestProblems` on
 `codex/windows-continuation`.
 
 Read the detailed local note first:
-**`.validation-local/SESSION-HANDOFF-20261022.txt`**. Its adjacent JSON records
-completion and the process check at handoff. These private notes stay on FOAM.
+**`.validation-local/SESSION-HANDOFF-20261023.txt`** for the latest fan diagnosis.
+The preserved **`.validation-local/SESSION-HANDOFF-20261022.txt`** and adjacent
+JSON record campaign completion and the earlier process check. These private
+notes stay on FOAM.
 
 ## Current state
 
@@ -15,8 +17,16 @@ using 118 workers. The last simulation finished on 22 October at 05:13 Eastern;
 the automatic final review finished at 05:15. No EnergyPlus or project background
 Python jobs were active at handoff, so logout will not interrupt an experiment.
 
-The user's next requested step is to **look at the completed replication**.
-Open the reports and plots before taking further action. There is nothing to
+The user's latest request was to **address the P6/P8 modern fan-energy shift**.
+The new opt-in `historical-hvac` option is implemented and validated: see
+[the compatibility record](historical-hvac.md). All 240 native checks passed;
+remaining fan differences are below 0.057% for P6 and 0.647% for P8 across the
+80-design audit. No optimizer campaign has used this option. Existing boxplots
+still show the original version-2 results. Private evidence and the before/after
+PNG are under `.validation-local/fan-diagnosis-20261023/`.
+
+To **look at the completed replication**, open the reports and plots before
+taking further action. There is nothing to
 resume after login. Old recovery instructions describe historical running state;
 some controller text still says `interrupted`, while `review/run-completion.json`
 correctly records `finished-with-failures` and all 2,400 attempts are terminal.
@@ -59,6 +69,9 @@ rounded dissertation best values. P4 differs by -4.19% and P6 by +1.13%; materia
 model/numerical departures remain. Boxplot medians, quartiles and tails have not
 been established as matching, and excluded failures can bias distributions.
 The saved publication comparison is under `review/publication-comparison-20261022/`.
+Digitized median/quartile comparisons are in `review/visual-comparison-20261022/`.
+Original dissertation panels beside both engine results, including the all-ten
+PNG, are in `review/dissertation-side-by-side-20261022/`.
 Use EnergyPlus 8.5 for historical comparisons; 26.2 is a separate engine experiment.
 
 ## Constraints for future work
@@ -79,7 +92,7 @@ Use EnergyPlus 8.5 for historical comparisons; 26.2 is a separate engine experim
 
 Suggested prompt after signing in:
 
-> Read `docs/foam-takeover.md` and `.validation-local/SESSION-HANDOFF-20261022.txt`.
+> Read `docs/foam-takeover.md` and `.validation-local/SESSION-HANDOFF-20261023.txt`.
 > I want to review the completed replication and boxplots first. Show me the
 > results and explain what matches Waibel's paper/dissertation and what remains
 > unresolved. Do not automatically restart or launch a campaign.

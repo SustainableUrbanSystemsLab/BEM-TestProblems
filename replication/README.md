@@ -116,6 +116,13 @@ See the [correction record](../docs/replication-failures.md#labelled-model-corre
 for measured objective changes and native validation. Keep its checkpoints and
 boxplots separate from canonical results.
 
+For a separate P6/P8 experiment, `--numerical-variant historical-hvac` restores
+selected 8.5 convection and fan-sizing algorithms under 26.2. All 240 native
+checks passed; smaller objective differences remain. See the
+[compatibility record](../docs/historical-hvac.md). This option supports only
+P6/P8 and does not replace the other problems' correction profiles. It requires
+a fresh manifest and separate results; the completed campaign is preserved.
+
 ## Extended-budget experiment
 
 [extended-budget.json](extended-budget.json) defines a separate PDFO BOBYQA

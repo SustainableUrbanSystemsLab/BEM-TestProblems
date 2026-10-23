@@ -11,6 +11,7 @@ from tempfile import TemporaryDirectory
 from types import MappingProxyType
 from typing import Mapping, Sequence
 
+from .historical_hvac import HISTORICAL_HVAC_PROBLEMS, historical_hvac_provenance
 from .model_controls import (
     CORRECTED_PROBLEM_IDS,
     corrected_provenance,
@@ -58,7 +59,8 @@ class Problem:
                      or (self.id in REFINED_PROBLEM_IDS and self.numerical_variant == "convergence-refined")
                      or (self.id in REPAIRED_PROBLEM_IDS and self.numerical_variant == "convergence-repaired")
                      or (self.id in CORRECTED_PROBLEM_IDS and self.numerical_variant in
-                         ("model-corrected", "model-corrected-v2", "model-corrected-v3")))
+                         ("model-corrected", "model-corrected-v2", "model-corrected-v3"))
+                     or (self.id in HISTORICAL_HVAC_PROBLEMS and self.numerical_variant == "historical-hvac"))
         if self.numerical_variant is not None and not supported:
             raise ValueError("Unsupported numerical variant for this problem")
         object.__setattr__(self, "constants", MappingProxyType(dict(self.constants)))
@@ -90,7 +92,9 @@ class Problem:
             "source_references": self.source_references,
             "definition": self.definition,
         }
-        if self.numerical_variant == "model-corrected-v3":
+        if self.numerical_variant == "historical-hvac":
+            provenance["numerical_variant"] = historical_hvac_provenance(self.id)
+        elif self.numerical_variant == "model-corrected-v3":
             provenance["numerical_variant"] = corrected_v3_provenance(self.id)
         elif self.numerical_variant == "model-corrected-v2":
             provenance["numerical_variant"] = corrected_v2_provenance(self.id)
@@ -343,6 +347,10 @@ _CORRECTED_V3_PROBLEMS = {
     number: replace(_PROBLEMS[number], definition="model-variant", numerical_variant="model-corrected-v3")
     for number in CORRECTED_PROBLEM_IDS
 }
+_HISTORICAL_HVAC_PROBLEMS = {
+    number: replace(_PROBLEMS[number], definition="model-variant", numerical_variant="historical-hvac")
+    for number in HISTORICAL_HVAC_PROBLEMS
+}
 
 
 def get_problem(problem_id, *, numerical_variant=None) -> Problem:
@@ -372,6 +380,8 @@ def get_problem(problem_id, *, numerical_variant=None) -> Problem:
         return _CORRECTED_V2_PROBLEMS[problem_id]
     if numerical_variant == "model-corrected-v3" and problem_id in _CORRECTED_V3_PROBLEMS:
         return _CORRECTED_V3_PROBLEMS[problem_id]
+    if numerical_variant == "historical-hvac" and problem_id in _HISTORICAL_HVAC_PROBLEMS:
+        return _HISTORICAL_HVAC_PROBLEMS[problem_id]
     raise ValueError("Unsupported numerical variant for this problem")
 
 

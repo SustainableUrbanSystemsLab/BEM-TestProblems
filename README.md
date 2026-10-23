@@ -9,7 +9,7 @@ and the earlier studies listed in the [references](docs/references.md).
 
 For the completed FOAM experiment, report and boxplot locations, and next-session
 instructions, read [the FOAM handoff](docs/foam-takeover.md). Detailed session
-notes are saved on FOAM at `.validation-local/SESSION-HANDOFF-20261022.txt`
+notes are saved on FOAM at `.validation-local/SESSION-HANDOFF-20261023.txt`
 and remain outside Git.
 
 ## Set up locally

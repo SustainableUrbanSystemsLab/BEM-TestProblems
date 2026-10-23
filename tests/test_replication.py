@@ -105,7 +105,7 @@ def local_setup(tmp_path, monkeypatch):
 
 
 @pytest.mark.parametrize("variant", ["convergence-refined", "convergence-repaired", "model-corrected",
-                                     "model-corrected-v2", "model-corrected-v3"])
+                                     "model-corrected-v2", "model-corrected-v3", "historical-hvac"])
 def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, variant):
     configuration, _ = local_setup
     configuration.update(problems=[1, 2, 3, 4, 5, 6, 8, 9, 10, 13], budget=None, repetitions=20)
@@ -116,6 +116,8 @@ def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, varia
     assert repaired["runs"] == canonical["runs"]
     assert repaired["diagnostics_policy"] == "strict"
     affected = (1, 4, 5, 6, 10) if variant == "convergence-refined" else (1, 3, 4, 5, 6, 9, 10)
+    if variant == "historical-hvac":
+        affected = (6, 8)
     for number, definition in repaired["problem_definitions"].items():
         assert definition.get("numerical_variant") == (variant if int(number) in affected else None)
     with pytest.raises(ValueError, match="one numerical variant"):
