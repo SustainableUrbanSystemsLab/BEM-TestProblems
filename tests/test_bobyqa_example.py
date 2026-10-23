@@ -50,3 +50,23 @@ def test_batch_keeps_results_and_continues_after_simulation_error(tmp_path, monk
             assert record["objective"] == pytest.approx(0, abs=1e-12)
             assert record["parameters"] == pytest.approx(record["starting_point"])
             assert 0 < record["evaluations"] <= record["max_evaluations"]
+
+
+def test_p13_initial_steps_are_comparable_fractions_of_each_bound_width(tmp_path, monkeypatch):
+    pytest.importorskip("pdfo")
+    from examples import solve_all_bobyqa as example
+
+    problem = example.get_problem(13)
+    points = []
+
+    def objective(x):
+        points.append(tuple(x))
+        return sum((value - middle) ** 2 for value, middle in zip(x, problem.midpoint))
+
+    monkeypatch.setattr(example, "make_objective", lambda *args, **kwargs: objective)
+    result = example.solve_problem(13, tmp_path / "P13")
+    assert result["outcome"] == "completed"
+    initial_points = points[:2 * problem.dimension + 1]
+    for index, (lower, upper) in enumerate(problem.bounds):
+        largest_step = max(abs(x[index] - problem.midpoint[index]) for x in initial_points)
+        assert largest_step / (upper - lower) == pytest.approx(0.25)
