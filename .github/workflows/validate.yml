@@ -42,7 +42,8 @@ jobs:
         run: |
           python -m venv .venv
           "$VENV_PY" -m pip install -c constraints/replication-py312.txt -e '.[dev,optimize,replication]'
-          "$VENV_PY" tools/fetch_reference.py
+      - name: Fetch checksum-pinned reference inputs
+        run: '"$VENV_PY" tools/fetch_reference.py'
       - name: Install optional NLopt adapters for analytic tests
         if: runner.os == 'Linux' || runner.os == 'Windows'
         run: '"$VENV_PY" -m pip install -c constraints/replication-py312.txt -e ".[replication-nlopt]"'
@@ -56,13 +57,17 @@ jobs:
           "$VENV_PY" -m coverage run -m pytest -m 'not integration' -q --junitxml=.validation-local/unit.xml
       - name: Report coverage for all Python modules and tools
         id: coverage_report
-        if: always() && !cancelled() && (steps.unit_tests.outcome == 'success' || steps.unit_tests.outcome == 'failure')
+        if: >-
+          always() && !cancelled() &&
+          (steps.unit_tests.outcome == 'success' || steps.unit_tests.outcome == 'failure')
         run: |
           "$VENV_PY" -m coverage json --fail-under=0 -o .validation-local/reports/pytest-coverage.json
           "$VENV_PY" tools/check_coverage.py .validation-local/reports/pytest-coverage.json
           "$VENV_PY" -m coverage report
       - name: Retain coverage report
-        if: always() && !cancelled() && (steps.coverage_report.outcome == 'success' || steps.coverage_report.outcome == 'failure')
+        if: >-
+          always() && !cancelled() &&
+          (steps.coverage_report.outcome == 'success' || steps.coverage_report.outcome == 'failure')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pytest-coverage-${{ matrix.os }}
@@ -146,7 +151,9 @@ jobs:
           --output .validation-local/reports/warmup-100-regression.json
           --baseline reference/baselines/8.5.0-warmup-100-canonical.json
       - name: Reproduce actual failed searches and verify strict numerical repairs
-        if: always() && !cancelled() && matrix.weather_kind == 'canonical' && (steps.original_compare.outcome == 'success' || steps.original_compare.outcome == 'failure')
+        if: >-
+          always() && !cancelled() && matrix.weather_kind == 'canonical' &&
+          (steps.original_compare.outcome == 'success' || steps.original_compare.outcome == 'failure')
         run: >-
           .venv/Scripts/python.exe tools/validate_replication_failures.py
           --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus.exe --version $ENERGYPLUS_VERSION
@@ -156,8 +163,23 @@ jobs:
           --baseline reference/baselines/8.5.0-replication-failures.json
           --oracle .tools/reference-bin/oracle/Oracle.exe
           --proxy .tools/reference-bin/proxy/EngineProxy.exe
+      - name: Check corrected warmup and historical HVAC models
+        if: >-
+          always() && !cancelled() && matrix.weather_kind == 'canonical' &&
+          (steps.original_compare.outcome == 'success' || steps.original_compare.outcome == 'failure')
+        run: >-
+          .venv/Scripts/python.exe tools/validate_cases.py
+          --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus.exe --version $ENERGYPLUS_VERSION
+          --weather-dir .validation-local/weather --weather-kind canonical
+          --cases reference/corrected-model-cases.json
+          --baseline reference/baselines/8.5.0-corrected-models.json
+          --work-dir .validation-local/corrected-models
+          --output .validation-local/reports/corrected-models.json
+          --rtol 1e-4 --atol 1e-7
       - name: Retain numerical comparison report
-        if: always() && !cancelled() && (steps.original_compare.outcome == 'success' || steps.original_compare.outcome == 'failure')
+        if: >-
+          always() && !cancelled() &&
+          (steps.original_compare.outcome == 'success' || steps.original_compare.outcome == 'failure')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: original-csharp-${{ matrix.weather_kind }}
@@ -165,6 +187,7 @@ jobs:
             .validation-local/reports/original-csharp.json
             .validation-local/reports/warmup-100-regression.json
             .validation-local/reports/replication-failures.json
+            .validation-local/reports/corrected-models.json
           include-hidden-files: true
           if-no-files-found: error
 
@@ -191,11 +214,12 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
-      - name: Install local environment and pinned EnergyPlus
+      - name: Create project-local environment
         run: |
           python -m venv .venv
           .venv/bin/python -m pip install -c constraints/replication-py312.txt -e '.[dev]'
-          .venv/bin/python tools/install_energyplus.py
+      - name: Install pinned EnergyPlus 26.2
+        run: .venv/bin/python tools/install_energyplus.py
       - name: Fetch checksum-verified canonical weather temporarily
         if: matrix.weather_kind == 'canonical'
         run: .venv/bin/python tools/fetch_weather.py --directory .validation-local/weather
@@ -213,7 +237,9 @@ jobs:
           --output .validation-local/reports/modern-regression.json
           --baseline ${{ matrix.baseline }}
       - name: Check exact repeatability of five midpoint cases
-        if: always() && (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
+        if: >-
+          always() && !cancelled() &&
+          (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
         run: >-
           .venv/bin/python tools/validate_cases.py
           --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus --version $ENERGYPLUS_VERSION
@@ -225,7 +251,9 @@ jobs:
           --case-id p01-midpoint --case-id p04-midpoint --case-id p06-midpoint
           --case-id p09-midpoint --case-id p13-midpoint --rtol 0 --atol 0
       - name: Reproduce actual failed searches and verify strict numerical repairs
-        if: always() && !cancelled() && matrix.weather_kind == 'canonical' && (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
+        if: >-
+          always() && !cancelled() && matrix.weather_kind == 'canonical' &&
+          (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
         run: >-
           .venv/bin/python tools/validate_replication_failures.py
           --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus --version $ENERGYPLUS_VERSION
@@ -233,8 +261,23 @@ jobs:
           --work-dir .validation-local/replication-failures
           --output .validation-local/reports/replication-failures.json
           --baseline reference/baselines/26.2.0-replication-failures.json
+      - name: Check corrected warmup and historical HVAC models
+        if: >-
+          always() && !cancelled() && matrix.weather_kind == 'canonical' &&
+          (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
+        run: >-
+          .venv/bin/python tools/validate_cases.py
+          --engine .tools/energyplus/$ENERGYPLUS_VERSION/energyplus --version $ENERGYPLUS_VERSION
+          --weather-dir .validation-local/weather --weather-kind canonical
+          --cases reference/corrected-model-cases.json
+          --baseline reference/baselines/26.2.0-corrected-models.json
+          --work-dir .validation-local/corrected-models
+          --output .validation-local/reports/corrected-models.json
+          --rtol 1e-4 --atol 1e-7
       - name: Retain numerical regression report
-        if: always() && !cancelled() && (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
+        if: >-
+          always() && !cancelled() &&
+          (steps.modern_compare.outcome == 'success' || steps.modern_compare.outcome == 'failure')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: modern-${{ matrix.weather_kind }}
@@ -242,5 +285,6 @@ jobs:
             .validation-local/reports/modern-regression.json
             .validation-local/reports/modern-repeatability.json
             .validation-local/reports/replication-failures.json
+            .validation-local/reports/corrected-models.json
           include-hidden-files: true
           if-no-files-found: error

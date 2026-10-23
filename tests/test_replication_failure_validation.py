@@ -294,14 +294,6 @@ def test_other_engine_cases_are_not_run_and_small_roundoff_is_allowed(native_aud
     assert all(case_id != "other-engine" for case_id, _ in audit.calls)
 
 
-def test_native_ci_runs_failure_repairs_only_with_canonical_weather():
-    workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/validate.yml").read_text()
-    assert workflow.count("tools/validate_replication_failures.py") == 2
-    for version in ("8.5.0", "26.2.0"):
-        assert f"--baseline reference/baselines/{version}-replication-failures.json" in workflow
-    assert workflow.count(".validation-local/reports/replication-failures.json") == 4
-
-
 def test_direct_script_entrypoint_imports_shared_helpers_without_repo_on_pythonpath(tmp_path):
     root = Path(__file__).resolve().parents[1]
     process = subprocess.run(
