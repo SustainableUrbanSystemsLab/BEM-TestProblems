@@ -145,22 +145,9 @@ For solvers that exploit objective structure, see the
 .venv/bin/python -m ruff check src tests tools replication
 ```
 
-GitHub Actions runs tests on Linux, Windows, and macOS. It also compares Python
-with the original C# implementation using EnergyPlus 8.5 and checks EnergyPlus
-26.2 against measured references, using the benchmark weather. See the
-[testing guide](docs/testing.md) and [reference checks](reference/README.md).
-
-Agreement with the original code and agreement with published results are
-checked separately. Some published-result discrepancies remain unresolved;
-the [validation record](docs/validation.md) and
-[published-design comparison](docs/published-solutions.md) explain the evidence
-and its limits.
-
-For repeated optimization runs and Figure 8/9-style boxplots, follow the
-[experiment guide](docs/optimization-replication.md). It records seeds, starts,
-budgets, engine versions, and failures, and distinguishes partial runs from
-completed experiments. The [model transition guide](docs/model-transition.md)
-documents the EnergyPlus upgrade.
+CI covers Linux, Windows, macOS, and both EnergyPlus versions. See
+[testing](docs/testing.md) for check details and [validation](docs/validation.md)
+for numerical evidence and remaining discrepancies.
 
 ## Acknowledgments
 
