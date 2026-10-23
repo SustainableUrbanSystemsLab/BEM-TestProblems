@@ -48,7 +48,8 @@ def audit(tmp_path, monkeypatch):
     modes, calls, extracted = {}, [], []
 
     class Problem:
-        def __init__(self, identifier):
+        def __init__(self, identifier, *, numerical_variant=None):
+            assert numerical_variant is None
             self.id = identifier
             self.design_day = identifier == 13
             self.family = "school" if self.design_day else "simple"

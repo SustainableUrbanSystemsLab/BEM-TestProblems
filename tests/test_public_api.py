@@ -6,6 +6,27 @@ import bem_testproblems as bem
 from bem_testproblems.energyplus import EnergyPlusRunner
 from bem_testproblems.evaluation import make_objective
 from bem_testproblems.optimize import solve, solve_bobyqa
+from bem_testproblems.problems import get_problem, list_problems
+
+
+@pytest.mark.parametrize(("number", "variant"), [
+    (1, "model-corrected-v3"), (2, None), (3, "model-corrected-v3"),
+    (4, "model-corrected-v3"), (5, "model-corrected-v3"), (6, "historical-hvac"),
+    (8, "historical-hvac"), (9, "model-corrected-v3"), (10, "model-corrected-v3"), (13, None),
+])
+def test_defaults_use_replication_profiles_and_canonical_selection_is_explicit(number, variant):
+    problem = bem.get_problem(number)
+    assert problem is get_problem(number, numerical_variant="replication")
+    assert problem is get_problem(f"P{number}")
+    assert problem is get_problem(number, numerical_variant=variant)
+    assert problem.numerical_variant == variant
+    assert problem in list_problems()
+    canonical = bem.get_problem(number, numerical_variant="canonical")
+    assert canonical is get_problem(number, numerical_variant=None)
+    assert canonical in list_problems(numerical_variant="canonical")
+    assert "numerical_variant" not in canonical.provenance
+    if variant:
+        assert problem.provenance["numerical_variant"]["name"] == variant
 
 
 def test_documented_lazy_exports_are_the_public_implementations():

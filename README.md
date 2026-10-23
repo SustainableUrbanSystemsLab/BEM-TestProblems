@@ -68,6 +68,15 @@ After setup, start the virtual environment's Python console with `.venv/bin/pyth
 on macOS/Linux or `.venv\Scripts\python.exe` on Windows. Paste the entire example
 below to run an optimization.
 
+`get_problem(number)` defaults to the labelled profiles used for replication:
+historical HVAC compatibility for P6/P8, corrected v3 for P1/P3/P4/P5/P9/P10,
+and canonical models for P2/P13. Changing the number below to 6 or 8 therefore
+selects the HVAC compatibility profile automatically. These corrections support
+comparisons with the paper; exact published results are not guaranteed.
+Use `get_problem(number, numerical_variant="canonical")` for an uncorrected
+model. The [model guide](docs/replication-failures.md#choose-a-model) describes
+the changes and validation limits.
+
 This complete example uses problem 13, which needs no weather file, and
 [SciPy's Powell method](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-powell.html),
 which supports box bounds and needs only objective evaluations:
@@ -112,10 +121,10 @@ The midpoint is a convenient start; the study's original starting vectors are
 unavailable. Use `problem.validate(your_start)` to check a different start.
 Inspecting problem metadata does not require EnergyPlus.
 
-Failed simulations raise errors and retain their diagnostics. Canonical models
-can fail convergence at designs within the bounds. The
-[simulation failure guide](docs/replication-failures.md) explains how to inspect
-errors and select a separately labelled corrected model.
+Failed simulations raise errors and retain their diagnostics. The corrected
+defaults passed the recorded audits, but convergence across the entire design
+domain is not established. The [simulation failure guide](docs/replication-failures.md)
+explains how to inspect errors and identify the selected model.
 
 ## Solve with BOBYQA
 
@@ -170,13 +179,10 @@ process and output directory. Final values are printed as problems finish.
 Each invocation saves designs, objective values, termination messages, timings,
 and native diagnostics in a fresh folder under `.validation-local/bobyqa/`.
 After each problem, it prints the final and best observed objective values with units.
-Failed problems are recorded and the script continues. The script defaults to
-the [historical HVAC compatibility](docs/historical-hvac.md) profile for P6/P8,
-`model-corrected-v3` for P1/P3/P4/P5/P9/P10, and canonical models for P2/P13.
+Failed problems are recorded and the script continues. The script uses the same
+default profiles as `get_problem(number)`.
 Add `--canonical-models` to use the original models for all ten problems.
 Corrected profiles change the models; each problem prints and records its profile.
-The historical HVAC profile addresses selected EnergyPlus 26.2 differences;
-it does not establish agreement with the published optimization results.
 Each problem uses a function-evaluation budget of `100 * (n + 1)`, where `n` is
 its number of optimization variables. The budget may be reached before convergence.
 

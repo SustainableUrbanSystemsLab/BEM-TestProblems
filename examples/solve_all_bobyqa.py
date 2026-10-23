@@ -30,8 +30,6 @@ from tempfile import mkdtemp
 from time import perf_counter
 
 from bem_testproblems import get_problem, make_objective
-from bem_testproblems.historical_hvac import HISTORICAL_HVAC_PROBLEMS
-from bem_testproblems.model_controls import CORRECTED_PROBLEM_IDS
 from bem_testproblems.problems import PROBLEM_IDS
 
 
@@ -39,13 +37,10 @@ def solve_problem(problem_id, directory, corrected_models=True):
     """Attempt one bounded search and save its result, including any error."""
     from pdfo import pdfo
 
-    variant = None
-    if corrected_models:
-        if problem_id in HISTORICAL_HVAC_PROBLEMS:
-            variant = "historical-hvac"
-        elif problem_id in CORRECTED_PROBLEM_IDS:
-            variant = "model-corrected-v3"
-    problem = get_problem(problem_id, numerical_variant=variant)
+    problem = get_problem(
+        problem_id, numerical_variant="replication" if corrected_models else "canonical"
+    )
+    variant = problem.numerical_variant
     print(f"P{problem_id}: starting; model={variant or 'canonical'}; EnergyPlus 26.2.0", flush=True)
     max_evaluations = 100 * (problem.dimension + 1)
     options = {"maxfev": max_evaluations, "scale": True, "honour_x0": True}

@@ -43,23 +43,24 @@ def test_model_identity_tracks_fixture_bytes_and_the_shared_p6_p8_template(tmp_p
         (data / name).write_bytes(b"{}\n")
     monkeypatch.setattr(replication, "legacy_template_path", lambda _: legacy)
     monkeypatch.setattr(replication, "files", lambda _: tmp_path)
-    old = replication._model_identity(get_problem(1), "8.5.0")
-    modern = replication._model_identity(get_problem(1), "26.2.0")
+    old = replication._model_identity(get_problem(1, numerical_variant=None), "8.5.0")
+    modern = replication._model_identity(get_problem(1, numerical_variant=None), "26.2.0")
     assert old == {"format": "IDF", "template_sha256": hashlib.sha256(b"Version,8.5;\n").hexdigest()}
     digest = hashlib.sha256(b"{}\n").hexdigest()
     assert modern == {"format": "epJSON", "template_sha256": digest, "bindings_sha256": digest}
     (data / "problem_1.epJSON").write_bytes(b"{}\n\n")
-    changed = replication._model_identity(get_problem(1), "26.2.0")
+    changed = replication._model_identity(get_problem(1, numerical_variant=None), "26.2.0")
     assert changed["template_sha256"] == hashlib.sha256(b"{}\n\n").hexdigest()
     assert changed["template_sha256"] != modern["template_sha256"]
     assert changed["bindings_sha256"] == modern["bindings_sha256"]
-    assert replication._model_identity(get_problem(6), "26.2.0") == replication._model_identity(
-        get_problem(8), "26.2.0")
+    assert replication._model_identity(
+        get_problem(6, numerical_variant=None), "26.2.0"
+    ) == replication._model_identity(get_problem(8, numerical_variant=None), "26.2.0")
 
 
 @pytest.mark.parametrize("version", ["8.5.0", "26.2.0"])
 def test_p1_variant_model_identity_names_the_adjustment_even_for_modern_noop(version):
-    canonical = replication._model_identity(get_problem(1), version)
+    canonical = replication._model_identity(get_problem(1, numerical_variant=None), version)
     variant = replication._model_identity(get_problem(1, numerical_variant="warmup-100"), version)
     assert "numerical_variant" not in canonical
     assert variant.pop("numerical_variant") == get_problem(

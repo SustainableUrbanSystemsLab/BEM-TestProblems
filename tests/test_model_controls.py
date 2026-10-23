@@ -11,7 +11,7 @@ from tests.test_models import idf_objects
 @pytest.mark.parametrize("version", ["8.5.0", "26.2.0"])
 @pytest.mark.parametrize("design_kind", ["midpoint", "lower", "upper"])
 def test_p4_corrected_model_changes_only_convection_sizing_and_warmup(version, design_kind, tmp_path):
-    canonical = get_problem(4)
+    canonical = get_problem(4, numerical_variant=None)
     corrected = get_problem(4, numerical_variant="model-corrected")
     design = {"midpoint": canonical.midpoint, "lower": tuple(b[0] for b in canonical.bounds),
               "upper": tuple(b[1] for b in canonical.bounds)}[design_kind]
@@ -59,13 +59,13 @@ def test_corrected_provenance_cannot_mutate_the_recipe():
     corrected = get_problem(4, numerical_variant="model-corrected")
     corrected.provenance["numerical_variant"]["controls"][1]["value"] = "Simple"
     assert corrected.provenance["numerical_variant"]["controls"][1]["value"] == "TARP"
-    assert "numerical_variant" not in get_problem(4).provenance
+    assert "numerical_variant" not in get_problem(4, numerical_variant=None).provenance
 
 
 @pytest.mark.parametrize("version", ["8.5.0", "26.2.0"])
 @pytest.mark.parametrize("design_kind", ["midpoint", "lower", "upper"])
 def test_p10_keeps_annual_controls_and_adds_only_labelled_warmup_conditioning(version, design_kind, tmp_path):
-    numerical = get_problem(10)
+    numerical = get_problem(10, numerical_variant=None)
     corrected = get_problem(10, numerical_variant="model-corrected")
     design = {"midpoint": numerical.midpoint, "lower": tuple(b[0] for b in numerical.bounds),
               "upper": tuple(b[1] for b in numerical.bounds)}[design_kind]

@@ -29,7 +29,7 @@ def find_object(objects, kind, name):
 
 @pytest.mark.parametrize("number", PROBLEM_IDS)
 def test_all_original_templates_render_without_placeholders(number, tmp_path):
-    problem = get_problem(number)
+    problem = get_problem(number, numerical_variant=None)
     path = problem.render_legacy(problem.midpoint, tmp_path / f"p{number}.idf")
     raw = path.read_bytes()
     assert not re.search(rb"%[A-Za-z0-9_]+%", raw)
@@ -39,7 +39,7 @@ def test_all_original_templates_render_without_placeholders(number, tmp_path):
 
 
 def test_simple_geometry_material_and_orientation_follow_physical_inputs(tmp_path):
-    problem = get_problem(3)
+    problem = get_problem(3, numerical_variant=None)
     path = problem.render_legacy([45, 2.5, 4.5, 0.3], tmp_path / "simple.idf")
     objects = idf_objects(path)
     assert float(find_object(objects, "Building", "office zone")[2]) == 45
@@ -58,7 +58,7 @@ def test_simple_geometry_material_and_orientation_follow_physical_inputs(tmp_pat
 
 @pytest.mark.parametrize("design", [(0, 3, 3, 0.5), (90, 3, 3, 0.5), (-180, 0.1, 5.9, 0.8)])
 def test_p1_warmup_variant_changes_only_the_rendered_legacy_cap(design, tmp_path):
-    canonical = get_problem(1)
+    canonical = get_problem(1, numerical_variant=None)
     variant = get_problem(1, numerical_variant="warmup-100")
     original = legacy_template_path(canonical.template_filename)
     before = original.read_bytes()
@@ -99,7 +99,7 @@ def test_p1_warmup_variant_refuses_unexpected_legacy_building(tmp_path, monkeypa
 
 
 def test_modern_p1_variant_is_a_checked_byte_identical_noop(tmp_path, monkeypatch):
-    canonical = get_problem(1)
+    canonical = get_problem(1, numerical_variant=None)
     variant = get_problem(1, numerical_variant="warmup-100")
     for azimuth in (0, 90):
         design = (azimuth, 3, 3, 0.5)
@@ -118,7 +118,7 @@ def test_modern_p1_variant_is_a_checked_byte_identical_noop(tmp_path, monkeypatc
 
 
 def test_detailed_window_centering_overhang_margin_and_schedule(tmp_path):
-    problem = get_problem(6)
+    problem = get_problem(6, numerical_variant=None)
     design = list(problem.midpoint)
     design[0], design[4], design[10], design[11], design[12] = 4, 0.75, 24, 21, 16
     path = problem.render_legacy(design, tmp_path / "detailed.idf")
@@ -137,7 +137,7 @@ def test_detailed_window_centering_overhang_margin_and_schedule(tmp_path):
 
 
 def test_office_upper_floor_window_coordinates_and_humidity_coupling():
-    problem = get_problem(10)
+    problem = get_problem(10, numerical_variant=None)
     design = list(problem.midpoint)
     design[0], design[1], design[8] = 0.9, 2.0, 16.0
     values = legacy_token_values(problem, design)
@@ -149,7 +149,7 @@ def test_office_upper_floor_window_coordinates_and_humidity_coupling():
 
 
 def test_school_changes_actual_insulation_and_all_nine_radiators(tmp_path):
-    problem = get_problem(13)
+    problem = get_problem(13, numerical_variant=None)
     design = list(problem.midpoint)
     path = problem.render_legacy(design, tmp_path / "school.idf")
     objects = idf_objects(path)
@@ -191,7 +191,7 @@ def test_every_original_physical_placeholder_occurrence_has_a_modern_binding():
     for number in PROBLEM_IDS:
         if number == 8:
             continue
-        problem = get_problem(number)
+        problem = get_problem(number, numerical_variant=None)
         raw = legacy_template_path(problem.template_filename).read_bytes()
         # Token syntax and comments are ASCII in both UTF-8 and CP1252 sources.
         objects = re.sub(rb"!.*", b"", raw)
@@ -208,14 +208,14 @@ def test_every_original_physical_placeholder_occurrence_has_a_modern_binding():
 
 @pytest.mark.parametrize("number", PROBLEM_IDS)
 def test_every_modern_model_has_target_version_and_all_bindings(number, tmp_path):
-    problem = get_problem(number)
+    problem = get_problem(number, numerical_variant=None)
     model = modern_model(problem, problem.midpoint, tmp_path)
     assert {str(value["version_identifier"]) for value in model["Version"].values()} == {"26.2"}
     assert not re.search(r"%[A-Za-z0-9_]+%", json.dumps(model))
 
 
 def test_modern_simple_physical_geometry_and_material_are_independent(tmp_path):
-    model = modern_model(get_problem(1), [45, 2.5, 4.5, 0.3], tmp_path)
+    model = modern_model(get_problem(1, numerical_variant=None), [45, 2.5, 4.5, 0.3], tmp_path)
     assert model["Building"]["office zone"]["north_axis"] == 45
     shade = model["WindowMaterial:Shade"]["ExtShade"]
     assert (
@@ -242,7 +242,7 @@ def test_modern_simple_physical_geometry_and_material_are_independent(tmp_path):
 
 def test_modern_detailed_all_faces_depths_setpoints_and_hvac_couplings(tmp_path):
     design = (2, 13, 17, 4, 0.2, 0.4, 0.8, 111, 333, 555, 20.5, 24, 17)
-    model = modern_model(get_problem(4), design, tmp_path)
+    model = modern_model(get_problem(4, numerical_variant=None), design, tmp_path)
     for side, width, center in (
         ("NORTH", 2, 3),
         ("WEST", 13, 12),
@@ -287,7 +287,7 @@ def test_modern_detailed_all_faces_depths_setpoints_and_hvac_couplings(tmp_path)
 @pytest.mark.parametrize("number", (9, 10))
 def test_modern_office_all_window_faces_floors_schedules_and_humidity(number, tmp_path):
     design = (0.85, 1.5, 0.95, 1.7, 1.1, 2.0, 1.2, 2.1, 17, 14, 20, 27, 34)
-    model = modern_model(get_problem(number), design, tmp_path)
+    model = modern_model(get_problem(number, numerical_variant=None), design, tmp_path)
     for name, window in model["FenestrationSurface:Detailed"].items():
         if "_Window" not in name:
             continue
@@ -321,7 +321,7 @@ def test_modern_office_all_window_faces_floors_schedules_and_humidity(number, tm
 
 def test_modern_school_all_nine_distinct_radiator_values(tmp_path):
     design = (0.12, 710, 83, 91, 127, 42, 131, 219, 540, 603)
-    model = modern_model(get_problem(13), design, tmp_path)
+    model = modern_model(get_problem(13, numerical_variant=None), design, tmp_path)
     assert model["Material"]["MineralWoolOut"]["thickness"] == 0.12
     names = (
         "ClassZone2Radiant",
@@ -341,7 +341,8 @@ def test_modern_school_all_nine_distinct_radiator_values(tmp_path):
 
 @pytest.mark.parametrize("number", (4, 5, 6))
 def test_modern_detailed_boundary_explicitly_preserves_historical_resolver_pair(number, tmp_path):
-    model = modern_model(get_problem(number), get_problem(number).midpoint, tmp_path)
+    problem = get_problem(number, numerical_variant=None)
+    model = modern_model(problem, problem.midpoint, tmp_path)
     surfaces = model["BuildingSurface:Detailed"]
     assert (
         surfaces["ZONE INTERIOR SURFACE NORTH"]["outside_boundary_condition_object"]
@@ -357,7 +358,7 @@ def test_legacy_reference_cache_is_explicit_and_never_fetched_implicitly(tmp_pat
     missing = tmp_path / "absent-reference-cache"
     monkeypatch.setenv("BEM_REFERENCE_DIR", str(missing))
     assert reference_root() == missing
-    problem = get_problem(1)
+    problem = get_problem(1, numerical_variant=None)
     with pytest.raises(FileNotFoundError, match="fetch_reference.py"):
         problem.render_legacy(problem.midpoint, tmp_path / "legacy.idf")
     assert not missing.exists()
@@ -366,7 +367,7 @@ def test_legacy_reference_cache_is_explicit_and_never_fetched_implicitly(tmp_pat
 
 
 def test_legacy_reference_bytes_are_checked_against_the_packaged_manifest(tmp_path, monkeypatch):
-    filename = get_problem(1).template_filename
+    filename = get_problem(1, numerical_variant=None).template_filename
     original = legacy_template_path(filename).read_bytes()
     cache = tmp_path / "reference-cache"
     (cache / "models").mkdir(parents=True)
@@ -384,7 +385,8 @@ def test_original_comment_encoding_is_preserved_in_portable_rendering(tmp_path, 
     text = "! Temperature in °C\r\nVersion,8.5;\r\n%azimuth%,%w_we_win%,%w_ea_win%,%tau%;\r\n"
     template.write_bytes(text.encode(encoding))
     monkeypatch.setattr(models, "legacy_template_path", lambda filename: template)
-    result = get_problem(1).render_legacy([45, 2.5, 4.5, 0.3], tmp_path / "output.idf")
+    problem = get_problem(1, numerical_variant=None)
+    result = problem.render_legacy([45, 2.5, 4.5, 0.3], tmp_path / "output.idf")
     assert result.read_bytes() == "! Temperature in °C\nVersion,8.5;\n45,2.5,4.5,0.3;\n".encode()
     assert template.read_bytes() == text.encode(encoding)
 
@@ -399,7 +401,8 @@ def test_legacy_token_mismatch_fails_without_writing_output(tmp_path, monkeypatc
     monkeypatch.setattr(models, "legacy_template_path", lambda filename: template)
     output = tmp_path / "output.idf"
     with pytest.raises(ValueError, match="Template/token mismatch"):
-        get_problem(1).render_legacy(get_problem(1).midpoint, output)
+        problem = get_problem(1, numerical_variant=None)
+        problem.render_legacy(problem.midpoint, output)
     assert not output.exists()
 
 
@@ -418,12 +421,13 @@ def test_incomplete_modern_binding_manifest_fails_without_writing_output(tmp_pat
     monkeypatch.setattr(models, "_data_resource", resource)
     output = tmp_path / "output.epJSON"
     with pytest.raises(ValueError, match="Modern binding coverage differs"):
-        get_problem(1).render_modern(get_problem(1).midpoint, output)
+        problem = get_problem(1, numerical_variant=None)
+        problem.render_modern(problem.midpoint, output)
     assert not output.exists()
 
 
 def test_modern_rendering_is_deterministic_and_keeps_packaged_model_immutable(tmp_path):
-    problem = get_problem(1)
+    problem = get_problem(1, numerical_variant=None)
     resource = models._data_resource("modern", "problem_1.epJSON")
     original = resource.read_bytes()
     first = problem.render_modern([45, 2.5, 4.5, 0.3], tmp_path / "one.epJSON")

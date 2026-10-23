@@ -25,6 +25,19 @@ class FakeRunner:
         pytest.fail("Binding an objective must not launch an EnergyPlus simulation")
 
 
+@pytest.mark.parametrize("number", [6, 8])
+def test_number_selects_historical_hvac_and_explicit_problem_keeps_its_model(number, tmp_path):
+    weather = tmp_path / "weather.epw"
+    weather.write_text("Explicit weather fixture")
+    runner = FakeRunner()
+    default = make_objective(number, runner=runner, weather=weather)
+    assert default.func.__self__ is get_problem(number, numerical_variant="historical-hvac")
+    canonical = get_problem(number, numerical_variant="canonical")
+    explicit = make_objective(canonical, runner=runner, weather=weather)
+    assert explicit.func.__self__ is canonical
+    assert runner.calls == []
+
+
 @pytest.mark.parametrize("selection", [1, "p1", get_problem(1)])
 def test_plain_scalar_callable_forwards_physical_vectors_and_explicit_weather(
     selection, tmp_path, monkeypatch

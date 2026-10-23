@@ -96,7 +96,9 @@ def make_objective(
     """Return ``objective(x)`` with its local runner and weather already bound.
 
     Obtain dimension, physical bounds and any chosen initial vector from
-    ``get_problem``. This factory performs no simulation, download, installation
+    ``get_problem``. A problem number selects the same replication profile as
+    ``get_problem(number)``; an explicit Problem preserves its selected model.
+    This factory performs no simulation, download, installation
     or PATH search. It checks required files and, when constructing a runner,
     probes its executable version once. Evaluation retains the runner's strict
     failure policy and exact-input cache.

@@ -38,7 +38,7 @@ def test_fixture_covers_every_distinct_audited_failure_without_machine_paths():
 
 @pytest.mark.parametrize("case", CASES, ids=CASE_IDS)
 def test_failed_design_still_has_exact_canonical_input_and_weather_identity(case, tmp_path):
-    problem = get_problem(case["problem"])
+    problem = get_problem(case["problem"], numerical_variant=None)
     assert len(case["x"]) == problem.dimension
     problem.validate(case["x"])
     for previous in case["preceding_observations"]:

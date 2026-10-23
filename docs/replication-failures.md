@@ -26,22 +26,25 @@ from completed-run boxplots. Other scheduled searches can continue.
 
 ## Choose a model
 
-`get_problem(number)` always selects the canonical definition. Alternatives are
-explicit and remain distinct benchmarks:
+`get_problem(number)` selects the validated replication profile for that problem.
+The selected profile is recorded in `problem.numerical_variant` and
+`problem.provenance`; the canonical model remains available explicitly.
 
 | Selection | Problems | Purpose |
 | --- | --- | --- |
-| Default | All ten | Preserve the canonical model for the selected engine |
+| Default (`replication`) | All ten | Historical HVAC for P6/P8, corrected v3 for P1/P3/P4/P5/P9/P10, canonical for P2/P13 |
+| `canonical` or explicit `None` | All ten | Preserve the uncorrected model for the selected engine |
 | `warmup-100` | 1 | Increase the historical warmup allowance without changing convergence thresholds |
 | `model-corrected-v3` | 1, 3, 4, 5, 6, 9, 10 | Use the validated correction profile, including sizing and warmup controls |
 | `historical-hvac` | 6, 8 | Restore selected historical convection and fan-sizing behavior in 26.2 |
 
-For example, select the corrected P4 model before constructing the objective:
+For example, the default P8 model includes historical HVAC compatibility:
 
 ```python
 from bem_testproblems import get_problem, make_objective
 
-problem = get_problem(4, numerical_variant="model-corrected-v3")
+problem = get_problem(8)
+print(problem.numerical_variant)  # historical-hvac
 objective = make_objective(problem)
 value = objective(problem.midpoint)
 print(value, problem.objective_unit)
@@ -49,6 +52,9 @@ print(value, problem.objective_unit)
 
 Use the same variant for the entire experiment and a new result directory.
 Changing a running campaign's model would change the function being optimized.
+Existing manifests and validation fixtures retain their explicit model selections;
+the API default does not override them. These profiles support publication
+comparisons without establishing exact historical equivalence or global optima.
 The historical profiles `convergence-refined`, `convergence-repaired`,
 `model-corrected`, and `model-corrected-v2` remain available to replay older
 experiments. Their exact recipes are recorded in

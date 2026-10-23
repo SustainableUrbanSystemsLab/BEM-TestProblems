@@ -410,7 +410,7 @@ def test_committed_native_repair_baselines_match_all_recorded_cases_and_actual_r
     weather = {row["cache_path"]: row["sha256"] for row in json.loads(
         files("bem_testproblems").joinpath("data/weather-assets.json").read_bytes())["files"]}
     for case in cases:
-        original = get_problem(case["problem"])
+        original = get_problem(case["problem"], numerical_variant=None)
         repaired = get_problem(case["problem"], numerical_variant=validation.VARIANT)
         render = "render_legacy" if version == "8.5.0" else "render_modern"
         suffix = ".idf" if version == "8.5.0" else ".epJSON"

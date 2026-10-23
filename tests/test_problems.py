@@ -37,7 +37,7 @@ def test_published_continuous_problem_inventory_and_climates():
 def test_p1_numerical_variant_is_frozen_separate_and_keeps_the_objective_definition():
     from bem_testproblems import get_problem as public_lookup
 
-    canonical = get_problem(1)
+    canonical = get_problem(1, numerical_variant=None)
     variant = public_lookup("p1", numerical_variant="warmup-100")
     assert variant is get_problem(1, numerical_variant="warmup-100")
     assert canonical is get_problem(1, numerical_variant=None)
