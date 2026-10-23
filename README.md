@@ -39,21 +39,35 @@ simulation failures, and solver experiments.
 
 ## Set up locally
 
-Use Python 3.12. From the repository root on macOS or Linux:
+Use Python 3.12 and activate the project's virtual environment before installing
+dependencies or running examples. From the repository root on macOS or Linux:
 
 ```sh
 python3.12 -m venv .venv
-.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[optimize]'
-.venv/bin/python tools/install_energyplus.py
-.venv/bin/python tools/fetch_weather.py
+source .venv/bin/activate
+python -m pip install -c dependencies-py312.txt -e '.[optimize]'
+python tools/install_energyplus.py
+python tools/fetch_weather.py
 ```
 
-On Windows, create the environment with `py -3.12 -m venv .venv` and use
-`.venv\Scripts\python.exe` in place of `.venv/bin/python` in subsequent commands.
+On Windows, use PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -c dependencies-py312.txt -e '.[optimize]'
+python tools/install_energyplus.py
+python tools/fetch_weather.py
+```
+
+Activation makes `.venv` the default Python environment for the current terminal.
+Activate it again in each new terminal with `source .venv/bin/activate` on
+macOS/Linux or `.\.venv\Scripts\Activate.ps1` in PowerShell. Use `python` for all
+commands below while the environment is active.
 
 These commands install EnergyPlus and download the benchmark weather into this
 project, with checksum verification. The `optimize` extra installs SciPy and
-PDFO BOBYQA for the examples below. These commands leave the system PATH unchanged.
+PDFO BOBYQA for the examples below.
 Once set up, evaluations run offline. The default engine is EnergyPlus 26.2;
 the [engine guide](docs/engine-versions.md) explains how to use historical 8.5
 models and a compatible local engine.
@@ -64,9 +78,8 @@ commands. For repeated solver comparisons and boxplots, use the
 
 ## Solve with SciPy
 
-After setup, start the virtual environment's Python console with `.venv/bin/python`
-on macOS/Linux or `.venv\Scripts\python.exe` on Windows. Paste the entire example
-below to run an optimization.
+After setup, run `python` in the activated terminal to start the Python console.
+Paste the entire example below to run an optimization.
 
 `get_problem(number)` defaults to the labelled profiles used for replication:
 historical HVAC compatibility for P5/P6/P8, corrected v3 for P1/P3/P4/P9/P10,
@@ -163,13 +176,13 @@ To solve all ten problems locally from their midpoints, run
 [solve_all_bobyqa.py](examples/solve_all_bobyqa.py) after setup:
 
 ```sh
-.venv/bin/python examples/solve_all_bobyqa.py
+python examples/solve_all_bobyqa.py
 ```
 
 To run problems in parallel, leaving two logical CPUs available:
 
 ```sh
-.venv/bin/python examples/solve_all_bobyqa.py --workers auto
+python examples/solve_all_bobyqa.py --workers auto
 ```
 
 Or choose a limit with `--workers 4`. The default is one worker; at most ten
@@ -195,10 +208,10 @@ For solvers that exploit objective structure, see the
 ## Tests and validation
 
 ```sh
-.venv/bin/python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
-.venv/bin/python tools/fetch_reference.py
-.venv/bin/python -m pytest -q -m 'not integration'
-.venv/bin/python -m ruff check src tests tools replication examples
+python -m pip install -c dependencies-py312.txt -e '.[dev,optimize,replication]'
+python tools/fetch_reference.py
+python -m pytest -q -m 'not integration'
+python -m ruff check src tests tools replication examples
 ```
 
 CI covers Linux, Windows, macOS, and both EnergyPlus versions. Native checks
