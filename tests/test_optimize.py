@@ -9,7 +9,7 @@ from types import SimpleNamespace
 import pytest
 
 import bem_testproblems.optimize as optimize
-from bem_testproblems import get_problem
+from bem_testproblems import get_problem, solve_bobyqa
 from bem_testproblems.optimize import solve
 
 
@@ -30,7 +30,8 @@ class Quadratic:
 def test_bobyqa_solves_and_honors_budget():
     pytest.importorskip("pdfo")
     problem = Quadratic()
-    result = solve(problem, runner=None, max_evaluations=30)
+    result = solve_bobyqa(problem, runner=None, max_evaluations=30)
+    assert result.method == "bobyqa"
     assert result.fun < 1e-12
     assert 0 < problem.calls <= 30
     assert result.nfev == problem.calls
