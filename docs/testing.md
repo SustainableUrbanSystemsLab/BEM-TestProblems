@@ -20,6 +20,19 @@ The native C#/EnergyPlus comparisons need additional tools; see the
 
 ## What the tests check
 
+For a native BOBYQA search on every problem from its midpoint, run:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_bobyqa_integration.py
+```
+
+This parametrized integration test uses PDFO directly with EnergyPlus 26.2,
+canonical weather, and up to 100 solver evaluations per problem. It requires
+the installed engine, weather, and `optimize` extra. It checks feasible, finite
+results no worse than the midpoint; the budget does not guarantee optimizer
+convergence. Simulation errors fail the case. The ordinary `not integration`
+selection excludes these long native runs.
+
 Tests protect behavior that a solver user or maintainer relies on. Expected
 values come from hand calculations, independent output fixtures, the documented
 paper definitions, or measured native reference runs. Calculating an expected
