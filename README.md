@@ -171,10 +171,12 @@ Each invocation saves designs, objective values, termination messages, timings,
 and native diagnostics in a fresh folder under `.validation-local/bobyqa/`.
 After each problem, it prints the final and best observed objective values with units.
 Failed problems are recorded and the script continues. The script defaults to
-labelled `model-corrected-v3` variants for P1/P3/P4/P5/P6/P9/P10; P2/P8/P13 retain
-their canonical models. Add `--canonical-models` to use the original models for
-all ten problems. Corrected profiles change the models; each result records the
-profile used.
+the [historical HVAC compatibility](docs/historical-hvac.md) profile for P6/P8,
+`model-corrected-v3` for P1/P3/P4/P5/P9/P10, and canonical models for P2/P13.
+Add `--canonical-models` to use the original models for all ten problems.
+Corrected profiles change the models; each problem prints and records its profile.
+The historical HVAC profile addresses selected EnergyPlus 26.2 differences;
+it does not establish agreement with the published optimization results.
 Each problem uses a function-evaluation budget of `100 * (n + 1)`, where `n` is
 its number of optimization variables. The budget may be reached before convergence.
 
