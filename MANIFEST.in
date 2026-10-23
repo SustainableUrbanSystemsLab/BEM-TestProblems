@@ -6,6 +6,7 @@ recursive-include reference *.cs *.csproj LICENSE *.md *.txt *.json
 recursive-include src/bem_testproblems/data *.epJSON *.json *.txt
 recursive-include tests *.py *.json
 recursive-include tools *.py
+recursive-include examples *.py
 include replication/pipeline.py replication/continuation.json replication/README.md replication/results/README.md
 include replication/extended_budget.py replication/extended-budget.json
 prune reference/Oracle/bin

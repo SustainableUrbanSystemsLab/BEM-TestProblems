@@ -11,6 +11,7 @@ box bounds. You can use any solver that accepts a scalar objective and bounds.
 | Install and run on Windows | [Windows setup](windows-continuation.md) |
 | Choose EnergyPlus 8.5 or 26.2 | [Engine versions](engine-versions.md) |
 | Find variable meanings, units, and bounds | [Parameters and objectives](parameters.md) |
+| Solve all ten problems locally with BOBYQA | [Python example](../examples/solve_all_bobyqa.py) |
 | Use simulator outputs, objective terms, or derivatives | [Objective structure](objective-structure.md) |
 | Diagnose a failed evaluation or choose a corrected model | [Simulation failures](replication-failures.md) |
 | Understand warmup convergence | [Warmup diagnostics](warmup-diagnostics.md) |

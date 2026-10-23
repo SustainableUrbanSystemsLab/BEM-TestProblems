@@ -48,7 +48,7 @@ jobs:
         if: runner.os == 'Linux' || runner.os == 'Windows'
         run: '"$VENV_PY" -m pip install -c dependencies-py312.txt -e ".[replication-nlopt]"'
       - name: Lint
-        run: '"$VENV_PY" -m ruff check src tests tools replication'
+        run: '"$VENV_PY" -m ruff check src tests tools replication examples'
       - name: Verify published replication packages
         run: '"$VENV_PY" replication/pipeline.py check-export'
       - name: Test behavior and measure branch coverage
