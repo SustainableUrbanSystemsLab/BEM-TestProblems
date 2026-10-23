@@ -8,6 +8,13 @@ import textwrap
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def isolate_github_reporting(monkeypatch):
+    """Keep deliberate test failures out of the real Actions job report."""
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+
+
 @pytest.fixture
 def fake_engine(tmp_path):
     script = tmp_path / "fake_engine.py"
