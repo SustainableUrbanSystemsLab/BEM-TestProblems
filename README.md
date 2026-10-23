@@ -8,6 +8,8 @@ benchmark in
 [Waibel, Wortmann, Evins, and Carmeliet (2019)](https://doi.org/10.1016/j.enbuild.2019.01.048)
 and Christoph Waibel's ETH Zurich dissertation,
 [*Simulation-Based Optimization of Buildings and Multi-Energy Systems* (2018)](https://doi.org/10.3929/ethz-b-000307674).
+The original C# and Grasshopper implementation is available in
+[Christoph Waibel's BEOBenchmark repository](https://github.com/christophwaibel/BEOBenchmark).
 Problem numbers follow the original study. The [references](docs/references.md)
 also credit the earlier studies on which these benchmarks build.
 

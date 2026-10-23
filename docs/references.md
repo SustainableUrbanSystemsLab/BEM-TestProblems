@@ -20,6 +20,10 @@ the machine-readable `references` section of [CITATION.cff](../CITATION.cff).
   T., Evins, R., and Carmeliet, J. (2019). Building energy optimization: An
   extensive benchmark of global search algorithms. *Energy and Buildings*, 187,
   218–240. [doi:10.1016/j.enbuild.2019.01.048](https://doi.org/10.1016/j.enbuild.2019.01.048).
+- **Original benchmark software:** Waibel, C. *BEOBenchmark: Building Energy
+  Optimization problem test bed*. Original C# and Grasshopper implementation.
+  [GitHub repository](https://github.com/christophwaibel/BEOBenchmark).
+  BibTeX key: `WaibelBEOBenchmark`.
 - **Rounded best-found designs:** Waibel, C. (2018). *Simulation-Based Optimization
   of Buildings and Multi-Energy Systems*. Doctoral thesis, ETH Zurich,
   dissertation No. 25399, Appendix C, Tables C.1–C.2, p. 298.

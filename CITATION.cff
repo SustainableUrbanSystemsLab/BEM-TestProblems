@@ -28,6 +28,12 @@ preferred-citation:
   year: 2019
   doi: "10.1016/j.enbuild.2019.01.048"
 references:
+  - type: software
+    title: "BEOBenchmark: Building Energy Optimization problem test bed"
+    authors:
+      - family-names: Waibel
+        given-names: Christoph
+    repository-code: "https://github.com/christophwaibel/BEOBenchmark"
   - type: thesis
     title: "Simulation-Based Optimization of Buildings and Multi-Energy Systems"
     authors:
