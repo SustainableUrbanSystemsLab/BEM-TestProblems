@@ -1,7 +1,8 @@
 # BEM-TestProblems
 
-Building energy optimization problems for testing your solver in Python. Choose
-a problem, get its objective and bounds, and let the package handle EnergyPlus.
+This repository provides Python implementations of ten building energy
+optimization benchmark problems, including objective functions, variable bounds,
+EnergyPlus simulation interfaces, and tools for comparing optimization solvers.
 
 This package implements ten problems with continuous variables selected from the
 benchmark in
