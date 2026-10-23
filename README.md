@@ -69,8 +69,8 @@ on macOS/Linux or `.venv\Scripts\python.exe` on Windows. Paste the entire exampl
 below to run an optimization.
 
 `get_problem(number)` defaults to the labelled profiles used for replication:
-historical HVAC compatibility for P6/P8, corrected v3 for P1/P3/P4/P5/P9/P10,
-and canonical models for P2/P13. Changing the number below to 6 or 8 therefore
+historical HVAC compatibility for P5/P6/P8, corrected v3 for P1/P3/P4/P9/P10,
+and canonical models for P2/P13. Changing the number below to 5, 6 or 8 therefore
 selects the HVAC compatibility profile automatically. These corrections support
 comparisons with the paper; exact published results are not guaranteed.
 Use `get_problem(number, numerical_variant="canonical")` for an uncorrected

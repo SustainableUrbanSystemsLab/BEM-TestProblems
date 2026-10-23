@@ -142,8 +142,8 @@ def render_legacy(problem: "Problem", x: Sequence[float], path) -> Path:
         text = correct_v2_legacy(text, problem.id)
     elif problem.numerical_variant == "model-corrected-v3":
         text = correct_v3_legacy(text, problem.id)
-    elif problem.numerical_variant == "historical-hvac" and problem.id == 6:
-        text = correct_v3_legacy(text, 6)
+    elif problem.numerical_variant == "historical-hvac" and problem.id in (5, 6):
+        text = correct_v3_legacy(text, problem.id)
     destination = Path(path).expanduser().resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(("\n".join(text.splitlines()) + "\n").encode("utf-8"))

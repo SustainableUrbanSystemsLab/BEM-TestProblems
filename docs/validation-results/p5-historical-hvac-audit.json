@@ -1,0 +1,239 @@
+{
+  "date": "2026-10-23",
+  "problem": 5,
+  "variant": "historical-hvac",
+  "audit_status": "partial",
+  "planned_fixed_designs": 42,
+  "planned_native_runs": 126,
+  "designs_with_completed_evaluations": 32,
+  "complete_three_way_designs": 31,
+  "strict_native_runs": 95,
+  "strict_failures": 0,
+  "unexecuted_native_runs": 31,
+  "additional_convection_only_native_runs": 3,
+  "optimization_rerun_included": false,
+  "original_campaign_modified": false,
+  "planned_selection": "Midpoint, lower/upper corners, interpreted rounded thesis design, retained warmup case, five seeded random designs and best/middle/worst saved outcomes of six solvers on both engines, deduplicated.",
+  "completed_selection": [
+    "midpoint",
+    "lower",
+    "upper",
+    "thesis-rounded",
+    "retained-warmup",
+    "random-0",
+    "random-1",
+    "random-2",
+    "random-3",
+    "random-4",
+    "p05-8.5.0-direct-r000.json",
+    "p05-8.5.0-crs2-r014.json",
+    "p05-8.5.0-crs2-r008.json",
+    "p05-8.5.0-crs2-r004.json",
+    "p05-8.5.0-sbplex-r018.json",
+    "p05-8.5.0-sbplex-r011.json",
+    "p05-8.5.0-sbplex-r017.json",
+    "p05-8.5.0-cma_es-r007.json",
+    "p05-8.5.0-cma_es-r017.json",
+    "p05-8.5.0-cma_es-r016.json",
+    "p05-8.5.0-bobyqa-r007.json",
+    "p05-8.5.0-bobyqa-r005.json",
+    "p05-8.5.0-bobyqa-r017.json",
+    "p05-8.5.0-pybobyqa-r007.json",
+    "p05-8.5.0-pybobyqa-r009.json",
+    "p05-8.5.0-pybobyqa-r019.json",
+    "p05-26.2.0-direct-r000.json",
+    "p05-26.2.0-crs2-r005.json",
+    "p05-26.2.0-crs2-r008.json",
+    "p05-26.2.0-crs2-r018.json",
+    "p05-26.2.0-sbplex-r007.json"
+  ],
+  "statistics_scope": "Only the 31 designs with all three completed comparisons",
+  "before_fan_difference_percent": {
+    "minimum": 12.589785277964438,
+    "maximum": 80.6599662449982,
+    "median_absolute": 14.412994088362318
+  },
+  "after_fan_difference_percent": {
+    "minimum": -0.7226338049680203,
+    "maximum": 0.17261473050687037,
+    "median_absolute": 0.0577561251013714
+  },
+  "after_objective_difference_percent": {
+    "minimum": -1.5867229593051757,
+    "maximum": 0.07155271859777823,
+    "median_absolute": 0.6360927896946977
+  },
+  "engine_identities": {
+    "8.5.0": {
+      "executable_sha256": "50115bd8bacc102bf793caa7bbb33f19508b8cbf28b7c20169e301c9b32d3d98",
+      "supporting_sha256": {
+        "Energy+.idd": "701e070690ae3cc7dbb213830e2495852a7a22055cd951307e686a4845041fd1",
+        "energyplusapi.dll": "7bf551f6f92aea0de18bce7adea952f0fbd36f9f0cbc8aaed2b7f24ef085ec86"
+      }
+    },
+    "26.2.0": {
+      "executable_sha256": "71278a62c9c3871922b3f7ee28a3c7c9f658caa995a934fccb92e8f8965a3977",
+      "supporting_sha256": {
+        "Energy+.idd": "c307d88afba83fba3603c04899b0ec063f7472879d80d5cfa75020202707d55f",
+        "Energy+.schema.epJSON": "28ba2e4267d79e69331c9988ec52f0211a86077629f0336c46b1cc9103e63c44",
+        "energyplusapi.dll": "d018859a87c38276ff1cfef49487b32cfa1db0a4aa2d6ec3e7949d1bcd448d83"
+      }
+    }
+  },
+  "input_equivalence": {
+    "unchanged_p6_p8_inputs": {
+      "p6-midpoint-8.5.0": true,
+      "p6-midpoint-26.2.0": true,
+      "p6-lower-8.5.0": true,
+      "p6-lower-26.2.0": true,
+      "p6-upper-8.5.0": true,
+      "p6-upper-26.2.0": true,
+      "p8-midpoint-8.5.0": true,
+      "p8-midpoint-26.2.0": true,
+      "p8-lower-8.5.0": true,
+      "p8-lower-26.2.0": true,
+      "p8-upper-8.5.0": true,
+      "p8-upper-26.2.0": true
+    },
+    "p5_legacy_byte_equal_designs": 42,
+    "p5_non_ems_fields_equal_designs": 42,
+    "production_inputs_matching_native_audit": 63
+  },
+  "source_scope": "Production source; every available corresponding native-tested input matched exactly",
+  "source_hash_normalization": "CRLF to LF",
+  "source_sha256": {
+    "historical_hvac.py": "8f88ad063c95b2d6d6c1da6413115c8ebe8a38b5db2efe5eeb02074338b957e4",
+    "models.py": "9af4322d949f262f180d49e07c45060be30c170583d360de2f0198ebec8d5dce",
+    "model_controls.py": "41afc96076c22b80a5aac15e23cb12a380e439bfbdc292ed96250073a59b2e36",
+    "problems.py": "4fc51137e9f8152b8802a7ba56e2c291a626260f59d020d0e58a535b4e4a7851",
+    "losses.py": "80daa3c93328d220771892f69fa29739196602de0d9534922e97c58fe9e141f9"
+  },
+  "evidence_sha256": {
+    "cases.json": "20a6f8630d9b2171bc919ec4bab37dd7b2d30be4d5220e3a1dc056a487f61614",
+    "partial-audit-summary.json": "eee16e84503664085b33adc845c66d1d402dc751562d6e1fc6ec4f5a595c606c",
+    "pilot-summary.json": "24c4e65803c5a4403ca58bd773745d70b617e33397d6efbd804b3e553ca7a0be",
+    "partial-production-equivalence.json": "287ad863d9511825e742f040f5f3397af02f2190682a07699a01a3c2fb3dc903"
+  },
+  "limitations": [
+    "The planned audit is incomplete; unexecuted checks are not passes.",
+    "Fixed-design checks do not establish optimizer or boxplot agreement.",
+    "Selected historical equations are restored, not the entire 8.5 simulator.",
+    "The v3 initialization and sizing base remains an explicitly corrected model.",
+    "Cross-engine differences below are observations, not acceptance tolerances.",
+    "The thesis design uses the documented interpretation of rounded slider coordinates."
+  ],
+  "midpoint": {
+    "26.2.0-historical-hvac": {
+      "objective": 213.48355863764385,
+      "terms": {
+        "heating": 0.0684067080280539,
+        "cooling": 61.71124399224152,
+        "lighting": 83.2467864224308,
+        "fans": 68.45712151494347
+      }
+    },
+    "26.2.0-v3": {
+      "objective": 248.5436158431248,
+      "terms": {
+        "heating": 0.012615663096422333,
+        "cooling": 60.670776867809316,
+        "lighting": 83.2467864224308,
+        "fans": 104.61343688978825
+      }
+    },
+    "8.5.0-v3": {
+      "objective": 213.64463081939394,
+      "terms": {
+        "heating": 0.0635199898215819,
+        "cooling": 61.55634159464009,
+        "lighting": 83.6238557464069,
+        "fans": 68.40091348852538
+      }
+    },
+    "26.2.0-historical-convection-only": {
+      "objective": 213.48358706258549,
+      "terms": {
+        "heating": 0.06840671700795915,
+        "cooling": 61.71126021682061,
+        "lighting": 83.2467864224308,
+        "fans": 68.4571337063261
+      }
+    }
+  },
+  "thesis-rounded": {
+    "26.2.0-historical-hvac": {
+      "objective": 174.657466196949,
+      "terms": {
+        "heating": 0.16325146839088092,
+        "cooling": 52.73371564852173,
+        "lighting": 76.05463821127354,
+        "fans": 45.70586086876284
+      }
+    },
+    "26.2.0-v3": {
+      "objective": 182.93765348801702,
+      "terms": {
+        "heating": 0.13472126657431147,
+        "cooling": 54.46560992122462,
+        "lighting": 76.05463821127354,
+        "fans": 52.28268408894455
+      }
+    },
+    "8.5.0-v3": {
+      "objective": 175.72891247405684,
+      "terms": {
+        "heating": 0.15556054499285446,
+        "cooling": 53.38157831410273,
+        "lighting": 76.4676786590029,
+        "fans": 45.72409495595834
+      }
+    },
+    "26.2.0-historical-convection-only": {
+      "objective": 177.47777166547445,
+      "terms": {
+        "heating": 0.1565245993576062,
+        "cooling": 53.945745935425066,
+        "lighting": 76.05463821127354,
+        "fans": 47.32086291941823
+      }
+    }
+  },
+  "retained-warmup": {
+    "26.2.0-historical-hvac": {
+      "objective": 382.6893783166072,
+      "terms": {
+        "heating": 0.00292823554511172,
+        "cooling": 72.96935923139402,
+        "lighting": 75.15876582254121,
+        "fans": 234.55832502712687
+      }
+    },
+    "26.2.0-v3": {
+      "objective": 602.4205822423155,
+      "terms": {
+        "heating": 0.005163274986469897,
+        "cooling": 104.16712929370615,
+        "lighting": 75.15876582254121,
+        "fans": 423.0895238510817
+      }
+    },
+    "8.5.0-v3": {
+      "objective": 382.41574945152854,
+      "terms": {
+        "heating": 0.002930701846715655,
+        "cooling": 72.67660938112431,
+        "lighting": 75.54513060054879,
+        "fans": 234.1910787680087
+      }
+    },
+    "26.2.0-historical-convection-only": {
+      "objective": 382.6893783166072,
+      "terms": {
+        "heating": 0.00292823554511172,
+        "cooling": 72.96935923139402,
+        "lighting": 75.15876582254121,
+        "fans": 234.55832502712687
+      }
+    }
+  }
+}

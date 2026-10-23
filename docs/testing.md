@@ -82,9 +82,9 @@ They compare accepted objectives/components using the documented tolerances and 
 known strict warmup rejections separately. These checks complement the offline
 pytest suite; changing a reference requires reviewing the measured evidence.
 
-Canonical-weather CI also runs five explicitly corrected designs per engine:
+Canonical-weather CI also runs six explicitly corrected designs per engine:
 one retained warmup failure each for P4/P5/P10 using `model-corrected-v3`, and
-P6/P8 midpoints using `historical-hvac`. Their references come from the audited
+P5/P6/P8 midpoints using `historical-hvac`. Their references come from the audited
 native runs, with exact input hashes and retained-output revalidation. These
 checks compare objectives and components at the existing corrected-model
 cross-platform tolerances (`rtol=1e-4`, `atol=1e-7`), with strict Severe/Fatal

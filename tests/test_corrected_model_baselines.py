@@ -18,7 +18,7 @@ def test_corrected_baselines_match_audited_case_definitions_and_rendered_inputs(
     baseline = json.loads((ROOT / f"reference/baselines/{version}-corrected-models.json").read_text())
     assert {(c["problem"], c["numerical_variant"]) for c in cases} == {
         (4, "model-corrected-v3"), (5, "model-corrected-v3"), (10, "model-corrected-v3"),
-        (6, "historical-hvac"), (8, "historical-hvac"),
+        (5, "historical-hvac"), (6, "historical-hvac"), (8, "historical-hvac"),
     }
     assert baseline["engine_version"] == version
     assert baseline["diagnostics_policy"] == "strict"

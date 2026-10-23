@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Explicit 8.5 HVAC compatibility for the modern Chicago office models.
+"""Explicit 8.5 HVAC compatibility for the modern Houston and Chicago office models.
 
 The coefficients and sizing rule come from EnergyPlus 8.5, not fitted results.
 Other 26.2 physics and sizing behavior still apply; whole-engine parity is not
@@ -8,17 +8,17 @@ claimed. Canonical models and the completed campaign are unchanged.
 
 from .model_controls import WARMUP_CONVECTION, correct_v3_modern, corrected_v3_provenance
 
-HISTORICAL_HVAC_PROBLEMS = (6, 8)
+HISTORICAL_HVAC_PROBLEMS = (5, 6, 8)
 SOURCE = "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/"
 
 
 def historical_hvac_provenance(number):
     if number not in HISTORICAL_HVAC_PROBLEMS:
-        raise ValueError("Historical HVAC compatibility is available only for P6 and P8")
+        raise ValueError("Historical HVAC compatibility is available only for P5, P6 and P8")
     return {
         "name": "historical-hvac", "physical_model_changes": True,
-        "base_variant": "model-corrected-v3" if number == 6 else None,
-        "base_recipe": corrected_v3_provenance(6) if number == 6 else None,
+        "base_variant": "model-corrected-v3" if number in (5, 6) else None,
+        "base_recipe": corrected_v3_provenance(number) if number in (5, 6) else None,
         "8.5.0": "Base input bytes unchanged",
         "26.2.0": "8.5 ceiling-diffuser equations and fan sizing rule through EMS",
         "convection": {"floor": [3.873, 0.082, 0.98], "ceiling": [2.234, 4.099, 0.503],
@@ -40,15 +40,15 @@ def apply_historical_hvac(model, number):
             or model.get("SizingPeriod:WeatherFileDays")
             or model.get("SizingPeriod:WeatherFileConditionType") or model.get("ZoneGroup")
             or len(model.get("Fan:VariableVolume", {})) != 2):
-        raise ValueError("Historical HVAC requires the canonical Chicago sizing configuration")
+        raise ValueError("Historical HVAC requires the canonical detailed-office sizing configuration")
     if any(obj["algorithm"] != "CeilingDiffuser"
            for obj in model["SurfaceConvectionAlgorithm:Inside"].values()):
         raise ValueError("Historical HVAC requires the canonical CeilingDiffuser model")
     if any(kind.startswith("EnergyManagementSystem:") for kind in model):
         raise ValueError("Historical HVAC requires canonical inputs without existing EMS controls")
-    if number == 6:
-        correct_v3_modern(model, 6)
-    # The replacement program retains P6's weather-warmup initialization.
+    if number in (5, 6):
+        correct_v3_modern(model, number)
+    # The replacement program retains each problem's weather-warmup initialization.
     for kind in list(model):
         if kind.startswith("EnergyManagementSystem:"):
             del model[kind]
@@ -92,9 +92,10 @@ def apply_historical_hvac(model, number):
             "actuated_component_unique_name": name, "actuated_component_type": "Surface",
             "actuated_component_control_type": "Interior Surface Convection Heat Transfer Coefficient"}
         lines.append(f"SET {actuator} = Historical{category}{zones[zone]}")
-    if number == 6:
+    if number in (5, 6):
+        coefficient = 1 if number == 5 else WARMUP_CONVECTION
         lines += ["IF CurrentEnvironment > 2 && WarmupFlag == 1"]
-        lines += [f"SET {name} = {WARMUP_CONVECTION}" for name in actuators] + ["ENDIF"]
+        lines += [f"SET {name} = {coefficient}" for name in actuators] + ["ENDIF"]
     model["EnergyManagementSystem:Sensor"] = sensors
     model["EnergyManagementSystem:Actuator"] = actuators
     model["EnergyManagementSystem:Program"] = {

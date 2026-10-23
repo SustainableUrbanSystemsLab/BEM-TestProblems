@@ -105,6 +105,27 @@
       ],
       "numerical_variant": "historical-hvac",
       "purpose": "Regression of historical convection and fan sizing at the midpoint"
+    },
+    {
+      "case_id": "p05-midpoint-historical-hvac",
+      "problem": 5,
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "numerical_variant": "historical-hvac",
+      "purpose": "Regression of historical convection and fan sizing at the midpoint"
     }
   ]
 }

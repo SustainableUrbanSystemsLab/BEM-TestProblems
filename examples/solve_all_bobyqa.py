@@ -9,8 +9,8 @@ Run from the repository root after completing the README setup:
 
 Problems run sequentially by default. --workers auto uses CPU count minus two,
 with at least one worker and at most one worker per problem.
-Defaults: historical HVAC compatibility for P6/P8, corrected v3 models for
-P1/P3/P4/P5/P9/P10, and canonical models for P2/P13. Use --canonical-models
+Defaults: historical HVAC compatibility for P5/P6/P8, corrected v3 models for
+P1/P3/P4/P9/P10, and canonical models for P2/P13. Use --canonical-models
 to select the original benchmark models for every problem.
 The function-evaluation budget is 100 * (n + 1), where n is the dimension.
 Each invocation creates a fresh results directory. Simulation failures are
@@ -151,7 +151,7 @@ def main():
     )
     models.add_argument(
         "--corrected-models", dest="corrected_models", action="store_true",
-        help="Use corrected models, including historical HVAC for P6/P8 (default)",
+        help="Use corrected models, including historical HVAC for P5/P6/P8 (default)",
     )
     parser.set_defaults(corrected_models=True)
     args = parser.parse_args()
@@ -159,7 +159,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     directory = Path(mkdtemp(prefix="run-", dir=args.output)).resolve()
     print(f"Results: {directory}", flush=True)
-    profile = ("historical-hvac for P6/P8; corrected v3 for P1/P3/P4/P5/P9/P10; "
+    profile = ("historical-hvac for P5/P6/P8; corrected v3 for P1/P3/P4/P9/P10; "
                "canonical for P2/P13") if args.corrected_models else "canonical"
     print(f"Models: {profile}", flush=True)
     print(f"Workers: {workers} for {len(PROBLEM_IDS)} problems", flush=True)

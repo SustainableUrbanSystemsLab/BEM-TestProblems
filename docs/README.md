@@ -28,7 +28,7 @@ versions; optimization bounds are defined separately by each problem.
 | Continue an existing campaign, replay winners, or export results | [Replication workflow](../replication/README.md) |
 | Understand what has been validated | [Validation evidence](validation.md) |
 | Compare with the dissertation's rounded designs | [Published solutions](published-solutions.md) |
-| Compare P6/P8 across engine generations | [Historical HVAC compatibility](historical-hvac.md) |
+| Compare P5/P6/P8 across engine generations | [Historical HVAC compatibility](historical-hvac.md) |
 
 `get_problem()` returns the original benchmark models by default. The BOBYQA
 example defaults to labelled corrected models. These require separate experiment

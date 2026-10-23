@@ -14,6 +14,7 @@ The [validation guide](../validation.md) explains what each comparison establish
 | [original-csharp-ci.json](original-csharp-ci.json) | Recorded original-C# comparison jobs and their actual tolerances |
 | [model-corrected-v3-audit.json](model-corrected-v3-audit.json) | Aggregate validation of the labelled warmup correction |
 | [historical-hvac-audit.json](historical-hvac-audit.json) | Matched P6/P8 designs comparing historical, modern, and compatibility models |
+| [p5-historical-hvac-audit.json](p5-historical-hvac-audit.json) | Partial P5 audit: 95 completed comparisons, causal checks and input preservation |
 
 The additional [native regression baselines](../../reference/baselines) and
 [failure fixtures](../../reference/replication-failure-cases.json) retain numeric

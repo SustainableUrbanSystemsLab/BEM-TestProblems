@@ -183,6 +183,23 @@ def modern_model(problem, design, tmp_path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def test_canonical_detailed_offices_share_physics_and_p8_fixes_two_controls(tmp_path):
+    problems = {n: get_problem(n, numerical_variant="canonical") for n in (4, 5, 6, 8)}
+    models = {n: modern_model(problems[n], problems[n].midpoint, tmp_path) for n in (4, 5, 6)}
+    # Climate inputs and P4's optional DXF drawing request do not define different buildings.
+    omitted = {"Site:Location", "SizingPeriod:DesignDay", "Output:Surfaces:Drawing"}
+    physics = [{k: v for k, v in model.items() if k not in omitted} for model in models.values()]
+    assert physics[0] == physics[1] == physics[2]
+    reduced = problems[8]
+    assert reduced.fixed_parameters == {
+        "summer_night_cooling_setpoint": 25.0, "cooling_supply_temperature": 12.0,
+    }
+    assert reduced.weather_filename == problems[6].weather_filename
+    assert modern_model(reduced, reduced.midpoint, tmp_path) == modern_model(
+        problems[6], reduced.expanded_vector(reduced.midpoint), tmp_path
+    )
+
+
 def test_every_original_physical_placeholder_occurrence_has_a_modern_binding():
     data = files("bem_testproblems").joinpath("data")
     manifest = json.loads(data.joinpath("modern", "parameter_bindings.json").read_bytes())
