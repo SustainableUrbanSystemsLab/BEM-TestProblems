@@ -159,9 +159,11 @@ To solve all ten problems locally from their midpoints, run
 
 Each invocation saves designs, objective values, termination messages, timings,
 and native diagnostics in a fresh folder under `.validation-local/bobyqa/`.
-Failed problems are recorded and the script continues. Canonical models are the
-default; add `--corrected-models` to select labelled `model-corrected-v3` variants
-for P1/P3/P4/P5/P6/P9/P10. These change the models and remain separate results.
+Failed problems are recorded and the script continues. The script defaults to
+labelled `model-corrected-v3` variants for P1/P3/P4/P5/P6/P9/P10; P2/P8/P13 retain
+their canonical models. Add `--canonical-models` to use the original models for
+all ten problems. Corrected profiles change the models; each result records the
+profile used.
 Each problem uses a function-evaluation budget of `100 * (n + 1)`, where `n` is
 its number of optimization variables. The budget may be reached before convergence.
 

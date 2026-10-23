@@ -3,8 +3,10 @@
 
 Run from the repository root after completing the README setup:
     python examples/solve_all_bobyqa.py
-    python examples/solve_all_bobyqa.py --corrected-models
+    python examples/solve_all_bobyqa.py --canonical-models
 
+Corrected v3 models are the default where available. Use --canonical-models
+to select the original benchmark models instead.
 The function-evaluation budget is 100 * (n + 1), where n is the dimension.
 Each invocation creates a fresh results directory. Simulation failures are
 recorded with their diagnostics; the remaining problems are still attempted.
@@ -26,7 +28,7 @@ from bem_testproblems.model_controls import CORRECTED_PROBLEM_IDS
 from bem_testproblems.problems import PROBLEM_IDS
 
 
-def solve_problem(problem_id, directory, corrected_models=False):
+def solve_problem(problem_id, directory, corrected_models=True):
     """Attempt one bounded search and save its result, including any error."""
     variant = None
     if corrected_models and problem_id in CORRECTED_PROBLEM_IDS:
@@ -92,14 +94,22 @@ def main():
         "--output", type=Path, default=Path(".validation-local/bobyqa"),
         help="Parent directory for a fresh run folder",
     )
-    parser.add_argument(
-        "--corrected-models", action="store_true",
-        help="Use labelled model-corrected-v3 variants where available",
+    models = parser.add_mutually_exclusive_group()
+    models.add_argument(
+        "--canonical-models", dest="corrected_models", action="store_false",
+        help="Use the original benchmark models",
     )
+    models.add_argument(
+        "--corrected-models", dest="corrected_models", action="store_true",
+        help="Use corrected v3 models where available (default)",
+    )
+    parser.set_defaults(corrected_models=True)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     directory = Path(mkdtemp(prefix="run-", dir=args.output)).resolve()
     print(f"Results: {directory}", flush=True)
+    profile = "corrected v3 where available" if args.corrected_models else "canonical"
+    print(f"Models: {profile}", flush=True)
     failures = 0
     for index, number in enumerate(PROBLEM_IDS, start=1):
         print(f"[{index}/{len(PROBLEM_IDS)}] P{number}: starting", flush=True)

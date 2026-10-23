@@ -30,8 +30,9 @@ versions; optimization bounds are defined separately by each problem.
 | Compare with the dissertation's rounded designs | [Published solutions](published-solutions.md) |
 | Compare P6/P8 across engine generations | [Historical HVAC compatibility](historical-hvac.md) |
 
-The default models preserve the benchmark definitions. Corrected models are
-explicit options and require separate experiment results. Agreement with the
+`get_problem()` returns the original benchmark models by default. The BOBYQA
+example defaults to labelled corrected models. These require separate experiment
+results. Agreement with the
 original C# caller, agreement between engines, and agreement with published
 boxplots are different checks.
 
