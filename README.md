@@ -159,6 +159,7 @@ To solve all ten problems locally from their midpoints, run
 
 Each invocation saves designs, objective values, termination messages, timings,
 and native diagnostics in a fresh folder under `.validation-local/bobyqa/`.
+After each problem, it prints the final and best observed objective values with units.
 Failed problems are recorded and the script continues. The script defaults to
 labelled `model-corrected-v3` variants for P1/P3/P4/P5/P6/P9/P10; P2/P8/P13 retain
 their canonical models. Add `--canonical-models` to use the original models for

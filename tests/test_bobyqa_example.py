@@ -11,7 +11,7 @@ from bem_testproblems.energyplus import EnergyPlusError
     (None, True), ("--canonical-models", False), ("--corrected-models", True),
 ])
 def test_batch_keeps_results_and_continues_after_simulation_error(
-        tmp_path, monkeypatch, model_flag, corrected):
+        tmp_path, monkeypatch, capsys, model_flag, corrected):
     pytest.importorskip("pdfo")
     from examples import solve_all_bobyqa as example
 
@@ -32,6 +32,9 @@ def test_batch_keeps_results_and_continues_after_simulation_error(
     previous.write_text("preserve me")
 
     assert example.main() == 1
+    output = capsys.readouterr().out
+    assert output.count("Final objective:") == 10
+    assert output.count("Best observed objective:") == 10
     assert previous.read_text() == "preserve me"
     directory, = [path for path in tmp_path.iterdir() if path.is_dir()]
     records = {}
@@ -52,6 +55,7 @@ def test_batch_keeps_results_and_continues_after_simulation_error(
         if number != 4:
             assert record["outcome"] == "completed"
             assert record["objective"] == pytest.approx(0, abs=1e-12)
+            assert record["best_objective"] == pytest.approx(0, abs=1e-12)
             assert record["parameters"] == pytest.approx(record["starting_point"])
             assert 0 < record["evaluations"] <= record["max_evaluations"]
 
@@ -70,6 +74,7 @@ def test_p13_initial_steps_are_comparable_fractions_of_each_bound_width(tmp_path
     monkeypatch.setattr(example, "make_objective", lambda *args, **kwargs: objective)
     result = example.solve_problem(13, tmp_path / "P13")
     assert result["outcome"] == "completed"
+    assert len(points) == result["evaluations"]  # Reporting must not reevaluate the objective.
     initial_points = points[:2 * problem.dimension + 1]
     for index, (lower, upper) in enumerate(problem.bounds):
         largest_step = max(abs(x[index] - problem.midpoint[index]) for x in initial_points)

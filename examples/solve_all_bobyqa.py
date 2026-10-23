@@ -51,6 +51,8 @@ def solve_problem(problem_id, directory, corrected_models=True):
         "bounds": problem.bounds,
         "starting_point": problem.midpoint,
         "objective_unit": problem.objective_unit,
+        "objective": None,
+        "best_objective": None,
     }
     started = perf_counter()
     try:
@@ -71,6 +73,7 @@ def solve_problem(problem_id, directory, corrected_models=True):
             outcome="completed",
             parameters=parameters,
             objective=float(result.fun),
+            best_objective=float(min(result.fun_history)),
             evaluations=int(result.nfev),
             converged=bool(result.success),
             solver_status=int(result.status),
@@ -120,6 +123,13 @@ def main():
             f"P{number}: {result['outcome']} in {result['elapsed_seconds']:.1f}s; {detail}",
             flush=True,
         )
+        for label, key in (
+            ("Final objective", "objective"),
+            ("Best observed objective", "best_objective"),
+        ):
+            value = result[key]
+            text = "unavailable" if value is None else f"{value:.12g} {result['objective_unit']}"
+            print(f"  {label}: {text}", flush=True)
     print(f"Finished: {len(PROBLEM_IDS) - failures} completed, {failures} failed. {directory}")
     return int(failures > 0)
 
