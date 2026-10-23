@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "license": "MIT",
+  "engine_version": "8.5.0",
+  "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+  "upstream_commit": "54736a6b899a488222ad3184f306c1f401daf4f9",
+  "platform": "Darwin-arm64",
+  "weather_kind": "canonical",
+  "comparison": "reviewed-strict-numerical-variant-baseline",
+  "diagnostics_policy": "strict",
+  "numerical_variant": {
+    "name": "warmup-100",
+    "object_type": "Building",
+    "object_name": "office zone",
+    "field": "maximum_number_of_warmup_days",
+    "canonical_by_engine": {
+      "8.5.0": 25,
+      "26.2.0": 100
+    },
+    "value": 100,
+    "other_fields": "unchanged, including convergence tolerances"
+  },
+  "rtol": 1e-06,
+  "atol": 1e-07,
+  "case_fixture": {
+    "path": "reference/warmup-100-cases.json",
+    "sha256": "e1e3319a555ba5bd98ca6133e6559861693c4df1adcc2214795fa10869cac1c7"
+  },
+  "provenance": {
+    "kind": "Independently generated numerical measurements; no thesis design table or original model/weather assets copied.",
+    "native_matrix_sha256": "9b80f17694bf2c89307e8b7eb048f18a5ce63360845c5bddf3e59e3cfd3ca80e",
+    "scope": "P1 Building warmup cap100. Historical cap25 parity baseline remains separate.",
+    "independent_best_source_run_id": "p01-8.5.0-cma_es-r008"
+  },
+  "cases": [
+    {
+      "case_id": "p01-midpoint-warmup100",
+      "problem": 1,
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "nominal physical midpoint",
+      "numerical_variant": "warmup-100",
+      "passed": true,
+      "objective": 153.18108166841446,
+      "components": {
+        "Q_h": 2.892227858083667,
+        "Q_c": 2367.644743189197,
+        "E_L": 3874.6490973975556
+      },
+      "terms": {
+        "heating": 0.06847130345842015,
+        "cooling": 32.02982607128243,
+        "lighting": 121.08278429367361
+      },
+      "input_sha256": "bef78ea4231c22e51bc4aa3e08ffdcf1f3e5fd07f7a696a4d18e17aad0ab9c75",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "actual_warmup_days": [
+        20
+      ],
+      "severe_count": 0,
+      "fatal_count": 0
+    },
+    {
+      "case_id": "p01-lower-warmup100",
+      "problem": 1,
+      "x": [
+        -180.0,
+        0.1,
+        0.1,
+        0.2
+      ],
+      "purpose": "representative family bounds",
+      "numerical_variant": "warmup-100",
+      "passed": true,
+      "objective": 237.04229079924937,
+      "components": {
+        "Q_h": 0.0,
+        "Q_c": 3450.5959704105835,
+        "E_L": 6091.588816220749
+      },
+      "terms": {
+        "heating": 0.0,
+        "cooling": 46.68014029235096,
+        "lighting": 190.36215050689842
+      },
+      "input_sha256": "b2ebef78595ab38ea115b1cd61d65835904452f4eff76ee39ec306f8fcd7830a",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "actual_warmup_days": [
+        23
+      ],
+      "severe_count": 0,
+      "fatal_count": 0
+    },
+    {
+      "case_id": "p01-upper-warmup100",
+      "problem": 1,
+      "x": [
+        180.0,
+        5.9,
+        5.9,
+        0.8
+      ],
+      "purpose": "representative family bounds",
+      "numerical_variant": "warmup-100",
+      "passed": true,
+      "objective": 148.3372514330389,
+      "components": {
+        "Q_h": 90.53436265436555,
+        "Q_c": 3427.7416521991668,
+        "E_L": 3194.334562374861
+      },
+      "terms": {
+        "heating": 2.14333244920373,
+        "cooling": 46.37096390962076,
+        "lighting": 99.8229550742144
+      },
+      "input_sha256": "4e37cc3a570c47371a660e319ee4edcde7003423329c6849cb807e178764c9b6",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "actual_warmup_days": [
+        23
+      ],
+      "severe_count": 0,
+      "fatal_count": 0
+    },
+    {
+      "case_id": "p01-orientation90-warmup100",
+      "problem": 1,
+      "x": [
+        90.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "purpose": "Paired orientation-90 trial with a recorded EnergyPlus8.5 warmup rejection; current26.2 passes.",
+      "numerical_variant": "warmup-100",
+      "passed": true,
+      "objective": 156.46031463966204,
+      "components": {
+        "Q_h": 0.008748366767084917,
+        "Q_c": 2289.305593202689,
+        "E_L": 4015.6820585797777
+      },
+      "terms": {
+        "heating": 0.00020711095566015427,
+        "cooling": 30.970043198088323,
+        "lighting": 125.49006433061805
+      },
+      "input_sha256": "d6790e461239e926a2533f6107ac1b5fcbe41e1132ade26cd969d2045bb46c06",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "actual_warmup_days": [
+        28
+      ],
+      "severe_count": 0,
+      "fatal_count": 0
+    },
+    {
+      "case_id": "p01-independent-best-warmup100",
+      "problem": 1,
+      "numerical_variant": "warmup-100",
+      "x": [
+        70.87841299355091,
+        5.89862468203601,
+        5.631944132369494,
+        0.28963715516397215
+      ],
+      "passed": true,
+      "objective": 132.90916239378797,
+      "components": {
+        "Q_h": 23.09045064584392,
+        "Q_c": 2256.2438256914497,
+        "E_L": 3258.8715020896666
+      },
+      "terms": {
+        "heating": 0.546648926274714,
+        "cooling": 30.522779027211172,
+        "lighting": 101.83973444030208
+      },
+      "input_sha256": "fa7dbba4e7143e1fd1638aa93625099be5379450abe8340006622b3f458de207",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "actual_warmup_days": [
+        17
+      ],
+      "severe_count": 0,
+      "fatal_count": 0
+    }
+  ]
+}

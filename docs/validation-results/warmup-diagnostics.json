@@ -1,0 +1,4540 @@
+{
+  "schema_version": 1,
+  "license": "MIT",
+  "recorded_on_utc": "2026-10-15",
+  "implementation_commit": "962b863506604dea1c517d08bd4b6c8c7919cead",
+  "scope": "All 26 recorded canonical validation cases plus the paired P1 orientation-90 trial. These are project measurements, not publication optimum references or complete-domain coverage. Scratch numerical variants are separate diagnostics and do not replace benchmark values.",
+  "matrix_sources": [
+    {
+      "path": "docs/validation-results/8.5.0-canonical-audit.json",
+      "sha256": "4185f65364293a17747f02ac189b58733e294209b9c18e5b59363f6c9034e7cf"
+    },
+    {
+      "path": "docs/validation-results/26.2.0-canonical-audit.json",
+      "sha256": "b616624a8bd25729331981f8fca9208b7437d631a0ca3578b77d8f8c62179783"
+    }
+  ],
+  "case_count": 27,
+  "engine_case_count": 54,
+  "accepted_engine_cases": 51,
+  "canonical_cases": [
+    {
+      "case_id": "p01-midpoint",
+      "problem": 1,
+      "description": "nominal physical midpoint",
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": true,
+        "objective": 153.18108166841446,
+        "input_sha256": "a33d9a1c845cca025107d73115c63ec84c7792431ce36b13304b01232d45e631"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 147.5659999247044,
+        "input_sha256": "9e13cdbc8074136d048c2cf08ced8aad33927957d19a0a102e4c62e74b9bdd98"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -5.61508174371005,
+        "absolute_difference": 5.61508174371005,
+        "percentage_change_against_8.5": -3.665649623668812
+      }
+    },
+    {
+      "case_id": "p02-midpoint",
+      "problem": 2,
+      "description": "nominal physical midpoint",
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "8.5.0": {
+        "passed": true,
+        "objective": 194.74595895142755,
+        "input_sha256": "ed596aa790f4419f54188d4f1d04912fb42d63ae19f0d55316f347edb0246ea4"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 186.87594278036502,
+        "input_sha256": "6221f96dc20af2da7d4322c1a5ecb04a5cc2bb814393bcd32ae1154bc442c5e2"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -7.870016171062531,
+        "absolute_difference": 7.870016171062531,
+        "percentage_change_against_8.5": -4.0411704630160905
+      }
+    },
+    {
+      "case_id": "p03-midpoint",
+      "problem": 3,
+      "description": "nominal physical midpoint",
+      "x": [
+        0.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "8.5.0": {
+        "passed": true,
+        "objective": 173.27474290208883,
+        "input_sha256": "8e52cf78854757a696620dd6c5761c27a0ae20cf231ef311a9ccf4dbb9521025"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 170.14388537158788,
+        "input_sha256": "b19c28729d9049e2d4901c7a574118988ad6af0412f5a9b8d7bbad4203d6d044"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -3.130857530500947,
+        "absolute_difference": 3.130857530500947,
+        "percentage_change_against_8.5": -1.8068747228037032
+      }
+    },
+    {
+      "case_id": "p04-midpoint",
+      "problem": 4,
+      "description": "nominal physical midpoint",
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": true,
+        "objective": 147.63863523578922,
+        "input_sha256": "bff5e099f6584529b0d2c7c2c28b7fccbf7fdf1c1f243cdc288cb0f0c0eac61b"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 172.68849670335467,
+        "input_sha256": "8075d1f91e7c7960a16ba1013b2053f971ccb0c2523906a988e4a05cc6a143b4"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 25.04986146756545,
+        "absolute_difference": 25.04986146756545,
+        "percentage_change_against_8.5": 16.9670096364404
+      }
+    },
+    {
+      "case_id": "p05-midpoint",
+      "problem": 5,
+      "description": "nominal physical midpoint",
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_TX_Houston-Intercontinental.722430_TMY2.epw",
+      "weather_sha256": "a185d53f1faea28d00efaae8b63dfdb7e5af6e59d7cfe5e72fbf420b859b8145",
+      "8.5.0": {
+        "passed": true,
+        "objective": 214.6093283200323,
+        "input_sha256": "bddc743a0b3f521de841b073829ec1b76091a7399372aa52ef2743cdb4a8bf58"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 241.74683046205237,
+        "input_sha256": "45b5eac6dde311e9271b5c71b888675619dfdab1673d46e8947161ffd876aced"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 27.137502142020082,
+        "absolute_difference": 27.137502142020082,
+        "percentage_change_against_8.5": 12.645071094743736
+      }
+    },
+    {
+      "case_id": "p06-midpoint",
+      "problem": 6,
+      "description": "nominal physical midpoint",
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5,
+        22.5,
+        15.0
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "8.5.0": {
+        "passed": true,
+        "objective": 179.57702533854365,
+        "input_sha256": "62a9abb3c05dec05027c26305f951690c28c91f4a3e5a8c5f977848ae8e5cc6c"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 201.96071376725243,
+        "input_sha256": "f564b6451bdec8df3bb9821da856b1142a004d98fce5a58a90b7b2c64edc62dc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 22.38368842870878,
+        "absolute_difference": 22.38368842870878,
+        "percentage_change_against_8.5": 12.464672686559108
+      }
+    },
+    {
+      "case_id": "p08-midpoint",
+      "problem": 8,
+      "description": "nominal physical midpoint",
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "8.5.0": {
+        "passed": true,
+        "objective": 173.93819111448886,
+        "input_sha256": "0eb4b49d67926209a65ad6339463134da357542ea114e62c4468cad8d3fa3815"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 190.62168177067485,
+        "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 16.683490656185995,
+        "absolute_difference": 16.683490656185995,
+        "percentage_change_against_8.5": 9.591620189498613
+      }
+    },
+    {
+      "case_id": "p09-midpoint",
+      "problem": 9,
+      "description": "nominal physical midpoint",
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 843.38,
+        "input_sha256": "75b761cb4d0ec7ad00660c76f4ef33176d1c2a7a37c149d0b288f7ef412d9f3a"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 840.87,
+        "input_sha256": "058b9df013c2e18e788a1c1d16c806d1c97f03b7439b24668c916ebb787c9717"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.509999999999991,
+        "absolute_difference": 2.509999999999991,
+        "percentage_change_against_8.5": -0.2976119898503629
+      }
+    },
+    {
+      "case_id": "p10-midpoint",
+      "problem": 10,
+      "description": "nominal physical midpoint",
+      "x": [
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1198.57,
+        "input_sha256": "18d206bc04432d6699e813102aa415ba007a7b2b6c9b466ee9ae63116c5eb0de"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1201.82,
+        "input_sha256": "fb0b0b21abee9bbc3025d5f475a8d8f06a0aab84ccc8f6168bcde96b278bb768"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 3.25,
+        "absolute_difference": 3.25,
+        "percentage_change_against_8.5": 0.27115646144989447
+      }
+    },
+    {
+      "case_id": "p13-midpoint",
+      "problem": 13,
+      "description": "nominal physical midpoint",
+      "x": [
+        0.175,
+        600.0,
+        90.0,
+        80.0,
+        120.0,
+        35.0,
+        130.0,
+        210.0,
+        570.0,
+        525.0
+      ],
+      "unit": "EUR",
+      "weather_file": "YUG_Belgrade_IWEC.epw",
+      "weather_sha256": "a1d29feac311cd9d3db4948ef9f8c4e71253410b93b392f43654ce111a04ac62",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1932.967349477319,
+        "input_sha256": "fdfb0e1c7268f235fc51356b71d6d4a8c7fa2823ac847e0b8c6d6826b6b6af5b"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1928.1966599775135,
+        "input_sha256": "bc306e7700ddb3a9ba025afcacbb7b4b03b225bc20cd8121dd2c9248b85c804d"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -4.770689499805485,
+        "absolute_difference": 4.770689499805485,
+        "percentage_change_against_8.5": -0.24680652268107353
+      }
+    },
+    {
+      "case_id": "p01-lower",
+      "problem": 1,
+      "description": "representative family bounds",
+      "x": [
+        -180.0,
+        0.1,
+        0.1,
+        0.2
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": true,
+        "objective": 237.04229079924937,
+        "input_sha256": "094b8d2e021b8a6e57ec6b937f8c426d0bf8f7af1322244e822228f374572bef"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 233.78118687799343,
+        "input_sha256": "79f7a987ff70e07589a216f352bd2c28a90b8153e22b831c48004f98647c317b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -3.2611039212559376,
+        "absolute_difference": 3.2611039212559376,
+        "percentage_change_against_8.5": -1.375747724281723
+      }
+    },
+    {
+      "case_id": "p01-upper",
+      "problem": 1,
+      "description": "representative family bounds",
+      "x": [
+        180.0,
+        5.9,
+        5.9,
+        0.8
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": true,
+        "objective": 148.3372514330389,
+        "input_sha256": "addd718c23e5b2b4ca41c862240bb1eaf49c21d873578fc67211cf679c00203c"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 145.93264712165546,
+        "input_sha256": "8107c34f613e68de0685ba0509b0b610799bf9b88ee9d6b3c00e5349792f6419"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.404604311383423,
+        "absolute_difference": 2.404604311383423,
+        "percentage_change_against_8.5": -1.6210387398669637
+      }
+    },
+    {
+      "case_id": "p04-lower",
+      "problem": 4,
+      "description": "representative family bounds",
+      "x": [
+        1.224,
+        7.344,
+        7.344,
+        1.224,
+        0.05,
+        0.05,
+        0.05,
+        100.0,
+        100.0,
+        100.0,
+        20.0,
+        20.0,
+        12.0
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": true,
+        "objective": 202.64311430347504,
+        "input_sha256": "85441c95a4db9beae346c1eea414dcfa71e03759ce51b6f196258487b856ee9e"
+      },
+      "26.2.0": {
+        "passed": false,
+        "objective": null,
+        "input_sha256": "67909545993480e08587b6cae8e57848b3000819e3f7c38482d20bdfd1814aa6"
+      },
+      "objective_change": {
+        "status": "unavailable_rejected_evaluation",
+        "signed_difference": null,
+        "absolute_difference": null,
+        "percentage_change_against_8.5": null
+      }
+    },
+    {
+      "case_id": "p04-upper",
+      "problem": 4,
+      "description": "representative family bounds",
+      "x": [
+        5.832,
+        25.668,
+        25.668,
+        5.832,
+        1.05,
+        1.05,
+        1.05,
+        600.0,
+        600.0,
+        600.0,
+        25.0,
+        25.0,
+        18.0
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": true,
+        "objective": 147.72543931339308,
+        "input_sha256": "4c251b888aaac06db4b25d17a40db2c0b3f989f1a783ae77e6a08bd81ecaced3"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 163.44788293535206,
+        "input_sha256": "74f45bdbefa04ee4154ce22feba2c215af4c1b17c173f85b81927efe023c0845"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 15.722443621958973,
+        "absolute_difference": 15.722443621958973,
+        "percentage_change_against_8.5": 10.643017001699006
+      }
+    },
+    {
+      "case_id": "p09-lower",
+      "problem": 9,
+      "description": "representative family bounds",
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 830.19,
+        "input_sha256": "17fee5d1c2a733cf137cb0041d1a890e65064e01eb18f92a9223f2a641dad366"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 828.53,
+        "input_sha256": "1450852e00f26ff54cf9d2fa350833b31243704fc1cc489bf94f845b9a9b4020"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -1.6600000000000819,
+        "absolute_difference": 1.6600000000000819,
+        "percentage_change_against_8.5": -0.19995422734555726
+      }
+    },
+    {
+      "case_id": "p09-upper",
+      "problem": 9,
+      "description": "representative family bounds",
+      "x": [
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        18.0,
+        21.0,
+        21.0,
+        36.0,
+        36.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 909.47,
+        "input_sha256": "e501a3b595e40eafab6a5a23a84fe9f79fa6de5e1325674b0aa15ee911d4c871"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 907.11,
+        "input_sha256": "2bd9a1f63626913ad40c47f288d7ae24f9de3e2ffe30528fceda667121a3e954"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.3600000000000136,
+        "absolute_difference": 2.3600000000000136,
+        "percentage_change_against_8.5": -0.2594917919227697
+      }
+    },
+    {
+      "case_id": "p10-lower",
+      "problem": 10,
+      "description": "representative family bounds",
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": false,
+        "objective": null,
+        "input_sha256": "24eb5ba94df24dc45243e2be2625aab39175494d4d70bcf695e6d6bc610108f3"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1095.63,
+        "input_sha256": "6bbef0c74b7c9e306a3b1315053d4ab8b8d09f23ec97f534d479f040b85c6a52"
+      },
+      "objective_change": {
+        "status": "unavailable_rejected_evaluation",
+        "signed_difference": null,
+        "absolute_difference": null,
+        "percentage_change_against_8.5": null
+      }
+    },
+    {
+      "case_id": "p10-upper",
+      "problem": 10,
+      "description": "representative family bounds",
+      "x": [
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        1.25,
+        2.2,
+        18.0,
+        21.0,
+        21.0,
+        36.0,
+        36.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1646.56,
+        "input_sha256": "74a9e5be088871e44ea7d9cf112f38c5e5f3655c28d7709cecfb69708b5fdb9e"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 2330.74,
+        "input_sha256": "c76d4d5b9dc8cc6fa4136c236978b51dc2a07d8146ed4f7037adafa91ae9e6c0"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 684.1799999999998,
+        "absolute_difference": 684.1799999999998,
+        "percentage_change_against_8.5": 41.55208434554464
+      }
+    },
+    {
+      "case_id": "p13-lower",
+      "problem": 13,
+      "description": "representative family bounds",
+      "x": [
+        0.05,
+        400.0,
+        60.0,
+        50.0,
+        80.0,
+        20.0,
+        80.0,
+        140.0,
+        380.0,
+        350.0
+      ],
+      "unit": "EUR",
+      "weather_file": "YUG_Belgrade_IWEC.epw",
+      "weather_sha256": "a1d29feac311cd9d3db4948ef9f8c4e71253410b93b392f43654ce111a04ac62",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1983.0351759669265,
+        "input_sha256": "444ecd9d6b7b825100e0530ca59ba57e138cd78c5762916ffc8fda399e9053ab"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1978.8141538891032,
+        "input_sha256": "300a4d4d9660950070bb50ad8a8c6011831d22743b21a2ef14590d69f648a02b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -4.221022077823363,
+        "absolute_difference": 4.221022077823363,
+        "percentage_change_against_8.5": -0.21285664162589532
+      }
+    },
+    {
+      "case_id": "p13-upper",
+      "problem": 13,
+      "description": "representative family bounds",
+      "x": [
+        0.3,
+        800.0,
+        120.0,
+        110.0,
+        160.0,
+        50.0,
+        180.0,
+        280.0,
+        760.0,
+        700.0
+      ],
+      "unit": "EUR",
+      "weather_file": "YUG_Belgrade_IWEC.epw",
+      "weather_sha256": "a1d29feac311cd9d3db4948ef9f8c4e71253410b93b392f43654ce111a04ac62",
+      "8.5.0": {
+        "passed": true,
+        "objective": 2212.9267156133583,
+        "input_sha256": "fe2303cd13196fd361e7b393994560da5b30a6b7a2dafc34525ded1fb496847d"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 2206.9418977143155,
+        "input_sha256": "fa57e894fdb1ee6694c5568b26fd1ea0025891976f909020a6c5ae05b39525da"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -5.98481789904281,
+        "absolute_difference": 5.98481789904281,
+        "percentage_change_against_8.5": -0.2704480838347145
+      }
+    },
+    {
+      "case_id": "p09-penalty-below",
+      "problem": 9,
+      "description": "straddle historical window-height penalty",
+      "x": [
+        1.0,
+        1.5487,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1262.055,
+        "input_sha256": "2cf4ed2733a913d8be1bc86d55f5a555933f1d4c3131373544dabadca3faa25f"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1258.3799999999999,
+        "input_sha256": "85652d5826a08eb3f75d9817f98e749c5e24833f19567f11b74cd0a275b76a2b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -3.675000000000182,
+        "absolute_difference": 3.675000000000182,
+        "percentage_change_against_8.5": -0.29119174679393384
+      }
+    },
+    {
+      "case_id": "p09-penalty-above",
+      "problem": 9,
+      "description": "straddle historical window-height penalty",
+      "x": [
+        1.0,
+        1.5489000000000002,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 841.37,
+        "input_sha256": "2613287bffb10e3a081a816be40149b4777b8c2ff4a07006a6974c2f9ec251f5"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 838.92,
+        "input_sha256": "3d7188447b41fc551b2eb8e5f28b73387c4304a38aac3be05b881734ec05d32b"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": -2.4500000000000455,
+        "absolute_difference": 2.4500000000000455,
+        "percentage_change_against_8.5": -0.29119174679392484
+      }
+    },
+    {
+      "case_id": "p10-penalty-below",
+      "problem": 10,
+      "description": "straddle historical window-height penalty",
+      "x": [
+        1.0,
+        1.5487,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1801.1999999999998,
+        "input_sha256": "26cb88110a13c2451d46454e901747a47c7d96a261ac90185d7ab5e6c6b417a3"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1805.745,
+        "input_sha256": "e9f5a7c220ed87d7efd7354241f6c4669e9b3903402abc96510cb6ef4c8a5bf8"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 4.545000000000073,
+        "absolute_difference": 4.545000000000073,
+        "percentage_change_against_8.5": 0.252331778814128
+      }
+    },
+    {
+      "case_id": "p10-penalty-above",
+      "problem": 10,
+      "description": "straddle historical window-height penalty",
+      "x": [
+        1.0,
+        1.5489000000000002,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        1.025,
+        1.7750000000000001,
+        15.0,
+        17.0,
+        17.0,
+        30.0,
+        30.0
+      ],
+      "unit": "MJ/m2",
+      "weather_file": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+      "weather_sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7",
+      "8.5.0": {
+        "passed": true,
+        "objective": 1200.79,
+        "input_sha256": "d3ccbd0a37800384b26f8d2337d61e8856841c58594028d7821dc14de667dc5c"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 1203.83,
+        "input_sha256": "63055fce459663dfc57b33dbee28e4956ca2e372994e2f530a7ca8163492524d"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 3.0399999999999636,
+        "absolute_difference": 3.0399999999999636,
+        "percentage_change_against_8.5": 0.25316666527868853
+      }
+    },
+    {
+      "case_id": "p06-embedded-p08",
+      "problem": 6,
+      "description": "P8 equivalent full-dimensional design",
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        25.0,
+        22.5,
+        12.0
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "8.5.0": {
+        "passed": true,
+        "objective": 173.93819111448886,
+        "input_sha256": "4465ac97df978c6c304a54439b798f1ac84be6e167e933a450a9f2aee54789a7"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 190.62168177067485,
+        "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 16.683490656185995,
+        "absolute_difference": 16.683490656185995,
+        "percentage_change_against_8.5": 9.591620189498613
+      }
+    },
+    {
+      "case_id": "p08-embedded-check",
+      "problem": 8,
+      "description": "P8 equivalent reduced-dimensional design",
+      "x": [
+        3.528,
+        16.506,
+        16.506,
+        3.528,
+        0.55,
+        0.55,
+        0.55,
+        350.0,
+        350.0,
+        350.0,
+        22.5
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_IL_Chicago-OHare.725300_TMY2.epw",
+      "weather_sha256": "8e952b43de8a3710bda483c5be33af385137bb526840cd8d41bc7e175ab563ec",
+      "8.5.0": {
+        "passed": true,
+        "objective": 173.93819111448886,
+        "input_sha256": "4465ac97df978c6c304a54439b798f1ac84be6e167e933a450a9f2aee54789a7"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 190.62168177067485,
+        "input_sha256": "1b9934bf3169aeda83ea99226d2523814431641b1219816ba906f8743da001bc"
+      },
+      "objective_change": {
+        "status": "available",
+        "signed_difference": 16.683490656185995,
+        "absolute_difference": 16.683490656185995,
+        "percentage_change_against_8.5": 9.591620189498613
+      }
+    },
+    {
+      "case_id": "p01-orientation90",
+      "problem": 1,
+      "description": "Additional paired P1 trial at [90,3,3,0.5]",
+      "x": [
+        90.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "unit": "kWh/(m2 year)",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "8.5.0": {
+        "passed": false,
+        "objective": null,
+        "input_sha256": "da1b8e865dd893ee1bb38450e2e0ea40ede6a152a294ac98817b0b7dd0f9f99e"
+      },
+      "26.2.0": {
+        "passed": true,
+        "objective": 152.72936839353014,
+        "input_sha256": "195d2635fd1f9f91bc414e7004e24ff51ac475bae3237328c51eff4b27024384"
+      },
+      "objective_change": {
+        "status": "unavailable_rejected_evaluation",
+        "signed_difference": null,
+        "absolute_difference": null,
+        "percentage_change_against_8.5": null
+      }
+    }
+  ],
+  "diagnoses": {
+    "p1": {
+      "description": "One real matched-input-vector modern trial; no optimization or model mutation.",
+      "problem": 1,
+      "x": [
+        90.0,
+        3.0,
+        3.0,
+        0.5
+      ],
+      "engine_version": "26.2.0",
+      "engine_version_output": "EnergyPlus, Version 26.2.0-4bd7a1f26f",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "input_sha256": "195d2635fd1f9f91bc414e7004e24ff51ac475bae3237328c51eff4b27024384",
+      "weather_filename": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "model_building_configuration": {
+        "office zone": {
+          "loads_convergence_tolerance_value": 0.04,
+          "maximum_number_of_warmup_days": 100,
+          "minimum_number_of_warmup_days": 6,
+          "north_axis": 90.0,
+          "solar_distribution": "FullInteriorAndExterior",
+          "temperature_convergence_tolerance_value": 0.0040000002,
+          "terrain": "Country"
+        }
+      },
+      "status": "strict-success",
+      "severe_count": 0,
+      "fatal_count": 0,
+      "outputs": {
+        "Q_h": 3.021359999665709,
+        "Q_c": 2100.765026059212,
+        "E_L": 3975.628790299186
+      },
+      "objective": 152.72936839353014,
+      "objective_unit": "kWh/(m2 year)",
+      "actual_warmup_days": [
+        34
+      ],
+      "verified_original_85_runs": [
+        {
+          "maximum_warmup_days": 25,
+          "actual_warmup_days": [
+            25
+          ],
+          "status": "strict-failure",
+          "severe_count": 1,
+          "fatal_count": 0,
+          "input_sha256": "da1b8e865dd893ee1bb38450e2e0ea40ede6a152a294ac98817b0b7dd0f9f99e",
+          "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+          "diagnostic_only_objective_if_failed": 156.45937753472893
+        },
+        {
+          "maximum_warmup_days": 100,
+          "actual_warmup_days": [
+            28
+          ],
+          "status": "strict-success",
+          "severe_count": 0,
+          "fatal_count": 0,
+          "input_sha256": "d6790e461239e926a2533f6107ac1b5fcbe41e1132ade26cd969d2045bb46c06",
+          "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+          "diagnostic_only_objective_if_failed": 156.46031463966204
+        }
+      ],
+      "material_properties": {
+        "CONCRETE BLOCK": {
+          "thickness": 0.2,
+          "density": 1400.0,
+          "specific_heat": 1000.0,
+          "conductivity": 0.51,
+          "areal_heat_capacity_kJ_m2_K": 280.0
+        },
+        "CONCRETE SLAB180": {
+          "thickness": 0.18,
+          "density": 1400.0,
+          "specific_heat": 1000.0,
+          "conductivity": 1.13,
+          "areal_heat_capacity_kJ_m2_K": 252.0
+        },
+        "CONCRETE SLAB050": {
+          "thickness": 0.05,
+          "density": 1400.0,
+          "specific_heat": 1000.0,
+          "conductivity": 1.13,
+          "areal_heat_capacity_kJ_m2_K": 70.0
+        },
+        "BRICK120": {
+          "thickness": 0.12,
+          "density": 2080.0,
+          "specific_heat": 790.0,
+          "conductivity": 1.0,
+          "areal_heat_capacity_kJ_m2_K": 197.184
+        }
+      },
+      "high_mass_inference": "The model explicitly derives from BESTEST High-Mass Case 930 and contains substantial concrete/brick heat-storage layers. Slow initialization of stored heat is consistent with needing 28 or 34 repeated warmup days under the stringent 0.004 K temperature tolerance. These runs do not isolate thermal mass from weather, orientation, schedules, convection, daylighting or engine changes, so mass is a supported contributor hypothesis, not a proven sole cause.",
+      "modern_minus_scratch_85_100_cap": {
+        "objective_absolute_signed": -3.730946246131907,
+        "objective_relative_signed_against_scratch_85": -0.02384595898790381,
+        "scope": "Same physical vector and canonical weather, both strict-success and 100-day caps, but different engine/model versions; scratch historical input is a diagnostic variant.",
+        "objective_percentage_signed_against_scratch_85": -2.3845958987903813
+      },
+      "scratch_100_minus_failed_25_diagnostic": {
+        "baseline_role": "Rejected original 8.5 run diagnostic-only value; this comparison is not a canonical accepted-objective comparison.",
+        "signed_difference": 0.0009371049331150516,
+        "percentage_change_against_failed_diagnostic": 0.0005989445617646309
+      }
+    },
+    "p4": {
+      "schema_version": 1,
+      "scope": "Read-only P4 failure analysis. All probes used scratch copies; no benchmark assets, caches, acceptance criteria or solver policy changed. Successful modified-model objectives are diagnostic variants only.",
+      "problem": 4,
+      "case_id": "p04-lower",
+      "x": [
+        1.224,
+        7.344,
+        7.344,
+        1.224,
+        0.05,
+        0.05,
+        0.05,
+        100.0,
+        100.0,
+        100.0,
+        20.0,
+        20.0,
+        12.0
+      ],
+      "parameter_names": [
+        "north_window_width",
+        "west_window_width",
+        "east_window_width",
+        "south_window_width",
+        "west_overhang_depth",
+        "east_overhang_depth",
+        "south_overhang_depth",
+        "west_shading_setpoint",
+        "east_shading_setpoint",
+        "south_shading_setpoint",
+        "summer_night_cooling_setpoint",
+        "winter_night_cooling_setpoint",
+        "cooling_supply_temperature"
+      ],
+      "engine_version": "26.2.0",
+      "engine_build": "4bd7a1f26f",
+      "engine_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "platform": "Darwin-arm64",
+      "weather_file": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+      "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+      "unmodified_input_sha256": "67909545993480e08587b6cae8e57848b3000819e3f7c38482d20bdfd1814aa6",
+      "conditions": [
+        {
+          "id": "unchanged25-repeat",
+          "input_sha256": "67909545993480e08587b6cae8e57848b3000819e3f7c38482d20bdfd1814aa6",
+          "output_err_sha256": "176cc3f86112adfc686ca7a15039640053ba6e01d54ecc28987a30ea8e17cb4c",
+          "output_eio_sha256": "96f9335b927cd1c99c71988db54729f0f0b6cadfc53f107ef04d7438d3694c0e",
+          "strict_success": false,
+          "severe_count": 1,
+          "fatal_count": 0,
+          "final_warning_count": 10,
+          "process_exit_code": 0,
+          "maximum_warmup_days": 25,
+          "actual_warmup_days": 25,
+          "temperature_tolerance_c": 0.004,
+          "relative_load_tolerance": 0.04,
+          "actual_timesteps_per_hour": 4,
+          "benchmark_inputs_unchanged": true,
+          "accepted_as_benchmark_value": false,
+          "objective_diagnostic_variant_only": null,
+          "description": "Exact unchanged modern model repeated with canonical Seattle weather; severe convergence failure reproduced.",
+          "failing_zone": "ZONE SOUTH",
+          "environment": "RUNPERIOD 1",
+          "failed_criterion": "maximum daily zone temperature change",
+          "convergence_metrics": {
+            "maximum_temperature_change_c": 0.0058081,
+            "minimum_temperature_change_c": 0.00286685,
+            "relative_peak_heating_load_change": 0.00291013,
+            "relative_peak_cooling_load_change": 0.000282408
+          }
+        },
+        {
+          "id": "diagnostic100",
+          "input_sha256": "baf17dd8a5fb17a33ceac8e552506dc504596e7106f60bf56006a8dbd3aa6e26",
+          "output_err_sha256": "7fcc0a343b0b8c48d410b161ef73fb60fe4ad60fefd9598816263b8290407ef0",
+          "output_eio_sha256": "fa5da06f922ec3bad948b03591d4470b1e8a73421111ed8f8b288234e8ff5b43",
+          "strict_success": false,
+          "severe_count": 1,
+          "fatal_count": 0,
+          "final_warning_count": 28,
+          "process_exit_code": 0,
+          "maximum_warmup_days": 100,
+          "actual_warmup_days": 100,
+          "temperature_tolerance_c": 0.004,
+          "relative_load_tolerance": 0.04,
+          "actual_timesteps_per_hour": 4,
+          "benchmark_inputs_unchanged": false,
+          "accepted_as_benchmark_value": false,
+          "objective_diagnostic_variant_only": null,
+          "description": "Only warmup cap25→100 and diagnostic reporting changed; same physical design and tolerances.",
+          "failing_zone": "ZONE SOUTH",
+          "environment": "RUNPERIOD 1",
+          "failed_criterion": "maximum daily zone temperature change",
+          "convergence_metrics": {
+            "maximum_temperature_change_c": 0.00573317,
+            "minimum_temperature_change_c": 0.00301922,
+            "relative_peak_heating_load_change": 0.00292434,
+            "relative_peak_cooling_load_change": 0.00037476
+          }
+        },
+        {
+          "id": "scratch-max-HVAC-iterations100",
+          "input_sha256": "9f21512c5a40bb7dabd9c4bc6c4b9be17e70a298f5365f8d3845d25b65c5e0e8",
+          "output_err_sha256": "8c81a557eeb0fb32c179826a4727ac90d72daf2cf711d72a7dc3d5134d7551a5",
+          "output_eio_sha256": "85d40d2979ed25190fa12b864c85d0ea8d8d59f830c942658efa0f76c1f1cb9d",
+          "strict_success": true,
+          "severe_count": 0,
+          "fatal_count": 0,
+          "final_warning_count": 10,
+          "process_exit_code": 0,
+          "maximum_warmup_days": 25,
+          "actual_warmup_days": 16,
+          "temperature_tolerance_c": 0.004,
+          "relative_load_tolerance": 0.04,
+          "actual_timesteps_per_hour": 4,
+          "benchmark_inputs_unchanged": false,
+          "accepted_as_benchmark_value": false,
+          "objective_diagnostic_variant_only": 232.84130695615679,
+          "description": "Scratch numerical-control variant only, not an accepted benchmark repair or reference.",
+          "controlled_change": {
+            "ConvergenceLimits": {
+              "Scratch limits": {
+                "maximum_hvac_iterations": 100
+              }
+            }
+          },
+          "objective_unit": "kWh/(m2 year)",
+          "components_diagnostic_variant_only": {
+            "H_1": 133.22973856179013,
+            "H_2": 151.19760136385278,
+            "H_3": 160.251051801571,
+            "H_4": 109.11993646178026,
+            "H_5": 1.3571366253017913e-14,
+            "H_6": 0.0,
+            "C": 186.86126376140402,
+            "L_N": 2382.4720332872284,
+            "L_W": 7719.542592713571,
+            "L_E": 7734.237083661663,
+            "L_S": 2137.5148177296396,
+            "L_I": 6345.6,
+            "V_legacy": 20457.413160957527,
+            "V_return": 20457.413160957527
+          }
+        },
+        {
+          "id": "scratch-analytical-zone-air",
+          "input_sha256": "1dd452201803d4356d8669b6b62ea30acfc3964804fbf6f958f3df125f97dfb6",
+          "output_err_sha256": "691a58b20a9cfede170ee018a0921656da686e7df2334d6b954c10e4f1389fbf",
+          "output_eio_sha256": "341cf41dec80d51881977bfca7b3b9b868a2671d608968e449072feb96aaf3db",
+          "strict_success": true,
+          "severe_count": 0,
+          "fatal_count": 0,
+          "final_warning_count": 11,
+          "process_exit_code": 0,
+          "maximum_warmup_days": 25,
+          "actual_warmup_days": 17,
+          "temperature_tolerance_c": 0.004,
+          "relative_load_tolerance": 0.04,
+          "actual_timesteps_per_hour": 4,
+          "benchmark_inputs_unchanged": false,
+          "accepted_as_benchmark_value": false,
+          "objective_diagnostic_variant_only": 229.85883666970622,
+          "description": "Scratch numerical-control variant only, not an accepted benchmark repair or reference.",
+          "controlled_change": {
+            "ZoneAirHeatBalanceAlgorithm": {
+              "Scratch algorithm": {
+                "algorithm": "AnalyticalSolution"
+              }
+            }
+          },
+          "objective_unit": "kWh/(m2 year)",
+          "components_diagnostic_variant_only": {
+            "H_1": 136.64255571399985,
+            "H_2": 157.04929986718,
+            "H_3": 165.17729172329462,
+            "H_4": 111.75990202034042,
+            "H_5": 9.994967816358743e-15,
+            "H_6": 0.0,
+            "C": 189.99760608806594,
+            "L_N": 2382.4720332872284,
+            "L_W": 7719.542592713571,
+            "L_E": 7734.237083661663,
+            "L_S": 2137.5148177296396,
+            "L_I": 6345.6,
+            "V_legacy": 19904.265336897988,
+            "V_return": 19904.265336897988
+          }
+        },
+        {
+          "id": "scratch-timestep8-warmup100",
+          "input_sha256": "bca17c1b005e808c499ade1ae4c522eb80a917ffc5783dadf87f89aabe2a0d23",
+          "output_err_sha256": "fd9e27ef1646d9802126d95b5ae3109bd245f9453321eb6fee91b6075cfdcbb1",
+          "output_eio_sha256": "8214a30ce2188b44a78aad1be467c168c06ae5e810a5945f5548be6619d75155",
+          "strict_success": true,
+          "severe_count": 0,
+          "fatal_count": 0,
+          "final_warning_count": 33,
+          "process_exit_code": 0,
+          "maximum_warmup_days": 100,
+          "actual_warmup_days": 14,
+          "temperature_tolerance_c": 0.004,
+          "relative_load_tolerance": 0.04,
+          "actual_timesteps_per_hour": 10,
+          "benchmark_inputs_unchanged": false,
+          "accepted_as_benchmark_value": false,
+          "objective_diagnostic_variant_only": 244.44153388707505,
+          "description": "Scratch numerical-control variant only, not an accepted benchmark repair or reference.",
+          "controlled_changes": {
+            "number_of_timesteps_per_hour": 8,
+            "maximum_number_of_warmup_days": 100,
+            "additional_reporting_only": [
+              [
+                "ZONE SOUTH",
+                "Zone Lights Electricity Rate"
+              ],
+              [
+                "ZONE SOUTH WINDOW",
+                "Surface Shading Device Is On Time Fraction"
+              ],
+              [
+                "ZONE SOUTH VAV REHEAT",
+                "Zone Air Terminal VAV Damper Position"
+              ],
+              [
+                "ZONE SOUTH IN NODE",
+                "System Node Temperature"
+              ],
+              [
+                "ZONE SOUTH IN NODE",
+                "System Node Mass Flow Rate"
+              ]
+            ]
+          },
+          "objective_unit": "kWh/(m2 year)",
+          "components_diagnostic_variant_only": {
+            "H_1": 105.18805956514714,
+            "H_2": 114.65762195635496,
+            "H_3": 118.98489100473697,
+            "H_4": 86.59519543388897,
+            "H_5": 1.3905321338825161e-14,
+            "H_6": 0.0,
+            "C": 204.54844476932428,
+            "L_N": 2382.8586690093875,
+            "L_W": 7732.054905794656,
+            "L_E": 7732.361620731502,
+            "L_S": 2138.039608210661,
+            "L_I": 6345.6,
+            "V_legacy": 22596.80976186393,
+            "V_return": 22596.80976186393
+          }
+        },
+        {
+          "id": "scratch-timestep12-averaging12-warmup100",
+          "description": "Final valid timestep refinement4→12/hour; sizing averaging duration preserved at60minutes. Diagnostic variant only.",
+          "controlled_changes": {
+            "number_of_timesteps_per_hour": 12,
+            "timesteps_in_averaging_window": 12,
+            "maximum_number_of_warmup_days": 100,
+            "preserved_sizing_averaging_duration_minutes": 60
+          },
+          "input_sha256": "375d04d69904f0a8b1d1ad9fc9ef19e8c4a26b83ff18d1341eaa0f1ec03bc717",
+          "output_err_sha256": "5fb0c7b1bf183b8f726a389bfaea2de8cbfff3ea7f20a7b377775e27676fa2ad",
+          "output_eio_sha256": "29c92991866722be59b3a71be51a81756b13cba1b414238d85ed777c5dbc725d",
+          "strict_success": true,
+          "severe_count": 0,
+          "fatal_count": 0,
+          "final_warning_count": 33,
+          "process_exit_code": 0,
+          "maximum_warmup_days": 100,
+          "actual_warmup_days": 14,
+          "temperature_tolerance_c": 0.004,
+          "relative_load_tolerance": 0.04,
+          "actual_timesteps_per_hour": 12,
+          "benchmark_inputs_unchanged": false,
+          "accepted_as_benchmark_value": false,
+          "objective_diagnostic_variant_only": 238.77270256495194,
+          "objective_unit": "kWh/(m2 year)",
+          "components_diagnostic_variant_only": {
+            "H_1": 112.31669756654053,
+            "H_2": 124.01764140934858,
+            "H_3": 131.4331754450907,
+            "H_4": 92.6305069657425,
+            "H_5": 1.2268704570791063e-14,
+            "H_6": 0.0,
+            "C": 200.3635430463677,
+            "L_N": 2382.92039875692,
+            "L_W": 7733.705250387121,
+            "L_E": 7731.767186221731,
+            "L_S": 2138.1110049821946,
+            "L_I": 6345.6,
+            "V_legacy": 21549.147769211304,
+            "V_return": 21549.147769211304
+          }
+        }
+      ],
+      "warmup_cycle": {
+        "zone": "ZONE SOUTH",
+        "environment": "RUNPERIOD 1",
+        "repeated_weather_day": "January1,Monday",
+        "period_days": 2,
+        "confirmed_from": "ReportDuringWarmup SQLite timestep data,100warmupdays",
+        "late_window_days": [
+          81,
+          100
+        ],
+        "daily_maximum_change_range_c": [
+          0.005733167231802838,
+          0.005733167232683911
+        ],
+        "odd_day_maximum_c": 24.831081669111608,
+        "even_day_maximum_c": 24.82534850187945,
+        "daily_peak_time": "16:15",
+        "odd_day_minimum_c": 23.459515290316368,
+        "even_day_minimum_c": 23.462534505961514,
+        "daily_minimum_time": "06:00",
+        "last_six_days": [
+          {
+            "day": 95,
+            "max_temp_c": 24.831081669111725,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.459515290316535,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.005733167232140346,
+            "min_temp_change": 0.003019215645011286
+          },
+          {
+            "day": 96,
+            "max_temp_c": 24.825348501879645,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.462534505961663,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.00573316723207995,
+            "min_temp_change": 0.0030192156451285257
+          },
+          {
+            "day": 97,
+            "max_temp_c": 24.831081669111796,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.45951529031662,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.005733167232151004,
+            "min_temp_change": 0.0030192156450432606
+          },
+          {
+            "day": 98,
+            "max_temp_c": 24.8253485018794,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.462534505961653,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.005733167232396141,
+            "min_temp_change": 0.0030192156450326024
+          },
+          {
+            "day": 99,
+            "max_temp_c": 24.831081669111608,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.459515290316368,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0057331672322078475,
+            "min_temp_change": 0.003019215645284845
+          },
+          {
+            "day": 100,
+            "max_temp_c": 24.82534850187945,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.462534505961514,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0057331672321581095,
+            "min_temp_change": 0.0030192156451462893
+          }
+        ]
+      },
+      "interpretation": {
+        "confirmed": "A persistent two-day cycle in maximum zone temperature exceeds the single-day warmup criterion. Increasing the cap from25 to100 cannot remove the settled cycle.",
+        "supported": "Convergence under higher HVAC iteration allowance, analytical zone-air integration and a finer effective timestep supports sensitivity to the coupled heat-balance/HVAC numerical solution.",
+        "not_proven": "No individual controller, geometry warning or shading-control defect was isolated as the root cause. Modified-model annual accuracy and benchmark equivalence were not established.",
+        "other_warnings": "Retained model warnings include self-adjacent/interspace surfaces, north/south door multiplier area mismatch, an interior-zone enclosure warning,80percent daylighting-control coverage, zero interior heating sizing and HVAC iteration-limit warnings. They are separate from the single Severe and were not repaired."
+      },
+      "load_metric_units": "EnergyPlus26.2 CheckWarmupConvergence source computes load metrics as dimensionless relative differences in daily peak loads, with a100W minimum denominator scale; temperature differences are degreesC.",
+      "primary_sources": [
+        "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc#L2998-L3217",
+        "https://energyplus.readthedocs.io/en/v26.2.0/guides/input-output-reference/1.5-group-simulation-parameters.html",
+        "https://energyplus.readthedocs.io/en/v26.2.0/guides/output-details-and-examples/2.7-eplusout.eio.html"
+      ],
+      "auto_normalized_timestep_probe": {
+        "requested_timesteps_per_hour": 8,
+        "effective_timesteps_per_hour": 10,
+        "original_zone_timestep_minutes": 15,
+        "refined_zone_timestep_minutes": 6,
+        "normalization_warning": "Requested number8 not evenly divisible into60; defaulted to nearest10.",
+        "confounder": "Sizing:Parameters averaging window remained4timesteps, changing its elapsed duration from60 to24minutes; autosized equipment can therefore also change.",
+        "cycle_observed_during_recorded_warmup": false,
+        "recorded_warmup_days": 14,
+        "last_six_days": [
+          {
+            "day": 9,
+            "max_temp_c": 24.918096618439982,
+            "max_at": [
+              16,
+              18
+            ],
+            "min_temp_c": 23.640366472391477,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.016473301784490246,
+            "min_temp_change": 0.03376104415811909
+          },
+          {
+            "day": 10,
+            "max_temp_c": 24.9282625160814,
+            "max_at": [
+              16,
+              18
+            ],
+            "min_temp_c": 23.661210849094875,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.010165897641417843,
+            "min_temp_change": 0.02084437670339767
+          },
+          {
+            "day": 11,
+            "max_temp_c": 24.934543356587355,
+            "max_at": [
+              16,
+              18
+            ],
+            "min_temp_c": 23.674134061709527,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.006280840505954899,
+            "min_temp_change": 0.012923212614651902
+          },
+          {
+            "day": 12,
+            "max_temp_c": 24.938431859254628,
+            "max_at": [
+              16,
+              18
+            ],
+            "min_temp_c": 23.682162723242545,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0038885026672730305,
+            "min_temp_change": 0.008028661533018067
+          },
+          {
+            "day": 13,
+            "max_temp_c": 24.94084660307479,
+            "max_at": [
+              16,
+              18
+            ],
+            "min_temp_c": 23.68716139788757,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.002414743820160936,
+            "min_temp_change": 0.0049986746450265684
+          },
+          {
+            "day": 14,
+            "max_temp_c": 24.94234117017302,
+            "max_at": [
+              16,
+              18
+            ],
+            "min_temp_c": 23.690278048119346,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0014945670982307036,
+            "min_temp_change": 0.0031166502317745426
+          }
+        ]
+      },
+      "valid_timestep_refinement": {
+        "requested_timesteps_per_hour": 12,
+        "effective_timesteps_per_hour": 12,
+        "baseline_sizing_window_steps": 4,
+        "baseline_timestep_minutes": 15,
+        "refined_sizing_window_steps": 12,
+        "refined_timestep_minutes": 5,
+        "preserved_sizing_window_minutes": 60,
+        "convergence_tolerances_unchanged": true,
+        "cycle_observed_during_recorded_warmup": false,
+        "recorded_warmup_days": 14,
+        "last_six_days": [
+          {
+            "day": 9,
+            "max_temp_c": 24.888678387231217,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.545018029727277,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.018781201189362662,
+            "min_temp_change": 0.03265066163309527
+          },
+          {
+            "day": 10,
+            "max_temp_c": 24.900370392462975,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.56880788130783,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.011692005231758174,
+            "min_temp_change": 0.02378985158055258
+          },
+          {
+            "day": 11,
+            "max_temp_c": 24.907649758487015,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.583623749086566,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0072793660240400015,
+            "min_temp_change": 0.014815867778736447
+          },
+          {
+            "day": 12,
+            "max_temp_c": 24.91217284440203,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.592880154689762,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.004523085915014491,
+            "min_temp_change": 0.009256405603196072
+          },
+          {
+            "day": 13,
+            "max_temp_c": 24.914988392808105,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.598697265510175,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0028155484060761182,
+            "min_temp_change": 0.0058171108204128075
+          },
+          {
+            "day": 14,
+            "max_temp_c": 24.916753649475737,
+            "max_at": [
+              16,
+              15
+            ],
+            "min_temp_c": 23.602360991327114,
+            "min_at": [
+              6,
+              0
+            ],
+            "max_temp_change": 0.0017652566676318315,
+            "min_temp_change": 0.0036637258169385234
+          }
+        ],
+        "limits": "This remains a changed numerical model with altered time discretization; annual accuracy or original-benchmark equivalence is not established."
+      },
+      "prior_cap100_without_diagnostic_reporting": {
+        "input_sha256": "9a87923d4e315678a95c2cc9aa2bc43d91c5d41e8cc41d89374f0d1847f77178",
+        "maximum_warmup_days": 100,
+        "actual_warmup_days": 100,
+        "severe_count": 1,
+        "fatal_count": 0,
+        "final_warning_count": 10,
+        "maximum_temperature_change_c": 0.00573317,
+        "minimum_temperature_change_c": 0.00301922,
+        "relative_peak_heating_load_change": 0.00292434,
+        "relative_peak_cooling_load_change": 0.00037476,
+        "note": "Same physical/control failure as diagnostic100. Extra-warning reporting expands warning count from10to28; it does not introduce the Severe."
+      },
+      "control_schedule_context": {
+        "fan_availability": "On24hours",
+        "night_cooling_setpoint_c": 20,
+        "night_cooling_setpoint_hours": "01–08and22–24",
+        "day_cooling_setpoint_c": 25,
+        "heating_setpoint_c": {
+          "night": 18,
+          "day": 20
+        },
+        "main_cooling_coil_availability": "On09–19;offatotherhours",
+        "late_cycle_maximum_timestep_difference": {
+          "between_warmup_days": [
+            99,
+            100
+          ],
+          "at": "07:15",
+          "temperature_difference_c": 0.07634668451486704,
+          "odd_day_temperature_c": 23.991711021431254,
+          "even_day_temperature_c": 24.06805770594612,
+          "heating_and_cooling_setpoints_c": [
+            20,
+            20
+          ],
+          "heating_rate_w": [
+            0,
+            0
+          ],
+          "cooling_rate_w": [
+            46.870437770433455,
+            54.49386394567773
+          ]
+        },
+        "interpretation": "At the largest morning pointwise discrepancy the night20°C cooling setpoint coincides with the20°C heating setpoint while the main cooling coil is unavailable. This is a model-control context, not an isolated proof of the two-day cycle cause."
+      }
+    },
+    "p10": {
+      "schema_version": 1,
+      "purpose": "Problem 10 original EnergyPlus 8.5 canonical lower-bound diagnosis; scratch variants are diagnostics only, with no benchmark or tolerance changes.",
+      "problem": 10,
+      "case": "simultaneous_lower_bounds",
+      "parameters": [
+        {
+          "name": "north_window_bottom",
+          "unit": "m",
+          "value": 0.8
+        },
+        {
+          "name": "north_window_top",
+          "unit": "m",
+          "value": 1.35
+        },
+        {
+          "name": "east_window_bottom",
+          "unit": "m",
+          "value": 0.8
+        },
+        {
+          "name": "east_window_top",
+          "unit": "m",
+          "value": 1.35
+        },
+        {
+          "name": "south_window_bottom",
+          "unit": "m",
+          "value": 0.8
+        },
+        {
+          "name": "south_window_top",
+          "unit": "m",
+          "value": 1.35
+        },
+        {
+          "name": "west_window_bottom",
+          "unit": "m",
+          "value": 0.8
+        },
+        {
+          "name": "west_window_top",
+          "unit": "m",
+          "value": 1.35
+        },
+        {
+          "name": "cooling_supply_temperature",
+          "unit": "degC",
+          "value": 12.0
+        },
+        {
+          "name": "weekday_heating_setback",
+          "unit": "degC",
+          "value": 13.0
+        },
+        {
+          "name": "holiday_heating_setback",
+          "unit": "degC",
+          "value": 13.0
+        },
+        {
+          "name": "weekday_cooling_setback",
+          "unit": "degC",
+          "value": 24.0
+        },
+        {
+          "name": "holiday_cooling_setback",
+          "unit": "degC",
+          "value": 24.0
+        }
+      ],
+      "x": [
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        0.8,
+        1.35,
+        12.0,
+        13.0,
+        13.0,
+        24.0,
+        24.0
+      ],
+      "engine": {
+        "version": "8.5.0",
+        "build": "EnergyPlus, Version 8.5.0-c87e61b44b",
+        "sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17"
+      },
+      "weather": {
+        "filename": "USA_CA_San.Francisco.Intl.AP_TMY3.epw",
+        "sha256": "4cac90a2374cd850a70a787afc4dd5517e1ac2c9c2ef47388d7c001c870500d7"
+      },
+      "convergence_controls": {
+        "temperature_tolerance_k": 0.2,
+        "load_tolerance_fraction": 0.04,
+        "minimum_warmup_days": 6,
+        "minimum_system_timestep_minutes": 1,
+        "maximum_hvac_iterations": 20
+      },
+      "runs": {
+        "baseline_25_days": {
+          "input_sha256": "24eb5ba94df24dc45243e2be2625aab39175494d4d70bcf695e6d6bc610108f3",
+          "changes_from_original": [],
+          "maximum_warmup_days": 25,
+          "run_period_warmup_days": 25,
+          "zone_timesteps_per_hour": 6,
+          "sizing_averaging_steps": 6,
+          "sizing_averaging_minutes": 60,
+          "engine_returncode": 0,
+          "status": "strict-failure",
+          "accepted_benchmark_objective": null,
+          "diagnostic_only_outputs": {
+            "Y": 1080.88
+          },
+          "diagnostic_only_objective": 1080.88,
+          "diagnostic_objective_status": "Rejected by the unchanged strict severe-error policy; do not use as a benchmark observation.",
+          "diagnostics": {
+            "warning_count": 17,
+            "severe_count": 7,
+            "fatal_count": 0,
+            "warmup_errors": [
+              {
+                "zone": "PERIMETER_BOT_ZN_3",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00228,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00383,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0052795,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.049607,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_2",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00456,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00284,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0049465,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.1107,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_1",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00655,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0267,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0051048,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.1017,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_2",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00727,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0174,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0018916,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.2607,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_1",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00368,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0296,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.001998,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.1283,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_3",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.0125,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0367,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.048326,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 5.6764e-05,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_4",
+                "maximum_warmup_days": 25,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00735,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0565,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.042746,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 6.543e-05,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                }
+              }
+            ]
+          },
+          "all_zone_runperiod_flags": [
+            {
+              "zone": "BASEMENT",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_BOTTOM",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_MID",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_TOP",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Fail",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Fail",
+              "cooling_peak_flag": "Pass"
+            }
+          ],
+          "error_file_sha256": "5ad2a6a31c890bb83be7f33d85798aab548b684820f4af35c6d0b0cddfae78f3",
+          "eio_file_sha256": "dbc410828756bd4b48347c77cf8d0ba3368b2671974e744472166a5029d79a1f"
+        },
+        "cap_100_days": {
+          "input_sha256": "bc4a6f036c8a7529a73edcf8dd147c492ebad8879800fc9a194de51a00d5183f",
+          "changes_from_original": [
+            "Maximum Number of Warmup Days: 25 -> 100"
+          ],
+          "maximum_warmup_days": 100,
+          "run_period_warmup_days": 100,
+          "zone_timesteps_per_hour": 6,
+          "sizing_averaging_steps": 6,
+          "sizing_averaging_minutes": 60,
+          "engine_returncode": 0,
+          "status": "strict-failure",
+          "accepted_benchmark_objective": null,
+          "diagnostic_only_outputs": {
+            "Y": 1080.87
+          },
+          "diagnostic_only_objective": 1080.87,
+          "diagnostic_objective_status": "Rejected by the unchanged strict severe-error policy; do not use as a benchmark observation.",
+          "diagnostics": {
+            "warning_count": 17,
+            "severe_count": 8,
+            "fatal_count": 0,
+            "warmup_errors": [
+              {
+                "zone": "PERIMETER_BOT_ZN_3",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00264,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00425,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0052795,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.04714,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_2",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00491,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00247,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0049465,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.099559,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.0069,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.027,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0051048,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.092213,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_2",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00438,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0059,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0018916,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.2113,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00787,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0401,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.001998,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.1133,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_3",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.0125,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0367,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.046107,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 5.6764e-05,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00248,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0472,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.010885,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 1.0,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_4",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00733,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0565,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.040999,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 6.543e-05,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                }
+              }
+            ]
+          },
+          "all_zone_runperiod_flags": [
+            {
+              "zone": "BASEMENT",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_BOTTOM",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_MID",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_TOP",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Fail",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Fail",
+              "cooling_peak_flag": "Pass"
+            }
+          ],
+          "error_file_sha256": "0f93f5b91f79a8f5f44846cd9307d8e313d646a72245afd37e26bbdcc3b4c0f8",
+          "eio_file_sha256": "4ab22510ceebc7a9f3c1c5ea36d32caa48493da17a215bdd23d2e2e6751e8174"
+        },
+        "cap_100_days_output_history": {
+          "input_sha256": "4b7d5b7c19a30dc77b45fdc84b2b61e93f01a73d4654435d16e715e85c5ba3b1",
+          "changes_from_original": [
+            "Maximum Number of Warmup Days: 25 -> 100",
+            "Added only warmup diagnostics and three output-variable requests"
+          ],
+          "maximum_warmup_days": 100,
+          "run_period_warmup_days": 100,
+          "zone_timesteps_per_hour": 6,
+          "sizing_averaging_steps": 6,
+          "sizing_averaging_minutes": 60,
+          "engine_returncode": 0,
+          "status": "strict-failure",
+          "accepted_benchmark_objective": null,
+          "diagnostic_only_outputs": {
+            "Y": 1080.87
+          },
+          "diagnostic_only_objective": 1080.87,
+          "diagnostic_objective_status": "Rejected by the unchanged strict severe-error policy; do not use as a benchmark observation.",
+          "diagnostics": {
+            "warning_count": 17,
+            "severe_count": 8,
+            "fatal_count": 0,
+            "warmup_errors": [
+              {
+                "zone": "PERIMETER_BOT_ZN_3",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00264,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00425,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0052795,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.04714,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_2",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00491,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00247,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0049465,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.099559,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.0069,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.027,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0051048,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.092213,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_2",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00438,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0059,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0018916,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.2113,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00787,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0401,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.001998,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.1133,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_3",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.0125,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0367,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.046107,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 5.6764e-05,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00248,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0472,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.010885,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 1.0,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_4",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00733,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0565,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.040999,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 6.543e-05,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                }
+              }
+            ]
+          },
+          "all_zone_runperiod_flags": [
+            {
+              "zone": "BASEMENT",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_BOTTOM",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_MID",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_TOP",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Fail",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Fail",
+              "cooling_peak_flag": "Pass"
+            }
+          ],
+          "error_file_sha256": "5562a8a6a8fa61303f67f7739129ed9dfb4a3bd916d1525d0a5ceb25c9a208ea",
+          "eio_file_sha256": "8bfcbc747724d8bf1049edfc53fc076908b9c355e500bbb9bf1b7c87f5369833",
+          "warmup_history": {
+            "observed_warmup_days": 100,
+            "analysis_day_range": [
+              81,
+              100
+            ],
+            "failed_peak_periodicity": [
+              {
+                "zone": "PERIMETER_BOT_ZN_3",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  422.7622286189,
+                  422.762228991462
+                ],
+                "even_days_peak_range_w": [
+                  443.677288527358,
+                  443.677288705323
+                ],
+                "same_phase_max_range_w": 3.725619990291307e-07,
+                "phase_mean_separation_w": 20.9150598486072,
+                "previous_day": 99,
+                "previous_raw_peak_w": 422.7622286189,
+                "current_day": 100,
+                "current_raw_peak_w": 443.677288527358,
+                "previous_stored_peak_w": 422.7622286189,
+                "current_test_peak_w": 443.677288527358,
+                "reconstructed_8_5_comparison_fraction": 0.04714025362415709,
+                "error_report_comparison_fraction": 0.04714,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_2",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  548.105802149119,
+                  548.105802213729
+                ],
+                "even_days_peak_range_w": [
+                  608.707918851582,
+                  608.707918999391
+                ],
+                "same_phase_max_range_w": 1.478090325690573e-07,
+                "phase_mean_separation_w": 60.60211672771868,
+                "previous_day": 99,
+                "previous_raw_peak_w": 548.105802154018,
+                "current_day": 100,
+                "current_raw_peak_w": 608.707918854373,
+                "previous_stored_peak_w": 548.105802154018,
+                "current_test_peak_w": 608.707918854373,
+                "reconstructed_8_5_comparison_fraction": 0.09955861394806903,
+                "error_report_comparison_fraction": 0.099559,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_1",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  1314.3769837779,
+                  1314.37698390458
+                ],
+                "even_days_peak_range_w": [
+                  1447.89140760185,
+                  1447.89140788186
+                ],
+                "same_phase_max_range_w": 2.8000999918731395e-07,
+                "phase_mean_separation_w": 133.51442387205498,
+                "previous_day": 99,
+                "previous_raw_peak_w": 1314.3769837779,
+                "current_day": 100,
+                "current_raw_peak_w": 1447.89140760793,
+                "previous_stored_peak_w": 1314.3769837779,
+                "current_test_peak_w": 1447.89140760793,
+                "reconstructed_8_5_comparison_fraction": 0.0922130092964706,
+                "error_report_comparison_fraction": 0.092213,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_2",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  241.698256596915,
+                  241.703526935627
+                ],
+                "even_days_peak_range_w": [
+                  306.452639246814,
+                  306.457196176655
+                ],
+                "same_phase_max_range_w": 0.005270338711994782,
+                "phase_mean_separation_w": 64.75414734452139,
+                "previous_day": 99,
+                "previous_raw_peak_w": 241.698256596915,
+                "current_day": 100,
+                "current_raw_peak_w": 306.452639246814,
+                "previous_stored_peak_w": 241.698256596915,
+                "current_test_peak_w": 306.452639246814,
+                "reconstructed_8_5_comparison_fraction": 0.2113030672832497,
+                "error_report_comparison_fraction": 0.2113,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_1",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  1054.5001610765,
+                  1054.50889432241
+                ],
+                "even_days_peak_range_w": [
+                  1189.21062483115,
+                  1189.21820677194
+                ],
+                "same_phase_max_range_w": 0.008733245909979814,
+                "phase_mean_separation_w": 134.7100840027549,
+                "previous_day": 99,
+                "previous_raw_peak_w": 1054.5001610765,
+                "current_day": 100,
+                "current_raw_peak_w": 1189.21062483115,
+                "previous_stored_peak_w": 1054.5001610765,
+                "current_test_peak_w": 1189.21062483115,
+                "reconstructed_8_5_comparison_fraction": 0.11327721174184498,
+                "error_report_comparison_fraction": 0.1133,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_3",
+                "failed_metric": "heating",
+                "odd_days_peak_range_w": [
+                  5677.11492878265,
+                  5677.11492887099
+                ],
+                "even_days_peak_range_w": [
+                  5951.52132294558,
+                  5951.52132303317
+                ],
+                "same_phase_max_range_w": 8.834012987790629e-08,
+                "phase_mean_separation_w": 274.406394181573,
+                "previous_day": 99,
+                "previous_raw_peak_w": 5677.11492878265,
+                "current_day": 100,
+                "current_raw_peak_w": 5951.52132303301,
+                "previous_stored_peak_w": 5677.11492878265,
+                "current_test_peak_w": 5951.52132303301,
+                "reconstructed_8_5_comparison_fraction": 0.04610693289266703,
+                "error_report_comparison_fraction": 0.046107,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_1",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  0.0,
+                  0.0
+                ],
+                "even_days_peak_range_w": [
+                  37.1888008897677,
+                  37.1888016209941
+                ],
+                "same_phase_max_range_w": 7.312264003189739e-07,
+                "phase_mean_separation_w": 37.188801352577954,
+                "previous_day": 99,
+                "previous_raw_peak_w": 0.0,
+                "current_day": 100,
+                "current_raw_peak_w": 37.1888016209941,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 100.0,
+                "reconstructed_8_5_comparison_fraction": 1.0,
+                "error_report_comparison_fraction": 1.0,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_TOP_ZN_4",
+                "failed_metric": "heating",
+                "odd_days_peak_range_w": [
+                  900.025135902693,
+                  900.025135949943
+                ],
+                "even_days_peak_range_w": [
+                  938.502831550349,
+                  938.502831574219
+                ],
+                "same_phase_max_range_w": 4.7249955059669446e-08,
+                "phase_mean_separation_w": 38.47769563930672,
+                "previous_day": 99,
+                "previous_raw_peak_w": 900.025135902693,
+                "current_day": 100,
+                "current_raw_peak_w": 938.50283155428,
+                "previous_stored_peak_w": 900.025135902693,
+                "current_test_peak_w": 938.50283155428,
+                "reconstructed_8_5_comparison_fraction": 0.040999019244154,
+                "error_report_comparison_fraction": 0.040999,
+                "matches_printed_error_within_rounding": true
+              }
+            ]
+          }
+        },
+        "cap_100_days_timestep_12_output_history": {
+          "input_sha256": "662c04c515af731887f51a3ba89135e5bdfda4cbd25491650e31d1d69df0c587",
+          "changes_from_original": [
+            "Maximum Number of Warmup Days: 25 -> 100",
+            "Added only warmup diagnostics and three output-variable requests",
+            "Timestep: 6 -> 12 zone timesteps per hour"
+          ],
+          "maximum_warmup_days": 100,
+          "run_period_warmup_days": 100,
+          "zone_timesteps_per_hour": 12,
+          "sizing_averaging_steps": 6,
+          "sizing_averaging_minutes": 30,
+          "engine_returncode": 0,
+          "status": "strict-failure",
+          "accepted_benchmark_objective": null,
+          "diagnostic_only_outputs": {
+            "Y": 1100.02
+          },
+          "diagnostic_only_objective": 1100.02,
+          "diagnostic_objective_status": "Rejected by the unchanged strict severe-error policy; do not use as a benchmark observation.",
+          "diagnostics": {
+            "warning_count": 18,
+            "severe_count": 3,
+            "fatal_count": 0,
+            "warmup_errors": [
+              {
+                "zone": "PERIMETER_BOT_ZN_2",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00703,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00191,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.002075,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.2474,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_1",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.0103,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.0112,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.0021386,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.060612,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_2",
+                "maximum_warmup_days": 100,
+                "environment_type": "RunPeriod",
+                "environment": "San Francisco Intl AP CA USA TMY3 WMO#=724940",
+                "maximum_temperature": {
+                  "comparison": 0.00623,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "minimum_temperature": {
+                  "comparison": 0.00138,
+                  "tolerance": 0.2,
+                  "result": "Pass",
+                  "unit": "K"
+                },
+                "peak_heating_load": {
+                  "comparison": 0.00062431,
+                  "tolerance": 0.04,
+                  "result": "Pass",
+                  "unit": "fraction"
+                },
+                "peak_cooling_load": {
+                  "comparison": 0.5681,
+                  "tolerance": 0.04,
+                  "result": "Fail",
+                  "unit": "fraction"
+                }
+              }
+            ]
+          },
+          "all_zone_runperiod_flags": [
+            {
+              "zone": "BASEMENT",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_BOTTOM",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_MID",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_TOP",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Fail"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            }
+          ],
+          "error_file_sha256": "7fb93b01e29069f0128786b838f05c35a8d18b0c5a7955d8d0a90d50c68dd4ee",
+          "eio_file_sha256": "109153767f8e6bc81c5fbd7f075216418f62dacc7001d726f2cd9057bd729154",
+          "warmup_history": {
+            "observed_warmup_days": 100,
+            "analysis_day_range": [
+              81,
+              100
+            ],
+            "failed_peak_periodicity": [
+              {
+                "zone": "PERIMETER_BOT_ZN_2",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  665.826516858606,
+                  665.826519136248
+                ],
+                "even_days_peak_range_w": [
+                  533.791213277638,
+                  533.791217471127
+                ],
+                "same_phase_max_range_w": 4.193488962300762e-06,
+                "phase_mean_separation_w": 132.03530254527084,
+                "previous_day": 99,
+                "previous_raw_peak_w": 665.826517707046,
+                "current_day": 100,
+                "current_raw_peak_w": 533.791215471133,
+                "previous_stored_peak_w": 665.826517707046,
+                "current_test_peak_w": 533.791215471133,
+                "reconstructed_8_5_comparison_fraction": 0.2473538312528738,
+                "error_report_comparison_fraction": 0.2474,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_BOT_ZN_1",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  1506.2825389415,
+                  1506.28254940012
+                ],
+                "even_days_peak_range_w": [
+                  1420.20196833063,
+                  1420.20197526054
+                ],
+                "same_phase_max_range_w": 1.045861995407904e-05,
+                "phase_mean_separation_w": 86.0805733750451,
+                "previous_day": 99,
+                "previous_raw_peak_w": 1506.28254659951,
+                "current_day": 100,
+                "current_raw_peak_w": 1420.20197349783,
+                "previous_stored_peak_w": 1506.28254659951,
+                "current_test_peak_w": 1420.20197349783,
+                "reconstructed_8_5_comparison_fraction": 0.060611500834399736,
+                "error_report_comparison_fraction": 0.060612,
+                "matches_printed_error_within_rounding": true
+              },
+              {
+                "zone": "PERIMETER_MID_ZN_2",
+                "failed_metric": "cooling",
+                "odd_days_peak_range_w": [
+                  436.279880260277,
+                  436.286489602322
+                ],
+                "even_days_peak_range_w": [
+                  278.230379127838,
+                  278.236239227726
+                ],
+                "same_phase_max_range_w": 0.006609342044953337,
+                "phase_mean_separation_w": 158.04975101079282,
+                "previous_day": 99,
+                "previous_raw_peak_w": 436.279880260277,
+                "current_day": 100,
+                "current_raw_peak_w": 278.230379127838,
+                "previous_stored_peak_w": 436.279880260277,
+                "current_test_peak_w": 278.230379127838,
+                "reconstructed_8_5_comparison_fraction": 0.5680526390679299,
+                "error_report_comparison_fraction": 0.5681,
+                "matches_printed_error_within_rounding": true
+              }
+            ]
+          }
+        },
+        "cap_100_days_timestep_12_sizing_12_output_history": {
+          "input_sha256": "d5ff486379daf1b9180991482715a158d9593915e43b80692dd3ee09db34cb51",
+          "changes_from_original": [
+            "Maximum Number of Warmup Days: 25 -> 100",
+            "Added only warmup diagnostics and three output-variable requests",
+            "Timestep: 6 -> 12 zone timesteps per hour",
+            "Sizing:Parameters averaging window: 6 -> 12 timesteps to preserve 60 minutes"
+          ],
+          "maximum_warmup_days": 100,
+          "run_period_warmup_days": 17,
+          "zone_timesteps_per_hour": 12,
+          "sizing_averaging_steps": 12,
+          "sizing_averaging_minutes": 60,
+          "engine_returncode": 0,
+          "status": "strict-success",
+          "accepted_benchmark_objective": null,
+          "diagnostic_only_outputs": {
+            "Y": 1096.91
+          },
+          "diagnostic_only_objective": 1096.91,
+          "diagnostic_objective_status": "Strict diagnostics pass, but numerical inputs were changed in a scratch probe; do not treat as the original canonical benchmark objective.",
+          "diagnostics": {
+            "warning_count": 28,
+            "severe_count": 0,
+            "fatal_count": 0,
+            "warmup_errors": []
+          },
+          "all_zone_runperiod_flags": [
+            {
+              "zone": "BASEMENT",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_BOTTOM",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_MID",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "CORE_TOP",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_3",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_2",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_1",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_4",
+              "temperature_max_flag": "Pass",
+              "temperature_min_flag": "Pass",
+              "heating_peak_flag": "Pass",
+              "cooling_peak_flag": "Pass"
+            }
+          ],
+          "error_file_sha256": "314c72c356a185a42736ea159b3b7fd3282f5819196efcf11019910431fe60a3",
+          "eio_file_sha256": "24fe9c8bc11c6a8fb884cdfbeec0f212309e1c726f4b97e8dea0b7b086db3994",
+          "warmup_history": {
+            "observed_warmup_days": 17,
+            "analysis_day_range": [
+              1,
+              17
+            ],
+            "failed_peak_periodicity": []
+          },
+          "final_two_day_load_comparisons_reconstructed_from_history": [
+            {
+              "zone": "BASEMENT",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              }
+            },
+            {
+              "zone": "CORE_BOTTOM",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 9101.53790503805,
+                "current_raw_peak_w": 9088.49410935188,
+                "previous_stored_peak_w": 9101.53790503805,
+                "current_test_peak_w": 9088.49410935188,
+                "comparison_fraction": 0.0014351987831240053,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "CORE_MID",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 7787.83307821898,
+                "current_raw_peak_w": 7685.22419202404,
+                "previous_stored_peak_w": 7787.83307821898,
+                "current_test_peak_w": 7685.22419202404,
+                "comparison_fraction": 0.013351449955283007,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "CORE_TOP",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 2764.02158584579,
+                "current_raw_peak_w": 2767.83184211,
+                "previous_stored_peak_w": 2764.02158584579,
+                "current_test_peak_w": 2767.83184211,
+                "comparison_fraction": 0.0013766212983896858,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              },
+              "cooling": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              }
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_3",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 493.851479295149,
+                "current_raw_peak_w": 492.525496017011,
+                "previous_stored_peak_w": 493.851479295149,
+                "current_test_peak_w": 492.525496017011,
+                "comparison_fraction": 0.0026922124618137242,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_2",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 628.258335200757,
+                "current_raw_peak_w": 627.395549632451,
+                "previous_stored_peak_w": 628.258335200757,
+                "current_test_peak_w": 627.395549632451,
+                "comparison_fraction": 0.0013751859872315462,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_1",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 1461.37125039525,
+                "current_raw_peak_w": 1459.82258947794,
+                "previous_stored_peak_w": 1461.37125039525,
+                "current_test_peak_w": 1459.82258947794,
+                "comparison_fraction": 0.001060855564554421,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_BOT_ZN_4",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 532.443102495875,
+                "current_raw_peak_w": 531.325113870419,
+                "previous_stored_peak_w": 532.443102495875,
+                "current_test_peak_w": 531.325113870419,
+                "comparison_fraction": 0.0021041516696095955,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_3",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 28.7445238186565,
+                "current_raw_peak_w": 40.1423666826686,
+                "previous_stored_peak_w": 100,
+                "current_test_peak_w": 100,
+                "comparison_fraction": 0.0,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              },
+              "cooling": {
+                "previous_raw_peak_w": 46.9265567726034,
+                "current_raw_peak_w": 36.5987250235066,
+                "previous_stored_peak_w": 100,
+                "current_test_peak_w": 100,
+                "comparison_fraction": 0.0,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_2",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 401.37142920205,
+                "current_raw_peak_w": 394.692771992647,
+                "previous_stored_peak_w": 401.37142920205,
+                "current_test_peak_w": 394.692771992647,
+                "comparison_fraction": 0.01692115408064132,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_1",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 1336.86838454944,
+                "current_raw_peak_w": 1324.20147820818,
+                "previous_stored_peak_w": 1336.86838454944,
+                "current_test_peak_w": 1324.20147820818,
+                "comparison_fraction": 0.009565694155846923,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_MID_ZN_4",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              },
+              "cooling": {
+                "previous_raw_peak_w": 215.225382240329,
+                "current_raw_peak_w": 207.446126469603,
+                "previous_stored_peak_w": 215.225382240329,
+                "current_test_peak_w": 207.446126469603,
+                "comparison_fraction": 0.037500125469278826,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              }
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_3",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 1500.42530261698,
+                "current_raw_peak_w": 1500.83517085346,
+                "previous_stored_peak_w": 1500.42530261698,
+                "current_test_peak_w": 1500.83517085346,
+                "comparison_fraction": 0.0002730934378670674,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              },
+              "cooling": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              }
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_2",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 831.090499076849,
+                "current_raw_peak_w": 831.429109759823,
+                "previous_stored_peak_w": 831.090499076849,
+                "current_test_peak_w": 831.429109759823,
+                "comparison_fraction": 0.00040726344435033945,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              },
+              "cooling": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              }
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_1",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 440.905907432258,
+                "current_raw_peak_w": 441.414965718775,
+                "previous_stored_peak_w": 440.905907432258,
+                "current_test_peak_w": 441.414965718775,
+                "comparison_fraction": 0.001153242019531658,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              },
+              "cooling": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              }
+            },
+            {
+              "zone": "PERIMETER_TOP_ZN_4",
+              "previous_warmup_day": 16,
+              "current_warmup_day": 17,
+              "heating": {
+                "previous_raw_peak_w": 890.421623216663,
+                "current_raw_peak_w": 890.7561909319,
+                "previous_stored_peak_w": 890.421623216663,
+                "current_test_peak_w": 890.7561909319,
+                "comparison_fraction": 0.0003755996518947166,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": false
+              },
+              "cooling": {
+                "previous_raw_peak_w": 0.0,
+                "current_raw_peak_w": 0.0,
+                "previous_stored_peak_w": 0.0,
+                "current_test_peak_w": 0.0,
+                "comparison_fraction": null,
+                "tolerance_fraction": 0.04,
+                "result": "Pass",
+                "zero_current_peak_bypasses_comparison": true
+              }
+            }
+          ],
+          "final_two_day_comparison_note": "These load fractions are reconstructed from matching zone-boundary ESO quantities; a successful run prints flags in EIO but no severe-error residual rows. No exact temperature-extrema residuals are asserted from the different mean-air-temperature output quantity."
+        }
+      },
+      "history_probe_matches_plain_cap100_error_rows": true,
+      "baseline_seven_zone_comparison": [
+        {
+          "zone": "PERIMETER_BOT_ZN_3",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00228,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.00383,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0052795,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.049607,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00264,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.00425,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0052795,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.04714,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          }
+        },
+        {
+          "zone": "PERIMETER_BOT_ZN_2",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00456,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.00284,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0049465,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.1107,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00491,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.00247,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0049465,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.099559,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          }
+        },
+        {
+          "zone": "PERIMETER_BOT_ZN_1",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00655,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0267,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0051048,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.1017,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.0069,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.027,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0051048,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.092213,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          }
+        },
+        {
+          "zone": "PERIMETER_MID_ZN_2",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00727,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0174,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0018916,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.2607,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00438,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0059,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.0018916,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.2113,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          }
+        },
+        {
+          "zone": "PERIMETER_MID_ZN_1",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00368,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0296,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.001998,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.1283,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00787,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0401,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.001998,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 0.1133,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            }
+          }
+        },
+        {
+          "zone": "PERIMETER_TOP_ZN_3",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.0125,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0367,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.048326,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 5.6764e-05,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.0125,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0367,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.046107,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 5.6764e-05,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            }
+          }
+        },
+        {
+          "zone": "PERIMETER_TOP_ZN_4",
+          "cap25_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00735,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0565,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.042746,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 6.543e-05,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            }
+          },
+          "cap100_metrics": {
+            "maximum_temperature": {
+              "comparison": 0.00733,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "minimum_temperature": {
+              "comparison": 0.0565,
+              "tolerance": 0.2,
+              "result": "Pass",
+              "unit": "K"
+            },
+            "peak_heating_load": {
+              "comparison": 0.040999,
+              "tolerance": 0.04,
+              "result": "Fail",
+              "unit": "fraction"
+            },
+            "peak_cooling_load": {
+              "comparison": 6.543e-05,
+              "tolerance": 0.04,
+              "result": "Pass",
+              "unit": "fraction"
+            }
+          }
+        }
+      ],
+      "interpretation": {
+        "supported": [
+          "The seven original errors all concern peak-load convergence during the annual RunPeriod; every reported temperature comparison passes.",
+          "Increasing the maximum warmup days from 25 to 100 retains all seven original failed zones and adds a cooling-load error in PERIMETER_TOP_ZN_1.",
+          "Days 81–100 at the original 10-minute zone timestep show a persistent near-period-two load cycle; the final day99/day100 zone-boundary peak ratios reproduce the printed cap100 errors.",
+          "The additional top-zone-1 cooling error is amplified by the 8.5 floor asymmetry: a prior zero day remains zero, whereas the current 37.1888 W peak is promoted to 100 W. Other failed peaks exceed 100 W and are not explained by this small-load artifact.",
+          "The first 5-minute zone-timestep refinement reaches 100 warmup days with three cooling-load severe errors. Its unchanged 6-timestep sizing averaging window lasts only 30 minutes, so it contains a sizing-duration confound.",
+          "The corrected 5-minute zone-timestep refinement also uses 12 sizing averaging steps, preserving the original 60-minute duration. It passes strict diagnostics without severe errors. The warmup-day count and objective are recorded separately; this demonstrates a numerical variant that resolves this sampled failure, without altering the canonical benchmark model.",
+          "No canonical benchmark objective is accepted from any probe. The runs with severe errors still exit zero and write annual reports, but the strict wrapper rejects them. The corrected timestep probe passes strict diagnostics and has a diagnostic-only objective because its numerical input differs from the original."
+        ],
+        "hypotheses_not_isolated": [
+          "The scheduled fan shutdown with night-cycle operation, thermostatic switches, and autosized VAV system can support the observed cycle, but no individual control change was tested.",
+          "The 26.2 dual-floor check prevents this specific 0-to-sub100-W artifact, but cannot by itself explain the modern model passing every other large-load check. Other version and transition changes are not isolated here."
+        ],
+        "input_control_context": {
+          "runperiod_start_day_declared": "Sunday",
+          "observed_warmup_day_type": "Holiday",
+          "observed_warmup_weather_date": "January 1, repeated each warmup day",
+          "holiday_and_sunday_heating_setpoint_c": 13,
+          "holiday_and_sunday_cooling_setpoint_c": 24,
+          "holiday_and_sunday_scheduled_fan_availability": "Off all day",
+          "night_cycle_control": "CycleOnAny",
+          "night_cycle_thermostat_tolerance_k": 1,
+          "night_cycle_run_time_seconds": 1800,
+          "winter_runtime_supply_air_temperature_c": 16,
+          "sizing_supply_air_temperature_decision_c": 12,
+          "holiday_and_sunday_plug_load_fraction": 0.3
+        }
+      },
+      "output_and_source_notes": {
+        "reported_error_precision": "Numbers are the exact printed .err values, rounded by EnergyPlus; recomputed history ratios retain more digits.",
+        "canonical_Y": "Total Source Energy per Conditioned Building Area [MJ/m2], as the 2-decimal annual tabular output; diagnostic-only in all runs here.",
+        "history_sampling": "Detailed ESO outputs record each HVAC call; peaks at zone-timestep boundaries reproduce the convergence peak values. Arbitrary within-step HVAC maxima can differ and are also retained separately.",
+        "eio_load_units": "8.5 .eio labels normalized warmup load differences as W, but source divides by maximum load. The report correctly uses dimensionless names for these averages.",
+        "zero_load_passed_metrics": "When the current peak is <= 1e-4 W, 8.5 sets Pass without recomputing the comparison field; a printed passed heating comparison can therefore be a stale value. Failed positive-load metrics are reconstructed from history.",
+        "official_source": [
+          {
+            "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/HeatBalanceManager.cc",
+            "lines": "4817–4826, 4897–4898, 4939–4959, 4992–4993, 5018–5027, 5102–5118",
+            "description": "Daily extrema, 100 W floor, residual checks, previous-day assignment, capped exit, and normalized EIO loads."
+          },
+          {
+            "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc",
+            "lines": "3108–3109, 3123–3124",
+            "description": "Current and previous heating/cooling peaks are both floored at 100 W before the modern residual check."
+          },
+          {
+            "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/ZoneTempPredictorCorrector.cc",
+            "lines": "2142–2143",
+            "description": "Detailed sensible-heating/cooling output variables refer to the convergence source quantities."
+          }
+        ]
+      }
+    }
+  },
+  "benchmark_model_assets_changed": false,
+  "warmup_tolerances_relaxed": false,
+  "primary_sources": [
+    {
+      "title": "EnergyPlus warmup convergence",
+      "url": "https://energyplus.readthedocs.io/en/stable/guides/engineering-reference/1.5-warmup-convergence.html"
+    },
+    {
+      "title": "EnergyPlus 8.5 convergence implementation",
+      "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v8.5.0/src/EnergyPlus/HeatBalanceManager.cc"
+    },
+    {
+      "title": "EnergyPlus 26.2 convergence implementation",
+      "url": "https://github.com/NatLabRockies/EnergyPlus/blob/v26.2.0/src/EnergyPlus/HeatBalanceManager.cc"
+    }
+  ],
+  "objective_comparison_policy": {
+    "baseline_engine": "8.5.0",
+    "candidate_engine": "26.2.0",
+    "signed_difference_formula": "f26.2 - f8.5",
+    "percentage_change_formula": "100 * (f26.2 - f8.5) / abs(f8.5)",
+    "availability": "Both canonical evaluations must pass strict diagnostics. Differences are null when either evaluation is rejected; percentage is null for a zero baseline.",
+    "interpretation": "Positive means an increase, negative a decrease. Cross-engine changes are descriptive and do not use the same-engine equivalence acceptance threshold."
+  }
+}

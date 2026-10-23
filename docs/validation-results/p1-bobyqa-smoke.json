@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "independently_generated_solver_integration_measurement",
+  "license": "MIT",
+  "purpose": "Real default PDFO BOBYQA integration smoke; not a published-optimum comparison or study-protocol replication for Waibel, Wortmann, Evins and Carmeliet (2019).",
+  "code_commit": "f08ce001fcbc8f94040b9a1e694f1595ca55b601",
+  "runtime_source_working_tree_clean": true,
+  "problem": 1,
+  "name": "Simple office - Seattle",
+  "objective_unit": "kWh/(m2 year)",
+  "parameter_mapping": [
+    {
+      "position": 1,
+      "name": "orientation",
+      "paper_symbol": "x1",
+      "unit": "deg",
+      "bounds": [
+        -180.0,
+        180.0
+      ]
+    },
+    {
+      "position": 2,
+      "name": "west_window_width",
+      "paper_symbol": "x2",
+      "unit": "m",
+      "bounds": [
+        0.1,
+        5.9
+      ]
+    },
+    {
+      "position": 3,
+      "name": "east_window_width",
+      "paper_symbol": "x3",
+      "unit": "m",
+      "bounds": [
+        0.1,
+        5.9
+      ]
+    },
+    {
+      "position": 4,
+      "name": "shade_transmittance",
+      "paper_symbol": "x4",
+      "unit": "1",
+      "bounds": [
+        0.2,
+        0.8
+      ]
+    }
+  ],
+  "solver": {
+    "package": "pdfo",
+    "method": "bobyqa",
+    "scale": true,
+    "default_options": true,
+    "maximum_objective_calls": 100,
+    "budget_definition": "Objective calls including initialization; exact-input cache reuse can reduce engine executions.",
+    "quiet": true
+  },
+  "environment": {
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "python": "3.12.12",
+    "packages": {
+      "bem-testproblems": "0.1.0.dev0",
+      "pdfo": "2.2.0",
+      "numpy": "1.26.4",
+      "scipy": "1.17.1"
+    }
+  },
+  "weather": {
+    "filename": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+    "sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+    "kind": "canonical"
+  },
+  "modern": {
+    "engine": {
+      "version": "26.2.0",
+      "build": "26.2.0-4bd7a1f26f",
+      "executable_sha256": "118b620557dbcd9d79280b9a0913c11a987f4b0a853ed1f2d093e431f36143b8",
+      "architecture": "arm64"
+    },
+    "starting_objective": 147.5659999247044,
+    "best_x": [
+      -1.1214112901192836,
+      4.856626576011762,
+      5.1732490024320175,
+      0.27307365349378676
+    ],
+    "best_objective": 133.33534913204608,
+    "nfev": 84,
+    "solver_status": 0,
+    "solver_success": true,
+    "solver_message": "Return from bobyqa because the lower bound for the trust region radius is reached.",
+    "within_bounds": true,
+    "finite_result": true,
+    "verified_best_objective": 133.33534913204608,
+    "verification_difference": 0.0,
+    "verification_cache_hit": true,
+    "best_input_sha256": "abf50fe3b7112742c75d3819b1ce16eff4100ebd528a5283c9bf313713837bc9",
+    "strict_diagnostic_audit": {
+      "successful_unique_directories": 84,
+      "severe_or_fatal_diagnostics": 0,
+      "all_returncodes_zero": true,
+      "all_completed_successfully": true
+    },
+    "unique_successful_simulations": 84,
+    "run_requests_including_start_and_verification": 86,
+    "cache_hits": 2,
+    "objective_change_against_start": {
+      "baseline_role": "Accepted modern starting objective at the physical midpoint.",
+      "signed_difference": -14.230650792658338,
+      "absolute_difference": 14.230650792658338,
+      "percentage_change": -9.643583752300348
+    }
+  },
+  "historical": {
+    "engine": {
+      "version": "8.5.0",
+      "build": "8.5.0-c87e61b44b",
+      "executable_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+      "architecture": "x86_64"
+    },
+    "starting_objective": 153.18108166841446,
+    "status": "strict_failure",
+    "solver_result_available": false,
+    "nfev": null,
+    "failed_x": [
+      90.0,
+      3.0,
+      3.0,
+      0.5
+    ],
+    "failed_input_sha256": "da1b8e865dd893ee1bb38450e2e0ea40ede6a152a294ac98817b0b7dd0f9f99e",
+    "failure_type": "EnergyPlusError",
+    "failure_reason": "Warmup did not converge after 25 days: minimum-temperature change 0.00647 K exceeded 0.004 K tolerance.",
+    "failed_output_accepted": false,
+    "invented_penalty_used": false,
+    "optimization_run_requests": 2,
+    "unique_successful_simulations": 1
+  },
+  "scratch_warmup_diagnostic": {
+    "purpose": "Isolate the 25-day warmup cap; no change to historical models or acceptance policy.",
+    "x": [
+      90,
+      3,
+      3,
+      0.5
+    ],
+    "engine_version": "8.5.0",
+    "engine_sha256": "e9935f044aabdfeacdaa472495935631504563fe4a2c4a102dd2cf45553bed17",
+    "weather_filename": "USA_WA_Seattle-Tacoma.727930_TMY2.epw",
+    "weather_sha256": "57d1534ad019ecf98f8ecb410cb491508372532a52542ee1a164a8cee0223d81",
+    "runs": [
+      {
+        "maximum_warmup_days": 25,
+        "input_sha256": "da1b8e865dd893ee1bb38450e2e0ea40ede6a152a294ac98817b0b7dd0f9f99e",
+        "status": "strict-failure",
+        "objective": 156.45937753472893,
+        "objective_role": "failed-run diagnostic only; not accepted as an evaluation",
+        "used_by_optimizer": false,
+        "severe_count": 1
+      },
+      {
+        "maximum_warmup_days": 100,
+        "input_sha256": "d6790e461239e926a2533f6107ac1b5fcbe41e1132ade26cd969d2045bb46c06",
+        "status": "strict-success",
+        "objective": 156.46031463966204,
+        "objective_role": "scratch modified-input measurement; not a historical-benchmark or optimizer result",
+        "used_by_optimizer": false,
+        "severe_count": 0
+      }
+    ],
+    "objective_relative_difference_against_failed_run": 5.989445617646309e-06,
+    "historical_model_modified": false,
+    "objective_100_minus_failed_25": 0.0009371049331150516,
+    "objective_percentage_difference_against_failed_run": 0.0005989445617646309
+  },
+  "interpretation": "Modern solver integration succeeded. Historical optimization stopped under the deliberate strict severe-diagnostic policy. No result establishes agreement with the winning designs or values published by Waibel, Wortmann, Evins and Carmeliet (2019).",
+  "x0": [
+    0.0,
+    3.0,
+    3.0,
+    0.5
+  ]
+}

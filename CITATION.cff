@@ -1,0 +1,146 @@
+cff-version: 1.2.0
+message: "Please cite Waibel, Wortmann, Evins, and Carmeliet (2019) and the originating studies for the problems used; cite Waibel (2018) when using the Appendix C solution references. See docs/references.md."
+type: software
+title: "BEM-TestProblems"
+authors:
+  - name: "Sustainable Urban Systems Lab"
+repository-code: "https://github.com/SustainableUrbanSystemsLab/BEM-TestProblems"
+license:
+  - MIT
+  - BSD-3-Clause
+abstract: "Python building-energy optimization benchmarks. New orchestration is MIT-licensed; imported and translated BEOBenchmark material retains BSD-3-Clause terms and attribution."
+preferred-citation:
+  type: article
+  title: "Building energy optimization: An extensive benchmark of global search algorithms"
+  authors:
+    - family-names: Waibel
+      given-names: Christoph
+    - family-names: Wortmann
+      given-names: Thomas
+    - family-names: Evins
+      given-names: Ralph
+    - family-names: Carmeliet
+      given-names: Jan
+  journal: "Energy and Buildings"
+  volume: "187"
+  start: "218"
+  end: "240"
+  year: 2019
+  doi: "10.1016/j.enbuild.2019.01.048"
+references:
+  - type: software
+    title: "BEOBenchmark: Building Energy Optimization problem test bed"
+    authors:
+      - family-names: Waibel
+        given-names: Christoph
+    repository-code: "https://github.com/christophwaibel/BEOBenchmark"
+  - type: thesis
+    title: "Simulation-Based Optimization of Buildings and Multi-Energy Systems"
+    authors:
+      - family-names: Waibel
+        given-names: Christoph
+    institution:
+      name: "ETH Zurich"
+    thesis-type: "Doctoral thesis"
+    year: 2018
+    doi: "10.3929/ethz-b-000307674"
+  - type: conference-paper
+    title: "Are Genetic Algorithms Really the Best Choice for Building Energy Optimization?"
+    authors:
+      - family-names: Wortmann
+        given-names: Thomas
+      - family-names: Waibel
+        given-names: Christoph
+      - family-names: Nannicini
+        given-names: Giacomo
+      - family-names: Evins
+        given-names: Ralph
+      - family-names: Schroepfer
+        given-names: Thomas
+      - family-names: Carmeliet
+        given-names: Jan
+    collection-title: "Proceedings of the Symposium on Simulation for Architecture and Urban Design"
+    start: "51"
+    end: "58"
+    year: 2017
+    doi: "10.22360/simaud.2017.simaud.006"
+  - type: article
+    title: "A comparison of deterministic and probabilistic optimization algorithms for nonsmooth simulation-based optimization"
+    authors:
+      - family-names: Wetter
+        given-names: Michael
+      - family-names: Wright
+        given-names: Jonathan
+    journal: "Building and Environment"
+    volume: "39"
+    issue: "8"
+    start: "989"
+    end: "999"
+    year: 2004
+    doi: "10.1016/j.buildenv.2004.01.022"
+  - type: article
+    title: "A comparison of global optimization algorithms with standard benchmark functions and real-world applications using EnergyPlus"
+    authors:
+      - family-names: Kämpf
+        given-names: Jérôme Henri
+      - family-names: Wetter
+        given-names: Michael
+      - family-names: Robinson
+        given-names: Darren
+    journal: "Journal of Building Performance Simulation"
+    volume: "3"
+    issue: "2"
+    start: "103"
+    end: "120"
+    year: 2010
+    doi: "10.1080/19401490903494597"
+  - type: article
+    title: "Optimization of energy consumption in buildings with hydronic heating systems considering thermal comfort by use of computer-based tools"
+    authors:
+      - family-names: Djuric
+        given-names: Natasa
+      - family-names: Novakovic
+        given-names: Vojislav
+      - family-names: Holst
+        given-names: Johnny
+      - family-names: Mitrovic
+        given-names: Zoran
+    journal: "Energy and Buildings"
+    volume: "39"
+    issue: "4"
+    start: "471"
+    end: "477"
+    year: 2007
+    doi: "10.1016/j.enbuild.2006.08.009"
+  - type: article
+    title: "PDFO: a cross-platform package for Powell's derivative-free optimization solvers"
+    authors:
+      - family-names: Ragonneau
+        given-names: Tom M.
+      - family-names: Zhang
+        given-names: Zaikun
+    journal: "Mathematical Programming Computation"
+    volume: "16"
+    issue: "4"
+    start: "535"
+    end: "559"
+    year: 2024
+    doi: "10.1007/s12532-024-00257-9"
+  - type: article
+    title: "Improving the Flexibility and Robustness of Model-Based Derivative-Free Optimization Solvers"
+    authors:
+      - family-names: Cartis
+        given-names: Coralia
+      - family-names: Fiala
+        given-names: Jan
+      - family-names: Marteau
+        given-names: Benjamin
+      - family-names: Roberts
+        given-names: Lindon
+    journal: "ACM Transactions on Mathematical Software"
+    volume: "45"
+    issue: "3"
+    start: "32:1"
+    end: "32:41"
+    year: 2019
+    doi: "10.1145/3338517"
