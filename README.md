@@ -118,21 +118,30 @@ errors and select a separately labelled corrected model.
 
 ## Solve with BOBYQA
 
-The `optimize` extra installed above also provides PDFO. The `solve_bobyqa()`
-adapter calls it with `method="bobyqa"`, passing the problem's bounds and scaling
-the variables:
+The `optimize` extra installed above also provides PDFO. Call it directly with
+`method="bobyqa"`, passing the objective and bounds:
 
 ```python
-from bem_testproblems import get_problem, solve_bobyqa
+from pdfo import pdfo
+
+from bem_testproblems import get_problem, make_objective
 
 problem = get_problem(13)
-result = solve_bobyqa(problem, x0=problem.midpoint, max_evaluations=100)
+objective = make_objective(problem)
+result = pdfo(
+    objective,
+    x0=problem.midpoint,
+    bounds=problem.bounds,
+    method="bobyqa",
+    options={"maxfev": 100},
+)
 print("Parameters:", result.x)
 print("Objective:", result.fun, problem.objective_unit)
 ```
 
-The budget counts objective calls and must be at least `problem.dimension + 3`.
-The original `solve()` name remains an alias for compatibility.
+The optional [package adapter](src/bem_testproblems/optimize.py), `solve_bobyqa()`,
+adds strict budget enforcement, endpoint-roundoff handling, and safe propagation
+of simulation errors through PDFO's compiled callbacks.
 For solvers that exploit objective structure, see the
 [simulator outputs, additive terms, and known derivatives](docs/objective-structure.md).
 
