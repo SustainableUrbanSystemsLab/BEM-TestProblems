@@ -39,8 +39,10 @@ simulation failures, and solver experiments.
 
 ## Set up locally
 
-Use Python 3.12 and activate the project's virtual environment before installing
-dependencies or running examples. From the repository root on macOS or Linux:
+Use Python 3.12. Choose either `venv` with pip or uv below; both create a local
+`.venv` environment. Run commands from the repository root.
+
+With `venv` and pip on macOS or Linux:
 
 ```sh
 python3.12 -m venv .venv
@@ -60,17 +62,28 @@ python tools/install_energyplus.py
 python tools/fetch_weather.py
 ```
 
-With [uv](https://docs.astral.sh/uv/) instead of `venv` and `pip` (any platform):
+With [uv](https://docs.astral.sh/uv/getting-started/installation/) on macOS or Linux:
 
 ```sh
-uv venv --python 3.12
-uv pip install -c dependencies-py312.txt -e '.[optimize]'
-uv run python tools/install_energyplus.py
-uv run python tools/fetch_weather.py
+uv venv --python 3.12 --seed
+source .venv/bin/activate
+uv pip install --python .venv -c dependencies-py312.txt -e '.[optimize]'
+python tools/install_energyplus.py
+python tools/fetch_weather.py
 ```
 
-`uv run python ...` uses `.venv` without activating it; prefix the commands below
-the same way.
+With uv on Windows (PowerShell):
+
+```powershell
+uv venv --python 3.12 --seed
+.\.venv\Scripts\Activate.ps1
+uv pip install --python .venv -c dependencies-py312.txt -e '.[optimize]'
+python tools/install_energyplus.py
+python tools/fetch_weather.py
+```
+
+For uv, `--seed` includes pip so the installation command in the testing section
+also works.
 
 Activation makes `.venv` the default Python environment for the current terminal.
 Activate it again in each new terminal with `source .venv/bin/activate` on
@@ -90,8 +103,8 @@ commands. For repeated solver comparisons and boxplots, use the
 
 ## Solve with SciPy
 
-After setup, run `python` in the activated terminal to start the Python console.
-Paste the entire example below to run an optimization.
+After either setup method, run `python` in the activated terminal to start the
+Python console. Paste the entire example below to run an optimization.
 
 `get_problem(number)` defaults to the labelled profiles used for replication:
 historical HVAC compatibility for P5/P6/P8, corrected v3 for P1/P3/P4/P9/P10,
