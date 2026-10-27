@@ -146,6 +146,19 @@ def test_version_probe_timeout_is_a_configuration_error(fake_engine):
     assert error.value.reason == "version"
 
 
+def test_version_probe_allows_delayed_startup_on_a_busy_machine(fake_engine, monkeypatch):
+    communicate = subprocess.Popen.communicate
+
+    def delayed_startup(process, input=None, timeout=None):
+        # Simulate a 30-second startup without adding that delay to the test suite.
+        if "--version" in process.args and timeout < 30:
+            raise subprocess.TimeoutExpired(process.args, timeout)
+        return communicate(process, input=input, timeout=timeout)
+
+    monkeypatch.setattr(subprocess.Popen, "communicate", delayed_startup)
+    assert EnergyPlusRunner(fake_engine).version == "26.2.0"
+
+
 def test_executable_replacement_is_rejected_before_running(tmp_path, fake_engine):
     runner = EnergyPlusRunner(fake_engine, output_root=tmp_path / "runs")
     fake_engine.write_bytes(fake_engine.read_bytes() + b"\n")

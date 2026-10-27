@@ -196,7 +196,8 @@ class EnergyPlusRunner:
             stderr=subprocess.STDOUT, text=True, **_process_options(),
         )
         try:
-            output, _ = process.communicate(timeout=min(self.timeout, 15.0))
+            # Concurrent Windows workers can delay executable/DLL startup.
+            output, _ = process.communicate(timeout=min(self.timeout, 60.0))
         except subprocess.TimeoutExpired as error:
             _terminate_tree(process)
             raise EnergyPlusError("EnergyPlus version probe timed out", reason="version") from error

@@ -203,14 +203,16 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         raise ValueError("schedule must be balanced or problem-first")
     if not isinstance(p1_warmup_100, bool):
         raise ValueError("p1_warmup_100 must be a boolean")
-    if numerical_variant not in (None, "convergence-refined", "convergence-repaired", "model-corrected", "model-corrected-v2", "model-corrected-v3", "historical-hvac"):
+    if numerical_variant not in (None, "replication", "convergence-refined", "convergence-repaired", "model-corrected", "model-corrected-v2", "model-corrected-v3", "historical-hvac"):
         raise ValueError("Unsupported replication numerical variant")
     if numerical_variant is not None and p1_warmup_100:
         raise ValueError("Select one numerical variant")
     definitions = [get_problem(number, numerical_variant=None) for number in problems]
     if not definitions or len({p.id for p in definitions}) != len(definitions):
         raise ValueError("Select at least one problem, without duplicates")
-    if numerical_variant is not None:
+    if numerical_variant == "replication":
+        definitions = [get_problem(p.id, numerical_variant="replication") for p in definitions]
+    elif numerical_variant is not None:
         from .historical_hvac import HISTORICAL_HVAC_PROBLEMS
         from .model_controls import CORRECTED_PROBLEM_IDS
         from .numerical_controls import REFINED_PROBLEM_IDS, REPAIRED_PROBLEM_IDS
@@ -274,6 +276,8 @@ def prepare_manifest(*, problems=PROBLEM_IDS, solvers=None, versions=("8.5.0", "
         "problems.py", "losses.py", "models.py", "numerical_controls.py", "model_controls.py", "outputs.py", "energyplus.py",
         "evaluation.py", "replication.py", "replication_solvers.py", "replication_diagnostics.py",
         "replication_journal.py")}
+    if numerical_variant == "replication":
+        code_hashes["historical_hvac.py"] = sha256_file(source / "historical_hvac.py")
     specifications = []
     for repetition in range(repetitions):
         for p in definitions:

@@ -12,6 +12,14 @@ For a separate P5/P6/P8 comparison, the
 [historical HVAC profile](historical-hvac.md) addresses selected modern fan-energy
 differences. Give every changed model or protocol a new result directory.
 
+Use `--numerical-variant replication` for the current per-problem selection:
+historical HVAC for P5/P6/P8, corrected v3 for P1/P3/P4/P9/P10, and canonical
+models for P2/P13. The manifest records each selected model separately.
+Omitting this option retains canonical replication-runner behavior, including
+for existing experiments. A new selection requires a new frozen source and
+result directory. The pipeline's canonical preflight checks engine/setup
+regressions; validate the selected profiles separately before the full run.
+
 Original seeds, starting vectors, and raw optimizer trajectories are unavailable.
 New recorded seeds make this experiment repeatable without claiming the original
 trajectories. The [dissertation designs](published-solutions.md) are rounded final

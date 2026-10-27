@@ -252,8 +252,8 @@ def test_extended_budget_handoff_preserves_multiplier_and_every_original_cap(set
     assert all(spec["budget"] == 50000 for spec in manifest["runs"])
 
 
-def test_continuation_preserves_and_checks_the_selected_numerical_variant(setup, monkeypatch):
-    variant = "convergence-repaired"
+@pytest.mark.parametrize("variant", ["convergence-repaired", "replication"])
+def test_continuation_preserves_and_checks_the_selected_numerical_variant(setup, monkeypatch, variant):
     setup.original["numerical_variant"] = variant
     setup.original.pop("manifest_id")
     setup.original["manifest_id"] = continuation._digest(setup.original)

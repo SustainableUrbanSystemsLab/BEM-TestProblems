@@ -124,6 +124,34 @@ def test_numerical_profile_preserves_starts_seeds_and_budgets(local_setup, varia
         replication.prepare_manifest(**configuration, numerical_variant=variant, p1_warmup_100=True)
 
 
+def test_replication_profile_selects_each_model_and_preserves_all_2400_run_specs(local_setup):
+    configuration, calls = local_setup
+    configuration.update(problems=[1, 13, 2, 3, 4, 5, 6, 8, 9, 10],
+                         solvers=["direct", "crs2", "sbplex", "cma_es", "bobyqa", "pybobyqa"],
+                         versions=["8.5.0", "26.2.0"], repetitions=20, budget=None, seed=2019)
+    canonical = replication.prepare_manifest(**configuration)
+    selected = replication.prepare_manifest(**configuration, numerical_variant="replication")
+    assert all("numerical_variant" not in p for p in canonical["problem_definitions"].values())
+    assert selected["numerical_variant"] == "replication"
+    assert selected["manifest_id"] != canonical["manifest_id"]
+    expected = {"1": "model-corrected-v3", "2": None, "3": "model-corrected-v3",
+                "4": "model-corrected-v3", "5": "historical-hvac", "6": "historical-hvac",
+                "8": "historical-hvac", "9": "model-corrected-v3",
+                "10": "model-corrected-v3", "13": None}
+    assert {n: p.get("numerical_variant") for n, p in selected["problem_definitions"].items()} == expected
+    for key in ("runs", "solvers", "dependency_provenance", "engines", "schedule",
+                "diagnostics_policy", "protocol", "master_seed"):
+        assert selected[key] == canonical[key]
+    assert len(selected["runs"]) == 2400
+    assert sum(row["budget"] for row in selected["runs"]) == 2592000
+    source = Path(replication.__file__).parent
+    assert selected["code_sha256"]["historical_hvac.py"] == sha256_file(source / "historical_hvac.py")
+    assert "historical_hvac.py" not in canonical["code_sha256"]
+    assert calls == []
+    with pytest.raises(ValueError, match="one numerical variant"):
+        replication.prepare_manifest(**configuration, numerical_variant="replication", p1_warmup_100=True)
+
+
 def test_replaced_runtime_library_is_rejected_before_any_objective_call(local_setup, tmp_path):
     configuration, calls = local_setup
     library = configuration["executables"]["26.2.0"].with_name("energyplusapi.dll")

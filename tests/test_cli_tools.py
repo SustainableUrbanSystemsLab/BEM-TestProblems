@@ -119,6 +119,21 @@ def test_replication_cli_rejects_unknown_solver_before_dispatch(monkeypatch):
     assert error.value.code == 2
 
 
+def test_replication_cli_dispatches_the_explicit_mixed_profile(monkeypatch, capsys):
+    captured = {}
+
+    def fake_run(**kwargs):
+        captured.update(kwargs)
+        return {"requested_runs": 2400}
+
+    monkeypatch.setattr(run_replication, "run_replication", fake_run)
+    run_replication.main(["--numerical-variant", "replication"])
+    assert captured["numerical_variant"] == "replication"
+    assert captured["diagnostics_policy"] == "strict"
+    assert captured["repetitions"] == 20 and captured["budget"] is None
+    assert json.loads(capsys.readouterr().out) == {"requested_runs": 2400}
+
+
 @pytest.mark.parametrize("diagnostic", [False, True])
 def test_plot_cli_dispatches_paths_and_prints_result(tmp_path, monkeypatch, capsys, diagnostic):
     from bem_testproblems import replication_plots

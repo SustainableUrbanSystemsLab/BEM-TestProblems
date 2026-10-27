@@ -113,11 +113,12 @@ def test_native_pilot_receives_the_pinned_solver_configuration(setup):
     assert command[command.index("--native-solvers") + 1] == "private-native.json"
 
 
-def test_repaired_pilot_uses_the_same_numerical_profile_and_strict_diagnostics(setup):
+@pytest.mark.parametrize("variant", ["convergence-repaired", "replication"])
+def test_repaired_pilot_uses_the_same_numerical_profile_and_strict_diagnostics(setup, variant):
     config, paths, manifest, project = loaded(setup)
-    manifest.update(numerical_variant="convergence-repaired", diagnostics_policy="strict")
+    manifest.update(numerical_variant=variant, diagnostics_policy="strict")
     command = pipeline.commands("pilot", config, paths, manifest, project)[0]
-    assert command[command.index("--numerical-variant") + 1] == "convergence-repaired"
+    assert command[command.index("--numerical-variant") + 1] == variant
     assert command[command.index("--diagnostics-policy") + 1] == "strict"
 
 
