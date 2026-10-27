@@ -60,6 +60,18 @@ python tools/install_energyplus.py
 python tools/fetch_weather.py
 ```
 
+With [uv](https://docs.astral.sh/uv/) instead of `venv` and `pip` (any platform):
+
+```sh
+uv venv --python 3.12
+uv pip install -c dependencies-py312.txt -e '.[optimize]'
+uv run python tools/install_energyplus.py
+uv run python tools/fetch_weather.py
+```
+
+`uv run python ...` uses `.venv` without activating it; prefix the commands below
+the same way.
+
 Activation makes `.venv` the default Python environment for the current terminal.
 Activate it again in each new terminal with `source .venv/bin/activate` on
 macOS/Linux or `.\.venv\Scripts\Activate.ps1` in PowerShell. Use `python` for all
